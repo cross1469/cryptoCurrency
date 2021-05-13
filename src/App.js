@@ -1,6 +1,7 @@
 import React from "react";
-import KLine from "./component/KLine";
-import AreaSpline from "./component/AreaSpline";
+import KLine from "./Component/KLine";
+import AreaSpline from "./Component/AreaSpline";
+import "./Utils/firebase";
 
 function App() {
   return (
