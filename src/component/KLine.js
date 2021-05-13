@@ -4,67 +4,127 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 
 const KLine = () => {
-  const [kLineData, setKLineData] = useState([]);
-  const [kLineVolume, setKLineVolume] = useState([]);
   const symbol = "ETHUSDT";
-  const interval = "1m";
+  // const interval = "1M";
 
-  useEffect(() => {
+  const callBinanceAPI = (coinSymbol, interval) => {
     axios
       .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${symbol}/${interval}`
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${interval}`
       )
       .then((res) => {
         const currencyData = [];
         const volumeData = [];
         for (let i = 0; i < res.data.length; i += 1) {
           currencyData.push([
-            ...kLineData,
             res.data[i][0],
             Number(res.data[i][1]),
             Number(res.data[i][2]),
             Number(res.data[i][3]),
             Number(res.data[i][4]),
           ]);
-          volumeData.push([
-            ...kLineVolume,
-            res.data[i][0],
-            Number(res.data[i][5]),
-          ]);
+          volumeData.push([res.data[i][0], Number(res.data[i][5])]);
         }
-        setKLineData(currencyData);
-        setKLineVolume(volumeData);
+        // eslint-disable-next-line no-use-before-define
+        setOptions({
+          series: [
+            {
+              type: "candlestick",
+              name: `${symbol}`,
+              data: currencyData,
+            },
+            {
+              type: "column",
+              name: `Volume`,
+              data: volumeData,
+              yAxis: 1,
+            },
+          ],
+        });
       });
-  }, []);
+  };
 
-  useEffect(() => {
-    const socket = new WebSocket(
-      "wss://stream.binance.com:9443/ws/ethusdt@kline_1m"
-    );
-    socket.onmessage = (event) => {
-      const newKLineData = [];
-      const data = JSON.parse(event.data);
-      newKLineData.push(data.k.t);
-      newKLineData.push(Number(data.k.o));
-      newKLineData.push(Number(data.k.h));
-      newKLineData.push(Number(data.k.l));
-      newKLineData.push(Number(data.k.c));
-      setKLineData((kData) => [...kData, newKLineData]);
-    };
-  }, []);
-
-  if (JSON.stringify(kLineData) === "[]") {
-    return null;
-  }
-  const options = {
+  const [options, setOptions] = useState({
+    chart: {
+      zoomType: "x",
+    },
     rangeSelector: {
-      selected: 1,
+      enabled: true,
+      allButtonsEnabled: true,
+      buttons: [
+        {
+          // type: "minute",
+          // count: 1,
+          text: "1m",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "1m");
+            },
+          },
+        },
+        {
+          // type: "minute",
+          // count: 15,
+          text: "15m",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "15m");
+            },
+          },
+        },
+        {
+          // type: "hour",
+          // count: 1,
+          text: "1h",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "1h");
+            },
+          },
+        },
+        {
+          // type: "hour",
+          // count: 4,
+          text: "4h",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "4h");
+            },
+          },
+        },
+        {
+          // type: "day",
+          // count: 1,
+          text: "1d",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "1d");
+            },
+          },
+        },
+        {
+          // type: "week",
+          // count: 1,
+          text: "週線",
+          events: {
+            click() {
+              callBinanceAPI(symbol, "1w");
+            },
+          },
+        },
+        {
+          type: "all",
+          text: "All",
+        },
+      ],
     },
 
     title: {
       text: `${symbol}`,
     },
-
+    xAxis: {
+      type: "datetime",
+    },
     yAxis: [
       {
         labels: {
@@ -99,38 +159,37 @@ const KLine = () => {
       split: true,
     },
 
-    series: [
-      {
-        type: "candlestick",
-        name: "AAPL",
-        data: kLineData,
-        dataGrouping: {
-          units: [
-            [
-              "week", // unit name
-              [1], // allowed multiples
-            ],
-            ["month", [1, 2, 3, 4, 6]],
-          ],
-        },
-      },
-      {
-        type: "column",
-        name: "Volume",
-        data: kLineVolume,
-        yAxis: 1,
-        dataGrouping: {
-          units: [
-            [
-              "week", // unit name
-              [1], // allowed multiples
-            ],
-            ["month", [1, 2, 3, 4, 6]],
-          ],
-        },
-      },
-    ],
-  };
+    series: [],
+  });
+
+  useEffect(() => {
+    callBinanceAPI(symbol, "1m");
+  }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${symbol}@kline_1m`
+    );
+    socket.onmessage = (event) => {
+      const newKLineData = [];
+      const data = JSON.parse(event.data);
+      newKLineData.push(
+        data.k.t,
+        Number(data.k.o),
+        Number(data.k.h),
+        Number(data.k.l),
+        Number(data.k.c)
+      );
+      setOptions((op) => {
+        const newOptions = { ...op };
+        newOptions.series[0].data = [
+          ...newOptions.series[0].data,
+          newKLineData,
+        ];
+        return newOptions;
+      });
+    };
+  }, []);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };

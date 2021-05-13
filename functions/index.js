@@ -12,11 +12,17 @@ app.get("/:symbol/:interval", (req, res) => {
   const interval = req.params.interval;
   axios
     .get(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}`
+      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=1000`
     )
     .then((response) => {
       res.status(200).json(response.data);
     });
+});
+
+app.get("/explore/", (req, res) => {
+  axios.get("https://api.binance.com/api/v3/ticker/24hr").then((response) => {
+    res.status(200).json(response.data);
+  });
 });
 
 exports.binanceAPI = functions.https.onRequest(app);
