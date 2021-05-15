@@ -35,7 +35,7 @@ const PlaceOrder = () => {
   });
   const [isLimit, setIsLimit] = useState(true);
 
-  const [coinPirce, setCoinPrice] = useState(0);
+  const [coinPrice, setCoinPrice] = useState(0);
   const [qty, setQty] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -94,7 +94,7 @@ const PlaceOrder = () => {
       setCoinPrice(e.target.value);
     } else if (e.target.placeholder === "數量") {
       const totalInput = document.getElementById("orderTotal");
-      const orderTotal = coinPirce * e.target.value;
+      const orderTotal = coinPrice * e.target.value;
 
       setQty(e.target.value);
       setTotal(orderTotal);
@@ -107,7 +107,7 @@ const PlaceOrder = () => {
 
   const handleClickUploadOrder = () => {
     const OrderData = {
-      coinPirce,
+      coinPrice,
       coinType: "ETH",
       qty,
       tradingType: limitOrMarket,
