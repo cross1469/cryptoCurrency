@@ -27,4 +27,19 @@ const firebaseAddOrder = (OrderData) => {
     });
 };
 
+const firebaseReadOrder = () =>
+  db
+    .collection("users")
+    .doc("cross1469")
+    .collection("orders")
+    .get()
+    .then((orders) => {
+      const orderData = [];
+      orders.forEach((order) => {
+        orderData.push(order.data());
+      });
+      return orderData;
+    });
+
 export default firebaseAddOrder;
+export { firebaseReadOrder };
