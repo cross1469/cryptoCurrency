@@ -19,7 +19,8 @@ const firebaseAddOrder = (OrderData) => {
     .collection("orders")
     .doc()
     .set({
-      coinPirce: Number(OrderData.coinPirce),
+      timestamp: Date.now(),
+      coinPrice: Number(OrderData.coinPrice),
       coinType: OrderData.coinType,
       qty: Number(OrderData.qty),
       tradingType: OrderData.tradingType,
