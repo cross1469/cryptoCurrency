@@ -11,3 +11,20 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const firebaseAddOrder = (OrderData) => {
+  db.collection("users")
+    .doc("cross1469")
+    .collection("orders")
+    .doc()
+    .set({
+      coinPirce: Number(OrderData.coinPirce),
+      coinType: OrderData.coinType,
+      qty: Number(OrderData.qty),
+      tradingType: OrderData.tradingType,
+      type: OrderData.type,
+    });
+};
+
+export default firebaseAddOrder;
