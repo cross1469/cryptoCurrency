@@ -5,6 +5,7 @@ import AreaSpline from "./Component/AreaSpline";
 import PlaceOrder from "./Component/PlaceOrder";
 import AssetsForm from "./Component/AssetsForm";
 import Chat from "./Component/Chat";
+import WishList from "./Component/WishList";
 import CoinData from "./Component/CoinData";
 
 import "./Utils/firebase";
@@ -30,6 +31,7 @@ function App() {
       </GridLayout>
       <AssetsForm />
       <Chat />
+      <WishList />
       <CoinData />
     </div>
   );

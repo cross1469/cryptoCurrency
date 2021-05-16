@@ -62,7 +62,18 @@ const readChatData = (setChatData) =>
       setChatData(chatData);
     });
 
+const readWishList = () =>
+  db
+    .collection("users")
+    .doc("cross1469")
+    .get()
+    .then((wishLists) => {
+      const wishList = [];
+      wishLists.data().wishList.forEach((item) => {
+        wishList.push(item);
+      });
+      return wishList;
+    });
+
 export default firebaseAddOrder;
-export { firebaseReadOrder };
-export { addChatData };
-export { readChatData };
+export { firebaseReadOrder, addChatData, readChatData, readWishList };
