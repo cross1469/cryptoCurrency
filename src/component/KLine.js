@@ -5,7 +5,6 @@ import Highcharts from "highcharts/highstock";
 
 const KLine = () => {
   const symbol = "ETHUSDT";
-  // const interval = "1M";
 
   const callBinanceAPI = (coinSymbol, interval) => {
     axios
