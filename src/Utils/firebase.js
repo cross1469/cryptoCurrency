@@ -13,18 +13,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseAddOrder = (OrderData) => {
+const firebaseAddOrder = (orderData) => {
   db.collection("users")
     .doc("cross1469")
     .collection("orders")
     .doc()
     .set({
       timestamp: Date.now(),
-      coinPrice: Number(OrderData.coinPrice),
-      coinType: OrderData.coinType,
-      qty: Number(OrderData.qty),
-      tradingType: OrderData.tradingType,
-      type: OrderData.type,
+      coinPrice: Number(orderData.coinPrice),
+      coinType: orderData.coinType,
+      qty: Number(orderData.qty),
+      tradingType: orderData.tradingType,
+      type: orderData.type,
     });
 };
 
@@ -42,5 +42,27 @@ const firebaseReadOrder = () =>
       return orderData;
     });
 
+const addChatData = (chatData) => {
+  db.collection("chat").doc().set({
+    account: chatData.account,
+    messages: chatData.messages,
+    timestamp: Date.now(),
+  });
+};
+
+const readChatData = (setChatData) =>
+  db
+    .collection("chat")
+    .orderBy("timestamp")
+    .onSnapshot((querySnapshot) => {
+      const chatData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setChatData(chatData);
+    });
+
 export default firebaseAddOrder;
 export { firebaseReadOrder };
+export { addChatData };
+export { readChatData };
