@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Thead, Tr, Th, Tbody, Td } from "@bootstrap-styled/v4";
+import { addWishList } from "../Utils/firebase";
 
 const CoinData = () => {
   const [realTimeDatas, setRealTimeDatas] = useState([]);
@@ -8,6 +9,10 @@ const CoinData = () => {
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleClickToWish = (e) => {
+    addWishList(e.target.parentNode.parentNode.id);
   };
 
   const realTimeCoinData = () => {
@@ -46,7 +51,7 @@ const CoinData = () => {
   const renderCoinDatas = () => {
     if (searchTerm === "") {
       return realTimeDatas.map((realTimeData) => (
-        <Tr key={realTimeData.L + 1}>
+        <Tr key={realTimeData.L + 1} id={realTimeData.s}>
           <Td scope="row">{realTimeData.s}</Td>
           <Td>{realTimeData.c}</Td>
           <Td>{realTimeData.P}</Td>
@@ -54,13 +59,15 @@ const CoinData = () => {
           <Td>{realTimeData.l}</Td>
           <Td>{realTimeData.v}</Td>
           <Td>
-            <button type="button">收藏</button>
+            <button type="button" onClick={handleClickToWish}>
+              收藏
+            </button>
           </Td>
         </Tr>
       ));
     }
     return searchResults.map((item) => (
-      <Tr key={item.L + 1}>
+      <Tr key={item.L + 1} id={item.s}>
         <Td scope="row">{item.s}</Td>
         <Td>{item.c}</Td>
         <Td>{item.P}</Td>
@@ -68,7 +75,9 @@ const CoinData = () => {
         <Td>{item.l}</Td>
         <Td>{item.v}</Td>
         <Td>
-          <button type="button">收藏</button>
+          <button type="button" onClick={handleClickToWish}>
+            收藏
+          </button>
         </Td>
       </Tr>
     ));

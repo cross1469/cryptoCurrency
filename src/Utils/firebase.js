@@ -62,7 +62,42 @@ const readChatData = (setChatData) =>
       setChatData(chatData);
     });
 
+const readWishList = () =>
+  db
+    .collection("users")
+    .doc("cross1469")
+    .get()
+    .then((wishLists) => {
+      const wishList = [];
+      wishLists.data().wishList.forEach((item) => {
+        wishList.push(item);
+      });
+      return wishList;
+    });
+
+const addWishList = async (wishList) => {
+  const wishListData = await readWishList();
+
+  if (wishListData.indexOf(wishList) === -1) {
+    db.collection("users")
+      .doc("cross1469")
+      .update({
+        wishList: firebase.firestore.FieldValue.arrayUnion(wishList),
+      });
+  } else {
+    db.collection("users")
+      .doc("cross1469")
+      .update({
+        wishList: firebase.firestore.FieldValue.arrayRemove(wishList),
+      });
+  }
+};
+
 export default firebaseAddOrder;
-export { firebaseReadOrder };
-export { addChatData };
-export { readChatData };
+export {
+  firebaseReadOrder,
+  addChatData,
+  readChatData,
+  addWishList,
+  readWishList,
+};
