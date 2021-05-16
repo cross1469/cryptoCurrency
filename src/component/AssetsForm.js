@@ -54,7 +54,7 @@ const AssetsForm = () => {
   }
 
   return (
-    <div>
+    <>
       <h2>購買清單</h2>
       <Table id="buy" hover>
         <Thead>
@@ -87,7 +87,7 @@ const AssetsForm = () => {
         </Thead>
         <Tbody>{renderSellTable()}</Tbody>
       </Table>
-    </div>
+    </>
   );
 };
 
