@@ -75,5 +75,29 @@ const readWishList = () =>
       return wishList;
     });
 
+const addWishList = async (wishList) => {
+  const wishListData = await readWishList();
+
+  if (wishListData.indexOf(wishList) === -1) {
+    db.collection("users")
+      .doc("cross1469")
+      .update({
+        wishList: firebase.firestore.FieldValue.arrayUnion(wishList),
+      });
+  } else {
+    db.collection("users")
+      .doc("cross1469")
+      .update({
+        wishList: firebase.firestore.FieldValue.arrayRemove(wishList),
+      });
+  }
+};
+
 export default firebaseAddOrder;
-export { firebaseReadOrder, addChatData, readChatData, readWishList };
+export {
+  firebaseReadOrder,
+  addChatData,
+  readChatData,
+  addWishList,
+  readWishList,
+};
