@@ -1,7 +1,9 @@
 import firebase from "firebase";
+import "firebase/auth";
+import "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_FIREBASE_APIKEY,
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: "cryptocurrency-0511.firebaseapp.com",
   projectId: "cryptocurrency-0511",
   storageBucket: "cryptocurrency-0511.appspot.com",
@@ -93,6 +95,50 @@ const addWishList = async (wishList) => {
   }
 };
 
+const firebaseAuthSignUp = (email, password) => {
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+};
+
+const firebaseAuthSignIn = (email, password) => {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+};
+
+// const firebaseAuthSignOut = () => {
+//   au.signOut()
+//     .then(() => {
+//       window.location.reload();
+//     })
+//     .catch((error) => {
+//       console.log(error.message);
+//     });
+// };
+
+// const getUserData = () => {
+//   au.onAuthStateChanged((user) => {
+//     if (user) {
+//       const { email } = user;
+//       const { uid } = user;
+//       console.log(email, uid);
+//     }
+//   });
+// };
+
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -100,4 +146,8 @@ export {
   readChatData,
   addWishList,
   readWishList,
+  firebaseAuthSignUp,
+  firebaseAuthSignIn,
+  // getUserData,
+  // firebaseAuthSignOut,
 };

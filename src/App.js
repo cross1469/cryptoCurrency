@@ -7,6 +7,7 @@ import AssetsForm from "./Component/AssetsForm";
 import Chat from "./Component/Chat";
 import WishList from "./Component/WishList";
 import CoinData from "./Component/CoinData";
+import Sign from "./Component/Sign";
 
 import "./Utils/firebase";
 
@@ -32,6 +33,7 @@ function App() {
       <AssetsForm />
       <Chat />
       <WishList />
+      <Sign />
       <CoinData />
     </div>
   );
