@@ -7,7 +7,6 @@ import Header from "./Component/Header";
 import Footer from "./Component/Footer";
 import Landing from "./Pages/Landing";
 import Explore from "./Pages/Explore";
-import Terms from "./Pages/Terms";
 import Portfolio from "./Pages/Portfolio";
 import Login from "./Pages/Login";
 
@@ -25,7 +24,6 @@ function App() {
           <Route exact path="/explore" component={Explore} />
           <Route exact path="/portfolio" component={Portfolio} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/Terms" component={Terms} />
           <Route exact path="/" component={Landing} />
           <Footer />
         </div>

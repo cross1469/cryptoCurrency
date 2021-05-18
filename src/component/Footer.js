@@ -45,24 +45,29 @@ const NavItemLink = styled.div`
 `;
 
 const Footer = () => (
-  <FooterStyled bg="black" pb={2}>
-    <Logo py={3} color="white" ml={4} fontSize={32} letterSpacing="1rem">
+  <FooterStyled bg="black" py={28}>
+    <Logo color="white" ml={4} fontSize={32} letterSpacing="1rem">
       <Link to="/">Logo</Link>
     </Logo>
     <Nav>
       <NavItem mr={4}>
-        <NavItemLink py={3} color="white" letterSpacing="0.5rem">
+        <NavItemLink
+          py={3}
+          color="white"
+          letterSpacing="0.3rem"
+          fontFamily="Roboto"
+        >
           <Link to="/explore">EXPLORE</Link>
         </NavItemLink>
       </NavItem>
       <NavItem mr={4}>
-        <NavItemLink py={3} color="white" letterSpacing="0.5rem">
+        <NavItemLink
+          py={3}
+          color="white"
+          letterSpacing="0.3rem"
+          fontFamily="Roboto"
+        >
           <Link to="/portfolio">PORTFOLIO</Link>
-        </NavItemLink>
-      </NavItem>
-      <NavItem mr={4}>
-        <NavItemLink py={3} color="white" letterSpacing="0.1rem">
-          <Link to="/terms">TERMS & CONDITIONS</Link>
         </NavItemLink>
       </NavItem>
     </Nav>
