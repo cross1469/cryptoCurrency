@@ -1,6 +1,7 @@
 import React from "react";
 // import GridLayout from "react-grid-layout";
 import { Reset } from "styled-reset";
+import { ThemeProvider } from "styled-components";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
 
@@ -14,6 +15,7 @@ import Footer from "./Component/Footer";
 import Sign from "./Component/Sign";
 
 import "./Utils/firebase";
+import theme from "./Utils/theme";
 
 function App() {
   // const layout = [
@@ -22,12 +24,13 @@ function App() {
   //   { i: "c", x: 10, y: 0, w: 12, h: 1 },
   // ];
   return (
-    <div className="App">
-      <Reset />
-      <Header />
-      <Sign />
-      <Footer />
-      {/* <GridLayout className="layout" layout={layout} cols={12} width={1200}>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Reset />
+        <Header />
+        <Sign />
+        <Footer />
+        {/* <GridLayout className="layout" layout={layout} cols={12} width={1200}>
         <div key="a">
           <KLine />
         </div>
@@ -43,7 +46,8 @@ function App() {
       <WishList />
       <Sign />
       <CoinData /> */}
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 

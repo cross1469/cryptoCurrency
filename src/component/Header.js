@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { color, space, typography } from "styled-system";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -7,17 +8,17 @@ const HeaderStyled = styled.header`
   align-items: center;
   outline: none;
   width: 100%;
-  background: #000;
-  padding-bottom: 8px;
+  ${color}
+  ${space}
+  box-sizing: border-box;
 `;
 
 const Logo = styled.a`
   text-decoration: none;
-  margin-left: 24px;
   cursor: pointer;
-  color: #fff;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  ${color}
+  ${space}
+  ${typography}
 `;
 
 const Nav = styled.ul`
@@ -25,32 +26,57 @@ const Nav = styled.ul`
 `;
 
 const NavItem = styled.li`
-  margin-right: 16px;
+  ${space}
 `;
 
 const NavItemLink = styled.a`
-  padding-top: 16px;
-  padding-bottom: 16px;
   text-decoration: none;
   cursor: pointer;
-  color: #fff;
+  ${color}
+  ${space}
+  ${typography}
   :hover {
     border-bottom: 2px solid orange;
   }
 `;
 
 const Header = () => (
-  <HeaderStyled>
-    <Logo href="/">Logo</Logo>
+  <HeaderStyled bg="black" pb={2}>
+    <Logo
+      href="/"
+      color="white"
+      ml={4}
+      py={3}
+      fontSize={32}
+      letterSpacing="1rem"
+    >
+      Logo
+    </Logo>
     <Nav>
-      <NavItem>
-        <NavItemLink href="/explore">EXPLORE</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink
+          href="/explore"
+          color="white"
+          py={3}
+          letterSpacing="0.5rem"
+        >
+          EXPLORE
+        </NavItemLink>
       </NavItem>
-      <NavItem>
-        <NavItemLink href="/portfolio">PORTFOLIO</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink
+          href="/portfolio"
+          color="white"
+          py={3}
+          letterSpacing="0.5rem"
+        >
+          PORTFOLIO
+        </NavItemLink>
       </NavItem>
-      <NavItem>
-        <NavItemLink href="/login">LOGIN</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink href="/login" color="white" py={3} letterSpacing="0.5rem">
+          LOGIN
+        </NavItemLink>
       </NavItem>
     </Nav>
   </HeaderStyled>

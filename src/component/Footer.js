@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { color, space, typography } from "styled-system";
 
 const FooterStyled = styled.footer`
   display: flex;
@@ -7,17 +8,16 @@ const FooterStyled = styled.footer`
   align-items: center;
   outline: none;
   width: 100%;
-  background: #000;
-  padding-bottom: 8px;
+  ${color}
+  ${space}
 `;
 
 const Logo = styled.a`
   text-decoration: none;
-  margin-left: 24px;
   cursor: pointer;
-  color: #fff;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  ${color}
+  ${space}
+  ${typography}
 `;
 
 const Nav = styled.ul`
@@ -25,32 +25,57 @@ const Nav = styled.ul`
 `;
 
 const NavItem = styled.li`
-  margin-right: 16px;
+  ${space}
 `;
 
 const NavItemLink = styled.a`
-  padding-top: 16px;
-  padding-bottom: 16px;
   text-decoration: none;
   cursor: pointer;
-  color: #fff;
+  ${color}
+  ${space}
+  ${typography}
   :hover {
     border-bottom: 2px solid orange;
   }
 `;
 
 const Footer = () => (
-  <FooterStyled>
-    <Logo href="/">Logo</Logo>
+  <FooterStyled bg="black" pb={2}>
+    <Logo
+      href="/"
+      py={3}
+      color="white"
+      ml={4}
+      fontSize={32}
+      letterSpacing="1rem"
+    >
+      Logo
+    </Logo>
     <Nav>
-      <NavItem>
-        <NavItemLink href="/explore">EXPLORE</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink
+          href="/explore"
+          py={3}
+          color="white"
+          letterSpacing="0.5rem"
+        >
+          EXPLORE
+        </NavItemLink>
       </NavItem>
-      <NavItem>
-        <NavItemLink href="/portfolio">PORTFOLIO</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink
+          href="/portfolio"
+          py={3}
+          color="white"
+          letterSpacing="0.5rem"
+        >
+          PORTFOLIO
+        </NavItemLink>
       </NavItem>
-      <NavItem>
-        <NavItemLink href="/terms">TERMS & CONDITIONS</NavItemLink>
+      <NavItem mr={4}>
+        <NavItemLink href="/terms" py={3} color="white" letterSpacing="0.1rem">
+          TERMS & CONDITIONS
+        </NavItemLink>
       </NavItem>
     </Nav>
   </FooterStyled>
