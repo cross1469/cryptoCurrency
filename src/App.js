@@ -2,6 +2,7 @@ import React from "react";
 // import GridLayout from "react-grid-layout";
 import { Reset } from "styled-reset";
 import Header from "./Component/Header";
+import Footer from "./Component/Footer";
 
 // import KLine from "./Component/KLine";
 // import AreaSpline from "./Component/AreaSpline";
@@ -10,7 +11,7 @@ import Header from "./Component/Header";
 // import Chat from "./Component/Chat";
 // import WishList from "./Component/WishList";
 // import CoinData from "./Component/CoinData";
-// import Sign from "./Component/Sign";
+import Sign from "./Component/Sign";
 
 import "./Utils/firebase";
 
@@ -24,6 +25,8 @@ function App() {
     <div className="App">
       <Reset />
       <Header />
+      <Sign />
+      <Footer />
       {/* <GridLayout className="layout" layout={layout} cols={12} width={1200}>
         <div key="a">
           <KLine />
