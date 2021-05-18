@@ -1,17 +1,57 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  Button,
-  ButtonGroup,
-  InputGroup,
-  Input,
-  InputGroupButton,
-} from "@bootstrap-styled/v4/";
-import firebaseAddOrder from "../Utils/firebase";
+import { color, space, typography } from "styled-system";
+import firebaseAddOrder from "../../Utils/firebase";
 
 const PlaceOrderBtn = styled.div`
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  ${space}
+`;
+
+const Button = styled.button`
+  border: none;
+  outline: none;
+  cursor: pointer;
+  ${color}
+  ${space}
+  ${typography}
+`;
+
+const AllInput = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+`;
+
+const InputGroup = styled.div`
+  display: inline-flex;
+  height: 32px;
+  border: 1px solid rgba(43, 47, 54, 0.8);
+  border-radius: 4px;
+  align-items: center;
+  :hover {
+    border-color: rgb(240, 185, 11);
+  }
+`;
+
+const InputText = styled.div`
+  min-width: 48px;
+  ${color}
+  ${space}
+  ${typography}
+`;
+
+const Input = styled.input`
+  outline: none;
+  border: none;
+  ${color}
+  ${space}
+  ${typography}
 `;
 
 const PlaceOrder = () => {
@@ -33,6 +73,7 @@ const PlaceOrder = () => {
     "$btn-primary-border": "black",
     "$btn-primary-bg": "black",
   });
+  console.log(buyColor, sellColor, limitColor, marketColor);
   const [isLimit, setIsLimit] = useState(true);
 
   const [coinPrice, setCoinPrice] = useState(0);
@@ -118,19 +159,19 @@ const PlaceOrder = () => {
 
   const renderBtn = () => (
     <PlaceOrderBtn>
-      <ButtonGroup onClick={handleClickBuy}>
-        <Button size="lg" theme={buyColor}>
+      <ButtonGroup onClick={handleClickBuy} mb={2}>
+        <Button px={4} py={2} bg="#02c077" color="white" lineHeight={2}>
           買入
         </Button>
-        <Button size="lg" theme={sellColor}>
+        <Button px={4} py={2} bg="#2b3139" color="#848e9c" lineHeight={2}>
           賣出
         </Button>
       </ButtonGroup>
-      <ButtonGroup onClick={handleClickPrice}>
-        <Button size="lg" id="limitPrice" theme={limitColor}>
+      <ButtonGroup onClick={handleClickPrice} mb={2}>
+        <Button id="limitPrice" px={4} py={2} bg="#14151a" color="white">
           限價
         </Button>
-        <Button size="lg" id="marketPrice" theme={marketColor}>
+        <Button id="marketPrice" px={4} py={2} bg="#14151a" color="#848e9c">
           市價
         </Button>
       </ButtonGroup>
@@ -140,31 +181,48 @@ const PlaceOrder = () => {
   const renderInput = () => {
     if (isLimit === true) {
       return (
-        <InputGroup>
-          <Input placeholder="價格" onChange={handleChangeInputValue} />
-          <Input placeholder="數量" onChange={handleChangeInputValue} />
-          <Input
-            placeholder="成交額"
-            id="orderTotal"
-            onChange={handleChangeInputValue}
-          />
-          <InputGroupButton onClick={handleClickUploadOrder}>
-            Send
-          </InputGroupButton>
-        </InputGroup>
+        <AllInput>
+          <InputGroup>
+            <InputText ml={2}>價格</InputText>
+            <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
+            <InputText mr={2}>USDT</InputText>
+          </InputGroup>
+          <InputGroup>
+            <InputText ml={2}>數量</InputText>
+            <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
+            <InputText mr={2}>ETH</InputText>
+          </InputGroup>
+          <InputGroup>
+            <InputText ml={2}>成交額</InputText>
+            <Input
+              id="orderTotal"
+              onChange={handleChangeInputValue}
+              textAlign="right"
+              px={1}
+            />
+            <InputText mr={2}>USDT</InputText>
+          </InputGroup>
+        </AllInput>
       );
     }
     return (
-      <InputGroup>
-        <Input placeholder="市價" size="lg" onChange={handleChangeInputValue} />
-        <Input placeholder="數量" size="lg" onChange={handleChangeInputValue} />
-        <Input
-          placeholder="成交額"
-          size="lg"
-          onChange={handleChangeInputValue}
-        />
-        <InputGroupButton>Send</InputGroupButton>
-      </InputGroup>
+      <AllInput>
+        <InputGroup>
+          <InputText ml={2}>市價</InputText>
+          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
+          <InputText mr={2}>USDT</InputText>
+        </InputGroup>
+        <InputGroup>
+          <InputText ml={2}>數量</InputText>
+          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
+          <InputText mr={2}>ETH</InputText>
+        </InputGroup>
+        <InputGroup>
+          <InputText ml={2}>成交額</InputText>
+          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
+          <InputText mr={2}>USDT</InputText>
+        </InputGroup>
+      </AllInput>
     );
   };
 
@@ -172,6 +230,9 @@ const PlaceOrder = () => {
     <div>
       {renderBtn()}
       {renderInput()}
+      <Button onClick={handleClickUploadOrder} px={3} py={2}>
+        Send
+      </Button>
     </div>
   );
 };
