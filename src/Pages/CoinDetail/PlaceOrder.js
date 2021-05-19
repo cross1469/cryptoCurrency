@@ -3,6 +3,12 @@ import styled from "styled-components";
 import { color, space, typography, flexbox } from "styled-system";
 import firebaseAddOrder from "../../Utils/firebase";
 
+const PlaceOrderTitle = styled.div`
+  ${color}
+  ${space}
+  ${typography}
+`;
+
 const RenderPlaceOrder = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -339,6 +345,14 @@ const PlaceOrder = () => {
 
   return (
     <RenderPlaceOrder ml={5}>
+      <PlaceOrderTitle
+        fontFamily="Roboto"
+        fontSize={28}
+        fontWeight="bold"
+        mb={2}
+      >
+        下單
+      </PlaceOrderTitle>
       {renderBtn()}
       {renderInput()}
       <Button

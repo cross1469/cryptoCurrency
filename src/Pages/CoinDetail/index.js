@@ -4,6 +4,7 @@ import { space, flexbox } from "styled-system";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
+import AddValue from "./AddValue";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -20,7 +21,10 @@ const CoinDetail = () => (
   <Container mt={3}>
     <FlexBox justifyContent="center">
       <KLine />
-      <PlaceOrder />
+      <div>
+        <PlaceOrder />
+        <AddValue />
+      </div>
     </FlexBox>
     <Chat />
   </Container>
