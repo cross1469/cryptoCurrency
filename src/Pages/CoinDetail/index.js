@@ -5,6 +5,7 @@ import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
 import AddValue from "./AddValue";
+import AssetTable from "./AssetTable";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -20,7 +21,10 @@ const FlexBox = styled.div`
 const CoinDetail = () => (
   <Container mt={3}>
     <FlexBox justifyContent="center">
-      <KLine />
+      <div>
+        <KLine />
+        <AssetTable />
+      </div>
       <div>
         <PlaceOrder />
         <AddValue />
