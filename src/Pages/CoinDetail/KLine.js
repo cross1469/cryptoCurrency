@@ -46,7 +46,8 @@ const KLine = () => {
   const [options, setOptions] = useState({
     chart: {
       zoomType: "x",
-      width: 800,
+      "max-width": 800,
+      height: 400,
     },
     rangeSelector: {
       enabled: true,

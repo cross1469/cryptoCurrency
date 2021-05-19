@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
+import { color, space, typography, flexbox } from "styled-system";
 import firebaseAddOrder from "../../Utils/firebase";
+
+const RenderPlaceOrder = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  ${space}
+`;
 
 const PlaceOrderBtn = styled.div`
   display: flex;
@@ -12,6 +18,7 @@ const PlaceOrderBtn = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   ${space}
+  ${flexbox}
 `;
 
 const Button = styled.button`
@@ -21,6 +28,7 @@ const Button = styled.button`
   ${color}
   ${space}
   ${typography}
+  ${flexbox}
 `;
 
 const AllInput = styled.div`
@@ -29,6 +37,7 @@ const AllInput = styled.div`
 `;
 
 const InputGroup = styled.div`
+  ${space}
   display: inline-flex;
   height: 32px;
   border: 1px solid rgba(43, 47, 54, 0.8);
@@ -58,24 +67,27 @@ const PlaceOrder = () => {
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [limitOrMarket, setLimitOrMarket] = useState("limit");
   const [buyColor, setBuyColor] = useState({
-    "$btn-primary-border": "#198754",
-    "$btn-primary-bg": "#198754",
+    color: "white",
+    bg: "#02c077",
   });
   const [sellColor, setSellColor] = useState({
-    "$btn-primary-border": "black",
-    "$btn-primary-bg": "black",
+    color: "#848e9c",
+    bg: "#2b3139",
   });
   const [limitColor, setLimitColor] = useState({
-    "$btn-primary-border": "#6c757d",
-    "$btn-primary-bg": "#6c757d",
+    color: "white",
+    bg: "#14151a",
   });
   const [marketColor, setMarketColor] = useState({
-    "$btn-primary-border": "black",
-    "$btn-primary-bg": "black",
+    color: "#848e9c",
+    bg: "#14151a",
   });
-  console.log(buyColor, sellColor, limitColor, marketColor);
-  const [isLimit, setIsLimit] = useState(true);
+  const [orderBtnColor, setOrderBtnColor] = useState({
+    color: "white",
+    bg: "#02c077",
+  });
 
+  const [isLimit, setIsLimit] = useState(true);
   const [coinPrice, setCoinPrice] = useState(0);
   const [qty, setQty] = useState(0);
   const [total, setTotal] = useState(0);
@@ -84,22 +96,30 @@ const PlaceOrder = () => {
     if (e.target.innerHTML === "買入") {
       setBuyOrSell("buy");
       setBuyColor({
-        "$btn-primary-border": "#198754",
-        "$btn-primary-bg": "#198754",
+        color: "white",
+        bg: "#02c077",
       });
       setSellColor({
-        "$btn-primary-border": "black",
-        "$btn-primary-bg": "black",
+        color: "#848e9c",
+        bg: "#2b3139",
+      });
+      setOrderBtnColor({
+        color: "white",
+        bg: "#02c077",
       });
     } else if (e.target.innerHTML === "賣出") {
       setBuyOrSell("sell");
       setBuyColor({
-        "$btn-primary-border": "black",
-        "$btn-primary-bg": "black",
+        color: "#848e9c",
+        bg: "#2b3139",
       });
       setSellColor({
-        "$btn-primary-border": "#dc3545",
-        "$btn-primary-bg": "#dc3545",
+        color: "white",
+        bg: "#f84960",
+      });
+      setOrderBtnColor({
+        color: "white",
+        bg: "#f84960",
       });
     }
   };
@@ -108,23 +128,23 @@ const PlaceOrder = () => {
     if (e.target.innerHTML === "限價") {
       setLimitOrMarket("limit");
       setLimitColor({
-        "$btn-primary-border": "#6c757d",
-        "$btn-primary-bg": "#6c757d",
+        color: "white",
+        bg: "#14151a",
       });
       setMarketColor({
-        "$btn-primary-border": "black",
-        "$btn-primary-bg": "black",
+        color: "#848e9c",
+        bg: "#14151a",
       });
       setIsLimit(true);
     } else if (e.target.innerHTML === "市價") {
       setLimitOrMarket("market");
       setLimitColor({
-        "$btn-primary-border": "black",
-        "$btn-primary-bg": "black",
+        color: "#848e9c",
+        bg: "#14151a",
       });
       setMarketColor({
-        "$btn-primary-border": "#6c757d",
-        "$btn-primary-bg": "#6c757d",
+        color: "white",
+        bg: "#14151a",
       });
       setIsLimit(false);
     }
@@ -160,18 +180,59 @@ const PlaceOrder = () => {
   const renderBtn = () => (
     <PlaceOrderBtn>
       <ButtonGroup onClick={handleClickBuy} mb={2}>
-        <Button px={4} py={2} bg="#02c077" color="white" lineHeight={2}>
+        <Button
+          px={4}
+          py={2}
+          bg={buyColor.bg}
+          color={buyColor.color}
+          lineHeight={2}
+          flexGrow={1}
+          fontSize={16}
+          mr={2}
+          fontFamily="Roboto"
+          fontWeight="100"
+        >
           買入
         </Button>
-        <Button px={4} py={2} bg="#2b3139" color="#848e9c" lineHeight={2}>
+        <Button
+          px={4}
+          py={2}
+          bg={sellColor.bg}
+          color={sellColor.color}
+          lineHeight={2}
+          flexGrow={1}
+          fontSize={16}
+          fontFamily="Roboto"
+        >
           賣出
         </Button>
       </ButtonGroup>
       <ButtonGroup onClick={handleClickPrice} mb={2}>
-        <Button id="limitPrice" px={4} py={2} bg="#14151a" color="white">
+        <Button
+          id="limitPrice"
+          px={4}
+          py={2}
+          bg={limitColor.bg}
+          color={limitColor.color}
+          lineHeight={2}
+          flexGrow={1}
+          fontSize={16}
+          mr={2}
+          fontFamily="Roboto"
+        >
           限價
         </Button>
-        <Button id="marketPrice" px={4} py={2} bg="#14151a" color="#848e9c">
+        <Button
+          id="marketPrice"
+          px={4}
+          py={2}
+          bg={marketColor.bg}
+          color={marketColor.color}
+          lineHeight={2}
+          flexGrow={1}
+          fontSize={16}
+          fontFamily="Roboto"
+        >
           市價
         </Button>
       </ButtonGroup>
@@ -182,58 +243,117 @@ const PlaceOrder = () => {
     if (isLimit === true) {
       return (
         <AllInput>
-          <InputGroup>
-            <InputText ml={2}>價格</InputText>
-            <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
-            <InputText mr={2}>USDT</InputText>
+          <InputGroup mb={2}>
+            <InputText ml={2} fontFamily="Roboto">
+              價格
+            </InputText>
+            <Input
+              onChange={handleChangeInputValue}
+              textAlign="right"
+              px={1}
+              fontFamily="Roboto"
+            />
+            <InputText mr={2} fontFamily="Roboto">
+              USDT
+            </InputText>
           </InputGroup>
-          <InputGroup>
-            <InputText ml={2}>數量</InputText>
-            <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
-            <InputText mr={2}>ETH</InputText>
+          <InputGroup mb={2}>
+            <InputText ml={2} fontFamily="Roboto">
+              數量
+            </InputText>
+            <Input
+              onChange={handleChangeInputValue}
+              textAlign="right"
+              px={1}
+              fontFamily="Roboto"
+            />
+            <InputText mr={2} fontFamily="Roboto">
+              ETH
+            </InputText>
           </InputGroup>
-          <InputGroup>
-            <InputText ml={2}>成交額</InputText>
+          <InputGroup mb={2}>
+            <InputText ml={2} fontSize={16} fontFamily="Roboto">
+              成交額
+            </InputText>
             <Input
               id="orderTotal"
               onChange={handleChangeInputValue}
               textAlign="right"
+              fontFamily="Roboto"
               px={1}
             />
-            <InputText mr={2}>USDT</InputText>
+            <InputText mr={2} fontFamily="Roboto">
+              USDT
+            </InputText>
           </InputGroup>
         </AllInput>
       );
     }
     return (
       <AllInput>
-        <InputGroup>
-          <InputText ml={2}>市價</InputText>
-          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
-          <InputText mr={2}>USDT</InputText>
+        <InputGroup mb={2}>
+          <InputText ml={2} fontFamily="Roboto">
+            市價
+          </InputText>
+          <Input
+            onChange={handleChangeInputValue}
+            textAlign="right"
+            px={1}
+            fontFamily="Roboto"
+          />
+          <InputText mr={2} fontFamily="Roboto">
+            USDT
+          </InputText>
         </InputGroup>
-        <InputGroup>
-          <InputText ml={2}>數量</InputText>
-          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
-          <InputText mr={2}>ETH</InputText>
+        <InputGroup mb={2}>
+          <InputText ml={2} fontFamily="Roboto">
+            數量
+          </InputText>
+          <Input
+            onChange={handleChangeInputValue}
+            textAlign="right"
+            px={1}
+            fontFamily="Roboto"
+          />
+          <InputText mr={2} fontFamily="Roboto">
+            ETH
+          </InputText>
         </InputGroup>
-        <InputGroup>
-          <InputText ml={2}>成交額</InputText>
-          <Input onChange={handleChangeInputValue} textAlign="right" px={1} />
-          <InputText mr={2}>USDT</InputText>
+        <InputGroup mb={2}>
+          <InputText ml={2} fontFamily="Roboto">
+            成交額
+          </InputText>
+          <Input
+            onChange={handleChangeInputValue}
+            textAlign="right"
+            px={1}
+            fontFamily="Roboto"
+          />
+          <InputText mr={2} fontFamily="Roboto">
+            USDT
+          </InputText>
         </InputGroup>
       </AllInput>
     );
   };
 
   return (
-    <div>
+    <RenderPlaceOrder ml={5}>
       {renderBtn()}
       {renderInput()}
-      <Button onClick={handleClickUploadOrder} px={3} py={2}>
+      <Button
+        onClick={handleClickUploadOrder}
+        px={3}
+        py={12}
+        mb={2}
+        bg={orderBtnColor.bg}
+        color={orderBtnColor.color}
+        fontFamily="Roboto"
+        fontSize={16}
+      >
         Send
       </Button>
-    </div>
+    </RenderPlaceOrder>
   );
 };
 
