@@ -46,14 +46,14 @@ const KLine = () => {
   const [options, setOptions] = useState({
     chart: {
       zoomType: "x",
+      "max-width": 800,
+      height: 400,
     },
     rangeSelector: {
       enabled: true,
       allButtonsEnabled: true,
       buttons: [
         {
-          // type: "minute",
-          // count: 1,
           text: "1m",
           events: {
             click() {
@@ -62,8 +62,6 @@ const KLine = () => {
           },
         },
         {
-          // type: "minute",
-          // count: 15,
           text: "15m",
           events: {
             click() {
@@ -72,8 +70,6 @@ const KLine = () => {
           },
         },
         {
-          // type: "hour",
-          // count: 1,
           text: "1h",
           events: {
             click() {
@@ -82,8 +78,6 @@ const KLine = () => {
           },
         },
         {
-          // type: "hour",
-          // count: 4,
           text: "4h",
           events: {
             click() {
@@ -92,8 +86,6 @@ const KLine = () => {
           },
         },
         {
-          // type: "day",
-          // count: 1,
           text: "1d",
           events: {
             click() {
@@ -102,8 +94,6 @@ const KLine = () => {
           },
         },
         {
-          // type: "week",
-          // count: 1,
           text: "週線",
           events: {
             click() {
