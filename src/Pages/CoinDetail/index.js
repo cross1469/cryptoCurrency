@@ -6,6 +6,7 @@ import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
 import AddValue from "./AddValue";
 import AssetTable from "./AssetTable";
+import DealTable from "./DealTable";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -24,6 +25,7 @@ const CoinDetail = () => (
       <div>
         <KLine />
         <AssetTable />
+        <DealTable />
       </div>
       <div>
         <PlaceOrder />

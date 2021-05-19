@@ -57,13 +57,13 @@ const AssetTable = () => (
     >
       資產管理
     </AssetTableTile>
-    <AssetTableHead fontFamily="Roboto" fontSize={12} py={2}>
+    <AssetTableHead fontFamily="Roboto" fontSize={16} py={2}>
       <AssetTableHeadItem flexGrow={1}>幣種</AssetTableHeadItem>
       <AssetTableHeadItem flexGrow={1}>總額</AssetTableHeadItem>
       <AssetTableHeadItem flexGrow={1}>可用資產</AssetTableHeadItem>
       <AssetTableHeadItem flexGrow={1}>下單鎖定</AssetTableHeadItem>
     </AssetTableHead>
-    <AssetTableBody fontFamily="Roboto" fontSize={12} py={2}>
+    <AssetTableBody fontFamily="Roboto" fontSize={16} py={2}>
       <AssetTableBodyItem flexGrow={1}>ETH</AssetTableBodyItem>
       <AssetTableBodyItem flexGrow={1}>0.05007971</AssetTableBodyItem>
       <AssetTableBodyItem flexGrow={1}>0.05007971</AssetTableBodyItem>
