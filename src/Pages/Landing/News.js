@@ -24,7 +24,16 @@ const NewsSubtitle = styled.div`
   ${space}
   ${typography}
 `;
-const FlexBox = styled.div``;
+
+const NewsCardsContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const FlexBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const News = () => (
   <>
@@ -52,12 +61,14 @@ const News = () => (
           熱門新聞快訊
         </NewsSubtitle>
       </NewsCotainer>
-      <FlexBox>
-        <NewsCard />
-        <NewsCard />
-        <NewsCard />
-        <NewsCard />
-      </FlexBox>
+      <NewsCardsContainer>
+        <FlexBox>
+          <NewsCard />
+          <NewsCard />
+          <NewsCard />
+          <NewsCard />
+        </FlexBox>
+      </NewsCardsContainer>
     </NewsBg>
   </>
 );
