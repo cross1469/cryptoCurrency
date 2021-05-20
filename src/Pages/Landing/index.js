@@ -1,5 +1,10 @@
 import React from "react";
+import Banner from "./Banner";
 
-const Landing = () => <>Landing</>;
+const Landing = () => (
+  <>
+    <Banner />
+  </>
+);
 
 export default Landing;
