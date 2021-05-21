@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { Link } from "react-router-dom";
 import SignModal from "./Modal";
+import Sign from "./Sign";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -88,7 +89,9 @@ const Header = () => {
           </NavItem>
         </Nav>
       </HeaderStyled>
-      <SignModal ref={modal}>Hello World</SignModal>
+      <SignModal ref={modal}>
+        <Sign />
+      </SignModal>
     </>
   );
 };

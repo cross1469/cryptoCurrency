@@ -68,7 +68,8 @@ const ModalBody = styled.div`
   z-index: 2;
   position: relative;
   margin: 0 auto;
-  background-color: #303030;
+  /* background-color: #303030; */
+  background-color: white;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 3px;
   overflow-x: hidden;
