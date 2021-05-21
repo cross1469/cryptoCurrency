@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { Link } from "react-router-dom";
+import SignModal from "./Modal";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -45,44 +46,51 @@ const NavItemLink = styled.div`
   }
 `;
 
-const Header = () => (
-  <HeaderStyled bg="black" py={28}>
-    <Logo color="white" ml={4} fontSize={32} letterSpacing="1rem">
-      <Link to="/">Logo</Link>
-    </Logo>
-    <Nav>
-      <NavItem mr={4}>
-        <NavItemLink
-          color="white"
-          py={3}
-          letterSpacing="0.3rem"
-          fontFamily="Roboto"
-        >
-          <Link to="/explore">EXPLORE</Link>
-        </NavItemLink>
-      </NavItem>
-      <NavItem mr={4}>
-        <NavItemLink
-          color="white"
-          py={3}
-          letterSpacing="0.3rem"
-          fontFamily="Roboto"
-        >
-          <Link to="/portfolio">PORTFOLIO</Link>
-        </NavItemLink>
-      </NavItem>
-      <NavItem mr={4}>
-        <NavItemLink
-          color="white"
-          py={3}
-          letterSpacing="0.3rem"
-          fontFamily="Roboto"
-        >
-          <Link to="/login">LOGIN</Link>
-        </NavItemLink>
-      </NavItem>
-    </Nav>
-  </HeaderStyled>
-);
+const Header = () => {
+  const modal = useRef(null);
+  return (
+    <>
+      <HeaderStyled bg="black" py={28}>
+        <Logo color="white" ml={4} fontSize={32} letterSpacing="1rem">
+          <Link to="/">Logo</Link>
+        </Logo>
+        <Nav>
+          <NavItem mr={4}>
+            <NavItemLink
+              color="white"
+              py={3}
+              letterSpacing="0.3rem"
+              fontFamily="Roboto"
+            >
+              <Link to="/explore">EXPLORE</Link>
+            </NavItemLink>
+          </NavItem>
+          <NavItem mr={4}>
+            <NavItemLink
+              color="white"
+              py={3}
+              letterSpacing="0.3rem"
+              fontFamily="Roboto"
+            >
+              <Link to="/portfolio">PORTFOLIO</Link>
+            </NavItemLink>
+          </NavItem>
+          <NavItem mr={4}>
+            <NavItemLink
+              color="white"
+              pb={3}
+              letterSpacing="0.3rem"
+              fontFamily="Roboto"
+              onClick={() => modal.current.open()}
+            >
+              <a href>LOGIN</a>
+            </NavItemLink>
+          </NavItem>
+        </Nav>
+      </HeaderStyled>
+      <SignModal ref={modal}>Hello World</SignModal>
+    </>
+  );
+};
 
 export default Header;

@@ -8,7 +8,6 @@ import Footer from "./Component/Footer";
 import Landing from "./Pages/Landing";
 import Explore from "./Pages/Explore";
 import Portfolio from "./Pages/Portfolio";
-import Login from "./Pages/Login";
 
 import "./Utils/firebase";
 import theme from "./Utils/theme";
@@ -23,7 +22,6 @@ function App() {
           <Route exact path="/coindetail/:id" component={CoinDetail} />
           <Route exact path="/explore" component={Explore} />
           <Route exact path="/portfolio" component={Portfolio} />
-          <Route exact path="/login" component={Login} />
           <Route exact path="/" component={Landing} />
           <Footer />
         </div>
