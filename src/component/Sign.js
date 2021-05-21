@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { color, space, typography } from "styled-system";
 import { firebaseAuthSignIn, firebaseAuthSignUp } from "../Utils/firebase";
 import catInput from "../images/cat_input.svg";
 import catBtn from "../images/cat_btn.svg";
@@ -10,7 +11,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 100vh;
 `;
 
 const FormCard = styled.div`
@@ -29,17 +29,19 @@ const Cat = styled.div`
 const TabTitle = styled.div`
   display: flex;
   justify-content: space-around;
+  margin-bottom: 8px;
   a {
+    cursor: pointer;
     display: block;
     width: 100%;
     line-height: 2;
-    border-bottom: 1px solid rgba(#00a7e5, 0.7);
+    border-bottom: 1px solid rgba(0, 167, 229, 0.7);
     text-decoration: none;
-    color: rgba(#00a7e5, 0.5);
+    color: rgba(0, 167, 229, 0.5);
   }
 
-  &.active {
-    background: rgba(#00a7e5, 0.7);
+  a.active {
+    background: rgba(0, 167, 229, 0.7);
     color: #fff;
   }
 `;
@@ -48,10 +50,11 @@ const InputGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  label {
+  span {
     flex: 0 0 auto;
-    margin-bottom: 0;
-    padding-right: 0.5rem;
+    ${color}
+    ${space}
+    ${typography}
   }
   input[type="email"],
   input[type="password"] {
@@ -60,8 +63,15 @@ const InputGroup = styled.div`
   input[type="email"]:focus,
   input[type="password"]:focus {
     border: 1px solid #00a7e5;
-    outline: 0;
+    outline: none;
   }
+`;
+
+const Input = styled.input`
+  outline: none;
+  border: 1px solid black;
+  padding: 4px 8px;
+  ${space}
 `;
 
 const Button = styled.button`
@@ -95,10 +105,19 @@ const Sign = () => {
   const [inputType, setInputType] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signInactive, setSignInActive] = useState("active");
+  const [signUpactive, setSignUpActive] = useState(null);
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
     setInputType(e.target.dataset.value);
+    if (e.target.dataset.value === "signin") {
+      setSignInActive("active");
+      setSignUpActive(null);
+    } else if (e.target.dataset.value === "create") {
+      setSignInActive(null);
+      setSignUpActive("active");
+    }
   };
 
   const handleChangeEmail = (e) => {
@@ -111,10 +130,8 @@ const Sign = () => {
 
   const checkType = () => {
     if (inputType === "signin") {
-      console.log(1);
       firebaseAuthSignIn(email, password);
     } else if (inputType === "create") {
-      console.log(2);
       firebaseAuthSignUp(email, password);
     }
   };
@@ -129,36 +146,43 @@ const Sign = () => {
               <img src={catInput} alt="input" />
             </Cat>
             <TabTitle>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a
-                className="active"
-                href="#"
+                className={signInactive}
+                href
                 data-value="signin"
                 onClick={handleSwitchTab}
               >
                 登入
               </a>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="#" data-value="create" onClick={handleSwitchTab}>
+              <a
+                className={signUpactive}
+                href
+                data-value="create"
+                onClick={handleSwitchTab}
+              >
                 註冊
               </a>
             </TabTitle>
-            <InputGroup>
-              <input
+            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
+              <span>帳號：</span>
+              <Input
                 className="u-full-width"
                 id="email"
                 type="email"
                 placeholder="輸入帳號"
                 onChange={handleChangeEmail}
+                mb={2}
               />
             </InputGroup>
-            <InputGroup>
-              <input
+            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
+              <span>密碼：</span>
+              <Input
                 className="u-full-width"
                 id="password"
                 type="password"
                 placeholder="輸入密碼"
                 onChange={handleChangePassword}
+                mb={2}
               />
             </InputGroup>
             <InputGroup>
