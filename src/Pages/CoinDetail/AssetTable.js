@@ -18,8 +18,8 @@ const AssetTableHead = styled.div`
 `;
 
 const AssetTableHeadItem = styled.div`
-  width: 60px;
-  min-width: 60px;
+  width: 160px;
+  min-width: 160px;
   text-align: center;
   ${color}
   ${space}
