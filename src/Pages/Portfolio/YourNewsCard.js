@@ -19,12 +19,11 @@ const CardSubContent = styled.div`
   ${typography}
 `;
 
-const NewsCard = () => (
+const YourNewsCard = () => (
   <>
     <CardContainer mt={3}>
       <CardImg src={star} />
       <CardTitle
-        color="white"
         fontFamily="Roboto"
         fontSize={28}
         lineHeight="36px"
@@ -33,16 +32,11 @@ const NewsCard = () => (
       >
         ETH
       </CardTitle>
-      <CardSubContent
-        color="white"
-        fontFamily="Roboto"
-        fontSize={20}
-        lineHeight="24px"
-      >
+      <CardSubContent fontFamily="Roboto" fontSize={20} lineHeight="24px">
         123
       </CardSubContent>
     </CardContainer>
   </>
 );
 
-export default NewsCard;
+export default YourNewsCard;

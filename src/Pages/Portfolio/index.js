@@ -4,6 +4,7 @@ import { color, space } from "styled-system";
 import OrderTable from "./OrderTable";
 import AssetsTotal from "./AssetsTotal";
 import WishList from "./WishList";
+import YourNews from "./YourNews";
 
 const PortfolioContainer = styled.div`
   max-width: 1200px;
@@ -21,6 +22,7 @@ const Portfolio = () => (
       <AssetsTotal />
       <OrderTable />
       <WishList />
+      <YourNews />
     </PortfolioContainer>
   </PortfolioBg>
 );

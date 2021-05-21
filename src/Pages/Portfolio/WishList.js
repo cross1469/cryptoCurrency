@@ -34,6 +34,7 @@ const WishListTableBody = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
   ${color}
   ${space}
   ${typography}
