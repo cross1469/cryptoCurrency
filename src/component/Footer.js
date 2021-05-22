@@ -39,7 +39,7 @@ const NavItemLink = styled.div`
     ${space}
     ${typography}
     :hover {
-      border-bottom: 2px solid orange;
+      color: #f0b90b;
     }
   }
 `;
