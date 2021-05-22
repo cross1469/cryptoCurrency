@@ -39,35 +39,39 @@ const NavItemLink = styled.div`
     ${space}
     ${typography}
     :hover {
-      border-bottom: 2px solid orange;
+      color: #f0b90b;
     }
+  }
+  @media only screen and (max-width: 576px) {
+    font-size: 12px;
+    line-height: 16px;
   }
 `;
 
 const Footer = () => (
   <FooterStyled bg="black" py={28}>
-    <Logo color="white" ml={4} fontSize={32} letterSpacing="1rem">
-      <Link to="/">Logo</Link>
+    <Logo
+      color="white"
+      ml={4}
+      fontFamily="Roboto"
+      fontSize={36}
+      letterSpacing="1rem"
+    >
+      <Link to="/">LOGO</Link>
     </Logo>
     <Nav>
       <NavItem mr={4}>
-        <NavItemLink
-          py={3}
-          color="white"
-          letterSpacing="0.3rem"
-          fontFamily="Roboto"
-        >
-          <Link to="/explore">EXPLORE</Link>
+        <NavItemLink color="white" letterSpacing="0.2rem" fontFamily="Roboto">
+          <Link to="/explore" fontFamily="Roboto">
+            EXPLORE
+          </Link>
         </NavItemLink>
       </NavItem>
       <NavItem mr={4}>
-        <NavItemLink
-          py={3}
-          color="white"
-          letterSpacing="0.3rem"
-          fontFamily="Roboto"
-        >
-          <Link to="/portfolio">PORTFOLIO</Link>
+        <NavItemLink color="white" letterSpacing="0.2rem" fontFamily="Roboto">
+          <Link to="/portfolio" fontFamily="Roboto">
+            PORTFOLIO
+          </Link>
         </NavItemLink>
       </NavItem>
     </Nav>
