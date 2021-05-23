@@ -5,6 +5,7 @@ import { readWishList } from "../../Utils/firebase";
 
 const WishListContainer = styled.div`
   box-shadow: rgb(0 0 0 / 8%) 0px 0px 4px;
+  overflow-x: auto;
   ${color}
   ${space}
 `;
@@ -97,19 +98,19 @@ const WishList = () => {
                 {wishData}
               </WishListTableBodyItem>
               <WishListTableBodyItem flexGrow={1}>
-                {item.c}
+                {Number(item.c).toFixed(5)}
               </WishListTableBodyItem>
               <WishListTableBodyItem flexGrow={1}>
-                {item.P}
+                {Number(item.P).toFixed(2)}%
               </WishListTableBodyItem>
               <WishListTableBodyItem flexGrow={1}>
-                {item.h}
+                {Number(item.h).toFixed(5)}
               </WishListTableBodyItem>
               <WishListTableBodyItem flexGrow={1}>
-                {item.l}
+                {Number(item.l).toFixed(5)}
               </WishListTableBodyItem>
               <WishListTableBodyItem flexGrow={1}>
-                {item.v}
+                {Number(item.v).toFixed(2)}
               </WishListTableBodyItem>
             </WishListTableBody>
           );

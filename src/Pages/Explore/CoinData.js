@@ -35,6 +35,7 @@ const CoinTable = styled.div`
   margin-left: auto;
   margin-right: auto;
   max-width: 1304px;
+  overflow-x: auto;
   ${space}
 `;
 

@@ -7,6 +7,7 @@ const OrderContainer = styled.div`
   box-shadow: rgb(0 0 0 / 8%) 0px 0px 4px;
   ${color}
   ${space}
+  overflow-x: auto;
 `;
 
 const OrderTitle = styled.div`
