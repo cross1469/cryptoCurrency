@@ -45,7 +45,11 @@ const BannerToExploreBtn = styled.button`
 `;
 
 const Banner = () => (
-  <BannerBg bg="black" pt={100} pb={100}>
+  <BannerBg
+    bg="black"
+    px={{ _: "12px", sm: "24px", md: "36px" }}
+    py={{ _: "70px", lg: "100px" }}
+  >
     <BannerCotainer>
       <BannerTitle
         color="white"

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
+import { color, space, typography, flexbox, layout } from "styled-system";
 import NewsCard from "./NewsCard";
 
 const NewsBg = styled.div`
@@ -28,16 +28,52 @@ const NewsSubtitle = styled.div`
 const NewsCardsContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  ${space}
+`;
+
+const NewsCardsSection = styled.div`
+  box-sizing: border-box;
 `;
 
 const FlexBox = styled.div`
+  box-sizing: border-box;
+  margin: 0;
   display: flex;
-  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  font-size: 12px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  ${space}
+`;
+
+const NewsCardItem = styled.div`
+  box-sizing: border-box;
+  ${space}
+  ${flexbox}
+  ${layout}
+`;
+
+const NewsCardLink = styled.a`
+  box-sizing: border-box;
+  padding: 16px;
+  display: block;
+  color: #1e2329;
+  position: relative;
+  border-radius: 3px;
+  box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
+  text-decoration: none;
+  cursor: pointer;
 `;
 
 const News = () => (
   <>
-    <NewsBg bg="black" pt={100} pb={100}>
+    <NewsBg
+      bg="black"
+      px={{ _: "12px", sm: "24px", md: "36px" }}
+      py={{ _: "70px", lg: "100px" }}
+    >
       <NewsCotainer>
         <NewsTitle
           color="white"
@@ -62,12 +98,50 @@ const News = () => (
         </NewsSubtitle>
       </NewsCotainer>
       <NewsCardsContainer>
-        <FlexBox>
-          <NewsCard />
-          <NewsCard />
-          <NewsCard />
-          <NewsCard />
-        </FlexBox>
+        <NewsCardsSection px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
+          <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+            <NewsCardItem
+              px={{ sm: 0, md: "12px", lg: "8px" }}
+              pb={{ sm: "16px", md: "24px", lg: 0 }}
+              width={{ sm: "100%", md: "50%", lg: "auto" }}
+              flex={{ sm: "none", md: "none", lg: 1 }}
+            >
+              <NewsCardLink>
+                <NewsCard />
+              </NewsCardLink>
+            </NewsCardItem>
+            <NewsCardItem
+              px={{ sm: 0, md: "12px", lg: "8px" }}
+              pb={{ sm: "16px", md: "24px", lg: 0 }}
+              width={{ sm: "100%", md: "50%", lg: "auto" }}
+              flex={{ sm: "none", md: "none", lg: 1 }}
+            >
+              <NewsCardLink>
+                <NewsCard />
+              </NewsCardLink>
+            </NewsCardItem>
+            <NewsCardItem
+              px={{ sm: 0, md: "12px", lg: "8px" }}
+              pb={{ sm: "16px", md: "24px", lg: 0 }}
+              width={{ sm: "100%", md: "50%", lg: "auto" }}
+              flex={{ sm: "none", md: "none", lg: 1 }}
+            >
+              <NewsCardLink>
+                <NewsCard />
+              </NewsCardLink>
+            </NewsCardItem>
+            <NewsCardItem
+              px={{ sm: 0, md: "12px", lg: "8px" }}
+              pb={{ sm: "16px", md: "24px", lg: 0 }}
+              width={{ sm: "100%", md: "50%", lg: "auto" }}
+              flex={{ sm: "none", md: "none", lg: 1 }}
+            >
+              <NewsCardLink>
+                <NewsCard />
+              </NewsCardLink>
+            </NewsCardItem>
+          </FlexBox>
+        </NewsCardsSection>
       </NewsCardsContainer>
     </NewsBg>
   </>
