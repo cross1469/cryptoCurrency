@@ -10,7 +10,7 @@ const PlaceOrderTitle = styled.div`
 `;
 
 const RenderPlaceOrder = styled.div`
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   ${space}
 `;
@@ -44,7 +44,7 @@ const AllInput = styled.div`
 
 const InputGroup = styled.div`
   ${space}
-  display: inline-flex;
+  display: flex;
   height: 32px;
   border: 1px solid rgba(43, 47, 54, 0.8);
   border-radius: 4px;
@@ -56,12 +56,21 @@ const InputGroup = styled.div`
 
 const InputText = styled.div`
   min-width: 48px;
+  flex-grow: 1;
+  ${color}
+  ${space}
+  ${typography}
+`;
+
+const InputUnit = styled.div`
+  min-width: 40px;
   ${color}
   ${space}
   ${typography}
 `;
 
 const Input = styled.input`
+  max-width: 40%;
   outline: none;
   border: none;
   ${color}
@@ -187,13 +196,13 @@ const PlaceOrder = () => {
     <PlaceOrderBtn>
       <ButtonGroup onClick={handleClickBuy} mb={2}>
         <Button
-          px={4}
+          px={{ md: 3, lg: 4 }}
           py={2}
           bg={buyColor.bg}
           color={buyColor.color}
           lineHeight={2}
           flexGrow={1}
-          fontSize={16}
+          fontSize={{ md: 14, lg: 16 }}
           mr={2}
           fontFamily="Roboto"
           fontWeight="100"
@@ -201,13 +210,13 @@ const PlaceOrder = () => {
           買入
         </Button>
         <Button
-          px={4}
+          px={{ md: 3, lg: 4 }}
           py={2}
           bg={sellColor.bg}
           color={sellColor.color}
           lineHeight={2}
           flexGrow={1}
-          fontSize={16}
+          fontSize={{ md: 14, lg: 16 }}
           fontFamily="Roboto"
         >
           賣出
@@ -216,13 +225,13 @@ const PlaceOrder = () => {
       <ButtonGroup onClick={handleClickPrice} mb={2}>
         <Button
           id="limitPrice"
-          px={4}
+          px={{ md: 3, lg: 4 }}
           py={2}
           bg={limitColor.bg}
           color={limitColor.color}
           lineHeight={2}
           flexGrow={1}
-          fontSize={16}
+          fontSize={{ md: 14, lg: 16 }}
           mr={2}
           fontFamily="Roboto"
         >
@@ -230,13 +239,13 @@ const PlaceOrder = () => {
         </Button>
         <Button
           id="marketPrice"
-          px={4}
+          px={{ md: 3, lg: 4 }}
           py={2}
           bg={marketColor.bg}
           color={marketColor.color}
           lineHeight={2}
           flexGrow={1}
-          fontSize={16}
+          fontSize={{ md: 14, lg: 16 }}
           fontFamily="Roboto"
         >
           市價
@@ -250,7 +259,7 @@ const PlaceOrder = () => {
       return (
         <AllInput>
           <InputGroup mb={2}>
-            <InputText ml={2} fontFamily="Roboto">
+            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               價格
             </InputText>
             <Input
@@ -259,12 +268,12 @@ const PlaceOrder = () => {
               px={1}
               fontFamily="Roboto"
             />
-            <InputText mr={2} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               USDT
-            </InputText>
+            </InputUnit>
           </InputGroup>
           <InputGroup mb={2}>
-            <InputText ml={2} fontFamily="Roboto">
+            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               數量
             </InputText>
             <Input
@@ -273,12 +282,12 @@ const PlaceOrder = () => {
               px={1}
               fontFamily="Roboto"
             />
-            <InputText mr={2} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               ETH
-            </InputText>
+            </InputUnit>
           </InputGroup>
           <InputGroup mb={2}>
-            <InputText ml={2} fontSize={16} fontFamily="Roboto">
+            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               成交額
             </InputText>
             <Input
@@ -288,9 +297,9 @@ const PlaceOrder = () => {
               fontFamily="Roboto"
               px={1}
             />
-            <InputText mr={2} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
               USDT
-            </InputText>
+            </InputUnit>
           </InputGroup>
         </AllInput>
       );
@@ -307,9 +316,9 @@ const PlaceOrder = () => {
             px={1}
             fontFamily="Roboto"
           />
-          <InputText mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontFamily="Roboto">
             USDT
-          </InputText>
+          </InputUnit>
         </InputGroup>
         <InputGroup mb={2}>
           <InputText ml={2} fontFamily="Roboto">
@@ -321,9 +330,9 @@ const PlaceOrder = () => {
             px={1}
             fontFamily="Roboto"
           />
-          <InputText mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontFamily="Roboto">
             ETH
-          </InputText>
+          </InputUnit>
         </InputGroup>
         <InputGroup mb={2}>
           <InputText ml={2} fontFamily="Roboto">
@@ -335,16 +344,16 @@ const PlaceOrder = () => {
             px={1}
             fontFamily="Roboto"
           />
-          <InputText mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontFamily="Roboto">
             USDT
-          </InputText>
+          </InputUnit>
         </InputGroup>
       </AllInput>
     );
   };
 
   return (
-    <RenderPlaceOrder ml={5}>
+    <RenderPlaceOrder className="placeOrder" ml={5}>
       <PlaceOrderTitle
         fontFamily="Roboto"
         fontSize={28}

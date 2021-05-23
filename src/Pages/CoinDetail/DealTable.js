@@ -18,13 +18,17 @@ const DealTableHead = styled.div`
 `;
 
 const DealTableHeadItem = styled.div`
-  width: 60px;
-  min-width: 60px;
+  width: 160px;
+  min-width: 160px;
   text-align: center;
   ${color}
   ${space}
   ${typography}
   ${flexbox}
+  @media only screen and (max-width: 568px) {
+    width: 120px;
+    min-width: 120px;
+  }
 `;
 
 const DealTableBody = styled.div`
@@ -44,6 +48,10 @@ const DealTableBodyItem = styled.div`
   ${space}
   ${typography}
   ${flexbox}
+  @media only screen and (max-width: 568px) {
+    width: 120px;
+    min-width: 120px;
+  }
 `;
 
 const DealTable = () => (
