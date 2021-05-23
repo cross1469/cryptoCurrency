@@ -7,6 +7,7 @@ import Chat from "./Chat";
 import AddValue from "./AddValue";
 import AssetTable from "./AssetTable";
 import DealTable from "./DealTable";
+import MobileButton from "./MobileButton";
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -42,6 +43,20 @@ const FlexBox = styled.div`
   }
 `;
 
+const Mobile = styled.div`
+  width: 100%;
+  display: none;
+  position: fixed;
+  bottom: 0;
+  height: 92px;
+  overflow-y: initial;
+  overflow-x: visible;
+  background-color: #1e2026;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const CoinDetail = () => (
   <Container mt={3} mb={4}>
     <FlexBox justifyContent="center">
@@ -55,6 +70,9 @@ const CoinDetail = () => (
         <AddValue />
       </div>
     </FlexBox>
+    <Mobile>
+      <MobileButton />
+    </Mobile>
     <Chat />
   </Container>
 );

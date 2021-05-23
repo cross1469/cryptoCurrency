@@ -61,7 +61,7 @@ const AddValue = () => {
   return (
     <RenderAddValue ml={5} mt={4}>
       <AddValueTitle fontFamily="Roboto" fontSize={28} fontWeight="bold" mb={2}>
-        資產
+        充值
       </AddValueTitle>
       <FlexBox mb={2}>
         <AddValueInput

@@ -49,6 +49,13 @@ const ChatForm = styled.div`
   ${color}
   ${border}
   ${layout}
+  @media only screen and (max-width: 768px) {
+    width: 50%;
+  }
+
+  @media only screen and (max-width: 576px) {
+    width: 70%;
+  }
 `;
 
 const SubmitChat = styled.form`
@@ -199,10 +206,10 @@ const Chat = () => {
       <OpenChat
         color="white"
         bg="#02c077"
-        px={4}
-        py={3}
+        px={{ md: 3, lg: 4 }}
+        py={{ md: 3, lg: 3 }}
         fontFamily="Roboto"
-        fontSize={16}
+        fontSize={{ md: 12, lg: 16 }}
         position="fixed"
         bottom="0"
         right="0"
