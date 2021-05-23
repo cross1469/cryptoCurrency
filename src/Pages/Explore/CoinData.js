@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography, flexbox, border } from "styled-system";
 import { addWishList } from "../../Utils/firebase";
+import defaultStar from "../../images/default_star.png";
+import activeStar from "../../images/active_star.png";
 
 const CoinDataTitle = styled.div`
   ${typography}
@@ -29,13 +31,24 @@ const FlexBox = styled.div`
 `;
 
 const CoinTable = styled.div`
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1304px;
   ${space}
 `;
 
 const CoinTableHead = styled.div`
+  box-sizing: border-box;
   display: flex;
+  padding: 16px 16px 16px 0px;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #eaecef;
+  border-top-color: #eaecef;
+  border-right-color: #eaecef;
+  border-left-color: #eaecef;
+  background-color: #fafafa;
   ${space}
 `;
 
@@ -43,12 +56,30 @@ const CoinTableHeadItem = styled.div`
   width: 120px;
   min-width: 120px;
   text-align: center;
+  @media only screen and (max-width: 768px) {
+    width: 80px;
+    min-width: 80px;
+  }
 `;
 
 const CoinTableBody = styled.div`
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
   display: flex;
+  padding-left: 0px;
+  padding-right: 16px;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #eaecef;
+  border-top-color: #eaecef;
+  border-right-color: #eaecef;
+  border-left-color: #eaecef;
+  flex: 1 1 0%;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #1e2329;
   ${space}
 `;
 
@@ -56,6 +87,10 @@ const CoinTableBodyItem = styled.div`
   width: 120px;
   min-width: 120px;
   text-align: center;
+  @media only screen and (max-width: 768px) {
+    width: 80px;
+    min-width: 80px;
+  }
 `;
 
 const OptionBtn = styled.button`
@@ -75,6 +110,11 @@ const MarketBtn = styled.button`
   ${typography}
 `;
 
+const Star = styled.img`
+  width: 16px;
+  height: 16px;
+`;
+
 const CoinData = () => {
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -91,11 +131,14 @@ const CoinData = () => {
     bg: "transparent",
   });
 
+  const [star, setStar] = useState(defaultStar);
+
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleClickToWish = (e) => {
+    setStar(activeStar);
     addWishList(e.target.parentNode.parentNode.id);
   };
 
@@ -162,33 +205,39 @@ const CoinData = () => {
     if (searchTerm === "") {
       return realTimeDatas.map((realTimeData) => (
         <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
-          <CoinTableBodyItem scope="row">{realTimeData.s}</CoinTableBodyItem>
-          <CoinTableBodyItem>{realTimeData.c}</CoinTableBodyItem>
-          <CoinTableBodyItem>{realTimeData.P}</CoinTableBodyItem>
-          <CoinTableBodyItem>{realTimeData.h}</CoinTableBodyItem>
-          <CoinTableBodyItem>{realTimeData.l}</CoinTableBodyItem>
-          <CoinTableBodyItem>{realTimeData.v}</CoinTableBodyItem>
           <CoinTableBodyItem>
-            <button type="button" onClick={handleClickToWish}>
-              收藏
-            </button>
+            <Star src={star} onClick={handleClickToWish} />
+            {realTimeData.s}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(realTimeData.c).toFixed(5)}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(realTimeData.P).toFixed(2)}%
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(realTimeData.h).toFixed(5)}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(realTimeData.l).toFixed(5)}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(realTimeData.v).toFixed(2)}
           </CoinTableBodyItem>
         </CoinTableBody>
       ));
     }
     return searchResults.map((item) => (
       <CoinTableBody mb={3} key={item.L} id={item.s}>
-        <CoinTableBodyItem scope="row">{item.s}</CoinTableBodyItem>
-        <CoinTableBodyItem>{item.c}</CoinTableBodyItem>
-        <CoinTableBodyItem>{item.P}</CoinTableBodyItem>
-        <CoinTableBodyItem>{item.h}</CoinTableBodyItem>
-        <CoinTableBodyItem>{item.l}</CoinTableBodyItem>
-        <CoinTableBodyItem>{item.v}</CoinTableBodyItem>
         <CoinTableBodyItem>
-          <button type="button" onClick={handleClickToWish}>
-            收藏
-          </button>
+          <Star src={star} onClick={handleClickToWish} />
+          {item.s}
         </CoinTableBodyItem>
+        <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
+        <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
+        <CoinTableBodyItem>{Number(item.h).toFixed(5)}</CoinTableBodyItem>
+        <CoinTableBodyItem>{Number(item.l).toFixed(5)}</CoinTableBodyItem>
+        <CoinTableBodyItem>{Number(item.v).toFixed(2)}</CoinTableBodyItem>
       </CoinTableBody>
     ));
   };
@@ -222,7 +271,7 @@ const CoinData = () => {
       >
         現貨市場
       </MarketBtn>
-      <FlexBox mt={2} mb={3}>
+      <FlexBox px={{ sm: 0, md: "16px", lg: "8px" }} mt={2} mb={3}>
         <CoinDataTitle fontFamily="Roboto" fontSize={28} fontWeight="bold">
           貨幣資料
         </CoinDataTitle>
@@ -236,7 +285,12 @@ const CoinData = () => {
         />
       </FlexBox>
 
-      <CoinTable mb={3} id="CoinDatas" hover>
+      <CoinTable
+        px={{ sm: 0, md: "16px", lg: "8px" }}
+        mb={3}
+        id="CoinDatas"
+        hover
+      >
         <CoinTableHead mb={3}>
           <CoinTableHeadItem>交易對</CoinTableHeadItem>
           <CoinTableHeadItem>最新價格</CoinTableHeadItem>
@@ -244,7 +298,6 @@ const CoinData = () => {
           <CoinTableHeadItem>24H 最高</CoinTableHeadItem>
           <CoinTableHeadItem>24H 最低</CoinTableHeadItem>
           <CoinTableHeadItem>24H 成交量</CoinTableHeadItem>
-          <CoinTableHeadItem>收藏</CoinTableHeadItem>
         </CoinTableHead>
         {renderCoinDatas()}
       </CoinTable>
