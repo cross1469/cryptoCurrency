@@ -39,13 +39,13 @@ const AssetsTotal = () => (
       <AccountTitle fontWeight="bold" mb={3}>
         帳戶餘額
       </AccountTitle>
-      <AccountBalance>123</AccountBalance>
+      <AccountBalance>123 USDT</AccountBalance>
     </Account>
     <Coin fontFamily="Roboto" fontSize={16}>
       <CoinTitle fontWeight="bold" mb={3}>
         貨幣盈餘
       </CoinTitle>
-      <CoinProfitLoss>123</CoinProfitLoss>
+      <CoinProfitLoss>123 USDT</CoinProfitLoss>
     </Coin>
   </AssetsContainer>
 );

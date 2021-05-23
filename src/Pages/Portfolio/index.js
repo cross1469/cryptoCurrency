@@ -17,7 +17,7 @@ const PortfolioBg = styled.div`
 `;
 
 const Portfolio = () => (
-  <PortfolioBg pt={4} bg="#fafafa">
+  <PortfolioBg pt={4} bg="#fafafa" pb={4}>
     <PortfolioContainer>
       <AssetsTotal />
       <OrderTable />
