@@ -25,6 +25,14 @@ const AssetTableHeadItem = styled.div`
   ${space}
   ${typography}
   ${flexbox}
+  @media only screen and (max-width: 996px) {
+    width: 120px;
+    min-width: 120px;
+  }
+  @media only screen and (max-width: 568px) {
+    width: 80px;
+    min-width: 80px;
+  }
 `;
 
 const AssetTableBody = styled.div`
@@ -44,6 +52,14 @@ const AssetTableBodyItem = styled.div`
   ${space}
   ${typography}
   ${flexbox}
+  @media only screen and (max-width: 996px) {
+    width: 120px;
+    min-width: 120px;
+  }
+  @media only screen and (max-width: 568px) {
+    width: 80px;
+    min-width: 80px;
+  }
 `;
 
 const AssetTable = () => (
