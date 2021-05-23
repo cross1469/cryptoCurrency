@@ -51,7 +51,6 @@ const AreaSpline = () => {
   const [options, setOptions] = useState({
     chart: {
       zoomType: "x",
-      width: 250,
       height: 150,
     },
 
