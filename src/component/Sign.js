@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { firebaseAuthSignIn, firebaseAuthSignUp } from "../Utils/firebase";
-import catInput from "../images/cat_input.svg";
-import catBtn from "../images/cat_btn.svg";
 
 const Container = styled.div`
   display: flex;
@@ -21,11 +19,6 @@ const FormCard = styled.div`
   text-align: center;
 `;
 
-const Cat = styled.div`
-  position: relative;
-  display: block;
-`;
-
 const TabTitle = styled.div`
   display: flex;
   justify-content: space-around;
@@ -35,14 +28,19 @@ const TabTitle = styled.div`
     display: block;
     width: 100%;
     line-height: 2;
-    border-bottom: 1px solid rgba(0, 167, 229, 0.7);
+    border-bottom: 1px solid #f0b90b;
     text-decoration: none;
-    color: rgba(0, 167, 229, 0.5);
+    color: #707a8a;
+    font-weight: bold;
+    font-family: Roboto;
   }
 
   a.active {
-    background: rgba(0, 167, 229, 0.7);
-    color: #fff;
+    background-image: linear-gradient(
+      rgb(248, 209, 47) 0%,
+      rgb(240, 185, 11) 100%
+    );
+    color: #1e2329;
   }
 `;
 
@@ -76,28 +74,36 @@ const Input = styled.input`
 
 const Button = styled.button`
   display: "inline-block";
-  padding: 0.25rem 3rem;
+  padding: 0.5rem 3rem;
   line-height: 1;
-  background: #fff;
+  background-image: linear-gradient(
+    rgb(248, 209, 47) 0%,
+    rgb(240, 185, 11) 100%
+  );
   border-radius: 0.5rem;
   cursor: pointer;
   outline: none;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
-  border: 2px solid #00a7e5;
-  color: #00a7e5;
-  svg {
-    transition: transform 0.2s, fill 0.2s;
-  }
+  border: none;
+  color: #212833;
+  font-weight: bold;
   &:hover {
-    background: #008bbf;
-    border-color: #008bbf;
-    color: #fff;
-    svg {
-      transform: rotateY(180deg);
-    }
-    path {
-      fill: #fff;
-    }
+    box-shadow: none;
+    background-image: linear-gradient(
+      rgb(255, 226, 81) 0%,
+      rgb(237, 196, 35) 100%
+    );
+  }
+`;
+
+const ForgetPasswordText = styled.div`
+  font-size: 12px;
+  text-align: right;
+  cursor: pointer;
+  font-family: Roboto;
+  ${space}
+  &:hover {
+    color: #1e2329;
   }
 `;
 
@@ -142,9 +148,6 @@ const Sign = () => {
       <Container>
         <section className="user-null none">
           <FormCard>
-            <Cat>
-              <img src={catInput} alt="input" />
-            </Cat>
             <TabTitle>
               <a
                 className={signInactive}
@@ -185,9 +188,10 @@ const Sign = () => {
                 mb={2}
               />
             </InputGroup>
+            <ForgetPasswordText mb={2}>忘記密碼？</ForgetPasswordText>
             <InputGroup>
               <Button id="sign-up" type="button" onClick={checkType}>
-                <img src={catBtn} alt="btn" />
+                登入
               </Button>
             </InputGroup>
           </FormCard>
