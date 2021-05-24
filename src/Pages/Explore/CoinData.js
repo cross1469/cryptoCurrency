@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography, flexbox, border } from "styled-system";
+import { Link } from "react-router-dom";
 import { addWishList } from "../../Utils/firebase";
 import defaultStar from "../../images/default_star.png";
 import activeStar from "../../images/active_star.png";
@@ -37,6 +38,9 @@ const CoinTable = styled.div`
   max-width: 1304px;
   overflow-x: auto;
   ${space}
+  a {
+    text-decoration: none;
+  }
 `;
 
 const CoinTableHead = styled.div`
@@ -205,41 +209,45 @@ const CoinData = () => {
   const renderCoinDatas = () => {
     if (searchTerm === "") {
       return realTimeDatas.map((realTimeData) => (
-        <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
-          <CoinTableBodyItem>
-            <Star src={star} onClick={handleClickToWish} />
-            {realTimeData.s}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.c).toFixed(5)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.P).toFixed(2)}%
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.h).toFixed(5)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.l).toFixed(5)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.v).toFixed(2)}
-          </CoinTableBodyItem>
-        </CoinTableBody>
+        <Link to={`/coinDetail/${realTimeData.s}`}>
+          <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
+            <CoinTableBodyItem>
+              <Star src={star} onClick={handleClickToWish} />
+              {realTimeData.s}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.c).toFixed(5)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.P).toFixed(2)}%
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.h).toFixed(5)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.l).toFixed(5)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.v).toFixed(2)}
+            </CoinTableBodyItem>
+          </CoinTableBody>
+        </Link>
       ));
     }
     return searchResults.map((item) => (
-      <CoinTableBody mb={3} key={item.L} id={item.s}>
-        <CoinTableBodyItem>
-          <Star src={star} onClick={handleClickToWish} />
-          {item.s}
-        </CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.h).toFixed(5)}</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.l).toFixed(5)}</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.v).toFixed(2)}</CoinTableBodyItem>
-      </CoinTableBody>
+      <Link to={`/coinDetail/${item.s}`}>
+        <CoinTableBody mb={3} key={item.L} id={item.s}>
+          <CoinTableBodyItem>
+            <Star src={star} onClick={handleClickToWish} />
+            {item.s}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.h).toFixed(5)}</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.l).toFixed(5)}</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.v).toFixed(2)}</CoinTableBodyItem>
+        </CoinTableBody>
+      </Link>
     ));
   };
 
