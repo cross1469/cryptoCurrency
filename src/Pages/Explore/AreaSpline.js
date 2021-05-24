@@ -2,38 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
-
-const symbols = [];
+import PropTypes from "prop-types";
 
 const AreaSpline = (props) => {
-  const [symbol, setSymbol] = useState("");
-  // eslint-disable-next-line react/prop-types
-  const { setPropsSymbol } = props;
-
-  const getSymbol = () => {
-    const allSymbol = [];
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const randomAllData = res.data.sort(() => Math.random() - 0.5);
-
-        for (let i = 0; i < randomAllData.length; i += 1) {
-          allSymbol.push(randomAllData[i].symbol);
-        }
-        const oneSymbol = allSymbol.sort(() => Math.random() - 0.5)[0];
-        setSymbol(oneSymbol);
-        symbols.push(oneSymbol);
-        console.log([...symbols]);
-        setPropsSymbol([...symbols]);
-        // setPropsSymbol(prev => {
-        //   const symbols = [...prev];
-        //   symbols[] = oneSymbol
-        //   return symbols
-        // });
-      });
-  };
+  const { symbol } = props;
 
   const callBinanceAPI = (coinSymbol) => {
     axios
@@ -81,13 +53,7 @@ const AreaSpline = (props) => {
   });
 
   useEffect(() => {
-    getSymbol();
-  }, []);
-
-  useEffect(() => {
-    if (symbol !== "") {
-      callBinanceAPI(symbol);
-    }
+    callBinanceAPI(symbol);
   }, [symbol]);
 
   useEffect(() => {
@@ -114,6 +80,10 @@ const AreaSpline = (props) => {
   }
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
+};
+
+AreaSpline.propTypes = {
+  symbol: PropTypes.string.isRequired,
 };
 
 export default AreaSpline;

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import { space, layout, flexbox } from "styled-system";
 import AreaSpline from "./AreaSpline";
@@ -54,21 +55,46 @@ const ChartLink = styled.div`
 `;
 
 const Explore = () => {
-  const [propsSymbol, setPropsSymbol] = useState([]);
-  const chartItemQty = [0, 1, 2, 3];
+  const [symbols, setSymbols] = useState([]);
+  const chartItemQty = 4;
+
+  const getSymbol = () => {
+    const allSymbol = [];
+    const fourSymbols = [];
+    axios
+      .get(
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
+      )
+      .then((res) => {
+        const randomAllData = res.data.sort(() => Math.random() - 0.5);
+
+        for (let i = 0; i < randomAllData.length; i += 1) {
+          allSymbol.push(randomAllData[i].symbol);
+        }
+
+        for (let i = 0; i < chartItemQty; i += 1) {
+          fourSymbols.push(allSymbol.sort(() => Math.random() - 0.5)[i]);
+        }
+        setSymbols(fourSymbols);
+      });
+  };
+
+  useEffect(() => {
+    getSymbol();
+  }, []);
 
   const renderChart = () =>
-    chartItemQty.map((index) => (
+    symbols.map((symbol) => (
       <ChartItem
         px={{ sm: 0, md: "12px", lg: "8px" }}
         pb={{ sm: "16px", md: "24px", lg: 0 }}
         width={{ _: "100%", md: "50%", lg: "25%" }}
         flex={{ sm: "none", md: "none", lg: 1 }}
-        key={index}
+        key={symbol}
       >
         <ChartLink>
-          <Link to={`/coinDetail/${propsSymbol[index]}`}>
-            <AreaSpline setPropsSymbol={setPropsSymbol} />
+          <Link to={`/coinDetail/${symbol}`}>
+            <AreaSpline symbol={symbol} />
           </Link>
         </ChartLink>
       </ChartItem>

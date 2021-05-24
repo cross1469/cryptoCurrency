@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import SignModal from "./Modal";
 import Sign from "./Sign";
 
@@ -145,19 +145,19 @@ const Header = () => {
         <nav className="nav">
           <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
           <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
-            <Link activeClassName="active" to="/explore">
+            <NavLink activeClassName="active" to="/explore">
               <li>EXPLORE</li>
-            </Link>
-            <Link activeClassName="active" to="/portfolio">
+            </NavLink>
+            <NavLink activeClassName="active" to="/portfolio">
               <li>PORTFOLIO</li>
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               activeClassName="active"
               to
               onClick={() => modal.current.open()}
             >
               <li>LOGIN</li>
-            </Link>
+            </NavLink>
           </ul>
         </nav>
       </Navigation>
