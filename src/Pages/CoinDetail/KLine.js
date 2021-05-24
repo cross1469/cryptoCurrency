@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 
 const KLine = () => {
-  const symbol = "ETHUSDT";
+  const { symbol } = useParams();
 
   const callBinanceAPI = (coinSymbol, interval) => {
     axios

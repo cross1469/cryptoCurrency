@@ -69,7 +69,9 @@ const Explore = () => {
         const randomAllData = res.data.sort(() => Math.random() - 0.5);
 
         for (let i = 0; i < randomAllData.length; i += 1) {
-          allSymbol.push(randomAllData[i].symbol);
+          if (randomAllData[i].symbol.indexOf("USDT", 2) !== -1) {
+            allSymbol.push(randomAllData[i].symbol);
+          }
         }
 
         for (let i = 0; i < chartItemQty; i += 1) {

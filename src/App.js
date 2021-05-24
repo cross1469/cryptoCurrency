@@ -19,7 +19,7 @@ function App() {
         <div className="App">
           <Reset />
           <Header />
-          <Route exact path="/coindetail/:id" component={CoinDetail} />
+          <Route exact path="/coindetail/:symbol" component={CoinDetail} />
           <Route exact path="/explore" component={Explore} />
           <Route exact path="/portfolio" component={Portfolio} />
           <Route exact path="/" component={Landing} />

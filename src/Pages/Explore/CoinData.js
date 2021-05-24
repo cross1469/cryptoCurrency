@@ -177,7 +177,7 @@ const CoinData = () => {
       const coinDatas = JSON.parse(event.data);
       const usdtDatas = [];
       coinDatas.forEach((data) => {
-        if (data.s.indexOf("USDT") !== -1) {
+        if (data.s.indexOf("USDT", 2) !== -1) {
           usdtDatas.push(data);
         }
       });
