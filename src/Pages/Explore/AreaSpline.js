@@ -3,8 +3,12 @@ import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 
-const AreaSpline = () => {
+const symbols = [];
+
+const AreaSpline = (props) => {
   const [symbol, setSymbol] = useState("");
+  // eslint-disable-next-line react/prop-types
+  const { setPropsSymbol } = props;
 
   const getSymbol = () => {
     const allSymbol = [];
@@ -18,7 +22,16 @@ const AreaSpline = () => {
         for (let i = 0; i < randomAllData.length; i += 1) {
           allSymbol.push(randomAllData[i].symbol);
         }
-        setSymbol(allSymbol.sort(() => Math.random() - 0.5)[0]);
+        const oneSymbol = allSymbol.sort(() => Math.random() - 0.5)[0];
+        setSymbol(oneSymbol);
+        symbols.push(oneSymbol);
+        console.log([...symbols]);
+        setPropsSymbol([...symbols]);
+        // setPropsSymbol(prev => {
+        //   const symbols = [...prev];
+        //   symbols[] = oneSymbol
+        //   return symbols
+        // });
       });
   };
 

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { space, layout, flexbox } from "styled-system";
 import AreaSpline from "./AreaSpline";
@@ -37,67 +38,52 @@ const ChartItem = styled.div`
   ${layout}
 `;
 
-const ChartLink = styled.a`
-  box-sizing: border-box;
-  padding: 16px;
-  display: block;
-  background-color: #fff;
-  color: #1e2329;
-  position: relative;
-  border-radius: 3px;
-  box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
-  text-decoration: none;
-  cursor: pointer;
+const ChartLink = styled.div`
+  a {
+    box-sizing: border-box;
+    padding: 16px;
+    display: block;
+    background-color: #fff;
+    color: #1e2329;
+    position: relative;
+    border-radius: 3px;
+    box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
+    text-decoration: none;
+    cursor: pointer;
+  }
 `;
 
-const Explore = () => (
-  <ExploreContainer mt={3}>
-    <ChartBox px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
-      <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-        <ChartItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ _: "100%", md: "50%", lg: "25%" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <ChartLink>
-            <AreaSpline />
-          </ChartLink>
-        </ChartItem>
-        <ChartItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ _: "100%", md: "50%", lg: "25%" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <ChartLink>
-            <AreaSpline />
-          </ChartLink>
-        </ChartItem>
-        <ChartItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ _: "100%", md: "50%", lg: "25%" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <ChartLink>
-            <AreaSpline />
-          </ChartLink>
-        </ChartItem>
-        <ChartItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ _: "100%", md: "50%", lg: "25%" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <ChartLink>
-            <AreaSpline />
-          </ChartLink>
-        </ChartItem>
-      </FlexBox>
-    </ChartBox>
-    <CoinData />
-  </ExploreContainer>
-);
+const Explore = () => {
+  const [propsSymbol, setPropsSymbol] = useState([]);
+  const chartItemQty = [0, 1, 2, 3];
+
+  const renderChart = () =>
+    chartItemQty.map((index) => (
+      <ChartItem
+        px={{ sm: 0, md: "12px", lg: "8px" }}
+        pb={{ sm: "16px", md: "24px", lg: 0 }}
+        width={{ _: "100%", md: "50%", lg: "25%" }}
+        flex={{ sm: "none", md: "none", lg: 1 }}
+        key={index}
+      >
+        <ChartLink>
+          <Link to={`/coinDetail/${propsSymbol[index]}`}>
+            <AreaSpline setPropsSymbol={setPropsSymbol} />
+          </Link>
+        </ChartLink>
+      </ChartItem>
+    ));
+
+  return (
+    <ExploreContainer mt={3}>
+      <ChartBox px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
+        <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+          {renderChart()}
+        </FlexBox>
+      </ChartBox>
+      <CoinData />
+    </ExploreContainer>
+  );
+};
 
 export default Explore;
