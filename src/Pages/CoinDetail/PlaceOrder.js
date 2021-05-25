@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router";
 import styled from "styled-components";
 import { color, space, typography, flexbox } from "styled-system";
 import firebaseAddOrder from "../../Utils/firebase";
@@ -79,6 +80,9 @@ const Input = styled.input`
 `;
 
 const PlaceOrder = () => {
+  const { symbol } = useParams();
+  const coin = symbol.replace(/USDT/, "");
+
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [limitOrMarket, setLimitOrMarket] = useState("limit");
   const [buyColor, setBuyColor] = useState({
@@ -283,7 +287,7 @@ const PlaceOrder = () => {
               fontFamily="Roboto"
             />
             <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
-              ETH
+              {coin}
             </InputUnit>
           </InputGroup>
           <InputGroup mb={2}>
@@ -331,7 +335,7 @@ const PlaceOrder = () => {
             fontFamily="Roboto"
           />
           <InputUnit mr={2} fontFamily="Roboto">
-            ETH
+            {coin}
           </InputUnit>
         </InputGroup>
         <InputGroup mb={2}>

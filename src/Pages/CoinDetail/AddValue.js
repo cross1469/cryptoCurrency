@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router";
 import styled from "styled-components";
 import { color, space, typography, flexbox } from "styled-system";
 
@@ -52,6 +53,9 @@ const CoinText = styled.div``;
 const CoinSum = styled.div``;
 
 const AddValue = () => {
+  const { symbol } = useParams();
+  const coin = symbol.replace(/USDT/, "");
+
   const [addValue, setAddValue] = useState("");
 
   const handlAddValueInput = (e) => {
@@ -86,7 +90,7 @@ const AddValue = () => {
       </FlexBox>
 
       <Asset fontFamily="Roboto" fontSize={16} mb={2}>
-        <CoinText>ETH 可用：</CoinText>
+        <CoinText>{coin} 可用：</CoinText>
         <CoinSum>0.05</CoinSum>
       </Asset>
       <Asset fontFamily="Roboto" fontSize={16} mb={2}>
