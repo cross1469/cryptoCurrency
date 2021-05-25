@@ -7,6 +7,7 @@ import {
   firebaseAuthSignUp,
   subscribeUserData,
 } from "../Utils/firebase";
+import validators from "../Utils/validators";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
@@ -69,7 +70,7 @@ const InputGroup = styled.div`
   }
   input[type="email"]:focus,
   input[type="password"]:focus {
-    border: 1px solid #00a7e5;
+    border: 1px solid #f0b90b;
     outline: none;
   }
 `;
@@ -116,6 +117,14 @@ const ForgetPasswordText = styled.div`
   }
 `;
 
+const Errors = styled.div`
+  text-align: left;
+  .error {
+    font-size: 12px;
+    color: red;
+  }
+`;
+
 const Sign = (props) => {
   const [inputType, setInputType] = useState("signin");
   const [email, setEmail] = useState("");
@@ -142,12 +151,33 @@ const Sign = (props) => {
     }
   };
 
+  const updateValidators = (fieldName, value) => {
+    validators[fieldName].errors = [];
+    validators[fieldName].state = value;
+    validators[fieldName].valid = true;
+    validators[fieldName].rules.forEach((rule) => {
+      if (rule.test instanceof RegExp) {
+        if (!rule.test.test(value)) {
+          validators[fieldName].errors.push(rule.message);
+          validators[fieldName].valid = false;
+        }
+      } else if (typeof rule.test === "function") {
+        if (!rule.test(value)) {
+          validators[fieldName].errors.push(rule.message);
+          validators[fieldName].valid = false;
+        }
+      }
+    });
+  };
+
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
+    updateValidators("email", e.target.value);
   };
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+    updateValidators("password", e.target.value);
   };
 
   const showToast = (type) => {
@@ -216,6 +246,41 @@ const Sign = (props) => {
     setList([...list, toastProperties]);
   };
 
+  // const resetValidators = () => {
+  //   Object.keys(validators).forEach((fieldName) => {
+  //     validators[fieldName].errors = [];
+  //     validators[fieldName].state = "";
+  //     validators[fieldName].valid = false;
+  //   });
+  // };
+
+  // resetValidators();
+
+  const displayValidationErrors = (fieldName) => {
+    const validator = validators[fieldName];
+    const result = "";
+    if (validator && !validator.valid) {
+      const errors = validator.errors.map((info) => (
+        <span className="error" key={info}>
+          * {info}
+        </span>
+      ));
+
+      return <Errors className="col s12 row">{errors}</Errors>;
+    }
+    return result;
+  };
+
+  const isFormValid = () => {
+    let status = true;
+    Object.keys(validators).forEach((field) => {
+      if (!validators[field].valid) {
+        status = false;
+      }
+    });
+    return status;
+  };
+
   useEffect(() => {
     subscribeUserData((userEmail) => setEmailInfo(userEmail));
   }, []);
@@ -274,17 +339,18 @@ const Sign = (props) => {
                 註冊
               </a>
             </TabTitle>
-            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
-              <span>帳號：</span>
+            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={1}>
+              <span>Email：</span>
               <Input
                 className="u-full-width"
                 id="email"
                 type="email"
-                placeholder="輸入帳號"
+                placeholder="輸入Email"
                 onChange={handleChangeEmail}
                 mb={2}
               />
             </InputGroup>
+            {displayValidationErrors("email")}
             <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
               <span>密碼：</span>
               <Input
@@ -296,6 +362,7 @@ const Sign = (props) => {
                 mb={2}
               />
             </InputGroup>
+            {displayValidationErrors("password")}
             <ForgetPasswordText
               mb={2}
               onClick={() => {
@@ -306,7 +373,12 @@ const Sign = (props) => {
               忘記密碼？
             </ForgetPasswordText>
             <InputGroup>
-              <Button id="sign-up" type="button" onClick={checkType}>
+              <Button
+                id="sign-up"
+                type="button"
+                onClick={checkType}
+                disabled={isFormValid}
+              >
                 登入
               </Button>
             </InputGroup>
