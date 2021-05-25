@@ -129,15 +129,15 @@ const firebaseAuthSignIn = (email, password) => {
 //     });
 // };
 
-// const getUserData = () => {
-//   au.onAuthStateChanged((user) => {
-//     if (user) {
-//       const { email } = user;
-//       const { uid } = user;
-//       console.log(email, uid);
-//     }
-//   });
-// };
+const subscribeUserData = (callback) => {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      const { email } = user;
+      const { uid } = user;
+      callback(email, uid);
+    }
+  });
+};
 
 export default firebaseAddOrder;
 export {
@@ -148,6 +148,6 @@ export {
   readWishList,
   firebaseAuthSignUp,
   firebaseAuthSignIn,
-  // getUserData,
+  subscribeUserData,
   // firebaseAuthSignOut,
 };
