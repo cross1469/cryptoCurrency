@@ -233,6 +233,7 @@ const Sign = (props) => {
       } else if (emailInfo) {
         showToast("signed");
       } else {
+        setIsOpen(false);
         showToast("successSignIn");
       }
     } else if (inputType === "create") {
@@ -244,6 +245,7 @@ const Sign = (props) => {
       } else if (signUpMessage === "auth/email-already-in-use") {
         showToast("existed");
       } else {
+        setIsOpen(false);
         showToast("successSignUp");
       }
     }

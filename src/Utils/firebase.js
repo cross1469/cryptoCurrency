@@ -113,10 +113,7 @@ const firebaseAuthSignOut = () => {
   firebase
     .auth()
     .signOut()
-    .then(() => {
-      window.location.reload();
-      alert("登出成功");
-    });
+    .then(() => {});
 };
 
 const subscribeUserData = (callback) => {
