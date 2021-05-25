@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
-import { firebaseAuthSignIn, firebaseAuthSignUp } from "../Utils/firebase";
+import {
+  firebaseAuthSignIn,
+  firebaseAuthSignUp,
+  subscribeUserData,
+} from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
+import warningIcon from "../images/warning.svg";
 
 const Container = styled.div`
   display: flex;
@@ -116,6 +121,7 @@ const Sign = () => {
   const [password, setPassword] = useState("");
   const [signInactive, setSignInActive] = useState("active");
   const [signUpactive, setSignUpActive] = useState(null);
+  const [emailInfo, setEmailInfo] = useState("");
 
   const [list, setList] = useState([]);
   let toastProperties = null;
@@ -140,14 +146,6 @@ const Sign = () => {
     setPassword(e.target.value);
   };
 
-  const checkType = () => {
-    if (inputType === "signin") {
-      firebaseAuthSignIn(email, password);
-    } else if (inputType === "create") {
-      firebaseAuthSignUp(email, password);
-    }
-  };
-
   const showToast = (type) => {
     const id = Math.floor(Math.random() * 101 + 1);
     switch (type) {
@@ -169,13 +167,42 @@ const Sign = () => {
           icon: checkIcon,
         };
         break;
-      case "danger":
+      case "passwordError":
         toastProperties = {
           id,
           title: "Danger",
-          description: "登入失敗，請重新輸入",
+          description: "密碼錯誤，請重新輸入",
           backgroundColor: "#d9534f",
           icon: errorIcon,
+        };
+        break;
+      case "emailError":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "Email 錯誤，請重新輸入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+
+      case "signed":
+        toastProperties = {
+          id,
+          title: "Warning",
+          description: "已登入",
+          backgroundColor: "#f0ad4e",
+          icon: warningIcon,
+        };
+        break;
+
+      case "existed":
+        toastProperties = {
+          id,
+          title: "Warning",
+          description: "已有此使用者",
+          backgroundColor: "#f0ad4e",
+          icon: warningIcon,
         };
         break;
       default:
@@ -183,6 +210,39 @@ const Sign = () => {
     }
 
     setList([...list, toastProperties]);
+  };
+
+  useEffect(() => {
+    subscribeUserData((userEmail) => setEmailInfo(userEmail));
+  }, []);
+
+  const checkType = async () => {
+    if (inputType === "signin") {
+      const loginMessage = await firebaseAuthSignIn(email, password);
+      if (loginMessage === "auth/wrong-password") {
+        showToast("passwordError");
+      } else if (
+        loginMessage === "auth/invalid-email" ||
+        loginMessage === "auth/user-not-found"
+      ) {
+        showToast("emailError");
+      } else if (emailInfo) {
+        showToast("signed");
+      } else {
+        showToast("successSignIn");
+      }
+    } else if (inputType === "create") {
+      const signUpMessage = await firebaseAuthSignUp(email, password);
+      if (signUpMessage === "auth/wrong-password") {
+        showToast("passwordError");
+      } else if (signUpMessage === "auth/invalid-email") {
+        showToast("emailError");
+      } else if (signUpMessage === "auth/email-already-in-use") {
+        showToast("existed");
+      } else {
+        showToast("successSignUp");
+      }
+    }
   };
 
   return (
@@ -239,7 +299,7 @@ const Sign = () => {
             </InputGroup>
           </FormCard>
         </section>
-        <Toast />
+        <Toast toastList={list} autoDelete dismissTime={5000} />
       </Container>
     </>
   );

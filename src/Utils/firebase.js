@@ -95,29 +95,19 @@ const addWishList = async (wishList) => {
   }
 };
 
-const firebaseAuthSignUp = (email, password) => {
+const firebaseAuthSignUp = (email, password) =>
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-};
+    .then((result) => result)
+    .catch((error) => error.code);
 
-const firebaseAuthSignIn = (email, password) => {
+const firebaseAuthSignIn = (email, password) =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-};
+    .then((result) => result.user)
+    .catch((error) => error.code);
 
 const firebaseAuthSignOut = () => {
   firebase
