@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useState,
   forwardRef,
+  cloneElement,
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
@@ -78,7 +79,7 @@ const ModalBody = styled.div`
   color: #c3c0c0;
 `;
 
-const SignModal = ({ children, fade = false, defaultOpen = false }, ref) => {
+const CustomModal = ({ children, fade = false, defaultOpen = false }, ref) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const close = useCallback(() => setIsOpen(false), []);
@@ -110,11 +111,11 @@ const SignModal = ({ children, fade = false, defaultOpen = false }, ref) => {
       <Modal fade={fade}>
         <ModalOverlay onClick={close} />
         <ModalClose onClick={close}>x</ModalClose>
-        <ModalBody>{children}</ModalBody>
+        <ModalBody>{cloneElement(children, { setIsOpen })}</ModalBody>
       </Modal>
     ) : null,
     modalElement
   );
 };
 
-export default forwardRef(SignModal);
+export default forwardRef(CustomModal);

@@ -129,6 +129,13 @@ const subscribeUserData = (callback) => {
   });
 };
 
+const firebaseAuthForget = (email) =>
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => "已送出")
+    .catch((error) => error.code);
+
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -140,4 +147,5 @@ export {
   firebaseAuthSignIn,
   subscribeUserData,
   firebaseAuthSignOut,
+  firebaseAuthForget,
 };

@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { createRef, useRef, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, NavLink } from "react-router-dom";
-import SignModal from "./Modal";
+import CustomModal from "./Modal";
 import Sign from "./Sign";
+import Forget from "./Forget";
 
 const Navigation = styled.header`
   font-size: 36px;
@@ -129,8 +130,8 @@ const Navigation = styled.header`
 const Header = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const modal = useRef(null);
-
+  const signModal = useRef(null);
+  const forgetModal = createRef();
   const handleToggle = (e) => {
     e.preventDefault();
     setIsExpanded(!isExpanded);
@@ -154,16 +155,19 @@ const Header = () => {
             <NavLink
               activeClassName="active"
               to
-              onClick={() => modal.current.open()}
+              onClick={() => signModal.current.open()}
             >
               <li>LOGIN</li>
             </NavLink>
           </ul>
         </nav>
       </Navigation>
-      <SignModal ref={modal}>
-        <Sign />
-      </SignModal>
+      <CustomModal ref={forgetModal}>
+        <Forget />
+      </CustomModal>
+      <CustomModal ref={signModal}>
+        <Sign forgetModal={forgetModal} />
+      </CustomModal>
     </>
   );
 };

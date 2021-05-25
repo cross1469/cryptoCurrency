@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
+import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
   firebaseAuthSignUp,
@@ -115,7 +116,7 @@ const ForgetPasswordText = styled.div`
   }
 `;
 
-const Sign = () => {
+const Sign = (props) => {
   const [inputType, setInputType] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -124,7 +125,10 @@ const Sign = () => {
   const [emailInfo, setEmailInfo] = useState("");
 
   const [list, setList] = useState([]);
+  const signModal = useRef(null);
   let toastProperties = null;
+
+  const { setIsOpen, forgetModal } = props;
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -247,14 +251,13 @@ const Sign = () => {
 
   return (
     <>
-      <input id="type" type="hidden" value="signin" />
-      <Container>
+      <Container ref={signModal}>
         <section className="user-null none">
           <FormCard>
             <TabTitle>
               <a
                 className={signInactive}
-                href
+                href="true"
                 data-value="signin"
                 onClick={handleSwitchTab}
               >
@@ -262,7 +265,7 @@ const Sign = () => {
               </a>
               <a
                 className={signUpactive}
-                href
+                href="true"
                 data-value="create"
                 onClick={handleSwitchTab}
               >
@@ -291,7 +294,15 @@ const Sign = () => {
                 mb={2}
               />
             </InputGroup>
-            <ForgetPasswordText mb={2}>忘記密碼？</ForgetPasswordText>
+            <ForgetPasswordText
+              mb={2}
+              onClick={() => {
+                setIsOpen(false);
+                forgetModal.current.open();
+              }}
+            >
+              忘記密碼？
+            </ForgetPasswordText>
             <InputGroup>
               <Button id="sign-up" type="button" onClick={checkType}>
                 登入
@@ -303,6 +314,12 @@ const Sign = () => {
       </Container>
     </>
   );
+};
+
+Sign.propTypes = {
+  setIsOpen: PropTypes.func.isRequired,
+  forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func))
+    .isRequired,
 };
 
 export default Sign;
