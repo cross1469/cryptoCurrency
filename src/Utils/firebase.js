@@ -119,15 +119,15 @@ const firebaseAuthSignIn = (email, password) => {
     });
 };
 
-// const firebaseAuthSignOut = () => {
-//   au.signOut()
-//     .then(() => {
-//       window.location.reload();
-//     })
-//     .catch((error) => {
-//       console.log(error.message);
-//     });
-// };
+const firebaseAuthSignOut = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      window.location.reload();
+      alert("登出成功");
+    });
+};
 
 const subscribeUserData = (callback) => {
   firebase.auth().onAuthStateChanged((user) => {
@@ -149,5 +149,5 @@ export {
   firebaseAuthSignUp,
   firebaseAuthSignIn,
   subscribeUserData,
-  // firebaseAuthSignOut,
+  firebaseAuthSignOut,
 };

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { color, space, typography, flexbox } from "styled-system";
 import firebaseAddOrder from "../../Utils/firebase";
+import Toast from "../../Component/Toast";
+import checkIcon from "../../images/check.svg";
+import errorIcon from "../../images/error.svg";
 
 const PlaceOrderTitle = styled.div`
   ${color}
@@ -79,9 +83,14 @@ const Input = styled.input`
   ${typography}
 `;
 
-const PlaceOrder = () => {
+const PlaceOrder = (props) => {
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
+
+  const { email } = props;
+
+  const [list, setList] = useState([]);
+  let toastProperties = null;
 
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [limitOrMarket, setLimitOrMarket] = useState("limit");
@@ -185,15 +194,48 @@ const PlaceOrder = () => {
     }
   };
 
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "success":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "下單成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "danger":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "下單前，請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
   const handleClickUploadOrder = () => {
-    const OrderData = {
-      coinPrice,
-      coinType: "ETH",
-      qty,
-      tradingType: limitOrMarket,
-      type: buyOrSell,
-    };
-    firebaseAddOrder(OrderData);
+    if (email) {
+      const OrderData = {
+        coinPrice,
+        coinType: "ETH",
+        qty,
+        tradingType: limitOrMarket,
+        type: buyOrSell,
+      };
+      firebaseAddOrder(OrderData);
+      showToast("success");
+    } else {
+      showToast("danger");
+    }
   };
 
   const renderBtn = () => (
@@ -380,8 +422,13 @@ const PlaceOrder = () => {
       >
         Send
       </Button>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </RenderPlaceOrder>
   );
+};
+
+PlaceOrder.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default PlaceOrder;

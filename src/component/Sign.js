@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { firebaseAuthSignIn, firebaseAuthSignUp } from "../Utils/firebase";
+import Toast from "./Toast";
+import checkIcon from "../images/check.svg";
+import errorIcon from "../images/error.svg";
 
 const Container = styled.div`
   display: flex;
@@ -114,6 +117,9 @@ const Sign = () => {
   const [signInactive, setSignInActive] = useState("active");
   const [signUpactive, setSignUpActive] = useState(null);
 
+  const [list, setList] = useState([]);
+  let toastProperties = null;
+
   const handleSwitchTab = (e) => {
     e.preventDefault();
     setInputType(e.target.dataset.value);
@@ -140,6 +146,43 @@ const Sign = () => {
     } else if (inputType === "create") {
       firebaseAuthSignUp(email, password);
     }
+  };
+
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "successSignIn":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "登入成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successSignUp":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "註冊成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "danger":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "登入失敗，請重新輸入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
   };
 
   return (
@@ -196,6 +239,7 @@ const Sign = () => {
             </InputGroup>
           </FormCard>
         </section>
+        <Toast />
       </Container>
     </>
   );
