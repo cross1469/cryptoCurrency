@@ -2,25 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
+import PropTypes from "prop-types";
 
-const AreaSpline = () => {
-  const [symbol, setSymbol] = useState("");
-
-  const getSymbol = () => {
-    const allSymbol = [];
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const randomAllData = res.data.sort(() => Math.random() - 0.5);
-
-        for (let i = 0; i < randomAllData.length; i += 1) {
-          allSymbol.push(randomAllData[i].symbol);
-        }
-        setSymbol(allSymbol.sort(() => Math.random() - 0.5)[0]);
-      });
-  };
+const AreaSpline = (props) => {
+  const { symbol } = props;
 
   const callBinanceAPI = (coinSymbol) => {
     axios
@@ -68,13 +53,7 @@ const AreaSpline = () => {
   });
 
   useEffect(() => {
-    getSymbol();
-  }, []);
-
-  useEffect(() => {
-    if (symbol !== "") {
-      callBinanceAPI(symbol);
-    }
+    callBinanceAPI(symbol);
   }, [symbol]);
 
   useEffect(() => {
@@ -101,6 +80,10 @@ const AreaSpline = () => {
   }
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
+};
+
+AreaSpline.propTypes = {
+  symbol: PropTypes.string.isRequired,
 };
 
 export default AreaSpline;

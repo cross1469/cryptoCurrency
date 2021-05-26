@@ -124,10 +124,7 @@ const Chat = () => {
     setToggleChatBtn("block");
   };
 
-  useEffect(() => {
-    readChatData(setChatDatas);
-    return readChatData(setChatDatas);
-  }, []);
+  useEffect(() => readChatData(setChatDatas), []);
 
   const renderChatData = () =>
     chatDatas.map((chatData) => (

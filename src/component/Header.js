@@ -1,11 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import SignModal from "./Modal";
+import { Link, NavLink } from "react-router-dom";
+import CustomModal from "./Modal";
 import Sign from "./Sign";
+import Forget from "./Forget";
+import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
+import Toast from "./Toast";
+import checkIcon from "../images/check.svg";
 
 const Navigation = styled.header`
   font-size: 36px;
@@ -128,13 +132,62 @@ const Navigation = styled.header`
 
 const Header = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [email, setemail] = useState(null);
+  const [list, setList] = useState([]);
+  const [uid, setUid] = useState(null);
+  const [loginStatus, setLoginStatus] = useState("LOGIN");
+  let toastProperties = null;
 
-  const modal = useRef(null);
+  const signModal = useRef(null);
+  const forgetModal = createRef();
 
   const handleToggle = (e) => {
     e.preventDefault();
     setIsExpanded(!isExpanded);
   };
+
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "successSignOut":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "登出成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
+  const handleClickSignOut = () => {
+    firebaseAuthSignOut();
+    showToast("successSignOut");
+    setLoginStatus("LOGIN");
+    setUid(null);
+  };
+
+  useEffect(
+    () =>
+      subscribeUserData((userEmail, userUid) => {
+        if (userEmail) {
+          setemail(userEmail);
+          setUid(userUid);
+          setLoginStatus("LOGOUT");
+        } else {
+          setemail(userEmail);
+          setUid(userUid);
+          setLoginStatus("LOGIN");
+        }
+      }),
+    []
+  );
+  console.log(email);
 
   return (
     <>
@@ -145,25 +198,35 @@ const Header = () => {
         <nav className="nav">
           <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
           <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
-            <Link activeClassName="active" to="/explore">
+            <NavLink activeClassName="active" to="/explore">
               <li>EXPLORE</li>
-            </Link>
-            <Link activeClassName="active" to="/portfolio">
+            </NavLink>
+            <NavLink activeClassName="active" to="/portfolio">
               <li>PORTFOLIO</li>
-            </Link>
-            <Link
-              activeClassName="active"
-              to
-              onClick={() => modal.current.open()}
-            >
-              <li>LOGIN</li>
-            </Link>
+            </NavLink>
+            {uid ? (
+              <NavLink activeClassName="active" to onClick={handleClickSignOut}>
+                <li>{loginStatus}</li>
+              </NavLink>
+            ) : (
+              <NavLink
+                activeClassName="active"
+                to
+                onClick={() => signModal.current.open()}
+              >
+                <li>{loginStatus}</li>
+              </NavLink>
+            )}
           </ul>
         </nav>
       </Navigation>
-      <SignModal ref={modal}>
-        <Sign />
-      </SignModal>
+      <CustomModal ref={forgetModal}>
+        <Forget />
+      </CustomModal>
+      <CustomModal ref={signModal}>
+        <Sign forgetModal={forgetModal} />
+      </CustomModal>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };

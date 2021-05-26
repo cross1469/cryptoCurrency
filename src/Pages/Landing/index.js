@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { layout, space, flexbox } from "styled-system";
+import axios from "axios";
+import { Link } from "react-router-dom";
 import Banner from "./Banner";
 import AreaSpline from "./AreaSpline";
 import News from "./News";
@@ -48,57 +50,67 @@ const ChartLink = styled.a`
   cursor: pointer;
 `;
 
-const Landing = () => (
-  <>
-    <Banner />
-    <ChartContainer my={4}>
-      <ChartSection px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
-        <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-          <ChartItem
-            px={{ sm: 0, md: "12px", lg: "8px" }}
-            pb={{ sm: "16px", md: "24px", lg: 0 }}
-            width={{ _: "100%", md: "50%", lg: "25%" }}
-            flex={{ sm: "none", md: "none", lg: 1 }}
-          >
-            <ChartLink>
-              <AreaSpline />
-            </ChartLink>
-          </ChartItem>
-          <ChartItem
-            px={{ sm: 0, md: "12px", lg: "8px" }}
-            pb={{ sm: "16px", md: "24px", lg: 0 }}
-            width={{ _: "100%", md: "50%", lg: "25%" }}
-            flex={{ sm: "none", md: "none", lg: 1 }}
-          >
-            <ChartLink>
-              <AreaSpline />
-            </ChartLink>
-          </ChartItem>
-          <ChartItem
-            px={{ sm: 0, md: "12px", lg: "8px" }}
-            pb={{ sm: "16px", md: "24px", lg: 0 }}
-            width={{ _: "100%", md: "50%", lg: "25%" }}
-            flex={{ sm: "none", md: "none", lg: 1 }}
-          >
-            <ChartLink>
-              <AreaSpline />
-            </ChartLink>
-          </ChartItem>
-          <ChartItem
-            px={{ sm: 0, md: "12px", lg: "8px" }}
-            pb={{ sm: "16px", md: "24px", lg: 0 }}
-            width={{ _: "100%", md: "50%", lg: "25%" }}
-            flex={{ sm: "none", md: "none", lg: 1 }}
-          >
-            <ChartLink>
-              <AreaSpline />
-            </ChartLink>
-          </ChartItem>
-        </FlexBox>
-      </ChartSection>
-    </ChartContainer>
-    <News />
-  </>
-);
+const Landing = () => {
+  const [symbols, setSymbols] = useState([]);
+  const chartItemQty = 4;
+
+  const getSymbol = () => {
+    const allSymbol = [];
+    const fourSymbols = [];
+    axios
+      .get(
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
+      )
+      .then((res) => {
+        const randomAllData = res.data.sort(() => Math.random() - 0.5);
+
+        for (let i = 0; i < randomAllData.length; i += 1) {
+          if (randomAllData[i].symbol.indexOf("USDT", 2) !== -1) {
+            allSymbol.push(randomAllData[i].symbol);
+          }
+        }
+
+        for (let i = 0; i < chartItemQty; i += 1) {
+          fourSymbols.push(allSymbol.sort(() => Math.random() - 0.5)[i]);
+        }
+        setSymbols(fourSymbols);
+      });
+  };
+
+  useEffect(() => {
+    getSymbol();
+  }, []);
+
+  const renderChart = () =>
+    symbols.map((symbol) => (
+      <ChartItem
+        px={{ sm: 0, md: "12px", lg: "8px" }}
+        pb={{ sm: "16px", md: "24px", lg: 0 }}
+        width={{ _: "100%", md: "50%", lg: "25%" }}
+        flex={{ sm: "none", md: "none", lg: 1 }}
+        key={symbol}
+      >
+        <ChartLink>
+          <Link to={`/coinDetail/${symbol}`}>
+            <AreaSpline symbol={symbol} />
+          </Link>
+        </ChartLink>
+      </ChartItem>
+    ));
+
+  return (
+    <>
+      <Banner />
+      <ChartContainer my={4}>
+        <ChartSection px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
+          <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+            {renderChart()}
+          </FlexBox>
+        </ChartSection>
+      </ChartContainer>
+      <News />
+    </>
+  );
+};
 
 export default Landing;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { space, flexbox } from "styled-system";
 import KLine from "./KLine";
@@ -8,6 +8,8 @@ import AddValue from "./AddValue";
 import AssetTable from "./AssetTable";
 import DealTable from "./DealTable";
 import MobileButton from "./MobileButton";
+
+import { subscribeUserData } from "../../Utils/firebase";
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -57,24 +59,38 @@ const Mobile = styled.div`
   }
 `;
 
-const CoinDetail = () => (
-  <Container mt={3} mb={4}>
-    <FlexBox justifyContent="center">
-      <div className="leftSide">
-        <KLine />
-        <AssetTable />
-        <DealTable />
-      </div>
-      <div className="rightSide">
-        <PlaceOrder />
-        <AddValue />
-      </div>
-    </FlexBox>
-    <Mobile>
-      <MobileButton />
-    </Mobile>
-    <Chat />
-  </Container>
-);
+const CoinDetail = () => {
+  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
+
+  useEffect(
+    () =>
+      subscribeUserData((userEmail, uid) => {
+        setEmail(userEmail);
+        setUserId(uid);
+      }),
+    []
+  );
+
+  return (
+    <Container mt={3} mb={4}>
+      <FlexBox justifyContent="center">
+        <div className="leftSide">
+          <KLine />
+          <AssetTable email={email} userId={userId} />
+          <DealTable />
+        </div>
+        <div className="rightSide">
+          <PlaceOrder email={email} userId={userId} />
+          <AddValue email={email} userId={userId} />
+        </div>
+      </FlexBox>
+      <Mobile>
+        <MobileButton />
+      </Mobile>
+      <Chat />
+    </Container>
+  );
+};
 
 export default CoinDetail;

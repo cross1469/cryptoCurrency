@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
+import { useDispatch } from "react-redux";
+import getMarketPrice from "../../Redux/Actions/actionCreator";
 
 const KLine = () => {
-  const symbol = "ETHUSDT";
+  const { symbol } = useParams();
+  const dispatch = useDispatch();
 
-  const callBinanceAPI = (coinSymbol, interval) => {
+  const callBinanceAPI = (coinSymbol, APIInterval) => {
     axios
       .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${interval}`
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
       )
       .then((res) => {
         const currencyData = [];
@@ -43,6 +47,33 @@ const KLine = () => {
       });
   };
 
+  const socketAPI = (socketSymbol, socketInterval) => {
+    const socket = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
+    );
+    socket.onmessage = (event) => {
+      const newKLineData = [];
+      const data = JSON.parse(event.data);
+      dispatch(getMarketPrice(data.k.o));
+      newKLineData.push(
+        data.k.t,
+        Number(data.k.o),
+        Number(data.k.h),
+        Number(data.k.l),
+        Number(data.k.c)
+      );
+      // eslint-disable-next-line no-use-before-define
+      setOptions((op) => {
+        const newOptions = { ...op };
+        newOptions.series[0].data = [
+          ...newOptions.series[0].data,
+          newKLineData,
+        ];
+        return newOptions;
+      });
+    };
+  };
+
   const [options, setOptions] = useState({
     chart: {
       zoomType: "x",
@@ -56,6 +87,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1m");
+              socketAPI(symbol, "1m");
             },
           },
         },
@@ -64,6 +96,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "15m");
+              socketAPI(symbol, "15m");
             },
           },
         },
@@ -72,6 +105,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1h");
+              socketAPI(symbol, "1h");
             },
           },
         },
@@ -80,6 +114,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "4h");
+              socketAPI(symbol, "4h");
             },
           },
         },
@@ -88,6 +123,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1d");
+              socketAPI(symbol, "1d");
             },
           },
         },
@@ -96,6 +132,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1w");
+              socketAPI(symbol, "1w");
             },
           },
         },
@@ -151,31 +188,8 @@ const KLine = () => {
 
   useEffect(() => {
     callBinanceAPI(symbol, "1m");
-  }, []);
-
-  useEffect(() => {
-    const socket = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${symbol}@kline_1m`
-    );
-    socket.onmessage = (event) => {
-      const newKLineData = [];
-      const data = JSON.parse(event.data);
-      newKLineData.push(
-        data.k.t,
-        Number(data.k.o),
-        Number(data.k.h),
-        Number(data.k.l),
-        Number(data.k.c)
-      );
-      setOptions((op) => {
-        const newOptions = { ...op };
-        newOptions.series[0].data = [
-          ...newOptions.series[0].data,
-          newKLineData,
-        ];
-        return newOptions;
-      });
-    };
+    socketAPI(symbol, "1m");
+    return () => socketAPI(symbol, "1m");
   }, []);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;

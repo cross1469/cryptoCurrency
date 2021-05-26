@@ -15,9 +15,36 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseAddOrder = (orderData) => {
+const firebaseAddValue = (email, coinType, addValue) => {
   db.collection("users")
-    .doc("cross1469")
+    .doc(email)
+    .collection("assets")
+    .doc(coinType)
+    .set({
+      profitLoss: 0,
+      qty: Number(addValue),
+    });
+};
+
+const firebaseReadCoinAsset = (email, coinType) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("assets")
+    .doc(coinType)
+    .get()
+    .then((doc) => {
+      if (doc.data() === undefined) {
+        return null;
+      }
+      const assetData = doc.data();
+      const { profitLoss, qty } = assetData;
+      return { profitLoss, qty };
+    });
+
+const firebaseAddOrder = (orderData, email) => {
+  db.collection("users")
+    .doc(email)
     .collection("orders")
     .doc()
     .set({
@@ -30,10 +57,10 @@ const firebaseAddOrder = (orderData) => {
     });
 };
 
-const firebaseReadOrder = () =>
+const firebaseReadOrder = (email) =>
   db
     .collection("users")
-    .doc("cross1469")
+    .doc(email)
     .collection("orders")
     .get()
     .then((orders) => {
@@ -95,49 +122,74 @@ const addWishList = async (wishList) => {
   }
 };
 
-const firebaseAuthSignUp = (email, password) => {
+const firebaseAuthSignUp = (email, password) =>
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-};
+    .then((result) => result)
+    .catch((error) => error.code);
 
-const firebaseAuthSignIn = (email, password) => {
+const firebaseAuthSignIn = (email, password) =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+    .then((result) => result.user)
+    .catch((error) => error.code);
+
+const firebaseAuthSignOut = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {});
 };
 
-// const firebaseAuthSignOut = () => {
-//   au.signOut()
-//     .then(() => {
-//       window.location.reload();
-//     })
-//     .catch((error) => {
-//       console.log(error.message);
-//     });
-// };
+const subscribeUserData = (callback) => {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      const { email } = user;
+      const { uid } = user;
+      callback(email, uid);
+    } else {
+      callback(null, null);
+    }
+  });
+};
 
-// const getUserData = () => {
-//   au.onAuthStateChanged((user) => {
-//     if (user) {
-//       const { email } = user;
-//       const { uid } = user;
-//       console.log(email, uid);
-//     }
-//   });
-// };
+const firebaseAuthForget = (email) =>
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => "已送出")
+    .catch((error) => error.code);
+
+const firebaseAuthGoogleSignIn = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  return firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      const { email, uid } = result.user;
+      return { email, uid };
+    })
+    .catch((error) => error.code);
+};
+
+const firebaseGetLimitOrderData = (email, coinType) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("orders")
+    .where("tradingType", "==", "limit")
+    .get()
+    .then((limitDatas) => {
+      const limitOrderData = [];
+      limitDatas.forEach((limitData) => {
+        if (limitData.data().coinType === coinType) {
+          limitOrderData.push(limitData.data());
+        }
+      });
+      return limitOrderData;
+    });
 
 export default firebaseAddOrder;
 export {
@@ -148,6 +200,11 @@ export {
   readWishList,
   firebaseAuthSignUp,
   firebaseAuthSignIn,
-  // getUserData,
-  // firebaseAuthSignOut,
+  subscribeUserData,
+  firebaseAuthSignOut,
+  firebaseAuthForget,
+  firebaseAuthGoogleSignIn,
+  firebaseAddValue,
+  firebaseReadCoinAsset,
+  firebaseGetLimitOrderData,
 };
