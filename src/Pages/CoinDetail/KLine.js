@@ -3,9 +3,12 @@ import { useParams } from "react-router";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
+import { useDispatch } from "react-redux";
+import getMarketPrice from "../../Redux/Actions/actionCreator";
 
 const KLine = () => {
   const { symbol } = useParams();
+  const dispatch = useDispatch();
 
   const callBinanceAPI = (coinSymbol, APIInterval) => {
     axios
@@ -51,6 +54,7 @@ const KLine = () => {
     socket.onmessage = (event) => {
       const newKLineData = [];
       const data = JSON.parse(event.data);
+      dispatch(getMarketPrice(data.k.o));
       newKLineData.push(
         data.k.t,
         Number(data.k.o),
@@ -185,6 +189,7 @@ const KLine = () => {
   useEffect(() => {
     callBinanceAPI(symbol, "1m");
     socketAPI(symbol, "1m");
+    return () => socketAPI(symbol, "1m");
   }, []);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;

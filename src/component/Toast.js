@@ -148,7 +148,7 @@ const Toast = (props) => {
 };
 
 Toast.propTypes = {
-  toastList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  toastList: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
   autoDelete: PropTypes.bool.isRequired,
   dismissTime: PropTypes.number.isRequired,
 };

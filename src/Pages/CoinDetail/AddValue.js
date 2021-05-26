@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { color, space, typography, flexbox } from "styled-system";
+import { color, space, typography } from "styled-system";
 
 const RenderAddValue = styled.div`
   ${space}
@@ -18,23 +18,7 @@ const AddValueTitle = styled.div`
   ${space}
   ${typography}
 `;
-const AddValueInput = styled.input`
-  flex-grow: 1;
-  max-width: 55%;
-  border: 1px solid rgba(43, 47, 54, 0.8);
-  outline: none;
-  text-align: right;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
-  :hover {
-    border-color: rgb(240, 185, 11);
-  }
-  @media only screen and (max-width: 996px) {
-    max-width: 50%;
-  }
-`;
+
 const AddValueBtn = styled.button`
   outline: none;
   border: none;
@@ -52,6 +36,34 @@ const Asset = styled.div`
 const CoinText = styled.div``;
 const CoinSum = styled.div``;
 
+const InputGroup = styled.div`
+  ${space}
+  max-width:70%;
+  display: flex;
+  height: 32px;
+  border: 1px solid rgba(43, 47, 54, 0.8);
+  border-radius: 4px;
+  align-items: center;
+  :hover {
+    border-color: rgb(240, 185, 11);
+  }
+`;
+const Input = styled.input`
+  width: calc(100% - 40px);
+  outline: none;
+  border: none;
+  ${color}
+  ${space}
+  ${typography}
+`;
+
+const InputUnit = styled.div`
+  min-width: 40px;
+  ${color}
+  ${space}
+  ${typography}
+`;
+
 const AddValue = () => {
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
@@ -68,21 +80,23 @@ const AddValue = () => {
         充值
       </AddValueTitle>
       <FlexBox mb={2}>
-        <AddValueInput
-          value={addValue}
-          onChange={handlAddValueInput}
-          fontFamily="Roboto"
-          fontSize={{ md: 14, lg: 16 }}
-          mr={{ md: 2 }}
-          px={3}
-          py={2}
-        />
+        <InputGroup mr={2}>
+          <Input
+            value={addValue}
+            onChange={handlAddValueInput}
+            textAlign="right"
+            px={1}
+            fontFamily="Roboto"
+          />
+          <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
+            USDT
+          </InputUnit>
+        </InputGroup>
         <AddValueBtn
+          fontSize={{ _: 10, lg: 16 }}
           fontFamily="Roboto"
-          fontSize={{ md: 14, lg: 16 }}
           bg="#02c077}"
-          px={{ md: 2, lg: 3 }}
-          py={{ md: 2 }}
+          px={{ _: 3 }}
           color="white"
         >
           充值

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import { color, space, typography, flexbox } from "styled-system";
 import firebaseAddOrder from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
@@ -84,6 +85,9 @@ const Input = styled.input`
 `;
 
 const PlaceOrder = (props) => {
+  const marketPrice = useSelector(
+    (state) => state.coinDetailReducer.marketPrice
+  );
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
 
@@ -116,9 +120,9 @@ const PlaceOrder = (props) => {
   });
 
   const [isLimit, setIsLimit] = useState(true);
-  const [coinPrice, setCoinPrice] = useState(0);
-  const [qty, setQty] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [coinPrice, setCoinPrice] = useState("");
+  const [qty, setQty] = useState("");
+  const [total, setTotal] = useState("");
 
   const handleClickBuy = (e) => {
     if (e.target.innerHTML === "買入") {
@@ -179,18 +183,20 @@ const PlaceOrder = (props) => {
   };
 
   const handleChangeInputValue = (e) => {
-    if (e.target.placeholder === "價格") {
+    if (e.target.id === "price") {
+      const orderTotal = Number(e.target.value * qty).toFixed(6);
       setCoinPrice(e.target.value);
-    } else if (e.target.placeholder === "數量") {
-      const totalInput = document.getElementById("orderTotal");
-      const orderTotal = coinPrice * e.target.value;
-
-      setQty(e.target.value);
       setTotal(orderTotal);
-
-      totalInput.value = orderTotal;
-
-      console.log(total);
+    } else if (e.target.id === "qty") {
+      if (isLimit) {
+        const orderTotal = Number(coinPrice * e.target.value).toFixed(6);
+        setQty(e.target.value);
+        setTotal(orderTotal);
+      } else {
+        const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+        setQty(e.target.value);
+        setTotal(orderTotal);
+      }
     }
   };
 
@@ -226,13 +232,16 @@ const PlaceOrder = (props) => {
     if (email) {
       const OrderData = {
         coinPrice,
-        coinType: "ETH",
+        coinType: coin,
         qty,
         tradingType: limitOrMarket,
         type: buyOrSell,
       };
-      firebaseAddOrder(OrderData);
+      firebaseAddOrder(OrderData, email);
       showToast("success");
+      setCoinPrice("");
+      setTotal("");
+      setQty("");
     } else {
       showToast("danger");
     }
@@ -305,35 +314,39 @@ const PlaceOrder = (props) => {
       return (
         <AllInput>
           <InputGroup mb={2}>
-            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
-              價格
+            <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
+              限價
             </InputText>
             <Input
+              id="price"
+              value={coinPrice}
               onChange={handleChangeInputValue}
               textAlign="right"
               px={1}
               fontFamily="Roboto"
             />
-            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
               USDT
             </InputUnit>
           </InputGroup>
           <InputGroup mb={2}>
-            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
+            <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
               數量
             </InputText>
             <Input
+              id="qty"
+              value={qty}
               onChange={handleChangeInputValue}
               textAlign="right"
               px={1}
               fontFamily="Roboto"
             />
-            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
               {coin}
             </InputUnit>
           </InputGroup>
           <InputGroup mb={2}>
-            <InputText ml={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
+            <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
               成交額
             </InputText>
             <Input
@@ -342,8 +355,10 @@ const PlaceOrder = (props) => {
               textAlign="right"
               fontFamily="Roboto"
               px={1}
+              value={total}
+              disabled
             />
-            <InputUnit mr={2} fontSize={{ md: 14, lg: 16 }} fontFamily="Roboto">
+            <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
               USDT
             </InputUnit>
           </InputGroup>
@@ -353,44 +368,52 @@ const PlaceOrder = (props) => {
     return (
       <AllInput>
         <InputGroup mb={2}>
-          <InputText ml={2} fontFamily="Roboto">
+          <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             市價
           </InputText>
           <Input
+            id="price"
+            value={Number(marketPrice).toFixed(6)}
             onChange={handleChangeInputValue}
             textAlign="right"
             px={1}
             fontFamily="Roboto"
+            disabled
           />
-          <InputUnit mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             USDT
           </InputUnit>
         </InputGroup>
         <InputGroup mb={2}>
-          <InputText ml={2} fontFamily="Roboto">
+          <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             數量
           </InputText>
           <Input
+            id="qty"
+            value={qty}
             onChange={handleChangeInputValue}
             textAlign="right"
             px={1}
             fontFamily="Roboto"
           />
-          <InputUnit mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             {coin}
           </InputUnit>
         </InputGroup>
         <InputGroup mb={2}>
-          <InputText ml={2} fontFamily="Roboto">
+          <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             成交額
           </InputText>
           <Input
+            id="orderTotal"
             onChange={handleChangeInputValue}
             textAlign="right"
             px={1}
             fontFamily="Roboto"
+            value={total}
+            disabled
           />
-          <InputUnit mr={2} fontFamily="Roboto">
+          <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
             USDT
           </InputUnit>
         </InputGroup>

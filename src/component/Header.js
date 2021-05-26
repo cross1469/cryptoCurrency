@@ -176,14 +176,12 @@ const Header = () => {
     () =>
       subscribeUserData((userEmail, userUid) => {
         setemail(userEmail);
-        console.log(email);
         setUid(userUid);
+        console.log(email);
         setLoginStatus("LOGOUT");
       }),
     []
   );
-
-  console.log(uid);
 
   return (
     <>

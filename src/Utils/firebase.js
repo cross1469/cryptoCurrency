@@ -15,9 +15,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseAddOrder = (orderData) => {
+const firebaseAddOrder = (orderData, email) => {
   db.collection("users")
-    .doc("cross1469")
+    .doc(email)
     .collection("orders")
     .doc()
     .set({
