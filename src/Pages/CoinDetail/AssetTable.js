@@ -78,7 +78,7 @@ const AssetTable = (props) => {
 
   const getUserCoinAsset = async () => {
     let limitQty = 0;
-    if (email !== "") {
+    if (email) {
       const coinAsset = await firebaseReadCoinAsset(email, coin);
       const limitOrderData = await firebaseGetLimitOrderData(email, coin);
       if (coinAsset) {
