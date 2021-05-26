@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { color, flexbox, space, typography } from "styled-system";
+import { color, flexbox, space, typography, border } from "styled-system";
 import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
@@ -70,18 +70,19 @@ const InputGroup = styled.div`
   input[type="password"] {
     appearance: none;
   }
-  input[type="email"]:focus,
+  /* input[type="email"]:focus,
   input[type="password"]:focus {
     border: 1px solid #f0b90b;
     outline: none;
-  }
+  } */
 `;
 
 const Input = styled.input`
   outline: none;
-  border: 1px solid black;
+  border: 1px solid #1e2329;
   padding: 4px 8px;
   ${space}
+  ${border}
 `;
 
 const Button = styled.button`
@@ -136,6 +137,10 @@ const Sign = (props) => {
   const [signInactive, setSignInActive] = useState("active");
   const [signUpactive, setSignUpActive] = useState(null);
   const [emailInfo, setEmailInfo] = useState("");
+  const [validColor, setValidColor] = useState({
+    email: "#1e2329",
+    password: "#1e2329",
+  });
 
   const [list, setList] = useState([]);
   const signModal = useRef(null);
@@ -164,11 +169,17 @@ const Sign = (props) => {
         if (!rule.test.test(value)) {
           validators[fieldName].errors.push(rule.message);
           validators[fieldName].valid = false;
+          setValidColor({ ...validColor, email: "red" });
+        } else {
+          setValidColor({ ...validColor, email: "#1e2329" });
         }
       } else if (typeof rule.test === "function") {
         if (!rule.test(value)) {
           validators[fieldName].errors.push(rule.message);
           validators[fieldName].valid = false;
+          setValidColor({ ...validColor, password: "red" });
+        } else {
+          setValidColor({ ...validColor, password: "#1e2329" });
         }
       }
     });
@@ -360,6 +371,7 @@ const Sign = (props) => {
                 placeholder="輸入Email"
                 onChange={handleChangeEmail}
                 mb={2}
+                borderColor={validColor.email}
               />
             </InputGroup>
             {displayValidationErrors("email")}
@@ -372,18 +384,24 @@ const Sign = (props) => {
                 placeholder="輸入密碼"
                 onChange={handleChangePassword}
                 mb={2}
+                borderColor={validColor.password}
               />
             </InputGroup>
+
             {displayValidationErrors("password")}
-            <ForgetPasswordText
-              mb={2}
-              onClick={() => {
-                setIsOpen(false);
-                forgetModal.current.open();
-              }}
-            >
-              忘記密碼？
-            </ForgetPasswordText>
+
+            {signInactive === "active" ? (
+              <ForgetPasswordText
+                mb={2}
+                onClick={() => {
+                  setIsOpen(false);
+                  forgetModal.current.open();
+                }}
+              >
+                忘記密碼？
+              </ForgetPasswordText>
+            ) : null}
+
             {signInactive === "active" ? (
               <InputGroup flexDirection="column">
                 <Button
