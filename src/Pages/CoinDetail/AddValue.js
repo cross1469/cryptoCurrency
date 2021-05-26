@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
+import { firebaseAddValue, firebaseReadCoinAsset } from "../../Utils/firebase";
 
 const RenderAddValue = styled.div`
   ${space}
@@ -64,15 +66,43 @@ const InputUnit = styled.div`
   ${typography}
 `;
 
-const AddValue = () => {
+const AddValue = (props) => {
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
 
   const [addValue, setAddValue] = useState("");
+  const [usdtData, setUsdtData] = useState({ profitLoss: "", qty: "" });
+  const [coinData, setCoinData] = useState({ profitLoss: "", qty: "" });
+
+  const { email } = props;
 
   const handlAddValueInput = (e) => {
     setAddValue(e.target.value);
   };
+
+  const getUserCoinAsset = async () => {
+    if (email !== "") {
+      const usdtAsset = await firebaseReadCoinAsset(email, "USDT");
+      const coinAsset = await firebaseReadCoinAsset(email, coin);
+      if (usdtAsset) {
+        setUsdtData(usdtAsset);
+      } else if (coinAsset) {
+        setCoinData(coinAsset);
+      }
+    }
+  };
+
+  const handleClickAddValue = () => {
+    const total = Number(usdtData.qty) + Number(addValue);
+
+    firebaseAddValue(email, "USDT", total);
+    getUserCoinAsset();
+    setAddValue("");
+  };
+
+  useEffect(() => {
+    getUserCoinAsset();
+  }, [email]);
 
   return (
     <RenderAddValue ml={5} mt={4}>
@@ -98,6 +128,7 @@ const AddValue = () => {
           bg="#02c077}"
           px={{ _: 3 }}
           color="white"
+          onClick={handleClickAddValue}
         >
           充值
         </AddValueBtn>
@@ -105,14 +136,18 @@ const AddValue = () => {
 
       <Asset fontFamily="Roboto" fontSize={16} mb={2}>
         <CoinText>{coin} 可用：</CoinText>
-        <CoinSum>0.05</CoinSum>
+        <CoinSum>{coinData.qty === "" ? 0 : coinData.qty}</CoinSum>
       </Asset>
       <Asset fontFamily="Roboto" fontSize={16} mb={2}>
         <CoinText>USDT 可用：</CoinText>
-        <CoinSum>0.00012</CoinSum>
+        <CoinSum>{usdtData.qty}</CoinSum>
       </Asset>
     </RenderAddValue>
   );
+};
+
+AddValue.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default AddValue;

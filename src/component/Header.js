@@ -175,13 +175,19 @@ const Header = () => {
   useEffect(
     () =>
       subscribeUserData((userEmail, userUid) => {
-        setemail(userEmail);
-        setUid(userUid);
-        console.log(email);
-        setLoginStatus("LOGOUT");
+        if (userEmail) {
+          setemail(userEmail);
+          setUid(userUid);
+          setLoginStatus("LOGOUT");
+        } else {
+          setemail(userEmail);
+          setUid(userUid);
+          setLoginStatus("LOGIN");
+        }
       }),
     []
   );
+  console.log(email);
 
   return (
     <>

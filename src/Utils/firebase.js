@@ -15,6 +15,33 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+const firebaseAddValue = (email, coinType, addValue) => {
+  db.collection("users")
+    .doc(email)
+    .collection("assets")
+    .doc(coinType)
+    .set({
+      profitLoss: 0,
+      qty: Number(addValue),
+    });
+};
+
+const firebaseReadCoinAsset = (email, coinType) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("assets")
+    .doc(coinType)
+    .get()
+    .then((doc) => {
+      if (doc.data() === undefined) {
+        return null;
+      }
+      const assetData = doc.data();
+      const { profitLoss, qty } = assetData;
+      return { profitLoss, qty };
+    });
+
 const firebaseAddOrder = (orderData, email) => {
   db.collection("users")
     .doc(email)
@@ -122,6 +149,8 @@ const subscribeUserData = (callback) => {
       const { email } = user;
       const { uid } = user;
       callback(email, uid);
+    } else {
+      callback(null, null);
     }
   });
 };
@@ -133,7 +162,7 @@ const firebaseAuthForget = (email) =>
     .then(() => "已送出")
     .catch((error) => error.code);
 
-const firebaseAuthGoogleSignIn = () => {
+const firebaseAuthGoogleSignIn = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   return firebase
     .auth()
@@ -158,4 +187,6 @@ export {
   firebaseAuthSignOut,
   firebaseAuthForget,
   firebaseAuthGoogleSignIn,
+  firebaseAddValue,
+  firebaseReadCoinAsset,
 };
