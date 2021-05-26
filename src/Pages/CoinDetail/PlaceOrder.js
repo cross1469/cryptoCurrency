@@ -230,14 +230,14 @@ const PlaceOrder = (props) => {
 
   const handleClickUploadOrder = () => {
     if (email) {
-      const OrderData = {
+      const orderData = {
         coinPrice,
         coinType: coin,
         qty,
         tradingType: limitOrMarket,
         type: buyOrSell,
       };
-      firebaseAddOrder(OrderData, email);
+      firebaseAddOrder(orderData, email);
       showToast("success");
       setCoinPrice("");
       setTotal("");

@@ -77,7 +77,7 @@ const CoinDetail = () => {
       <FlexBox justifyContent="center">
         <div className="leftSide">
           <KLine />
-          <AssetTable />
+          <AssetTable email={email} userId={userId} />
           <DealTable />
         </div>
         <div className="rightSide">

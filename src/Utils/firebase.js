@@ -57,10 +57,10 @@ const firebaseAddOrder = (orderData, email) => {
     });
 };
 
-const firebaseReadOrder = () =>
+const firebaseReadOrder = (email) =>
   db
     .collection("users")
-    .doc("cross1469")
+    .doc(email)
     .collection("orders")
     .get()
     .then((orders) => {
@@ -174,6 +174,23 @@ const firebaseAuthGoogleSignIn = async () => {
     .catch((error) => error.code);
 };
 
+const firebaseGetLimitOrderData = (email, coinType) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("orders")
+    .where("tradingType", "==", "limit")
+    .get()
+    .then((limitDatas) => {
+      const limitOrderData = [];
+      limitDatas.forEach((limitData) => {
+        if (limitData.data().coinType === coinType) {
+          limitOrderData.push(limitData.data());
+        }
+      });
+      return limitOrderData;
+    });
+
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -189,4 +206,5 @@ export {
   firebaseAuthGoogleSignIn,
   firebaseAddValue,
   firebaseReadCoinAsset,
+  firebaseGetLimitOrderData,
 };
