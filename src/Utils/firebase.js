@@ -133,6 +133,18 @@ const firebaseAuthForget = (email) =>
     .then(() => "已送出")
     .catch((error) => error.code);
 
+const firebaseAuthGoogleSignIn = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  return firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      const { email, uid } = result.user;
+      return { email, uid };
+    })
+    .catch((error) => error.code);
+};
+
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -145,4 +157,5 @@ export {
   subscribeUserData,
   firebaseAuthSignOut,
   firebaseAuthForget,
+  firebaseAuthGoogleSignIn,
 };

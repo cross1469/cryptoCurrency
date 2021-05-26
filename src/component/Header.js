@@ -135,6 +135,7 @@ const Header = () => {
   const [email, setemail] = useState(null);
   const [list, setList] = useState([]);
   const [uid, setUid] = useState(null);
+  const [loginStatus, setLoginStatus] = useState("LOGIN");
   let toastProperties = null;
 
   const signModal = useRef(null);
@@ -167,6 +168,8 @@ const Header = () => {
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
     showToast("successSignOut");
+    setLoginStatus("LOGIN");
+    setUid(null);
   };
 
   useEffect(
@@ -175,9 +178,12 @@ const Header = () => {
         setemail(userEmail);
         console.log(email);
         setUid(userUid);
+        setLoginStatus("LOGOUT");
       }),
     []
   );
+
+  console.log(uid);
 
   return (
     <>
@@ -196,7 +202,7 @@ const Header = () => {
             </NavLink>
             {uid ? (
               <NavLink activeClassName="active" to onClick={handleClickSignOut}>
-                <li>LOGOUT</li>
+                <li>{loginStatus}</li>
               </NavLink>
             ) : (
               <NavLink
@@ -204,7 +210,7 @@ const Header = () => {
                 to
                 onClick={() => signModal.current.open()}
               >
-                <li>LOGIN</li>
+                <li>{loginStatus}</li>
               </NavLink>
             )}
           </ul>

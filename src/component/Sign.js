@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
+import { color, flexbox, space, typography } from "styled-system";
 import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
   firebaseAuthSignUp,
   subscribeUserData,
+  firebaseAuthGoogleSignIn,
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
 import Toast from "./Toast";
@@ -58,6 +59,7 @@ const InputGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  ${flexbox}
   span {
     flex: 0 0 auto;
     ${color}
@@ -97,6 +99,7 @@ const Button = styled.button`
   border: none;
   color: #212833;
   font-weight: bold;
+  margin-bottom: 8px;
   &:hover {
     box-shadow: none;
     background-image: linear-gradient(
@@ -119,6 +122,7 @@ const ForgetPasswordText = styled.div`
 
 const Errors = styled.div`
   text-align: left;
+  ${space}
   .error {
     font-size: 12px;
     color: red;
@@ -266,7 +270,7 @@ const Sign = (props) => {
         </span>
       ));
 
-      return <Errors className="col s12 row">{errors}</Errors>;
+      return <Errors mb={2}>{errors}</Errors>;
     }
     return result;
   };
@@ -315,6 +319,13 @@ const Sign = (props) => {
         showToast("successSignUp");
       }
     }
+  };
+
+  const googleSignIn = async () => {
+    firebaseAuthGoogleSignIn();
+    const googleEmail = await firebaseAuthGoogleSignIn.email;
+    setIsOpen(false);
+    setEmail(googleEmail);
   };
 
   return (
@@ -373,16 +384,37 @@ const Sign = (props) => {
             >
               忘記密碼？
             </ForgetPasswordText>
-            <InputGroup>
-              <Button
-                id="sign-up"
-                type="button"
-                onClick={checkType}
-                disabled={isFormValid}
-              >
-                登入
-              </Button>
-            </InputGroup>
+            {signInactive === "active" ? (
+              <InputGroup flexDirection="column">
+                <Button
+                  id="sign-in"
+                  type="button"
+                  onClick={checkType}
+                  disabled={!isFormValid}
+                  mb={2}
+                >
+                  登入
+                </Button>
+                <Button
+                  id="google-sign-in"
+                  type="button"
+                  onClick={googleSignIn}
+                >
+                  Google 登入
+                </Button>
+              </InputGroup>
+            ) : (
+              <InputGroup>
+                <Button
+                  id="sign-up"
+                  type="button"
+                  onClick={checkType}
+                  disabled={!isFormValid}
+                >
+                  註冊
+                </Button>
+              </InputGroup>
+            )}
           </FormCard>
         </section>
         <Toast toastList={list} autoDelete dismissTime={5000} />
