@@ -63,12 +63,14 @@ const CoinDetail = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
 
-  useEffect(() => {
-    subscribeUserData((userEmail, uid) => {
-      setEmail(userEmail);
-      setUserId(uid);
-    });
-  }, []);
+  useEffect(
+    () =>
+      subscribeUserData((userEmail, uid) => {
+        setEmail(userEmail);
+        setUserId(uid);
+      }),
+    []
+  );
 
   return (
     <Container mt={3} mb={4}>

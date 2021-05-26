@@ -281,9 +281,10 @@ const Sign = (props) => {
     return status;
   };
 
-  useEffect(() => {
-    subscribeUserData((userEmail) => setEmailInfo(userEmail));
-  }, []);
+  useEffect(
+    () => subscribeUserData((userEmail) => setEmailInfo(userEmail)),
+    []
+  );
 
   const checkType = async () => {
     if (inputType === "signin") {

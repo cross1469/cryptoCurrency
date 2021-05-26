@@ -169,13 +169,15 @@ const Header = () => {
     showToast("successSignOut");
   };
 
-  useEffect(() => {
-    subscribeUserData((userEmail, userUid) => {
-      setemail(userEmail);
-      console.log(email);
-      setUid(userUid);
-    });
-  });
+  useEffect(
+    () =>
+      subscribeUserData((userEmail, userUid) => {
+        setemail(userEmail);
+        console.log(email);
+        setUid(userUid);
+      }),
+    []
+  );
 
   return (
     <>
