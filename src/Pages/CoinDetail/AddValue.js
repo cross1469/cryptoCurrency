@@ -119,6 +119,15 @@ const AddValue = (props) => {
           icon: errorIcon,
         };
         break;
+      case "dangerTotal":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "金額不得為 0",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
       default:
         setList([]);
     }
@@ -127,12 +136,14 @@ const AddValue = (props) => {
   };
 
   const handleClickAddValue = () => {
-    if (email) {
-      const total = Number(usdtData.qty) + Number(addValue);
+    const total = Number(usdtData.qty) + Number(addValue);
+    if (email && addValue > 0) {
       firebaseAddValue(email, "USDT", total);
       getUserCoinAsset();
       setAddValue("");
       showToast("success");
+    } else if (!addValue) {
+      showToast("dangerTotal");
     } else {
       showToast("danger");
     }
