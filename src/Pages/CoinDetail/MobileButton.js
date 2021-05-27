@@ -1,7 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { color, space, typography, layout, flexbox } from "styled-system";
-// import MobileAddValue from "./MobileAddValue";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import {
+  color,
+  space,
+  typography,
+  layout,
+  flexbox,
+  border,
+} from "styled-system";
+import firebaseAddOrder, {
+  firebaseReadCoinAsset,
+  firebaseAddValue,
+} from "../../Utils/firebase";
+import Toast from "../../Component/Toast";
+import checkIcon from "../../images/check.svg";
+import errorIcon from "../../images/error.svg";
 
 const Button = styled.div`
   box-sizing: border-box;
@@ -130,10 +146,9 @@ const BuyBtn = styled.span`
   cursor: pointer;
   font-weight: 400;
   text-transform: uppercase;
-  color: white;
-  background-color: rgb(2, 192, 118);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  ${color}
 `;
 const SellBtn = styled.span`
   box-sizing: border-box;
@@ -145,8 +160,7 @@ const SellBtn = styled.span`
   cursor: pointer;
   font-weight: 400;
   text-transform: uppercase;
-  color: rgb(132, 142, 156);
-  background-color: rgb(43, 49, 57);
+  ${color}
 `;
 const PlaceOrderInputSection = styled.div`
   box-sizing: border-box;
@@ -179,9 +193,9 @@ const LimitBtn = styled.span`
   padding-top: 8px;
   padding-bottom: 10px;
   font-weight: 500;
-  color: rgb(255, 255, 255);
-  border-bottom: 2px solid rgb(240, 185, 11);
+  border-bottom: 2px solid;
   cursor: pointer;
+  ${border}
 `;
 const MarketBtn = styled.span`
   box-sizing: border-box;
@@ -192,8 +206,9 @@ const MarketBtn = styled.span`
   padding-bottom: 10px;
   font-weight: 500;
   color: rgb(132, 142, 156);
-  border-bottom: 2px solid transparent;
+  border-bottom: 2px solid;
   cursor: pointer;
+  ${border}
 `;
 
 const AllInput = styled.div`
@@ -231,6 +246,9 @@ const Input = styled.input`
   width: 80%;
   outline: none;
   border: none;
+  :disabled {
+    background: #fff;
+  }
   ${color}
   ${space}
   ${typography}
@@ -248,21 +266,49 @@ const PlaceOrderButton = styled.button`
   ${flexbox}
 `;
 
-const MobileButton = () => {
+const MobileButton = (props) => {
+  const marketPrice = useSelector(
+    (state) => state.coinDetailReducer.marketPrice
+  );
   const [displayPlaceOrder, setDisplayPlaceOrder] = useState("none");
   const [displayBtn, setDisplayBtn] = useState("flex");
   const [displayAddValue, setDisplayAddValue] = useState("none");
+  const [buyOrSell, setBuyOrSell] = useState("buy");
+  const [buyColor, setBuyColor] = useState({
+    color: "white",
+    bg: "#02c077",
+  });
+  const [sellColor, setSellColor] = useState({
+    color: "#848e9c",
+    bg: "#2b3139",
+  });
+  const [orderBtnColor, setOrderBtnColor] = useState({
+    color: "white",
+    bg: "#02c077",
+  });
+  const [limitOrMarket, setLimitOrMarket] = useState("limit");
+  const [limitColor, setLimitColor] = useState({
+    color: "white",
+    borderBottomColor: "#f0b90b",
+  });
+  const [marketColor, setMarketColor] = useState({
+    color: "#848e9c",
+    borderBottomColor: "transparent",
+  });
+  const [isLimit, setIsLimit] = useState(true);
+  const [coinPrice, setCoinPrice] = useState("");
+  const [qty, setQty] = useState("");
+  const [total, setTotal] = useState("");
 
-  const handleClickPlaceOrderBtn = (e) => {
-    e.preventDefault();
-    setDisplayPlaceOrder("block");
-    setDisplayBtn("none");
-  };
-  const handleClickAddValueBtn = (e) => {
-    e.preventDefault();
-    setDisplayAddValue("block");
-    setDisplayBtn("none");
-  };
+  const [addValue, setAddValue] = useState("");
+  const [usdtData, setUsdtData] = useState({ profitLoss: "", qty: "" });
+
+  const { symbol } = useParams();
+  const coin = symbol.replace(/USDT/, "");
+  const { email } = props;
+  const [list, setList] = useState([]);
+  let toastProperties = null;
+
   const handleClickClose = (e) => {
     e.preventDefault();
     setDisplayPlaceOrder("none");
@@ -270,11 +316,218 @@ const MobileButton = () => {
     setDisplayBtn("flex");
   };
 
+  const handleChangeInputValue = (e) => {
+    if (e.target.id === "price") {
+      if (isLimit) {
+        const orderTotal = Number(e.target.value * qty).toFixed(6);
+        setCoinPrice(e.target.value);
+        setTotal(orderTotal);
+      } else {
+        const orderTotal = Number(marketPrice * qty).toFixed(6);
+        setCoinPrice(e.target.value);
+        setTotal(orderTotal);
+      }
+    } else if (e.target.id === "qty") {
+      if (isLimit) {
+        const orderTotal = Number(coinPrice * e.target.value).toFixed(6);
+        setQty(e.target.value);
+        setTotal(orderTotal);
+      } else {
+        const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+        setQty(e.target.value);
+        setTotal(orderTotal);
+      }
+    }
+  };
+
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "successOrder":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "下單成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successAdd":
+        toastProperties = {
+          id,
+          title: "Success",
+          description: "下單成功",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "dangerOrder":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "下單前，請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      case "dangerAdd":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "加值前，請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      case "dangerTotal":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "金額不得為 0",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
+  const handleClickPlaceOrderBtn = (e) => {
+    e.preventDefault();
+    if (email) {
+      setDisplayPlaceOrder("block");
+      setDisplayBtn("none");
+    } else {
+      showToast("dangerOrder");
+    }
+  };
+  const handleClickAddValueBtn = (e) => {
+    e.preventDefault();
+    if (email) {
+      setDisplayAddValue("block");
+      setDisplayBtn("none");
+    } else {
+      showToast("dangerAdd");
+    }
+  };
+
+  const handleClickBuy = (e) => {
+    if (e.target.innerHTML === "買入") {
+      setBuyOrSell("buy");
+      setBuyColor({
+        color: "white",
+        bg: "#02c077",
+      });
+      setSellColor({
+        color: "#848e9c",
+        bg: "#2b3139",
+      });
+      setOrderBtnColor({
+        color: "white",
+        bg: "#02c077",
+      });
+    } else if (e.target.innerHTML === "賣出") {
+      setBuyOrSell("sell");
+      setBuyColor({
+        color: "#848e9c",
+        bg: "#2b3139",
+      });
+      setSellColor({
+        color: "white",
+        bg: "#f84960",
+      });
+      setOrderBtnColor({
+        color: "white",
+        bg: "#f84960",
+      });
+    }
+  };
+
+  const handleClickPrice = (e) => {
+    if (e.target.innerHTML === "限價") {
+      setLimitOrMarket("limit");
+      setLimitColor({
+        color: "white",
+        borderBottomColor: "#f0b90b",
+      });
+      setMarketColor({
+        color: "#848e9c",
+        borderBottomColor: "transparent",
+      });
+      setIsLimit(true);
+    } else if (e.target.innerHTML === "市價") {
+      setLimitOrMarket("market");
+      setLimitColor({
+        color: "#848e9c",
+        borderBottomColor: "transparent",
+      });
+      setMarketColor({
+        color: "white",
+        borderBottomColor: "#f0b90b",
+      });
+      setIsLimit(false);
+    }
+  };
+
+  const handleClickUploadOrder = () => {
+    if (email && total > 0) {
+      const orderData = {
+        coinPrice,
+        coinType: coin,
+        qty,
+        tradingType: limitOrMarket,
+        type: buyOrSell,
+      };
+      firebaseAddOrder(orderData, email);
+      showToast("successOrder");
+      setCoinPrice("");
+      setTotal("");
+      setQty("");
+    } else if (!total) {
+      showToast("dangerTotal");
+    } else {
+      showToast("dangerOrder");
+    }
+  };
+
+  const handlAddValueInput = (e) => {
+    setAddValue(e.target.value);
+  };
+
+  const getUserCoinAsset = async () => {
+    if (email) {
+      const usdtAsset = await firebaseReadCoinAsset(email, "USDT");
+      if (usdtAsset) {
+        setUsdtData(usdtAsset);
+      }
+    }
+  };
+  const handleClickAddValue = () => {
+    const totalValue = Number(usdtData.qty) + Number(addValue);
+    if (email && addValue > 0) {
+      firebaseAddValue(email, "USDT", totalValue);
+      getUserCoinAsset();
+      setAddValue("");
+      showToast("successAdd");
+    } else if (!addValue) {
+      showToast("dangerTotal");
+    } else {
+      showToast("dangerAdd");
+    }
+  };
+
+  useEffect(() => {
+    getUserCoinAsset();
+  }, [email]);
+
   return (
     <>
       <Button display={displayBtn}>
         <PlaceOrderBtn onClick={handleClickPlaceOrderBtn}>下單</PlaceOrderBtn>
-        <AddValueBtn onClick={handleClickAddValueBtn}>充值</AddValueBtn>
+        <AddValueBtn onClick={handleClickAddValueBtn}>加值</AddValueBtn>
       </Button>
       <PlaceOrderSection display={displayPlaceOrder}>
         <PlaceOrderTitleSection>
@@ -282,16 +535,30 @@ const MobileButton = () => {
           <PlaceOrderClose onClick={handleClickClose}>X</PlaceOrderClose>
         </PlaceOrderTitleSection>
         <PlaceOrderBody>
-          <BuyOrSellBtn>
-            <BuyBtn>買入</BuyBtn>
-            <SellBtn>賣出</SellBtn>
+          <BuyOrSellBtn onClick={handleClickBuy}>
+            <BuyBtn bg={buyColor.bg} color={buyColor.color}>
+              買入
+            </BuyBtn>
+            <SellBtn bg={sellColor.bg} color={sellColor.color}>
+              賣出
+            </SellBtn>
           </BuyOrSellBtn>
           <PlaceOrderInputSection>
             <PlaceOrderInputPart>
               <div>
-                <LimitOrMarketPrice>
-                  <LimitBtn>限價</LimitBtn>
-                  <MarketBtn>市價</MarketBtn>
+                <LimitOrMarketPrice onClick={handleClickPrice}>
+                  <LimitBtn
+                    borderBottomColor={limitColor.borderBottomColor}
+                    color={limitColor.color}
+                  >
+                    限價
+                  </LimitBtn>
+                  <MarketBtn
+                    borderBottomColor={marketColor.borderBottomColor}
+                    color={marketColor.color}
+                  >
+                    市價
+                  </MarketBtn>
                 </LimitOrMarketPrice>
                 <AllInput>
                   <InputGroup mb={2}>
@@ -300,13 +567,19 @@ const MobileButton = () => {
                       fontSize={{ md: 14, lg: 16 }}
                       fontFamily="Roboto"
                     >
-                      價格
+                      {isLimit ? "價格" : "市價"}
                     </InputText>
                     <Input
+                      id="price"
+                      value={
+                        isLimit ? coinPrice : Number(marketPrice).toFixed(6)
+                      }
+                      onChange={handleChangeInputValue}
                       mr={2}
                       textAlign="right"
                       px={1}
                       fontFamily="Roboto"
+                      disabled={!isLimit}
                     />
                     <InputUnit
                       mr={2}
@@ -325,6 +598,9 @@ const MobileButton = () => {
                       數量
                     </InputText>
                     <Input
+                      id="qty"
+                      value={qty}
+                      onChange={handleChangeInputValue}
                       mr={2}
                       textAlign="right"
                       px={1}
@@ -335,7 +611,7 @@ const MobileButton = () => {
                       fontSize={{ md: 14, lg: 16 }}
                       fontFamily="Roboto"
                     >
-                      ETH
+                      {symbol}
                     </InputUnit>
                   </InputGroup>
                   <InputGroup mb={2}>
@@ -352,6 +628,8 @@ const MobileButton = () => {
                       fontFamily="Roboto"
                       px={1}
                       mr={2}
+                      value={total}
+                      disabled
                     />
                     <InputUnit
                       mr={2}
@@ -367,7 +645,10 @@ const MobileButton = () => {
                   py={12}
                   mb={2}
                   fontFamily="Roboto"
+                  bg={orderBtnColor.bg}
+                  color={orderBtnColor.color}
                   fontSize={16}
+                  onClick={handleClickUploadOrder}
                 >
                   Send
                 </PlaceOrderButton>
@@ -395,11 +676,36 @@ const MobileButton = () => {
                       金額
                     </InputText>
                     <Input
-                      id="orderTotal"
+                      value={addValue}
+                      onChange={handlAddValueInput}
                       textAlign="right"
                       fontFamily="Roboto"
                       px={1}
                       mr={2}
+                    />
+                    <InputUnit
+                      mr={2}
+                      fontSize={{ md: 14, lg: 16 }}
+                      fontFamily="Roboto"
+                    >
+                      USDT
+                    </InputUnit>
+                  </InputGroup>
+                  <InputGroup mb={2}>
+                    <InputText
+                      ml={2}
+                      fontSize={{ md: 14, lg: 16 }}
+                      fontFamily="Roboto"
+                    >
+                      可用
+                    </InputText>
+                    <Input
+                      textAlign="right"
+                      fontFamily="Roboto"
+                      value={usdtData.qty === "" ? 0 : usdtData.qty}
+                      px={1}
+                      mr={2}
+                      disabled
                     />
                     <InputUnit
                       mr={2}
@@ -416,6 +722,7 @@ const MobileButton = () => {
                   mb={2}
                   fontFamily="Roboto"
                   fontSize={16}
+                  onClick={handleClickAddValue}
                 >
                   加值
                 </PlaceOrderButton>
@@ -424,8 +731,13 @@ const MobileButton = () => {
           </PlaceOrderInputSection>
         </PlaceOrderBody>
       </PlaceOrderSection>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
+};
+
+MobileButton.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default MobileButton;

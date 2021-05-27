@@ -221,6 +221,15 @@ const PlaceOrder = (props) => {
           icon: errorIcon,
         };
         break;
+      case "dangerTotal":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "金額不得為 0",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
       default:
         setList([]);
     }
@@ -229,7 +238,7 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickUploadOrder = () => {
-    if (email) {
+    if (email && total > 0) {
       const orderData = {
         coinPrice,
         coinType: coin,
@@ -242,6 +251,8 @@ const PlaceOrder = (props) => {
       setCoinPrice("");
       setTotal("");
       setQty("");
+    } else if (!total) {
+      showToast("dangerTotal");
     } else {
       showToast("danger");
     }

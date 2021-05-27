@@ -86,7 +86,7 @@ const CoinDetail = () => {
         </div>
       </FlexBox>
       <Mobile>
-        <MobileButton />
+        <MobileButton email={email} userId={userId} />
       </Mobile>
       <Chat />
     </Container>
