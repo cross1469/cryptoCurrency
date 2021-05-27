@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { color, space, typography, flexbox, border } from "styled-system";
 import { Link } from "react-router-dom";
-import { addWishList } from "../../Utils/firebase";
+import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
 import defaultStar from "../../images/default_star.png";
 import activeStar from "../../images/active_star.png";
 import Pagination from "../../Component/Pagination";
+import Toast from "../../Component/Toast";
+import errorIcon from "../../images/error.svg";
 
 const CoinDataTitle = styled.div`
   ${typography}
@@ -123,7 +126,7 @@ const Star = styled.img`
 
 let dataFirstOpen = true;
 
-const CoinData = () => {
+const CoinData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -140,15 +143,53 @@ const CoinData = () => {
     bg: "transparent",
   });
 
-  const [star, setStar] = useState(defaultStar);
+  const { email } = props;
+
+  const [starList, setStarList] = useState([]);
+
+  const [list, setList] = useState([]);
+  let toastProperties = null;
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleClickToWish = (e) => {
-    setStar(activeStar);
-    addWishList(e.target.parentNode.parentNode.id);
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "danger":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
+  const renderInitActiveStar = async () => {
+    if (email) {
+      const wishList = await readWishList(email);
+      setStarList(wishList);
+    } else {
+      setStarList([]);
+    }
+  };
+
+  const handleClickToWish = async (e) => {
+    e.preventDefault();
+    if (email) {
+      await addAndRemoveWishList(email, e.target.parentNode.parentNode.id);
+      renderInitActiveStar();
+    } else {
+      showToast("danger");
+    }
   };
 
   const handleClickBtn = (e) => {
@@ -226,6 +267,10 @@ const CoinData = () => {
   useEffect(() => realTimeCoinData(), []);
 
   useEffect(() => {
+    renderInitActiveStar();
+  }, [email]);
+
+  useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
       const results = realTimeDatas.filter((realTimeData) =>
         realTimeData.s.includes(searchTerm)
@@ -244,7 +289,15 @@ const CoinData = () => {
         <Link to={`/coinDetail/${realTimeData.s}`}>
           <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <Star src={star} onClick={handleClickToWish} />
+              <Star
+                id={realTimeData.s}
+                src={
+                  starList.indexOf(realTimeData.s) === -1
+                    ? defaultStar
+                    : activeStar
+                }
+                onClick={handleClickToWish}
+              />
               {realTimeData.s}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
@@ -270,7 +323,11 @@ const CoinData = () => {
       <Link to={`/coinDetail/${item.s}`}>
         <CoinTableBody mb={3} key={item.L} id={item.s}>
           <CoinTableBodyItem>
-            <Star src={star} onClick={handleClickToWish} />
+            <Star
+              id={item.s}
+              src={starList.indexOf(item.s) === -1 ? defaultStar : activeStar}
+              onClick={handleClickToWish}
+            />
             {item.s}
           </CoinTableBodyItem>
           <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
@@ -352,8 +409,13 @@ const CoinData = () => {
           currentPage={currentPage}
         />
       </div>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
+};
+
+CoinData.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default CoinData;
