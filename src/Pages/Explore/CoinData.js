@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { color, space, typography, flexbox, border } from "styled-system";
 import { Link } from "react-router-dom";
-import { addWishList } from "../../Utils/firebase";
+import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
 import defaultStar from "../../images/default_star.png";
 import activeStar from "../../images/active_star.png";
+import Pagination from "../../Component/Pagination";
+import Toast from "../../Component/Toast";
+import errorIcon from "../../images/error.svg";
 
 const CoinDataTitle = styled.div`
   ${typography}
@@ -120,7 +124,10 @@ const Star = styled.img`
   height: 16px;
 `;
 
-const CoinData = () => {
+let dataFirstOpen = true;
+
+const CoinData = (props) => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -136,15 +143,53 @@ const CoinData = () => {
     bg: "transparent",
   });
 
-  const [star, setStar] = useState(defaultStar);
+  const { email } = props;
+
+  const [starList, setStarList] = useState([]);
+
+  const [list, setList] = useState([]);
+  let toastProperties = null;
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleClickToWish = (e) => {
-    setStar(activeStar);
-    addWishList(e.target.parentNode.parentNode.id);
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "danger":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
+  const renderInitActiveStar = async () => {
+    if (email) {
+      const wishList = await readWishList(email);
+      setStarList(wishList);
+    } else {
+      setStarList([]);
+    }
+  };
+
+  const handleClickToWish = async (e) => {
+    e.preventDefault();
+    if (email) {
+      await addAndRemoveWishList(email, e.target.parentNode.parentNode.id);
+      renderInitActiveStar();
+    } else {
+      showToast("danger");
+    }
   };
 
   const handleClickBtn = (e) => {
@@ -185,13 +230,45 @@ const CoinData = () => {
           usdtDatas.push(data);
         }
       });
-      setRealTimeDatas([...realTimeDatas, ...usdtDatas]);
+
+      if (dataFirstOpen) {
+        setRealTimeDatas(usdtDatas);
+        dataFirstOpen = false;
+      }
+
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
   };
 
+  const NUM_OF_RECORDS = realTimeDatas.length;
+  const limit = 10;
+  const onPageChanged = useCallback(
+    (e, page) => {
+      e.preventDefault();
+      setCurrentPage(page);
+    },
+    [setCurrentPage]
+  );
+
+  const currentData = realTimeDatas.slice(
+    (currentPage - 1) * limit,
+    (currentPage - 1) * limit + limit
+  );
+
+  useEffect(() => realTimeCoinData(), []);
+
   useEffect(() => {
-    realTimeCoinData();
-  }, []);
+    renderInitActiveStar();
+  }, [email]);
 
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
@@ -207,12 +284,20 @@ const CoinData = () => {
   }
 
   const renderCoinDatas = () => {
-    if (searchTerm === "") {
-      return realTimeDatas.map((realTimeData) => (
+    if (!searchTerm) {
+      return currentData.map((realTimeData) => (
         <Link to={`/coinDetail/${realTimeData.s}`}>
           <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <Star src={star} onClick={handleClickToWish} />
+              <Star
+                id={realTimeData.s}
+                src={
+                  starList.indexOf(realTimeData.s) === -1
+                    ? defaultStar
+                    : activeStar
+                }
+                onClick={handleClickToWish}
+              />
               {realTimeData.s}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
@@ -238,7 +323,11 @@ const CoinData = () => {
       <Link to={`/coinDetail/${item.s}`}>
         <CoinTableBody mb={3} key={item.L} id={item.s}>
           <CoinTableBodyItem>
-            <Star src={star} onClick={handleClickToWish} />
+            <Star
+              id={item.s}
+              src={starList.indexOf(item.s) === -1 ? defaultStar : activeStar}
+              onClick={handleClickToWish}
+            />
             {item.s}
           </CoinTableBodyItem>
           <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
@@ -256,6 +345,7 @@ const CoinData = () => {
       <OptionBtn
         mt={4}
         mr={2}
+        ml={2}
         px={2}
         py={1}
         fontFamily="Roboto"
@@ -310,8 +400,22 @@ const CoinData = () => {
         </CoinTableHead>
         {renderCoinDatas()}
       </CoinTable>
+      <div className="pagination-wrapper">
+        <Pagination
+          totalRecords={NUM_OF_RECORDS}
+          pageLimit={limit}
+          pageNeighbours={1}
+          onPageChanged={onPageChanged}
+          currentPage={currentPage}
+        />
+      </div>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
+};
+
+CoinData.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default CoinData;

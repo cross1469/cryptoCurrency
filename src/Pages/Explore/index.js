@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { space, layout, flexbox } from "styled-system";
 import AreaSpline from "./AreaSpline";
 import CoinData from "./CoinData";
+import { subscribeUserData } from "../../Utils/firebase";
 
 const ExploreContainer = styled.div`
   max-width: 1200px;
@@ -57,6 +58,17 @@ const ChartLink = styled.div`
 const Explore = () => {
   const [symbols, setSymbols] = useState([]);
   const chartItemQty = 4;
+  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
+
+  useEffect(
+    () =>
+      subscribeUserData((userEmail, uid) => {
+        setEmail(userEmail);
+        setUserId(uid);
+      }),
+    []
+  );
 
   const getSymbol = () => {
     const allSymbol = [];
@@ -109,7 +121,7 @@ const Explore = () => {
           {renderChart()}
         </FlexBox>
       </ChartBox>
-      <CoinData />
+      <CoinData email={email} userId={userId} />
     </ExploreContainer>
   );
 };

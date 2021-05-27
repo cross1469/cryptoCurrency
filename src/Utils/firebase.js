@@ -91,10 +91,10 @@ const readChatData = (setChatData) =>
       setChatData(chatData);
     });
 
-const readWishList = () =>
+const readWishList = (email) =>
   db
     .collection("users")
-    .doc("cross1469")
+    .doc(email)
     .get()
     .then((wishLists) => {
       const wishList = [];
@@ -104,18 +104,18 @@ const readWishList = () =>
       return wishList;
     });
 
-const addWishList = async (wishList) => {
-  const wishListData = await readWishList();
+const addAndRemoveWishList = async (email, wishList) => {
+  const wishListData = await readWishList(email);
 
   if (wishListData.indexOf(wishList) === -1) {
     db.collection("users")
-      .doc("cross1469")
+      .doc(email)
       .update({
         wishList: firebase.firestore.FieldValue.arrayUnion(wishList),
       });
   } else {
     db.collection("users")
-      .doc("cross1469")
+      .doc(email)
       .update({
         wishList: firebase.firestore.FieldValue.arrayRemove(wishList),
       });
@@ -196,7 +196,7 @@ export {
   firebaseReadOrder,
   addChatData,
   readChatData,
-  addWishList,
+  addAndRemoveWishList,
   readWishList,
   firebaseAuthSignUp,
   firebaseAuthSignIn,
