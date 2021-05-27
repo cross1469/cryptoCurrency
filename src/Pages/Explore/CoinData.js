@@ -121,6 +121,8 @@ const Star = styled.img`
   height: 16px;
 `;
 
+let dataFirstOpen = true;
+
 const CoinData = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
@@ -187,7 +189,22 @@ const CoinData = () => {
           usdtDatas.push(data);
         }
       });
-      setRealTimeDatas([...realTimeDatas, ...usdtDatas]);
+
+      if (dataFirstOpen) {
+        setRealTimeDatas(usdtDatas);
+        dataFirstOpen = false;
+      }
+
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
   };
 
@@ -206,9 +223,7 @@ const CoinData = () => {
     (currentPage - 1) * limit + limit
   );
 
-  useEffect(() => {
-    realTimeCoinData();
-  }, []);
+  useEffect(() => realTimeCoinData(), []);
 
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
@@ -224,7 +239,7 @@ const CoinData = () => {
   }
 
   const renderCoinDatas = () => {
-    if (searchTerm === "") {
+    if (!searchTerm) {
       return currentData.map((realTimeData) => (
         <Link to={`/coinDetail/${realTimeData.s}`}>
           <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
