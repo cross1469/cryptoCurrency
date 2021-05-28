@@ -334,6 +334,7 @@ const MobileButton = (props) => {
         setTotal(orderTotal);
       } else {
         const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+        setCoinPrice(marketPrice);
         setQty(e.target.value);
         setTotal(orderTotal);
       }

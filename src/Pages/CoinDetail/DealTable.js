@@ -73,7 +73,7 @@ const DealTable = () => {
     );
     socket.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
-      setDealDatas((prev) => [eventData, ...prev]);
+      setDealDatas((prev) => [eventData, ...prev.slice(0, 49)]);
     };
   }, []);
 

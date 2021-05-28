@@ -236,6 +236,28 @@ const CoinData = (props) => {
         dataFirstOpen = false;
       }
 
+      /*
+        realTimeDatas [{ s: "BTC", l:  }]
+      */
+
+      /*
+        realTimeDatasOrder: ["BTC", "ETH"]
+        realTimeDatsByCoinType: {
+          BTC: {
+            l:
+          },
+          ETH: {
+
+          }
+        }
+
+        realTimeDataOrder.map(coinType => {
+          const data = realTimeDatsByCoinType[coinType]
+        })
+      */
+
+      // useReducer
+
       if (!dataFirstOpen) {
         setRealTimeDatas((usdt) => {
           const newUsdtDatas = [...usdt];
