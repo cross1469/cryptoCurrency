@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography, flexbox, layout } from "styled-system";
 import NewsCard from "./NewsCard";
@@ -27,6 +28,7 @@ const NewsSubtitle = styled.div`
 
 const NewsCardsContainer = styled.div`
   max-width: 1200px;
+  height: 100%;
   margin: 0 auto;
   ${space}
 `;
@@ -67,84 +69,85 @@ const NewsCardLink = styled.a`
   cursor: pointer;
 `;
 
-const News = () => (
-  <>
-    <NewsBg
-      bg="black"
-      px={{ _: "12px", sm: "24px", md: "36px" }}
-      py={{ _: "70px", lg: "100px" }}
-    >
-      <NewsCotainer>
-        <NewsTitle
-          color="white"
-          fontFamily="Roboto"
-          fontSize={36}
-          lineHeight="48px"
-          mb={3}
-          fontWeight="bold"
-          letterSpacing={1}
-        >
-          News
-        </NewsTitle>
-        <NewsSubtitle
-          color="white"
-          fontFamily="Roboto"
-          fontSize={28}
-          lineHeight="36px"
-          mb={3}
-          letterSpacing={1}
-        >
-          熱門新聞快訊
-        </NewsSubtitle>
-      </NewsCotainer>
-      <NewsCardsContainer>
-        <NewsCardsSection px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
-          <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-            <NewsCardItem
-              px={{ sm: 0, md: "12px", lg: "8px" }}
-              pb={{ sm: "16px", md: "24px", lg: 0 }}
-              width={{ sm: "100%", md: "50%", lg: "auto" }}
-              flex={{ sm: "none", md: "none", lg: 1 }}
-            >
-              <NewsCardLink>
-                <NewsCard />
-              </NewsCardLink>
-            </NewsCardItem>
-            <NewsCardItem
-              px={{ sm: 0, md: "12px", lg: "8px" }}
-              pb={{ sm: "16px", md: "24px", lg: 0 }}
-              width={{ sm: "100%", md: "50%", lg: "auto" }}
-              flex={{ sm: "none", md: "none", lg: 1 }}
-            >
-              <NewsCardLink>
-                <NewsCard />
-              </NewsCardLink>
-            </NewsCardItem>
-            <NewsCardItem
-              px={{ sm: 0, md: "12px", lg: "8px" }}
-              pb={{ sm: "16px", md: "24px", lg: 0 }}
-              width={{ sm: "100%", md: "50%", lg: "auto" }}
-              flex={{ sm: "none", md: "none", lg: 1 }}
-            >
-              <NewsCardLink>
-                <NewsCard />
-              </NewsCardLink>
-            </NewsCardItem>
-            <NewsCardItem
-              px={{ sm: 0, md: "12px", lg: "8px" }}
-              pb={{ sm: "16px", md: "24px", lg: 0 }}
-              width={{ sm: "100%", md: "50%", lg: "auto" }}
-              flex={{ sm: "none", md: "none", lg: 1 }}
-            >
-              <NewsCardLink>
-                <NewsCard />
-              </NewsCardLink>
-            </NewsCardItem>
-          </FlexBox>
-        </NewsCardsSection>
-      </NewsCardsContainer>
-    </NewsBg>
-  </>
-);
+const News = () => {
+  const [newsHeadlines, setNewsHeadlines] = useState([]);
+
+  const coinTopHeadline = () => {
+    axios
+      .get(
+        `https://newsapi.org/v2/everything?q=crypto&sortBy=publishedAt&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
+      )
+      .then((res) => {
+        const newsFourHeadline = res.data.articles.slice(0, 4);
+        setNewsHeadlines(newsFourHeadline);
+      });
+  };
+
+  const renderNewsHeadline = () =>
+    newsHeadlines.map((news) => (
+      <NewsCardItem
+        px={{ sm: 0, md: "12px", lg: "8px" }}
+        pb={{ sm: "16px", md: "24px", lg: 0 }}
+        width={{ sm: "100%", md: "50%", lg: "auto" }}
+        flex={{ sm: "none", md: "none", lg: 1 }}
+      >
+        <NewsCardLink href={news.url}>
+          <NewsCard
+            newsTitle={news.title}
+            newsDescription={news.description}
+            newsUrlToImage={news.urlToImage}
+          />
+        </NewsCardLink>
+      </NewsCardItem>
+    ));
+
+  useEffect(() => {
+    coinTopHeadline();
+  }, []);
+
+  return (
+    <>
+      <NewsBg
+        bg="black"
+        px={{ _: "12px", sm: "24px", md: "36px" }}
+        py={{ _: "70px", lg: "100px" }}
+      >
+        <NewsCotainer>
+          <NewsTitle
+            color="white"
+            fontFamily="Roboto"
+            fontSize={36}
+            lineHeight="48px"
+            mb={3}
+            fontWeight="bold"
+            letterSpacing={1}
+          >
+            News
+          </NewsTitle>
+          <NewsSubtitle
+            color="white"
+            fontFamily="Roboto"
+            fontSize={28}
+            lineHeight="36px"
+            mb={3}
+            letterSpacing={1}
+          >
+            熱門新聞快訊
+          </NewsSubtitle>
+        </NewsCotainer>
+        <NewsCardsContainer>
+          <NewsCardsSection
+            px={{ sm: "16px", md: "4px", lg: "24px" }}
+            py="24px"
+          >
+            <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+              {renderNewsHeadline()}
+            </FlexBox>
+          </NewsCardsSection>
+        </NewsCardsContainer>
+      </NewsBg>
+    </>
+  );
+};
 
 export default News;
