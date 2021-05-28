@@ -1,15 +1,22 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import CustomModal from "./Modal";
 import Sign from "./Sign";
 import Forget from "./Forget";
 import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
+import errorIcon from "../images/error.svg";
 
 const Navigation = styled.header`
   font-size: 36px;
@@ -138,6 +145,8 @@ const Header = () => {
   const [loginStatus, setLoginStatus] = useState("LOGIN");
   let toastProperties = null;
 
+  const history = useHistory();
+
   const signModal = useRef(null);
   const forgetModal = createRef();
 
@@ -158,6 +167,15 @@ const Header = () => {
           icon: checkIcon,
         };
         break;
+      case "dangerPortfolio":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "進入 Portfolio 頁面前，請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
       default:
         setList([]);
     }
@@ -171,6 +189,14 @@ const Header = () => {
     setLoginStatus("LOGIN");
     setUid(null);
   };
+
+  const handleClickCheckMember = useCallback(() => {
+    if (email) {
+      history.push("/portfolio");
+    } else {
+      showToast("dangerPortfolio");
+    }
+  }, [history]);
 
   useEffect(
     () =>
@@ -187,7 +213,6 @@ const Header = () => {
       }),
     []
   );
-  console.log(email);
 
   return (
     <>
@@ -201,10 +226,14 @@ const Header = () => {
             <NavLink activeClassName="active" to="/explore">
               <li>EXPLORE</li>
             </NavLink>
-            <NavLink activeClassName="active" to="/portfolio">
+            <NavLink
+              activeClassName="active"
+              to
+              onClick={handleClickCheckMember}
+            >
               <li>PORTFOLIO</li>
             </NavLink>
-            {uid ? (
+            {email || uid ? (
               <NavLink activeClassName="active" to onClick={handleClickSignOut}>
                 <li>{loginStatus}</li>
               </NavLink>
