@@ -25,4 +25,10 @@ app.get("/explore/", (req, res) => {
   });
 });
 
+app.get("/portfolio/", (req, res) => {
+  axios.get("https://api.binance.com/api/v3/ticker/price").then((response) => {
+    res.status(200).json(response.data);
+  });
+});
+
 exports.binanceAPI = functions.https.onRequest(app);

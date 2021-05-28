@@ -33,8 +33,8 @@ const Portfolio = () => {
   return (
     <PortfolioBg pt={4} bg="#fafafa" pb={4}>
       <PortfolioContainer>
-        <AssetsTotal />
-        <OrderTable />
+        <AssetsTotal email={email} userId={userId} />
+        <OrderTable email={email} userId={userId} />
         <WishList email={email} userId={userId} />
         <YourNews />
       </PortfolioContainer>
