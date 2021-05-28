@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 
@@ -33,14 +34,17 @@ const BannerToExploreBtn = styled.button`
     rgb(248, 209, 47) 0%,
     rgb(240, 185, 11) 100%
   );
-  ${color}
   ${space}
-  ${typography}
   :hover {
     background-image: linear-gradient(
       rgb(255, 226, 81) 0%,
       rgb(237, 196, 35) 100%
     );
+  }
+  a {
+    text-decoration: none;
+    ${color}
+    ${typography}
   }
 `;
 
@@ -80,7 +84,7 @@ const Banner = () => (
         fontSize={16}
         letterSpacing={1}
       >
-        Explore
+        <Link to="/explore">Explore</Link>
       </BannerToExploreBtn>
     </BannerCotainer>
   </BannerBg>
