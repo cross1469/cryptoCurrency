@@ -148,11 +148,11 @@ const OrderTable = (props) => {
           {sellData.coinType}
         </OrderTableBodyItem>
         <OrderTableBodyItem flexGrow={1}>
-          {sellData.coinPrice}
+          $ {sellData.coinPrice}
         </OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>{sellData.qty}</OrderTableBodyItem>
+        <OrderTableBodyItem flexGrow={1}>$ {sellData.qty}</OrderTableBodyItem>
         <OrderTableBodyItem flexGrow={1}>
-          {Number(sellData.coinPrice * sellData.qty).toFixed(2)}
+          $ {Number(sellData.coinPrice * sellData.qty).toFixed(2)}
         </OrderTableBodyItem>
       </OrderTableBody>
     ));
