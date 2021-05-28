@@ -36,7 +36,7 @@ const Portfolio = () => {
         <AssetsTotal email={email} userId={userId} />
         <OrderTable email={email} userId={userId} />
         <WishList email={email} userId={userId} />
-        <YourNews />
+        <YourNews email={email} userId={userId} />
       </PortfolioContainer>
     </PortfolioBg>
   );

@@ -39,7 +39,7 @@ const NewsCard = (props) => {
           color="white"
           fontFamily="Roboto"
           fontSize={20}
-          lineHeight="36px"
+          lineHeight="28px"
           fontWeight="bold"
           mb={3}
         >
@@ -49,7 +49,7 @@ const NewsCard = (props) => {
           color="white"
           fontFamily="Roboto"
           fontSize={12}
-          lineHeight="24px"
+          lineHeight="16px"
         >
           {newsDescription}
         </CardSubContent>

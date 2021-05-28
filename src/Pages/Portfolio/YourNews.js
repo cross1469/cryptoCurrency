@@ -1,7 +1,10 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { space, typography, flexbox, layout } from "styled-system";
 import YourNewsCard from "./YourNewsCard";
+import { readWishList } from "../../Utils/firebase";
 
 const YourNewsTitle = styled.div`
   ${space}
@@ -50,62 +53,83 @@ const YourNewsCardLink = styled.a`
   cursor: pointer;
 `;
 
-const YourNews = () => (
-  <YourNewsCardsContainer>
-    <YourNewsTitle
-      fontFamily="Roboto"
-      fontWeight="bold"
-      fontSize={28}
-      lineHeight="36px"
-      pl={3}
-    >
-      Your News
-    </YourNewsTitle>
-    <YourNewsCardsSection px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
-      <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-        <YourNewsCardItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ sm: "100%", md: "50%", lg: "auto" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <YourNewsCardLink>
-            <YourNewsCard />
-          </YourNewsCardLink>
-        </YourNewsCardItem>
-        <YourNewsCardItem
-          px={{ sm: 0, md: "16px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ sm: "100%", md: "50%", lg: "auto" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <YourNewsCardLink>
-            <YourNewsCard />
-          </YourNewsCardLink>
-        </YourNewsCardItem>
-        <YourNewsCardItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ sm: "100%", md: "50%", lg: "auto" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <YourNewsCardLink>
-            <YourNewsCard />
-          </YourNewsCardLink>
-        </YourNewsCardItem>
-        <YourNewsCardItem
-          px={{ sm: 0, md: "12px", lg: "8px" }}
-          pb={{ sm: "16px", md: "24px", lg: 0 }}
-          width={{ sm: "100%", md: "50%", lg: "auto" }}
-          flex={{ sm: "none", md: "none", lg: 1 }}
-        >
-          <YourNewsCardLink>
-            <YourNewsCard />
-          </YourNewsCardLink>
-        </YourNewsCardItem>
-      </FlexBox>
-    </YourNewsCardsSection>
-  </YourNewsCardsContainer>
-);
+const YourNews = (props) => {
+  const [wishStr, setWishStr] = useState("");
+  const [newsHeadlines, setNewsHeadlines] = useState([]);
+  const { email } = props;
+
+  const coinTopHeadline = () => {
+    if (wishStr) {
+      axios
+        .get(
+          `https://newsapi.org/v2/everything?q=${wishStr}&sortBy=publishedAt&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
+        )
+        .then((res) => {
+          const newsFourHeadline = res.data.articles.slice(0, 4);
+          setNewsHeadlines(newsFourHeadline);
+        });
+    }
+  };
+
+  const getWishListData = async () => {
+    if (email) {
+      const wishListData = await readWishList(email);
+      const wishString = wishListData
+        .toString()
+        .replace(/USDT/g, "")
+        .replace(/,/g, " OR ");
+      setWishStr(wishString);
+    }
+  };
+
+  const renderNewsHeadline = () =>
+    newsHeadlines.map((news) => (
+      <YourNewsCardItem
+        px={{ sm: 0, md: "12px", lg: "8px" }}
+        pb={{ sm: "16px", md: "24px", lg: 0 }}
+        width={{ sm: "100%", md: "50%", lg: "auto" }}
+        flex={{ sm: "none", md: "none", lg: 1 }}
+      >
+        <YourNewsCardLink href={news.url}>
+          <YourNewsCard
+            newsTitle={news.title}
+            newsDescription={news.description}
+            newsUrlToImage={news.urlToImage}
+          />
+        </YourNewsCardLink>
+      </YourNewsCardItem>
+    ));
+
+  useEffect(() => {
+    getWishListData();
+    coinTopHeadline();
+  }, [email, wishStr]);
+
+  return (
+    <YourNewsCardsContainer>
+      <YourNewsTitle
+        fontFamily="Roboto"
+        fontWeight="bold"
+        fontSize={28}
+        lineHeight="36px"
+        pl={3}
+      >
+        Your News
+      </YourNewsTitle>
+      <YourNewsCardsSection
+        px={{ sm: "16px", md: "4px", lg: "24px" }}
+        py="24px"
+      >
+        <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+          {renderNewsHeadline()}
+        </FlexBox>
+      </YourNewsCardsSection>
+    </YourNewsCardsContainer>
+  );
+};
+
+YourNews.propTypes = {
+  email: PropTypes.string.isRequired,
+};
 
 export default YourNews;
