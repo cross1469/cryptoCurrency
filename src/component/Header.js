@@ -1,10 +1,4 @@
-import React, {
-  createRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -190,13 +184,13 @@ const Header = () => {
     setUid(null);
   };
 
-  const handleClickCheckMember = useCallback(() => {
+  const handleClickCheckMember = () => {
     if (email) {
       history.push("/portfolio");
     } else {
       showToast("dangerPortfolio");
     }
-  }, [history]);
+  };
 
   useEffect(
     () =>

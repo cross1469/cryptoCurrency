@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { color, space, typography, flexbox } from "styled-system";
+import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 
 const WishListContainer = styled.div`
@@ -8,6 +10,10 @@ const WishListContainer = styled.div`
   overflow-x: auto;
   ${color}
   ${space}
+  a {
+    text-decoration: none;
+    color: #000e1a;
+  }
 `;
 const WishListTitle = styled.div`
   ${color}
@@ -53,13 +59,17 @@ const WishListTableBodyItem = styled.div`
   ${flexbox}
 `;
 
-const WishList = () => {
+const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
 
+  const { email } = props;
+
   const getWishListData = async () => {
-    const wishListData = await readWishList();
-    setWishList(wishListData);
+    if (email) {
+      const wishListData = await readWishList(email);
+      setWishList(wishListData);
+    }
   };
 
   const getCoinData = () => {
@@ -81,38 +91,40 @@ const WishList = () => {
   useEffect(() => {
     getWishListData();
     getCoinData();
-  }, []);
+  }, [email]);
 
   const renderWishListTable = () =>
     wishList.map((wishData) =>
       realTimeDatas.map((item) => {
         if (wishData === item.s) {
           return (
-            <WishListTableBody
-              key={wishData}
-              fontFamily="Roboto"
-              fontSize={16}
-              py={2}
-            >
-              <WishListTableBodyItem flexGrow={1}>
-                {wishData}
-              </WishListTableBodyItem>
-              <WishListTableBodyItem flexGrow={1}>
-                {Number(item.c).toFixed(5)}
-              </WishListTableBodyItem>
-              <WishListTableBodyItem flexGrow={1}>
-                {Number(item.P).toFixed(2)}%
-              </WishListTableBodyItem>
-              <WishListTableBodyItem flexGrow={1}>
-                {Number(item.h).toFixed(5)}
-              </WishListTableBodyItem>
-              <WishListTableBodyItem flexGrow={1}>
-                {Number(item.l).toFixed(5)}
-              </WishListTableBodyItem>
-              <WishListTableBodyItem flexGrow={1}>
-                {Number(item.v).toFixed(2)}
-              </WishListTableBodyItem>
-            </WishListTableBody>
+            <Link to={`/coinDetail/${wishData}`}>
+              <WishListTableBody
+                key={wishData}
+                fontFamily="Roboto"
+                fontSize={16}
+                py={2}
+              >
+                <WishListTableBodyItem flexGrow={1}>
+                  {wishData}
+                </WishListTableBodyItem>
+                <WishListTableBodyItem flexGrow={1}>
+                  {Number(item.c).toFixed(5)}
+                </WishListTableBodyItem>
+                <WishListTableBodyItem flexGrow={1}>
+                  {Number(item.P).toFixed(2)}%
+                </WishListTableBodyItem>
+                <WishListTableBodyItem flexGrow={1}>
+                  {Number(item.h).toFixed(5)}
+                </WishListTableBodyItem>
+                <WishListTableBodyItem flexGrow={1}>
+                  {Number(item.l).toFixed(5)}
+                </WishListTableBodyItem>
+                <WishListTableBodyItem flexGrow={1}>
+                  {Number(item.v).toFixed(2)}
+                </WishListTableBodyItem>
+              </WishListTableBody>
+            </Link>
           );
         }
         return null;
@@ -147,6 +159,10 @@ const WishList = () => {
       {renderWishListTable()}
     </WishListContainer>
   );
+};
+
+WishList.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default WishList;

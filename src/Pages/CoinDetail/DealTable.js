@@ -74,8 +74,6 @@ const DealTable = () => {
     socket.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
       setDealDatas((prev) => [eventData, ...prev.slice(0, 49)]);
-      // max 50 筆，後續第一筆進來就刪除最後一筆
-      // setDealDatas([eventData]);
     };
   }, []);
 
