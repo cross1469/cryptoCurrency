@@ -4,7 +4,7 @@ import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 import { useDispatch } from "react-redux";
-import getMarketPrice from "../../Redux/Actions/actionCreator";
+import { getMarketPrice } from "../../Redux/Actions/actionCreator";
 
 const KLine = () => {
   const { symbol } = useParams();

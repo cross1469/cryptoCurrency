@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
-import { firebaseAddValue, firebaseReadCoinAsset } from "../../Utils/firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
+import { firebaseWriteCoinAsset } from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
@@ -70,12 +71,10 @@ const InputUnit = styled.div`
 `;
 
 const AddValue = (props) => {
-  const { symbol } = useParams();
-  const coin = symbol.replace(/USDT/, "");
+  const dispatch = useDispatch();
+  const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
 
   const [addValue, setAddValue] = useState("");
-  const [usdtData, setUsdtData] = useState({ profitLoss: "", qty: "" });
-  const [coinData, setCoinData] = useState({ profitLoss: "", qty: "" });
 
   const { email } = props;
 
@@ -84,18 +83,6 @@ const AddValue = (props) => {
 
   const handlAddValueInput = (e) => {
     setAddValue(e.target.value);
-  };
-
-  const getUserCoinAsset = async () => {
-    if (email) {
-      const usdtAsset = await firebaseReadCoinAsset(email, "USDT");
-      const coinAsset = await firebaseReadCoinAsset(email, coin);
-      if (usdtAsset) {
-        setUsdtData(usdtAsset);
-      } else if (coinAsset) {
-        setCoinData(coinAsset);
-      }
-    }
   };
 
   const showToast = (type) => {
@@ -136,10 +123,10 @@ const AddValue = (props) => {
   };
 
   const handleClickAddValue = () => {
-    const total = Number(usdtData.qty) + Number(addValue);
+    const total = Number(usdtQty) + Number(addValue);
     if (email && addValue > 0) {
-      firebaseAddValue(email, "USDT", total);
-      getUserCoinAsset();
+      firebaseWriteCoinAsset(email, "USDT", total);
+      dispatch(updateUsdtPrice(total));
       setAddValue("");
       showToast("success");
     } else if (!addValue) {
@@ -148,10 +135,6 @@ const AddValue = (props) => {
       showToast("danger");
     }
   };
-
-  useEffect(() => {
-    getUserCoinAsset();
-  }, [email]);
 
   return (
     <RenderAddValue ml={5} mt={4}>
@@ -184,12 +167,8 @@ const AddValue = (props) => {
       </FlexBox>
 
       <Asset fontFamily="Roboto" fontSize={16} mb={2}>
-        <CoinText>{coin} 可用：</CoinText>
-        <CoinSum>{coinData.qty === "" ? 0 : coinData.qty}</CoinSum>
-      </Asset>
-      <Asset fontFamily="Roboto" fontSize={16} mb={2}>
         <CoinText>USDT 可用：</CoinText>
-        <CoinSum>{usdtData.qty === "" ? 0 : usdtData.qty}</CoinSum>
+        <CoinSum>{Number(usdtQty).toFixed(2)}</CoinSum>
       </Asset>
       <Toast toastList={list} autoDelete dismissTime={5000} />
     </RenderAddValue>

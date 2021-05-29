@@ -15,14 +15,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseAddValue = (email, coinType, addValue) => {
+const firebaseWriteCoinAsset = (email, coinType, coinValue) => {
   db.collection("users")
     .doc(email)
     .collection("assets")
     .doc(coinType)
     .set({
       profitLoss: 0,
-      qty: Number(addValue),
+      qty: Number(coinValue),
     });
 };
 
@@ -204,7 +204,7 @@ export {
   firebaseAuthSignOut,
   firebaseAuthForget,
   firebaseAuthGoogleSignIn,
-  firebaseAddValue,
+  firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
   firebaseGetLimitOrderData,
 };

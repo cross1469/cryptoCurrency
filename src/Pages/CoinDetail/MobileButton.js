@@ -13,7 +13,7 @@ import {
 } from "styled-system";
 import firebaseAddOrder, {
   firebaseReadCoinAsset,
-  firebaseAddValue,
+  firebaseWriteCoinAsset,
 } from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
 import checkIcon from "../../images/check.svg";
@@ -509,7 +509,7 @@ const MobileButton = (props) => {
   const handleClickAddValue = () => {
     const totalValue = Number(usdtData.qty) + Number(addValue);
     if (email && addValue > 0) {
-      firebaseAddValue(email, "USDT", totalValue);
+      firebaseWriteCoinAsset(email, "USDT", totalValue);
       getUserCoinAsset();
       setAddValue("");
       showToast("successAdd");
