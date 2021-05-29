@@ -49,6 +49,24 @@ const firebaseReadCoinAsset = (email, coinType) =>
       return { profitLoss, qty, averagePrice };
     });
 
+const firebaseReadAsset = (email) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("assets")
+    .get()
+    .then((docs) => {
+      const coinDatas = [];
+      docs.forEach((doc) => {
+        const coinData = doc.data();
+        coinDatas.push({
+          coinType: doc.id,
+          ...coinData,
+        });
+      });
+      return coinDatas;
+    });
+
 const firebaseAddOrder = (orderData, email) => {
   db.collection("users")
     .doc(email)
@@ -214,4 +232,5 @@ export {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
   firebaseGetLimitOrderData,
+  firebaseReadAsset,
 };

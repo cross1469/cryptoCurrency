@@ -18,9 +18,9 @@ const getLastPrice = () =>
     });
 
 const updateProfitLoss = async () => {
-  const userEmail = await firebase.readMemberEmail();
+  const userEmail = await firebase.firebase.readMemberEmail();
   userEmail.forEach(async (mail) => {
-    const userCoinAsset = await firebase.readUserCoinAsset(mail);
+    const userCoinAsset = await firebase.firebase.readUserCoinAsset(mail);
     userCoinAsset.forEach(async (item) => {
       if (item.coinType !== "USDT") {
         const coinLastPrice = await getLastPrice();
@@ -32,7 +32,7 @@ const updateProfitLoss = async () => {
                 item.coinData.qty) /
                 coinPrice.price) *
               100;
-            firebase.firebaseWriteCoinAsset(
+            firebase.firebase.firebaseWriteCoinAsset(
               mail,
               item.coinType,
               item.coinData.qty,
@@ -46,9 +46,12 @@ const updateProfitLoss = async () => {
   });
 };
 
+// every 1 minutes
+// every 24 hours
 exports.schedule = functions.pubsub
-  .schedule("every 24 hours")
+  .schedule("0 0 * * *")
   .timeZone("Asia/Taipei")
   .onRun(() => {
     updateProfitLoss();
+    return null;
   });

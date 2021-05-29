@@ -49,8 +49,8 @@ const readUserCoinAsset = (email) =>
       return userCoin;
     });
 
-exports = {
-  firebaseWriteCoinAsset,
-  readMemberEmail,
-  readUserCoinAsset,
+exports.firebase = {
+  firebaseWriteCoinAsset: firebaseWriteCoinAsset,
+  readMemberEmail: readMemberEmail,
+  readUserCoinAsset: readUserCoinAsset,
 };
