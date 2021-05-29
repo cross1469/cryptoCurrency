@@ -11,6 +11,8 @@ import {
   layout,
 } from "styled-system";
 import { addChatData, readChatData } from "../../Utils/firebase";
+import Toast from "../../Component/Toast";
+import errorIcon from "../../images/error.svg";
 
 const OpenChat = styled.button`
   outline: none;
@@ -97,21 +99,46 @@ const Chat = (props) => {
   const [newMessage, setNewMessage] = useState("");
   const [toggleChat, setToggleChat] = useState("none");
   const [toggleChatBtn, setToggleChatBtn] = useState("block");
+  const [list, setList] = useState([]);
+  let toastProperties = null;
 
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
 
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "dangerChat":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "送出前，請先登入",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const trimmedMessage = newMessage.trim();
-    if (trimmedMessage) {
-      addChatData({
-        account: email,
-        messages: trimmedMessage,
-      });
+    if (email) {
+      const trimmedMessage = newMessage.trim();
+      if (trimmedMessage) {
+        addChatData({
+          account: email,
+          messages: trimmedMessage,
+        });
+      }
+      setNewMessage("");
+    } else {
+      showToast("dangerChat");
     }
-    setNewMessage("");
   };
 
   const HandleOpenChat = (e) => {
@@ -126,7 +153,7 @@ const Chat = (props) => {
     setToggleChatBtn("block");
   };
 
-  useEffect(() => readChatData(setChatDatas), []);
+  useEffect(() => readChatData(setChatDatas), [email]);
 
   const renderChatData = () =>
     chatDatas.map((chatData) => {
@@ -223,6 +250,7 @@ const Chat = (props) => {
       >
         Open Chat
       </OpenChat>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };
