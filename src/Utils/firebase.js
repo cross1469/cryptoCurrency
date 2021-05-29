@@ -15,14 +15,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseWriteCoinAsset = (email, coinType, coinValue) => {
+const firebaseWriteCoinAsset = (
+  email,
+  coinType,
+  coinQty,
+  averagePrice,
+  profitLoss
+) => {
   db.collection("users")
     .doc(email)
     .collection("assets")
     .doc(coinType)
     .set({
-      profitLoss: 0,
-      qty: Number(coinValue),
+      qty: Number(coinQty),
+      averagePrice,
+      profitLoss,
     });
 };
 
@@ -38,8 +45,8 @@ const firebaseReadCoinAsset = (email, coinType) =>
         return null;
       }
       const assetData = doc.data();
-      const { profitLoss, qty } = assetData;
-      return { profitLoss, qty };
+      const { profitLoss, qty, averagePrice } = assetData;
+      return { profitLoss, qty, averagePrice };
     });
 
 const firebaseAddOrder = (orderData, email) => {
@@ -191,20 +198,6 @@ const firebaseGetLimitOrderData = (email, coinType) =>
       return limitOrderData;
     });
 
-const readCoinAsset = () =>
-  db
-    .collection("users")
-    .where("profitLoss", ">=", 0)
-    .get()
-    .then((querySnapshot) => {
-      const userAllData = [];
-      querySnapshot.forEach((doc) => {
-        userAllData.push(doc);
-      });
-      console.log(userAllData);
-      return userAllData;
-    });
-
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -221,5 +214,4 @@ export {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
   firebaseGetLimitOrderData,
-  readCoinAsset,
 };

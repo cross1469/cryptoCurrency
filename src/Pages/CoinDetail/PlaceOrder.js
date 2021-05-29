@@ -268,7 +268,17 @@ const PlaceOrder = (props) => {
       const allcoinQty = Number(coinAsset.qty) + Number(coinQty);
       const allUsdtQty =
         Number(usdtAsset.qty) - Number(coinPriceForUSDT * coinQty);
-      firebaseWriteCoinAsset(email, coin, allcoinQty);
+      const averageCoinPrice =
+        (Number(coinAsset.averagePrice) * Number(coinAsset.qty) +
+          Number(coinPriceForUSDT) * Number(coinQty)) /
+        allcoinQty;
+      firebaseWriteCoinAsset(
+        email,
+        coin,
+        allcoinQty,
+        averageCoinPrice,
+        coinAsset.profitLoss
+      );
       firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
@@ -276,7 +286,17 @@ const PlaceOrder = (props) => {
       const allcoinQty = Number(coinAsset.qty) - Number(coinQty);
       const allUsdtQty =
         Number(usdtAsset.qty) + Number(coinPriceForUSDT * coinQty);
-      firebaseWriteCoinAsset(email, coin, allcoinQty);
+      const averageCoinPrice =
+        (Number(coinAsset.averagePrice) * Number(coinAsset.qty) -
+          Number(coinPriceForUSDT) * Number(coinQty)) /
+        allcoinQty;
+      firebaseWriteCoinAsset(
+        email,
+        coin,
+        allcoinQty,
+        averageCoinPrice,
+        coinAsset.profitLoss
+      );
       firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
