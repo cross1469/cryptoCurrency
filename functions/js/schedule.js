@@ -47,7 +47,7 @@ const updateProfitLoss = async () => {
 };
 
 exports.schedule = functions.pubsub
-  .schedule("every 1 minutes")
+  .schedule("every 24 hours")
   .timeZone("Asia/Taipei")
   .onRun(() => {
     updateProfitLoss();
