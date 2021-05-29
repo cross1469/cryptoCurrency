@@ -288,8 +288,13 @@ const PlaceOrder = (props) => {
       const userCoinAsset = await firebaseReadCoinAsset(email, coin);
       const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
       setUserUsdt(userUsdtAsset.qty);
-      dispatch(updateUsdtPrice(userUsdtAsset.qty));
-      dispatch(updateCoinPrice(userCoinAsset.qty));
+      if (userCoinAsset === null) {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(0));
+      } else {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(userCoinAsset.qty));
+      }
     }
   };
 

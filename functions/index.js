@@ -1,7 +1,9 @@
+const firebase = require("firebase-admin");
 const functions = require("firebase-functions");
 const axios = require("axios");
 const cors = require("cors");
 const express = require("express");
+firebase.initializeApp();
 
 const app = express();
 
@@ -32,3 +34,8 @@ app.get("/portfolio/", (req, res) => {
 });
 
 exports.binanceAPI = functions.https.onRequest(app);
+
+exports.scheduledFunction = functions.pubsub
+  .schedule("every 1 minutes")
+  .timeZone("Asia/Taipei")
+  .onRun(() => {});

@@ -191,6 +191,20 @@ const firebaseGetLimitOrderData = (email, coinType) =>
       return limitOrderData;
     });
 
+const readCoinAsset = () =>
+  db
+    .collection("users")
+    .where("profitLoss", ">=", 0)
+    .get()
+    .then((querySnapshot) => {
+      const userAllData = [];
+      querySnapshot.forEach((doc) => {
+        userAllData.push(doc);
+      });
+      console.log(userAllData);
+      return userAllData;
+    });
+
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -207,4 +221,5 @@ export {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
   firebaseGetLimitOrderData,
+  readCoinAsset,
 };

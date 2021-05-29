@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import {
   color,
   space,
@@ -90,7 +91,8 @@ const Close = styled.div`
   ${typography}
 `;
 
-const Chat = () => {
+const Chat = (props) => {
+  const { email } = props;
   const [chatDatas, setChatDatas] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [toggleChat, setToggleChat] = useState("none");
@@ -105,7 +107,7 @@ const Chat = () => {
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage) {
       addChatData({
-        account: "Max",
+        account: email,
         messages: trimmedMessage,
       });
     }
@@ -127,18 +129,24 @@ const Chat = () => {
   useEffect(() => readChatData(setChatDatas), []);
 
   const renderChatData = () =>
-    chatDatas.map((chatData) => (
-      <ChatDataItem
-        key={chatData.id}
-        color="black"
-        fontFamily="Roboto"
-        fontSize={16}
-        mb={3}
-        ml={2}
-      >
-        {chatData.messages}
-      </ChatDataItem>
-    ));
+    chatDatas.map((chatData) => {
+      const { timestamp } = chatData;
+      const time = new Date(timestamp).toLocaleTimeString();
+      return (
+        <ChatDataItem
+          key={chatData.id}
+          color="black"
+          fontFamily="Roboto"
+          fontSize={16}
+          mb={3}
+          ml={2}
+        >
+          <div>{chatData.account}</div>
+          <div>{chatData.messages}</div>
+          <div>{time}</div>
+        </ChatDataItem>
+      );
+    });
 
   return (
     <>
@@ -217,6 +225,10 @@ const Chat = () => {
       </OpenChat>
     </>
   );
+};
+
+Chat.propTypes = {
+  email: PropTypes.string.isRequired,
 };
 
 export default Chat;

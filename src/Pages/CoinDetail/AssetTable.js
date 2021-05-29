@@ -100,7 +100,7 @@ const AssetTable = (props) => {
       <AssetTableBody fontFamily="Roboto" fontSize={16} py={2}>
         <AssetTableBodyItem flexGrow={1}>{coin}</AssetTableBodyItem>
         <AssetTableBodyItem flexGrow={1}>
-          {coinData.qty === "" ? 0 : Number(coinData.qty).toFixed(2)}
+          {coinData ? Number(coinData.qty).toFixed(2) : 0}
         </AssetTableBodyItem>
       </AssetTableBody>
     </>

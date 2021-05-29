@@ -88,7 +88,7 @@ const CoinDetail = () => {
       <Mobile>
         <MobileButton email={email} userId={userId} />
       </Mobile>
-      <Chat />
+      <Chat email={email} userId={userId} />
     </Container>
   );
 };

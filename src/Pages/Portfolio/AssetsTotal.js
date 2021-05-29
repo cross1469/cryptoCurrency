@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { color, space, typography } from "styled-system";
 
-import { firebaseReadCoinAsset } from "../../Utils/firebase";
+import { firebaseReadCoinAsset, readCoinAsset } from "../../Utils/firebase";
 
 const AssetsContainer = styled.div`
   display: flex;
@@ -47,8 +47,14 @@ const AssetsTotal = (props) => {
     }
   };
 
+  const read = async () => {
+    const data = await readCoinAsset();
+    console.log(data);
+  };
+
   useEffect(() => {
     getUSDTAssetData();
+    read();
   }, [email]);
 
   return (
