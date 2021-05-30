@@ -76,16 +76,18 @@ const Banner = () => (
       >
         買賣加密貨幣聯通全世界
       </BannerSubtitle>
-      <BannerToExploreBtn
-        color="#212833"
-        py={2}
-        fontFamily="Roboto"
-        fontWeight="bold"
-        fontSize={16}
-        letterSpacing={1}
-      >
-        <Link to="/explore">Explore</Link>
-      </BannerToExploreBtn>
+      <Link to="/explore">
+        <BannerToExploreBtn
+          color="#212833"
+          py={2}
+          fontFamily="Roboto"
+          fontWeight="bold"
+          fontSize={16}
+          letterSpacing={1}
+        >
+          Explore
+        </BannerToExploreBtn>
+      </Link>
     </BannerCotainer>
   </BannerBg>
 );
