@@ -107,9 +107,8 @@ const Star = styled.img`
   height: 16px;
 `;
 
-let dataFirstOpen = true;
-
 const CoinData = (props) => {
+  let dataFirstOpen = true;
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
