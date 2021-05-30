@@ -254,7 +254,7 @@ const CoinData = (props) => {
   const renderCoinDatas = () => {
     if (!searchTerm) {
       return currentData.map((realTimeData) => (
-        <Link to={`/coinDetail/${realTimeData.s}`}>
+        <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
           <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
               <Star
@@ -288,7 +288,7 @@ const CoinData = (props) => {
       ));
     }
     return searchResults.map((item) => (
-      <Link to={`/coinDetail/${item.s}`}>
+      <Link to={`/coinDetail/${item.s}`} key={item.s}>
         <CoinTableBody mb={3} key={item.L} id={item.s}>
           <CoinTableBodyItem>
             <Star
