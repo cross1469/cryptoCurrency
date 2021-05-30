@@ -62,10 +62,10 @@ const YourNews = (props) => {
     if (wishStr) {
       axios
         .get(
-          `https://newsapi.org/v2/everything?q=${wishStr}&sortBy=publishedAt&language=en&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
+          `https://api.nytimes.com/svc/search/v2/articlesearch.json?facet=true&facet_fields=day_of_week&fq=${wishStr}&q=crypto&sort=newest&api-key=${process.env.REACT_APP_NEWS_APIKEY}`
         )
         .then((res) => {
-          const newsFourHeadline = res.data.articles.slice(0, 4);
+          const newsFourHeadline = res.data.response.docs.slice(0, 4);
           setNewsHeadlines(newsFourHeadline);
         });
     }
@@ -81,7 +81,6 @@ const YourNews = (props) => {
       setWishStr(wishString);
     }
   };
-
   const renderNewsHeadline = () =>
     newsHeadlines.map((news) => (
       <YourNewsCardItem
@@ -89,13 +88,17 @@ const YourNews = (props) => {
         pb={{ sm: "16px", md: "24px", lg: 0 }}
         width={{ sm: "100%", md: "50%", lg: "auto" }}
         flex={{ sm: "none", md: "none", lg: 1 }}
-        key={news.publishedAt}
+        key={news.pub_date}
       >
-        <YourNewsCardLink href={news.url}>
+        <YourNewsCardLink href={news.web_url}>
           <YourNewsCard
-            newsTitle={news.title}
-            newsDescription={news.description}
-            newsUrlToImage={news.urlToImage}
+            newsTitle={news.headline.main}
+            newsDescription={news.abstract}
+            newsUrlToImage={
+              news.multimedia.length > 0
+                ? `https://www.nytimes.com/${news.multimedia[0].url}`
+                : null
+            }
           />
         </YourNewsCardLink>
       </YourNewsCardItem>
