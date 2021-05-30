@@ -263,6 +263,7 @@ const MobileButton = (props) => {
   const marketPrice = useSelector(
     (state) => state.coinDetailReducer.marketPrice
   );
+  const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const dispatch = useDispatch();
   const [displayPlaceOrder, setDisplayPlaceOrder] = useState("none");
   const [displayBtn, setDisplayBtn] = useState("flex");
@@ -290,7 +291,6 @@ const MobileButton = (props) => {
   const [total, setTotal] = useState("");
 
   const [addValue, setAddValue] = useState("");
-  const [usdtData, setUsdtData] = useState({ profitLoss: "", qty: "" });
   const [userUsdt, setUserUsdt] = useState();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
@@ -306,16 +306,10 @@ const MobileButton = (props) => {
   };
 
   const handleChangeInputValue = (e) => {
-    if (e.target.id === "price") {
-      const orderTotal = Number(marketPrice * qty).toFixed(6);
-      setCoinPrice(e.target.value);
-      setTotal(orderTotal);
-    } else if (e.target.id === "qty") {
-      const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
-      setCoinPrice(marketPrice);
-      setQty(e.target.value);
-      setTotal(orderTotal);
-    }
+    const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+    setCoinPrice(marketPrice);
+    setQty(e.target.value);
+    setTotal(orderTotal);
   };
 
   const showToast = (type) => {
@@ -533,19 +527,11 @@ const MobileButton = (props) => {
     setAddValue(e.target.value);
   };
 
-  const getUserCoinAsset = async () => {
-    if (email) {
-      const usdtAsset = await firebaseReadCoinAsset(email, "USDT");
-      if (usdtAsset) {
-        setUsdtData(usdtAsset);
-      }
-    }
-  };
   const handleClickAddValue = () => {
-    const totalValue = Number(usdtData.qty) + Number(addValue);
+    const totalValue = Number(usdtQty) + Number(addValue);
     if (email && addValue > 0) {
       firebaseWriteCoinAsset(email, "USDT", totalValue);
-      getUserCoinAsset();
+      dispatch(updateUsdtPrice(totalValue));
       setAddValue("");
       showToast("successAdd");
     } else if (!addValue) {
@@ -556,7 +542,6 @@ const MobileButton = (props) => {
   };
 
   useEffect(() => {
-    getUserCoinAsset();
     readUserUsdt();
   }, [email]);
 
@@ -601,9 +586,7 @@ const MobileButton = (props) => {
                       市價
                     </InputText>
                     <Input
-                      id="price"
                       value={Number(marketPrice).toFixed(6)}
-                      onChange={handleChangeInputValue}
                       mr={2}
                       textAlign="right"
                       px={1}
@@ -627,7 +610,6 @@ const MobileButton = (props) => {
                       數量
                     </InputText>
                     <Input
-                      id="qty"
                       value={qty}
                       onChange={handleChangeInputValue}
                       mr={2}
@@ -652,7 +634,6 @@ const MobileButton = (props) => {
                       成交額
                     </InputText>
                     <Input
-                      id="orderTotal"
                       textAlign="right"
                       fontFamily="Roboto"
                       px={1}
@@ -731,7 +712,7 @@ const MobileButton = (props) => {
                     <Input
                       textAlign="right"
                       fontFamily="Roboto"
-                      value={usdtData.qty === "" ? 0 : usdtData.qty}
+                      value={usdtQty}
                       px={1}
                       mr={2}
                       disabled

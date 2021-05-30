@@ -171,16 +171,10 @@ const PlaceOrder = (props) => {
   };
 
   const handleChangeInputValue = (e) => {
-    if (e.target.id === "price") {
-      const orderTotal = Number(e.target.value * qty).toFixed(6);
-      setCoinPrice(e.target.value);
-      setTotal(orderTotal);
-    } else if (e.target.id === "qty") {
-      const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
-      setCoinPrice(marketPrice);
-      setQty(e.target.value);
-      setTotal(orderTotal);
-    }
+    const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+    setCoinPrice(marketPrice);
+    setQty(e.target.value);
+    setTotal(orderTotal);
   };
 
   const showToast = (type) => {
@@ -376,7 +370,6 @@ const PlaceOrder = (props) => {
         <Input
           id="price"
           value={Number(marketPrice).toFixed(6)}
-          onChange={handleChangeInputValue}
           textAlign="right"
           px={1}
           fontFamily="Roboto"
@@ -408,7 +401,6 @@ const PlaceOrder = (props) => {
         </InputText>
         <Input
           id="orderTotal"
-          onChange={handleChangeInputValue}
           textAlign="right"
           px={1}
           fontFamily="Roboto"
