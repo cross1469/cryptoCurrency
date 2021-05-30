@@ -217,7 +217,7 @@ const CoinData = (props) => {
   };
 
   const NUM_OF_RECORDS = realTimeDatas.length;
-  const limit = 10;
+  const limit = 15;
   const onPageChanged = useCallback(
     (e, page) => {
       e.preventDefault();
