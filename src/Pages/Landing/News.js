@@ -75,7 +75,7 @@ const News = () => {
   const coinTopHeadline = () => {
     axios
       .get(
-        `https://newsapi.org/v2/everything?q=crypto&sortBy=publishedAt&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
+        `https://newsapi.org/v2/everything?q=crypto&sortBy=publishedAt&language=en&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
       )
       .then((res) => {
         const newsFourHeadline = res.data.articles.slice(0, 4);
