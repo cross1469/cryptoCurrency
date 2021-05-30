@@ -38,14 +38,14 @@ const YourNewsCard = (props) => {
       <CardContainer mt={3}>
         <CardTitle
           fontFamily="Roboto"
-          fontSize={20}
-          lineHeight="28px"
+          fontSize={24}
+          lineHeight="32px"
           fontWeight="bold"
           mb={3}
         >
           {newsTitle}
         </CardTitle>
-        <CardSubContent fontFamily="Roboto" fontSize={12} lineHeight="16px">
+        <CardSubContent fontFamily="Roboto" fontSize={16} lineHeight="20px">
           {newsDescription}
         </CardSubContent>
       </CardContainer>
