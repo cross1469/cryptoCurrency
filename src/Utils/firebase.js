@@ -15,14 +15,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const firebaseAddValue = (email, coinType, addValue) => {
+const firebaseWriteCoinAsset = (
+  email,
+  coinType,
+  coinQty,
+  averagePrice,
+  profitLoss
+) => {
   db.collection("users")
     .doc(email)
     .collection("assets")
     .doc(coinType)
     .set({
-      profitLoss: 0,
-      qty: Number(addValue),
+      qty: Number(coinQty),
+      averagePrice,
+      profitLoss,
     });
 };
 
@@ -38,8 +45,26 @@ const firebaseReadCoinAsset = (email, coinType) =>
         return null;
       }
       const assetData = doc.data();
-      const { profitLoss, qty } = assetData;
-      return { profitLoss, qty };
+      const { profitLoss, qty, averagePrice } = assetData;
+      return { profitLoss, qty, averagePrice };
+    });
+
+const firebaseReadAsset = (email) =>
+  db
+    .collection("users")
+    .doc(email)
+    .collection("assets")
+    .get()
+    .then((docs) => {
+      const coinDatas = [];
+      docs.forEach((doc) => {
+        const coinData = doc.data();
+        coinDatas.push({
+          coinType: doc.id,
+          ...coinData,
+        });
+      });
+      return coinDatas;
     });
 
 const firebaseAddOrder = (orderData, email) => {
@@ -204,7 +229,8 @@ export {
   firebaseAuthSignOut,
   firebaseAuthForget,
   firebaseAuthGoogleSignIn,
-  firebaseAddValue,
+  firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
   firebaseGetLimitOrderData,
+  firebaseReadAsset,
 };

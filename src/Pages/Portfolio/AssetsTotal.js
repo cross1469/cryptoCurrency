@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { color, space, typography } from "styled-system";
 
-import { firebaseReadCoinAsset } from "../../Utils/firebase";
+import { firebaseReadCoinAsset, firebaseReadAsset } from "../../Utils/firebase";
 
 const AssetsContainer = styled.div`
   display: flex;
@@ -38,17 +38,26 @@ const CoinProfitLoss = styled.div``;
 
 const AssetsTotal = (props) => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
+  const [profitLoss, setProfitLoss] = useState(0);
   const { email } = props;
 
-  const getUSDTAssetData = async () => {
+  const getAssetData = async () => {
     if (email) {
       const usdtData = await firebaseReadCoinAsset(email, "USDT");
+      const coinProfitLoss = await firebaseReadAsset(email);
+      let coinAllprofitLoss = 0;
+      coinProfitLoss.forEach((coin) => {
+        if (coin.coinType !== "USDT") {
+          coinAllprofitLoss += coin.profitLoss;
+        }
+      });
+      setProfitLoss(coinAllprofitLoss);
       setUsdt(usdtData);
     }
   };
 
   useEffect(() => {
-    getUSDTAssetData();
+    getAssetData();
   }, [email]);
 
   return (
@@ -63,7 +72,7 @@ const AssetsTotal = (props) => {
         <CoinTitle fontWeight="bold" mb={3}>
           貨幣盈餘
         </CoinTitle>
-        <CoinProfitLoss>123 USDT</CoinProfitLoss>
+        <CoinProfitLoss>{Number(profitLoss).toFixed(2)} %</CoinProfitLoss>
       </Coin>
     </AssetsContainer>
   );

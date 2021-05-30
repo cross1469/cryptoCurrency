@@ -8,4 +8,7 @@ module.exports = {
   rules: {
     quotes: ["error", "double"],
   },
+  parserOptions: {
+    ecmaVersion: 8, // or 2017
+  },
 };
