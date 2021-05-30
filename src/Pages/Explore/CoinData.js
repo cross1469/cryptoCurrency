@@ -232,10 +232,14 @@ const CoinData = (props) => {
     (currentPage - 1) * limit + limit
   );
 
-  useEffect(() => realTimeCoinData(), []);
+  useEffect(() => {
+    realTimeCoinData();
+    return () => realTimeCoinData();
+  }, []);
 
   useEffect(() => {
     renderInitActiveStar();
+    return () => renderInitActiveStar();
   }, [email]);
 
   useEffect(() => {
@@ -245,6 +249,14 @@ const CoinData = (props) => {
       );
       setSearchResults(results);
     }
+    return () => {
+      if (JSON.stringify(realTimeDatas) !== "[]") {
+        const results = realTimeDatas.filter((realTimeData) =>
+          realTimeData.s.includes(searchTerm)
+        );
+        setSearchResults(results);
+      }
+    };
   }, [searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {
