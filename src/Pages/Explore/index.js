@@ -67,7 +67,7 @@ const Explore = () => {
         setEmail(userEmail);
         setUserId(uid);
       }),
-    []
+    [email]
   );
 
   const getSymbol = () => {

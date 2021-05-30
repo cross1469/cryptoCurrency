@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { color, space, typography, flexbox, border } from "styled-system";
+import { color, space, typography, flexbox } from "styled-system";
 import { Link } from "react-router-dom";
 import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
 import defaultStar from "../../images/default_star.png";
@@ -102,23 +102,6 @@ const CoinTableBodyItem = styled.div`
   }
 `;
 
-const OptionBtn = styled.button`
-  outline: none;
-  cursor: pointer;
-  ${color}
-  ${border}
-  ${space}
-  ${typography}
-`;
-const MarketBtn = styled.button`
-  outline: none;
-  cursor: pointer;
-  ${color}
-  ${border}
-  ${space}
-  ${typography}
-`;
-
 const Star = styled.img`
   width: 16px;
   height: 16px;
@@ -131,17 +114,6 @@ const CoinData = (props) => {
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [optionBtnColor, setOptionBtnColor] = useState({
-    color: "#c99400",
-    border: "1px solid #FCEA9C",
-    bg: "#fffdf0",
-  });
-
-  const [marketBtnColor, setMarketBtnColor] = useState({
-    color: "#1e2329",
-    border: "1px solid #e6e6e6",
-    bg: "transparent",
-  });
 
   const { email } = props;
 
@@ -189,32 +161,6 @@ const CoinData = (props) => {
       renderInitActiveStar();
     } else {
       showToast("danger");
-    }
-  };
-
-  const handleClickBtn = (e) => {
-    if (e.target.innerHTML === "自選") {
-      setOptionBtnColor({
-        color: "#c99400",
-        border: "1px solid #FCEA9C",
-        bg: "#fffdf0",
-      });
-      setMarketBtnColor({
-        color: "#1e2329",
-        border: "1px solid #e6e6e6",
-        bg: "transparent",
-      });
-    } else if (e.target.innerHTML === "現貨市場") {
-      setOptionBtnColor({
-        color: "#1e2329",
-        border: "1px solid #e6e6e6",
-        bg: "transparent",
-      });
-      setMarketBtnColor({
-        color: "#c99400",
-        border: "1px solid #FCEA9C",
-        bg: "#fffdf0",
-      });
     }
   };
 
@@ -364,34 +310,6 @@ const CoinData = (props) => {
 
   return (
     <>
-      <OptionBtn
-        mt={4}
-        mr={2}
-        ml={2}
-        px={2}
-        py={1}
-        fontFamily="Roboto"
-        fontSize={12}
-        color={optionBtnColor.color}
-        border={optionBtnColor.border}
-        bg={optionBtnColor.bg}
-        onClick={handleClickBtn}
-      >
-        自選
-      </OptionBtn>
-      <MarketBtn
-        mt={4}
-        px={2}
-        py={1}
-        fontFamily="Roboto"
-        fontSize={12}
-        color={marketBtnColor.color}
-        border={marketBtnColor.border}
-        bg={marketBtnColor.bg}
-        onClick={handleClickBtn}
-      >
-        現貨市場
-      </MarketBtn>
       <FlexBox px={{ sm: 0, md: "16px", lg: "8px" }} mt={2} mb={3}>
         <CoinDataTitle fontFamily="Roboto" fontSize={28} fontWeight="bold">
           貨幣資料

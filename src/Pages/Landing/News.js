@@ -90,6 +90,7 @@ const News = () => {
         pb={{ sm: "16px", md: "24px", lg: 0 }}
         width={{ sm: "100%", md: "50%", lg: "auto" }}
         flex={{ sm: "none", md: "none", lg: 1 }}
+        key={news.publishedAt}
       >
         <NewsCardLink href={news.url}>
           <NewsCard
