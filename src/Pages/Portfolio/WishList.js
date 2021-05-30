@@ -98,7 +98,7 @@ const WishList = (props) => {
       realTimeDatas.map((item) => {
         if (wishData === item.s) {
           return (
-            <Link to={`/coinDetail/${wishData}`}>
+            <Link to={`/coinDetail/${wishData}`} key={item.s}>
               <WishListTableBody
                 key={wishData}
                 fontFamily="Roboto"

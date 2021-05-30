@@ -35,19 +35,18 @@ const ChartItem = styled.div`
   ${space}
   ${flexbox}
   ${layout}
-`;
-
-const ChartLink = styled.a`
-  box-sizing: border-box;
-  padding: 16px;
-  display: block;
-  background-color: #fff;
-  color: #1e2329;
-  position: relative;
-  border-radius: 3px;
-  box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
-  text-decoration: none;
-  cursor: pointer;
+  a {
+    box-sizing: border-box;
+    padding: 16px;
+    display: block;
+    background-color: #fff;
+    color: #1e2329;
+    position: relative;
+    border-radius: 3px;
+    box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
+    text-decoration: none;
+    cursor: pointer;
+  }
 `;
 
 const Landing = () => {
@@ -90,11 +89,9 @@ const Landing = () => {
         flex={{ sm: "none", md: "none", lg: 1 }}
         key={symbol}
       >
-        <ChartLink>
-          <Link to={`/coinDetail/${symbol}`}>
-            <AreaSpline symbol={symbol} />
-          </Link>
-        </ChartLink>
+        <Link to={`/coinDetail/${symbol}`}>
+          <AreaSpline symbol={symbol} />
+        </Link>
       </ChartItem>
     ));
 

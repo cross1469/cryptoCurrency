@@ -21,14 +21,18 @@ const Portfolio = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    subscribeUserData((userEmail, uid) => {
+      setEmail(userEmail);
+      setUserId(uid);
+    });
+    return () => {
       subscribeUserData((userEmail, uid) => {
         setEmail(userEmail);
         setUserId(uid);
-      }),
-    []
-  );
+      });
+    };
+  }, []);
 
   return (
     <PortfolioBg pt={4} bg="#fafafa" pb={4}>

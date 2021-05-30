@@ -64,10 +64,15 @@ const Explore = () => {
   useEffect(
     () =>
       subscribeUserData((userEmail, uid) => {
-        setEmail(userEmail);
-        setUserId(uid);
+        if (userEmail) {
+          setEmail(userEmail);
+          setUserId(uid);
+        } else {
+          setEmail("");
+          setUserId("");
+        }
       }),
-    []
+    [email]
   );
 
   const getSymbol = () => {

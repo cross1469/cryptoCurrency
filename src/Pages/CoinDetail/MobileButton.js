@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import {
   color,
@@ -15,6 +15,10 @@ import firebaseAddOrder, {
   firebaseReadCoinAsset,
   firebaseWriteCoinAsset,
 } from "../../Utils/firebase";
+import {
+  updateUsdtPrice,
+  updateCoinPrice,
+} from "../../Redux/Actions/actionCreator";
 import Toast from "../../Component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
@@ -185,18 +189,7 @@ const LimitOrMarketPrice = styled.div`
   -webkit-box-pack: justify;
   justify-content: space-between;
 `;
-const LimitBtn = styled.span`
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  display: inline-block;
-  padding-top: 8px;
-  padding-bottom: 10px;
-  font-weight: 500;
-  border-bottom: 2px solid;
-  cursor: pointer;
-  ${border}
-`;
+
 const MarketBtn = styled.span`
   box-sizing: border-box;
   margin: 0px;
@@ -205,7 +198,7 @@ const MarketBtn = styled.span`
   padding-top: 8px;
   padding-bottom: 10px;
   font-weight: 500;
-  color: rgb(132, 142, 156);
+  color: white;
   border-bottom: 2px solid;
   cursor: pointer;
   ${border}
@@ -270,6 +263,8 @@ const MobileButton = (props) => {
   const marketPrice = useSelector(
     (state) => state.coinDetailReducer.marketPrice
   );
+  const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
+  const dispatch = useDispatch();
   const [displayPlaceOrder, setDisplayPlaceOrder] = useState("none");
   const [displayBtn, setDisplayBtn] = useState("flex");
   const [displayAddValue, setDisplayAddValue] = useState("none");
@@ -287,22 +282,16 @@ const MobileButton = (props) => {
     bg: "#02c077",
   });
   const [limitOrMarket, setLimitOrMarket] = useState("limit");
-  const [limitColor, setLimitColor] = useState({
+  const [marketColor, setMarketColor] = useState({
     color: "white",
     borderBottomColor: "#f0b90b",
   });
-  const [marketColor, setMarketColor] = useState({
-    color: "#848e9c",
-    borderBottomColor: "transparent",
-  });
-  const [isLimit, setIsLimit] = useState(true);
   const [coinPrice, setCoinPrice] = useState("");
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
 
   const [addValue, setAddValue] = useState("");
-  const [usdtData, setUsdtData] = useState({ profitLoss: "", qty: "" });
-
+  const [userUsdt, setUserUsdt] = useState();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
   const { email } = props;
@@ -317,28 +306,10 @@ const MobileButton = (props) => {
   };
 
   const handleChangeInputValue = (e) => {
-    if (e.target.id === "price") {
-      if (isLimit) {
-        const orderTotal = Number(e.target.value * qty).toFixed(6);
-        setCoinPrice(e.target.value);
-        setTotal(orderTotal);
-      } else {
-        const orderTotal = Number(marketPrice * qty).toFixed(6);
-        setCoinPrice(e.target.value);
-        setTotal(orderTotal);
-      }
-    } else if (e.target.id === "qty") {
-      if (isLimit) {
-        const orderTotal = Number(coinPrice * e.target.value).toFixed(6);
-        setQty(e.target.value);
-        setTotal(orderTotal);
-      } else {
-        const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
-        setCoinPrice(marketPrice);
-        setQty(e.target.value);
-        setTotal(orderTotal);
-      }
-    }
+    const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
+    setCoinPrice(marketPrice);
+    setQty(e.target.value);
+    setTotal(orderTotal);
   };
 
   const showToast = (type) => {
@@ -385,6 +356,15 @@ const MobileButton = (props) => {
           id,
           title: "Danger",
           description: "金額不得為 0",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      case "dangerUsdt":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: "USDT 可用金額不足，請先充值",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -448,33 +428,79 @@ const MobileButton = (props) => {
   };
 
   const handleClickPrice = (e) => {
-    if (e.target.innerHTML === "限價") {
-      setLimitOrMarket("limit");
-      setLimitColor({
-        color: "white",
-        borderBottomColor: "#f0b90b",
-      });
-      setMarketColor({
-        color: "#848e9c",
-        borderBottomColor: "transparent",
-      });
-      setIsLimit(true);
-    } else if (e.target.innerHTML === "市價") {
+    if (e.target.innerHTML === "市價") {
       setLimitOrMarket("market");
-      setLimitColor({
-        color: "#848e9c",
-        borderBottomColor: "transparent",
-      });
       setMarketColor({
         color: "white",
         borderBottomColor: "#f0b90b",
       });
-      setIsLimit(false);
+    }
+  };
+
+  const calcAssetForUploadOrder = async (
+    userEmail,
+    coinType,
+    coinPriceForUSDT,
+    coinQty
+  ) => {
+    const coinAsset = await firebaseReadCoinAsset(userEmail, coinType);
+    const usdtAsset = await firebaseReadCoinAsset(userEmail, "USDT");
+    if (buyOrSell === "buy") {
+      const allcoinQty = Number(coinAsset.qty) + Number(coinQty);
+      const allUsdtQty =
+        Number(usdtAsset.qty) - Number(coinPriceForUSDT * coinQty);
+      const averageCoinPrice =
+        (Number(coinAsset.averagePrice) * Number(coinAsset.qty) +
+          Number(coinPriceForUSDT) * Number(coinQty)) /
+        allcoinQty;
+      firebaseWriteCoinAsset(
+        email,
+        coin,
+        allcoinQty,
+        averageCoinPrice,
+        coinAsset.profitLoss
+      );
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
+      dispatch(updateUsdtPrice(allUsdtQty));
+      dispatch(updateCoinPrice(allcoinQty));
+    } else if (buyOrSell === "sell") {
+      const allcoinQty = Number(coinAsset.qty) - Number(coinQty);
+      const allUsdtQty =
+        Number(usdtAsset.qty) + Number(coinPriceForUSDT * coinQty);
+      const averageCoinPrice =
+        (Number(coinAsset.averagePrice) * Number(coinAsset.qty) -
+          Number(coinPriceForUSDT) * Number(coinQty)) /
+        allcoinQty;
+      firebaseWriteCoinAsset(
+        email,
+        coin,
+        allcoinQty,
+        averageCoinPrice,
+        coinAsset.profitLoss
+      );
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
+      dispatch(updateUsdtPrice(allUsdtQty));
+      dispatch(updateCoinPrice(allcoinQty));
+    }
+  };
+
+  const readUserUsdt = async () => {
+    if (email) {
+      const userCoinAsset = await firebaseReadCoinAsset(email, coin);
+      const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
+      setUserUsdt(userUsdtAsset.qty);
+      if (userCoinAsset === null) {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(0));
+      } else {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(userCoinAsset.qty));
+      }
     }
   };
 
   const handleClickUploadOrder = () => {
-    if (email && total > 0) {
+    if (email && total > 0 && userUsdt > total) {
       const orderData = {
         coinPrice,
         coinType: coin,
@@ -483,12 +509,15 @@ const MobileButton = (props) => {
         type: buyOrSell,
       };
       firebaseAddOrder(orderData, email);
+      calcAssetForUploadOrder(email, coin, coinPrice, qty);
       showToast("successOrder");
       setCoinPrice("");
       setTotal("");
       setQty("");
     } else if (!total) {
       showToast("dangerTotal");
+    } else if (userUsdt < total) {
+      showToast("dangerUsdt");
     } else {
       showToast("dangerOrder");
     }
@@ -498,19 +527,11 @@ const MobileButton = (props) => {
     setAddValue(e.target.value);
   };
 
-  const getUserCoinAsset = async () => {
-    if (email) {
-      const usdtAsset = await firebaseReadCoinAsset(email, "USDT");
-      if (usdtAsset) {
-        setUsdtData(usdtAsset);
-      }
-    }
-  };
   const handleClickAddValue = () => {
-    const totalValue = Number(usdtData.qty) + Number(addValue);
+    const totalValue = Number(usdtQty) + Number(addValue);
     if (email && addValue > 0) {
       firebaseWriteCoinAsset(email, "USDT", totalValue);
-      getUserCoinAsset();
+      dispatch(updateUsdtPrice(totalValue));
       setAddValue("");
       showToast("successAdd");
     } else if (!addValue) {
@@ -521,7 +542,7 @@ const MobileButton = (props) => {
   };
 
   useEffect(() => {
-    getUserCoinAsset();
+    readUserUsdt();
   }, [email]);
 
   return (
@@ -548,12 +569,6 @@ const MobileButton = (props) => {
             <PlaceOrderInputPart>
               <div>
                 <LimitOrMarketPrice onClick={handleClickPrice}>
-                  <LimitBtn
-                    borderBottomColor={limitColor.borderBottomColor}
-                    color={limitColor.color}
-                  >
-                    限價
-                  </LimitBtn>
                   <MarketBtn
                     borderBottomColor={marketColor.borderBottomColor}
                     color={marketColor.color}
@@ -568,19 +583,15 @@ const MobileButton = (props) => {
                       fontSize={{ md: 14, lg: 16 }}
                       fontFamily="Roboto"
                     >
-                      {isLimit ? "價格" : "市價"}
+                      市價
                     </InputText>
                     <Input
-                      id="price"
-                      value={
-                        isLimit ? coinPrice : Number(marketPrice).toFixed(6)
-                      }
-                      onChange={handleChangeInputValue}
+                      value={Number(marketPrice).toFixed(6)}
                       mr={2}
                       textAlign="right"
                       px={1}
                       fontFamily="Roboto"
-                      disabled={!isLimit}
+                      disabled
                     />
                     <InputUnit
                       mr={2}
@@ -599,7 +610,6 @@ const MobileButton = (props) => {
                       數量
                     </InputText>
                     <Input
-                      id="qty"
                       value={qty}
                       onChange={handleChangeInputValue}
                       mr={2}
@@ -624,7 +634,6 @@ const MobileButton = (props) => {
                       成交額
                     </InputText>
                     <Input
-                      id="orderTotal"
                       textAlign="right"
                       fontFamily="Roboto"
                       px={1}
@@ -703,7 +712,7 @@ const MobileButton = (props) => {
                     <Input
                       textAlign="right"
                       fontFamily="Roboto"
-                      value={usdtData.qty === "" ? 0 : usdtData.qty}
+                      value={usdtQty}
                       px={1}
                       mr={2}
                       disabled

@@ -75,7 +75,7 @@ const News = () => {
   const coinTopHeadline = () => {
     axios
       .get(
-        `https://newsapi.org/v2/everything?q=crypto&sortBy=publishedAt&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
+        `https://newsapi.org/v2/everything?q=crypto&sortBy=publishedAt&language=en&apiKey=${process.env.REACT_APP_NEWS_APIKEY}`
       )
       .then((res) => {
         const newsFourHeadline = res.data.articles.slice(0, 4);
@@ -90,6 +90,7 @@ const News = () => {
         pb={{ sm: "16px", md: "24px", lg: 0 }}
         width={{ sm: "100%", md: "50%", lg: "auto" }}
         flex={{ sm: "none", md: "none", lg: 1 }}
+        key={news.publishedAt}
       >
         <NewsCardLink href={news.url}>
           <NewsCard

@@ -54,6 +54,7 @@ const AreaSpline = (props) => {
 
   useEffect(() => {
     callBinanceAPI(symbol);
+    return () => callBinanceAPI(symbol);
   }, [symbol]);
 
   useEffect(() => {
@@ -72,6 +73,22 @@ const AreaSpline = (props) => {
         ];
         return newOptions;
       });
+    };
+
+    return () => {
+      socket.onmessage = (event) => {
+        const newKLineData = [];
+        const data = JSON.parse(event.data);
+        newKLineData.push(data.k.t, (Number(data.k.h) + Number(data.k.l)) / 2);
+        setOptions((op) => {
+          const newOptions = { ...op };
+          newOptions.series[0].data = [
+            ...newOptions.series[0].data,
+            newKLineData,
+          ];
+          return newOptions;
+        });
+      };
     };
   }, []);
 

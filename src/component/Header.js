@@ -217,28 +217,40 @@ const Header = () => {
         <nav className="nav">
           <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
           <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
-            <NavLink activeClassName="active" to="/explore">
-              <li>EXPLORE</li>
-            </NavLink>
-            <NavLink
-              activeClassName="active"
-              to
-              onClick={handleClickCheckMember}
-            >
-              <li>PORTFOLIO</li>
-            </NavLink>
-            {email || uid ? (
-              <NavLink activeClassName="active" to onClick={handleClickSignOut}>
-                <li>{loginStatus}</li>
+            <li>
+              <NavLink activeClassName="active" to="/explore">
+                EXPLORE
               </NavLink>
-            ) : (
+            </li>
+            <li>
               <NavLink
                 activeClassName="active"
-                to
-                onClick={() => signModal.current.open()}
+                to="/portfolio"
+                onClick={handleClickCheckMember}
               >
-                <li>{loginStatus}</li>
+                PORTFOLIO
               </NavLink>
+            </li>
+            {email || uid ? (
+              <li>
+                <NavLink
+                  activeClassName="active"
+                  to
+                  onClick={handleClickSignOut}
+                >
+                  {loginStatus}
+                </NavLink>
+              </li>
+            ) : (
+              <li>
+                <NavLink
+                  activeClassName="active"
+                  to
+                  onClick={() => signModal.current.open()}
+                >
+                  {loginStatus}
+                </NavLink>
+              </li>
             )}
           </ul>
         </nav>
