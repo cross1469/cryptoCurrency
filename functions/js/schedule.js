@@ -28,7 +28,7 @@ const updateProfitLoss = async () => {
           const symbol = coinPrice.symbol.replace(/USDT/, "");
           if (item.coinType === symbol) {
             const profitLoss =
-              (((item.coinData.averagePrice - coinPrice.price) *
+              (((coinPrice.price - item.coinData.averagePrice) *
                 item.coinData.qty) /
                 coinPrice.price) *
               100;
@@ -45,6 +45,31 @@ const updateProfitLoss = async () => {
     });
   });
 };
+
+// const read = async () => {
+//   const userEmail = await readMemberEmail();
+//   userEmail.forEach(async (mail) => {
+//         coinLastPrice.forEach((coinPrice) => {
+//           const symbol = coinPrice.symbol.replace(/USDT/, "");
+//           collection("users").doc(email).collection("assets").doc(symbol).get().then(doc => {
+//             if (doc.exists) {
+//               const profitLoss =
+//                 (((item.coinData.averagePrice - coinPrice.price) *
+//                   item.coinData.qty) /
+//                   coinPrice.price) *
+//                   100;
+//               firebaseWriteCoinAsset(
+//                 mail,
+//                 item.coinType,
+//                 item.coinData.qty,
+//                 item.coinData.averagePrice,
+//                 profitLoss
+//               );
+//             }
+//           })
+//         });
+//   });
+// };
 
 // every 1 minutes
 // every 24 hours
