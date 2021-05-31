@@ -164,12 +164,10 @@ const OrderTable = (props) => {
 
   useEffect(() => {
     getOrderData();
-    return () => getOrderData();
   }, [email]);
 
   useEffect(() => {
     getLastPrice();
-    return () => getLastPrice();
   }, []);
 
   return (

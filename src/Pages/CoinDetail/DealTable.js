@@ -76,12 +76,7 @@ const DealTable = () => {
       setDealDatas((prev) => [eventData, ...prev.slice(0, 49)]);
     };
 
-    return () => {
-      socket.onmessage = (event) => {
-        const eventData = JSON.parse(event.data);
-        setDealDatas((prev) => [eventData, ...prev.slice(0, 49)]);
-      };
-    };
+    return () => socket.close();
   }, []);
 
   const renderDealTable = () =>

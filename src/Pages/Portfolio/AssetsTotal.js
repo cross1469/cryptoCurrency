@@ -58,7 +58,6 @@ const AssetsTotal = (props) => {
 
   useEffect(() => {
     getAssetData();
-    return () => getAssetData();
   }, [email]);
 
   return (

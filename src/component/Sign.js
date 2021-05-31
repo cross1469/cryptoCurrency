@@ -442,9 +442,13 @@ const Sign = (props) => {
 };
 
 Sign.propTypes = {
-  setIsOpen: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func,
   forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func))
     .isRequired,
+};
+
+Sign.defaultProps = {
+  setIsOpen: undefined,
 };
 
 export default Sign;

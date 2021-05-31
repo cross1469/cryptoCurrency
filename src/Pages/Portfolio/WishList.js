@@ -72,7 +72,11 @@ const WishList = (props) => {
     }
   };
 
-  const getCoinData = () => {
+  useEffect(() => {
+    getWishListData();
+  }, [email]);
+
+  useEffect(() => {
     const socket = new WebSocket(
       `wss://stream.binance.com:9443/ws/!ticker@arr`
     );
@@ -86,12 +90,8 @@ const WishList = (props) => {
       });
       setRealTimeDatas([...realTimeDatas, ...usdtDatas]);
     };
-  };
-
-  useEffect(() => {
-    getWishListData();
-    getCoinData();
-  }, [email]);
+    return () => socket.close();
+  }, []);
 
   const renderWishListTable = () =>
     wishList.map((wishData) =>
