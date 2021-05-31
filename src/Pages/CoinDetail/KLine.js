@@ -72,6 +72,8 @@ const KLine = () => {
         return newOptions;
       });
     };
+
+    return socket.close();
   };
 
   const [options, setOptions] = useState({
@@ -188,9 +190,11 @@ const KLine = () => {
 
   useEffect(() => {
     callBinanceAPI(symbol, "1m");
-    socketAPI(symbol, "1m");
-    return () => socketAPI(symbol, "1m");
   }, []);
+
+  useEffect(() => {
+    socketAPI(symbol, "1m");
+  }, [options]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };

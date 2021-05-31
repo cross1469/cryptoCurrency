@@ -56,7 +56,11 @@ const YourNewsCard = (props) => {
 YourNewsCard.propTypes = {
   newsTitle: PropTypes.string.isRequired,
   newsDescription: PropTypes.string.isRequired,
-  newsUrlToImage: PropTypes.string.isRequired,
+  newsUrlToImage: PropTypes.string,
+};
+
+YourNewsCard.defaultProps = {
+  newsUrlToImage: "",
 };
 
 export default YourNewsCard;

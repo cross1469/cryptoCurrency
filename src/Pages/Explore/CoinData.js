@@ -163,7 +163,22 @@ const CoinData = (props) => {
     }
   };
 
-  const realTimeCoinData = () => {
+  const NUM_OF_RECORDS = realTimeDatas.length;
+  const limit = 15;
+  const onPageChanged = useCallback(
+    (e, page) => {
+      e.preventDefault();
+      setCurrentPage(page);
+    },
+    [setCurrentPage]
+  );
+
+  const currentData = realTimeDatas.slice(
+    (currentPage - 1) * limit,
+    (currentPage - 1) * limit + limit
+  );
+
+  useEffect(() => {
     const socket = new WebSocket(
       `wss://stream.binance.com:9443/ws/!ticker@arr`
     );
@@ -214,31 +229,12 @@ const CoinData = (props) => {
         });
       }
     };
-  };
 
-  const NUM_OF_RECORDS = realTimeDatas.length;
-  const limit = 15;
-  const onPageChanged = useCallback(
-    (e, page) => {
-      e.preventDefault();
-      setCurrentPage(page);
-    },
-    [setCurrentPage]
-  );
-
-  const currentData = realTimeDatas.slice(
-    (currentPage - 1) * limit,
-    (currentPage - 1) * limit + limit
-  );
-
-  useEffect(() => {
-    realTimeCoinData();
-    return () => realTimeCoinData();
+    return () => socket.close();
   }, []);
 
   useEffect(() => {
     renderInitActiveStar();
-    return () => renderInitActiveStar();
   }, [email]);
 
   useEffect(() => {
@@ -248,14 +244,6 @@ const CoinData = (props) => {
       );
       setSearchResults(results);
     }
-    return () => {
-      if (JSON.stringify(realTimeDatas) !== "[]") {
-        const results = realTimeDatas.filter((realTimeData) =>
-          realTimeData.s.includes(searchTerm)
-        );
-        setSearchResults(results);
-      }
-    };
   }, [searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {

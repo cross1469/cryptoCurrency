@@ -68,6 +68,19 @@ const Navigation = styled.header`
     a.active {
       color: #f0b90b;
     }
+    button {
+      padding-right: 24px;
+      font-size: 1em;
+      letter-spacing: 0.2rem;
+      text-decoration: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      ${color}
+      :hover {
+        color: #f0b90b;
+      }
+    }
   }
 
   @media only screen and (max-width: 768px) {
@@ -233,23 +246,19 @@ const Header = () => {
             </li>
             {email || uid ? (
               <li>
-                <NavLink
-                  activeClassName="active"
-                  to
-                  onClick={handleClickSignOut}
-                >
+                <button bg="black" type="button" onClick={handleClickSignOut}>
                   {loginStatus}
-                </NavLink>
+                </button>
               </li>
             ) : (
               <li>
-                <NavLink
-                  activeClassName="active"
-                  to
+                <button
+                  bg="black"
+                  type="button"
                   onClick={() => signModal.current.open()}
                 >
                   {loginStatus}
-                </NavLink>
+                </button>
               </li>
             )}
           </ul>
