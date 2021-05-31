@@ -10,6 +10,8 @@ const KLine = () => {
   const { symbol } = useParams();
   const dispatch = useDispatch();
 
+  const [interval, setInterval] = useState("1m");
+
   const callBinanceAPI = (coinSymbol, APIInterval) => {
     axios
       .get(
@@ -73,7 +75,7 @@ const KLine = () => {
       });
     };
 
-    return socket.close();
+    return () => socket.close();
   };
 
   const [options, setOptions] = useState({
@@ -89,7 +91,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1m");
-              socketAPI(symbol, "1m");
+              setInterval(() => "1m");
             },
           },
         },
@@ -98,7 +100,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "15m");
-              socketAPI(symbol, "15m");
+              setInterval(() => "15m");
             },
           },
         },
@@ -107,7 +109,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1h");
-              socketAPI(symbol, "1h");
+              setInterval(() => "1h");
             },
           },
         },
@@ -116,7 +118,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "4h");
-              socketAPI(symbol, "4h");
+              setInterval(() => "4h");
             },
           },
         },
@@ -125,7 +127,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1d");
-              socketAPI(symbol, "1d");
+              setInterval(() => "1d");
             },
           },
         },
@@ -134,7 +136,7 @@ const KLine = () => {
           events: {
             click() {
               callBinanceAPI(symbol, "1w");
-              socketAPI(symbol, "1w");
+              setInterval(() => "1w");
             },
           },
         },
@@ -193,8 +195,9 @@ const KLine = () => {
   }, []);
 
   useEffect(() => {
-    socketAPI(symbol, "1m");
-  }, [options]);
+    const closeSocket = socketAPI(symbol, interval);
+    return closeSocket;
+  }, [options, interval]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
