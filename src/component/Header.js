@@ -197,7 +197,8 @@ const Header = () => {
     setUid(null);
   };
 
-  const handleClickCheckMember = () => {
+  const handleClickCheckMember = (e) => {
+    e.preventDefault();
     if (email) {
       history.push("/portfolio");
     } else {
@@ -236,13 +237,13 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink
+              <button
+                type="button"
                 activeClassName="active"
-                to="/portfolio"
                 onClick={handleClickCheckMember}
               >
                 PORTFOLIO
-              </NavLink>
+              </button>
             </li>
             {email || uid ? (
               <li>
