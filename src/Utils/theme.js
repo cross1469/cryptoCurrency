@@ -6,7 +6,7 @@ const breakpoints = {
 
 export default {
   colors: {
-    black: "#000e1a",
+    black: "#12161C",
     white: "#fff",
     blue: "#007ce0",
     navy: "#004175",
