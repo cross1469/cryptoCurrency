@@ -1,60 +1,39 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
 
-const Card = styled.div`
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  border-radius: 5px;
-  :hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const CardContainer = styled.div`
-  padding: 2px 16px;
-`;
-const CardImg = styled.img`
-  width: 100%;
-  border-radius: 5px 5px 0 0;
+const CardImg = styled.div`
+  min-height: 230px;
+  margin: 0 auto 35px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 const CardTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
+  color: #fff;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-bottom: 25px;
+  text-align: left;
 `;
 const CardSubContent = styled.div`
-  ${color}
-  ${typography}
+  font-size: 18px;
+  color: #95a1bb;
+  line-height: 18px;
+  text-align: left;
 `;
 
 const NewsCard = (props) => {
   const { newsTitle, newsDescription, newsUrlToImage } = props;
   return (
-    <Card>
-      <CardImg src={newsUrlToImage} />
-      <CardContainer>
-        <CardTitle
-          color="white"
-          fontFamily="Roboto"
-          fontSize={24}
-          lineHeight="32px"
-          fontWeight="bold"
-          mb={3}
-        >
-          {newsTitle}
-        </CardTitle>
-        <CardSubContent
-          color="white"
-          fontFamily="Roboto"
-          fontSize={16}
-          lineHeight="20px"
-        >
-          {newsDescription}
-        </CardSubContent>
-      </CardContainer>
-    </Card>
+    <>
+      <CardImg style={{ backgroundImage: `url(${newsUrlToImage})` }} />
+      <div>
+        <CardTitle>{newsTitle}</CardTitle>
+        <CardSubContent>{newsDescription}</CardSubContent>
+      </div>
+    </>
   );
 };
 
