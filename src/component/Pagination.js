@@ -25,7 +25,7 @@ const PagnitionUl = styled.ul`
     padding: 0px;
     background-color: transparent;
     border-radius: 4px;
-    color: #474d57;
+    color: #fff;
     font-weight: 400;
     :hover {
       background-color: #eaecef;
