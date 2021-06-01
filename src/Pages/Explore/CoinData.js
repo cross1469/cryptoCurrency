@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { color, space, typography, flexbox } from "styled-system";
 import { Link } from "react-router-dom";
 import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
 import defaultStar from "../../images/default_star.png";
@@ -9,30 +8,109 @@ import activeStar from "../../images/active_star.png";
 import Pagination from "../../Component/Pagination";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
+import { ReactComponent as Search } from "../../images/search.svg";
 
-const CoinDataTitle = styled.div`
-  ${typography}
-  ${space}
-  ${flexbox}
-  ${color}
+const CoinDataSection = styled.section`
+  background-color: #1c1c1e;
+  display: flex;
+  flex: 1 1 auto;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0px 24px;
 `;
 
-const SearchInput = styled.input`
-  outline: none;
-  height: 32px;
-  border: 1px solid rgba(43, 47, 54, 0.8);
-  border-radius: 4px;
-  :hover {
-    border-color: rgb(240, 185, 11);
-  }
-  ${space}
+const CoinDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  height: 100%;
+  max-height: 100%;
+  margin: 0px;
+  padding: 25px 0px;
+  width: 100%;
+  max-width: 1280px;
 `;
 
-const FlexBox = styled.div`
+const CoinDataHeadContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+`;
+
+const CoinDataHeadLeft = styled.div`
+  flex: 1 1 0%;
+`;
+
+const CoinDataTitle = styled.h1`
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0px;
+  padding: 0px;
+`;
+
+const CoinDataHeadRight = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  max-width: 250px;
+  justify-content: flex-end;
+`;
+
+const SearchSection = styled.section`
+  color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  ${space}
+  width: 100%;
+  height: 48px;
+  padding: 0px 16px;
+  border: 1px solid #dfe1e5;
+  border-radius: 4px;
+  background: #1c1c1e;
+`;
+
+const SearchInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex: 1 1 0%;
+`;
+
+const SearchInputIconContainer = styled.div`
+  margin-right: 16px;
+  width: 20px;
+  height: 20px;
+  svg {
+    filter: invert(100%) sepia(0%) saturate(7471%) hue-rotate(99deg)
+      brightness(102%) contrast(100%);
+  }
+`;
+
+const SearchInput = styled.input`
+  color: #fff;
+  width: 100%;
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  appearance: none;
+  font-size: 16px;
+  :focus {
+    outline: none;
+  }
+`;
+
+const CoinTableStyle = styled.section`
+  width: 100%;
+`;
+
+const CoinTableContainer = styled.div`
+  border: 1px solid rgb(236, 239, 241);
+  box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
+  width: auto;
+  border-radius: 0px;
+  overflow-x: auto;
 `;
 
 const CoinTable = styled.div`
@@ -41,7 +119,6 @@ const CoinTable = styled.div`
   margin-right: auto;
   max-width: 1304px;
   overflow-x: auto;
-  ${space}
   a {
     text-decoration: none;
   }
@@ -58,7 +135,6 @@ const CoinTableHead = styled.div`
   border-right-color: #eaecef;
   border-left-color: #eaecef;
   background-color: #fafafa;
-  ${space}
 `;
 
 const CoinTableHeadItem = styled.div`
@@ -89,7 +165,6 @@ const CoinTableBody = styled.div`
   line-height: 16px;
   font-weight: 400;
   color: #1e2329;
-  ${space}
 `;
 
 const CoinTableBodyItem = styled.div`
@@ -308,48 +383,56 @@ const CoinData = (props) => {
   };
 
   return (
-    <>
-      <FlexBox px={{ sm: 0, md: "16px", lg: "8px" }} mt={2} mb={3}>
-        <CoinDataTitle fontFamily="Roboto" fontSize={28} fontWeight="bold">
-          貨幣資料
-        </CoinDataTitle>
-        <SearchInput
-          type="text"
-          placeholder="Search"
-          value={searchTerm}
-          onChange={handleChange}
-          fontFamily="Roboto"
-          px={2}
-        />
-      </FlexBox>
+    <CoinDataSection>
+      <CoinDataContainer>
+        <CoinDataHeadContainer>
+          <CoinDataHeadLeft>
+            <CoinDataTitle>Coin Datas / Prices</CoinDataTitle>
+          </CoinDataHeadLeft>
+          <CoinDataHeadRight>
+            <SearchSection>
+              <SearchInputContainer>
+                <SearchInputIconContainer>
+                  <Search />
+                </SearchInputIconContainer>
+                <SearchInput
+                  type="text"
+                  placeholder="Search all coins..."
+                  value={searchTerm}
+                  onChange={handleChange}
+                />
+              </SearchInputContainer>
+            </SearchSection>
+          </CoinDataHeadRight>
+        </CoinDataHeadContainer>
 
-      <CoinTable
-        px={{ sm: 0, md: "16px", lg: "8px" }}
-        mb={3}
-        id="CoinDatas"
-        hover
-      >
-        <CoinTableHead mb={3}>
-          <CoinTableHeadItem>交易對</CoinTableHeadItem>
-          <CoinTableHeadItem>最新價格</CoinTableHeadItem>
-          <CoinTableHeadItem>24H 漲跌</CoinTableHeadItem>
-          <CoinTableHeadItem>24H 最高</CoinTableHeadItem>
-          <CoinTableHeadItem>24H 最低</CoinTableHeadItem>
-          <CoinTableHeadItem>24H 成交量</CoinTableHeadItem>
-        </CoinTableHead>
-        {renderCoinDatas()}
-      </CoinTable>
-      <div className="pagination-wrapper">
-        <Pagination
-          totalRecords={NUM_OF_RECORDS}
-          pageLimit={limit}
-          pageNeighbours={1}
-          onPageChanged={onPageChanged}
-          currentPage={currentPage}
-        />
-      </div>
+        <CoinTableStyle>
+          <CoinTableContainer>
+            <CoinTable id="CoinDatas" hover>
+              <CoinTableHead>
+                <CoinTableHeadItem>交易對</CoinTableHeadItem>
+                <CoinTableHeadItem>最新價格</CoinTableHeadItem>
+                <CoinTableHeadItem>24H 漲跌</CoinTableHeadItem>
+                <CoinTableHeadItem>24H 最高</CoinTableHeadItem>
+                <CoinTableHeadItem>24H 最低</CoinTableHeadItem>
+                <CoinTableHeadItem>24H 成交量</CoinTableHeadItem>
+              </CoinTableHead>
+              {renderCoinDatas()}
+            </CoinTable>
+            <div className="pagination-wrapper">
+              <Pagination
+                totalRecords={NUM_OF_RECORDS}
+                pageLimit={limit}
+                pageNeighbours={1}
+                onPageChanged={onPageChanged}
+                currentPage={currentPage}
+              />
+            </div>
+          </CoinTableContainer>
+        </CoinTableStyle>
+      </CoinDataContainer>
       <Toast toastList={list} autoDelete dismissTime={5000} />
-    </>
+    </CoinDataSection>
   );
 };
 
