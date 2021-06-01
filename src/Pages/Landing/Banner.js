@@ -1,30 +1,68 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
+import { color } from "styled-system";
+import { ReactComponent as BannerSvg } from "../../images/banner.svg";
 
-const BannerBg = styled.div`
-  height: 200px;
+const BannerBg = styled.section`
+  display: flex;
+  flex-shrink: 0;
+  width: 100%;
+  margin: 0px auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  overflow: hidden;
+  padding-left: 56px;
+  padding-right: 56px;
   ${color}
-  ${space}
 `;
 const BannerCotainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  flex-direction: row;
+  .leftSection {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 100px;
+    padding-bottom: 111px;
+    flex: 1 1 0%;
+  }
+  .rightSection {
+    display: flex;
+    padding-top: 40px;
+    padding-left: 24px;
+    justify-content: flex-end;
+    flex: 2 1 0%;
+    svg {
+      height: 608px;
+      width: auto;
+    }
+  }
 `;
-const BannerTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
+const BannerTitle = styled.h1`
+  max-width: 425px;
+  font-size: 62px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #fff;
 `;
-const BannerSubtitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
+const BannerSubtitle = styled.h3`
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 32px;
+  color: #fff;
 `;
 const BannerToExploreBtn = styled.button`
+  position: relative;
+  width: 100%;
+  padding: 24px;
+  font-size: 16px;
   cursor: pointer;
   border: none;
   outline: none;
@@ -34,7 +72,6 @@ const BannerToExploreBtn = styled.button`
     rgb(248, 209, 47) 0%,
     rgb(240, 185, 11) 100%
   );
-  ${space}
   :hover {
     background-image: linear-gradient(
       rgb(255, 226, 81) 0%,
@@ -43,51 +80,26 @@ const BannerToExploreBtn = styled.button`
   }
   a {
     text-decoration: none;
-    ${color}
-    ${typography}
   }
 `;
 
 const Banner = () => (
-  <BannerBg
-    bg="black"
-    px={{ _: "12px", sm: "24px", md: "36px" }}
-    py={{ _: "70px", lg: "100px" }}
-  >
+  <BannerBg bg="#0b0e11">
     <BannerCotainer>
-      <BannerTitle
-        color="white"
-        fontFamily="Roboto"
-        fontSize={36}
-        lineHeight="48px"
-        mb={3}
-        fontWeight="bold"
-        letterSpacing={1}
-      >
-        加密貨幣交易所 <br /> Cryptocurrency Exchange
-      </BannerTitle>
-      <BannerSubtitle
-        color="white"
-        fontFamily="Roboto"
-        fontSize={28}
-        lineHeight="36px"
-        mb={3}
-        letterSpacing={1}
-      >
-        買賣加密貨幣聯通全世界
-      </BannerSubtitle>
-      <Link to="/explore">
-        <BannerToExploreBtn
-          color="#212833"
-          py={2}
-          fontFamily="Roboto"
-          fontWeight="bold"
-          fontSize={16}
-          letterSpacing={1}
-        >
-          Explore
-        </BannerToExploreBtn>
-      </Link>
+      <div className="leftSection">
+        <BannerTitle>
+          <span>Cryptocurrency Exchange</span>
+        </BannerTitle>
+        <BannerSubtitle>
+          <span>Buy and sell cryptocurrency to connect to the world</span>
+        </BannerSubtitle>
+        <Link to="/explore">
+          <BannerToExploreBtn>Explore</BannerToExploreBtn>
+        </Link>
+      </div>
+      <div className="rightSection">
+        <BannerSvg />
+      </div>
     </BannerCotainer>
   </BannerBg>
 );

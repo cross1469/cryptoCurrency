@@ -4,10 +4,11 @@ import { color } from "styled-system";
 
 const FooterStyled = styled.footer`
   position: relative;
+  border-top: 1px solid #fff;
   bottom: 0;
   ${color}
   .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 0px;
   }
