@@ -15,6 +15,7 @@ import logo from "../images/logo.svg";
 
 const Navigation = styled.header`
   width: 100%;
+  border-bottom: 1px solid white;
   ${color}
   ${typography}
   .container {
