@@ -17,8 +17,7 @@ const BannerBg = styled.section`
   ${color}
 `;
 const BannerCotainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1280px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -38,7 +37,20 @@ const BannerCotainer = styled.div`
     flex: 2 1 0%;
     svg {
       height: 608px;
-      width: auto;
+    }
+  }
+  @media (max-width: 996px) {
+    flex-wrap: wrap;
+    .leftSection {
+      align-items: center;
+    }
+  }
+  @media (max-width: 768px) {
+    .leftSection {
+      align-items: flex-start;
+    }
+    .rightSection {
+      display: none;
     }
   }
 `;
@@ -50,6 +62,10 @@ const BannerTitle = styled.h1`
   margin-top: 8px;
   margin-bottom: 16px;
   color: #fff;
+  @media (max-width: 576px) {
+    font-size: 34px;
+    line-height: 40px;
+  }
 `;
 const BannerSubtitle = styled.h3`
   font-size: 20px;
@@ -57,6 +73,11 @@ const BannerSubtitle = styled.h3`
   line-height: 1.4;
   margin-bottom: 32px;
   color: #fff;
+  @media (max-width: 576px) {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
 `;
 const BannerToExploreBtn = styled.button`
   position: relative;
@@ -64,10 +85,9 @@ const BannerToExploreBtn = styled.button`
   padding: 24px;
   font-size: 16px;
   cursor: pointer;
-  border: none;
-  outline: none;
   width: 120px;
   border-radius: 4px;
+  font-family: "Exo 2", sans-serif;
   background-image: linear-gradient(
     rgb(248, 209, 47) 0%,
     rgb(240, 185, 11) 100%
