@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Reset } from "styled-reset";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
+import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
 import CoinDetail from "./Pages/CoinDetail";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
@@ -27,7 +27,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App">
-          <Reset />
+          <ResetStyle />
+          <GlobalStyle />
           <Header />
           <Route exact path="/coindetail/:symbol" component={CoinDetail} />
           <Route exact path="/explore" component={Explore} />

@@ -14,19 +14,19 @@ import errorIcon from "../images/error.svg";
 import logo from "../images/logo.svg";
 
 const Navigation = styled.header`
-  font-size: 36px;
-  line-height: 48px;
-  letter-spacing: 1rem;
   width: 100%;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 140px;
   ${color}
   ${typography}
+  .container {
+    height: 67px;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    box-sizing: content-box;
+  }
   .logo a {
-    padding-left: 36px;
     display: flex;
     flex-direction: column;
     text-decoration: none;
@@ -54,14 +54,15 @@ const Navigation = styled.header`
     }
     li {
       justify-content: space-between;
-      font-size: 24px;
-      letter-spacing: 0.2rem;
-      line-height: 36px;
+      font-size: 14px;
+      line-height: 16px;
     }
     a {
-      padding-right: 24px;
       font-size: 1em;
+      margin: 0px 18px;
       text-decoration: none;
+      letter-spacing: 1px;
+      font-weight: 500;
       .active {
         color: #f0b90b;
       }
@@ -70,13 +71,15 @@ const Navigation = styled.header`
       color: #f0b90b;
     }
     button {
-      padding-right: 24px;
-      font-size: 1em;
-      letter-spacing: 0.2rem;
+      font-size: 14px;
+      margin: 0px 18px;
+      line-height: 16px;
       text-decoration: none;
       border: none;
       outline: none;
       cursor: pointer;
+      letter-spacing: 1px;
+      font-weight: 500;
       ${color}
       :hover {
         color: #f0b90b;
@@ -85,12 +88,6 @@ const Navigation = styled.header`
   }
 
   @media only screen and (max-width: 768px) {
-    padding: 0px;
-    .logo a {
-      font-size: 28px;
-      padding-left: 24px;
-    }
-
     nav {
       li {
         font-size: 16px;
@@ -98,38 +95,34 @@ const Navigation = styled.header`
     }
   }
   @media only screen and (max-width: 576px) {
-    height: auto;
-    min-height: 50px;
-    display: block;
-    position: relative;
-    .logo {
-      width: 100%;
+    .container {
       display: block;
-      margin: 0px;
-      a {
-        padding-top: 12px;
-        padding-left: 12px;
-      }
+      padding: 0;
+      position: relative;
+    }
+    .logo {
+      display: flex;
+      padding-top: 10px;
+      padding-left: 20px;
     }
     .fa-bars {
       display: inline-block;
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 17px;
+      right: 20px;
       cursor: pointer;
     }
     ul.collapsed {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      display: block;
       overflow: hidden;
+      background-color: #12161c;
       max-height: 0;
       transition-duration: 0.4s;
       transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 
       &.is-expanded {
+        width: 100%;
         overflow: hidden;
         max-height: 300px;
         transition-duration: 0.4s;
@@ -138,8 +131,12 @@ const Navigation = styled.header`
       li {
         width: 100%;
         font-size: 16px;
-        line-height: 24px;
-        padding: 16px 12px;
+      }
+
+      li a,
+      li button {
+        display: block;
+        padding: 20px 24px;
       }
     }
   }
@@ -150,7 +147,7 @@ const Header = () => {
   const [email, setemail] = useState(null);
   const [list, setList] = useState([]);
   const [uid, setUid] = useState(null);
-  const [loginStatus, setLoginStatus] = useState("LOGIN");
+  const [loginStatus, setLoginStatus] = useState("Sign In");
   let toastProperties = null;
 
   const history = useHistory();
@@ -194,7 +191,7 @@ const Header = () => {
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
     showToast("successSignOut");
-    setLoginStatus("LOGIN");
+    setLoginStatus("Login");
     setUid(null);
   };
 
@@ -213,11 +210,11 @@ const Header = () => {
         if (userEmail) {
           setemail(userEmail);
           setUid(userUid);
-          setLoginStatus("LOGOUT");
+          setLoginStatus("Sign Out");
         } else {
           setemail(userEmail);
           setUid(userUid);
-          setLoginStatus("LOGIN");
+          setLoginStatus("Sign In");
         }
       }),
     []
@@ -225,49 +222,63 @@ const Header = () => {
 
   return (
     <>
-      <Navigation bg="black" color="white" fontFamily="Roboto">
-        <div className="logo">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-          </Link>
-        </div>
-        <nav className="nav">
-          <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
-          <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
-            <li>
-              <NavLink activeClassName="active" to="/explore">
-                EXPLORE
-              </NavLink>
-            </li>
-            <li>
-              <button
-                type="button"
-                activeClassName="active"
-                onClick={handleClickCheckMember}
-              >
-                PORTFOLIO
-              </button>
-            </li>
-            {email || uid ? (
+      <Navigation bg="black" color="white">
+        <div className="container">
+          <div className="logo">
+            <Link to="/">
+              <img src={logo} alt="logo" />
+            </Link>
+          </div>
+          <nav className="nav">
+            <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
+            <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
               <li>
-                <button bg="black" type="button" onClick={handleClickSignOut}>
-                  {loginStatus}
-                </button>
+                <NavLink activeClassName="active" to="/explore">
+                  Explore
+                </NavLink>
               </li>
-            ) : (
               <li>
                 <button
-                  bg="black"
                   type="button"
-                  onClick={() => signModal.current.open()}
+                  activeClassName="active"
+                  onClick={handleClickCheckMember}
                 >
-                  {loginStatus}
+                  Portfolio
                 </button>
               </li>
-            )}
-          </ul>
-        </nav>
+              {email || uid ? (
+                <li>
+                  <button bg="black" type="button" onClick={handleClickSignOut}>
+                    {loginStatus}
+                  </button>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <button
+                      bg="black"
+                      type="button"
+                      onClick={() => signModal.current.open()}
+                    >
+                      {loginStatus}
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      bg="black"
+                      type="button"
+                      onClick={() => signModal.current.open()}
+                    >
+                      Sign Up
+                    </button>
+                  </li>
+                </>
+              )}
+            </ul>
+          </nav>
+        </div>
       </Navigation>
+
       <CustomModal ref={forgetModal}>
         <Forget />
       </CustomModal>
