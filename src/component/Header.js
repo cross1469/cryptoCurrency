@@ -11,6 +11,7 @@ import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
+import logo from "../images/logo.svg";
 
 const Navigation = styled.header`
   font-size: 36px;
@@ -226,7 +227,9 @@ const Header = () => {
     <>
       <Navigation bg="black" color="white" fontFamily="Roboto">
         <div className="logo">
-          <Link to="/">LOGO</Link>
+          <Link to="/">
+            <img src={logo} alt="logo" />
+          </Link>
         </div>
         <nav className="nav">
           <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
