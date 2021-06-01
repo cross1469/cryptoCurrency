@@ -1,60 +1,47 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { color, space, typography, flexbox, layout } from "styled-system";
 import NewsCard from "./NewsCard";
 
-const NewsBg = styled.div`
-  ${color}
-  ${space}
+const NewsBg = styled.section`
+  padding: 80px 0;
+  text-align: center;
+  background-color: #181a20;
+  color: #fff;
 `;
 const NewsCotainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding-left: 60px;
+  padding-right: 60px;
 `;
 const NewsTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 1.2;
+  margin-bottom: 30px;
 `;
 const NewsSubtitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 18px;
+  color: #95a1bb;
+  margin-bottom: 60px;
+`;
+
+const NewsColumsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 0 65px;
+  justify-content: space-between;
 `;
 
 const NewsCardsContainer = styled.div`
-  max-width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  ${space}
-`;
-
-const NewsCardsSection = styled.div`
-  box-sizing: border-box;
-`;
-
-const FlexBox = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-  font-size: 12px;
-  flex-wrap: wrap;
-  flex-direction: row;
-  ${space}
-`;
-
-const NewsCardItem = styled.div`
-  box-sizing: border-box;
-  ${space}
-  ${flexbox}
-  ${layout}
+  width: calc(33.33% - 50px);
 `;
 
 const NewsCardLink = styled.a`
@@ -77,20 +64,14 @@ const News = () => {
         `https://api.nytimes.com/svc/search/v2/articlesearch.json?facet=true&facet_fields=day_of_week&fq=coin&q=crypto&sort=newest&api-key=${process.env.REACT_APP_NEWS_APIKEY}`
       )
       .then((res) => {
-        const newsFourHeadline = res.data.response.docs.slice(0, 4);
+        const newsFourHeadline = res.data.response.docs.slice(0, 3);
         setNewsHeadlines(newsFourHeadline);
       });
   };
 
   const renderNewsHeadline = () =>
     newsHeadlines.map((news) => (
-      <NewsCardItem
-        px={{ sm: 0, md: "12px", lg: "8px" }}
-        pb={{ sm: "16px", md: "24px", lg: 0 }}
-        width={{ sm: "100%", md: "50%", lg: "auto" }}
-        flex={{ sm: "none", md: "none", lg: 1 }}
-        key={news.pub_date}
-      >
+      <NewsCardsContainer key={news.pub_date}>
         <NewsCardLink href={news.web_url}>
           <NewsCard
             newsTitle={news.headline.main}
@@ -98,7 +79,7 @@ const News = () => {
             newsUrlToImage={`https://www.nytimes.com/${news.multimedia[0].url}`}
           />
         </NewsCardLink>
-      </NewsCardItem>
+      </NewsCardsContainer>
     ));
 
   useEffect(() => {
@@ -107,44 +88,16 @@ const News = () => {
 
   return (
     <>
-      <NewsBg
-        bg="black"
-        px={{ _: "12px", sm: "24px", md: "36px" }}
-        py={{ _: "70px", lg: "100px" }}
-      >
+      <NewsBg>
         <NewsCotainer>
-          <NewsTitle
-            color="white"
-            fontFamily="Roboto"
-            fontSize={36}
-            lineHeight="48px"
-            mb={3}
-            fontWeight="bold"
-            letterSpacing={1}
-          >
-            News
+          <NewsTitle>
+            <span>News</span>
           </NewsTitle>
-          <NewsSubtitle
-            color="white"
-            fontFamily="Roboto"
-            fontSize={28}
-            lineHeight="36px"
-            mb={3}
-            letterSpacing={1}
-          >
-            熱門新聞快訊
+          <NewsSubtitle>
+            <span>You can get the latest cryptocurrency hot news here</span>
           </NewsSubtitle>
         </NewsCotainer>
-        <NewsCardsContainer>
-          <NewsCardsSection
-            px={{ sm: "16px", md: "4px", lg: "24px" }}
-            py="24px"
-          >
-            <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-              {renderNewsHeadline()}
-            </FlexBox>
-          </NewsCardsSection>
-        </NewsCardsContainer>
+        <NewsColumsContainer>{renderNewsHeadline()}</NewsColumsContainer>
       </NewsBg>
     </>
   );
