@@ -30,12 +30,14 @@ function App() {
           <ResetStyle />
           <GlobalStyle />
           <Header />
-          <Route exact path="/coindetail/:symbol" component={CoinDetail} />
-          <Route exact path="/explore" component={Explore} />
-          <Route path="/portfolio">
-            {email !== null ? <Portfolio /> : <Redirect to="/" />}
-          </Route>
-          <Route exact path="/" component={Landing} />
+          <div className="content-container">
+            <Route exact path="/coindetail/:symbol" component={CoinDetail} />
+            <Route exact path="/explore" component={Explore} />
+            <Route path="/portfolio">
+              {email !== null ? <Portfolio /> : <Redirect to="/" />}
+            </Route>
+            <Route exact path="/" component={Landing} />
+          </div>
           <Footer />
         </div>
       </Router>

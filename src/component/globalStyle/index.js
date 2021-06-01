@@ -78,6 +78,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     font-family: 'Exo 2', sans-serif;
   }
+  .content-container {
+    min-height: calc(100vh - 84px);
+  }
 `;
 
 export { GlobalStyle, ResetStyle };
