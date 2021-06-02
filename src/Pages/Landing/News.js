@@ -38,10 +38,16 @@ const NewsColumsContainer = styled.div`
   display: flex;
   padding: 0 65px;
   justify-content: space-between;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const NewsCardsContainer = styled.div`
   width: calc(33.33% - 50px);
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const NewsCardLink = styled.a`
@@ -58,25 +64,32 @@ const NewsCardLink = styled.a`
 
 const News = () => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
+
+  const options = {
+    method: "GET",
+    url: "https://free-news.p.rapidapi.com/v1/search",
+    params: { q: "Crypto", lang: "en" },
+    headers: {
+      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+      "x-rapidapi-host": "free-news.p.rapidapi.com",
+    },
+  };
+
   const coinTopHeadline = () => {
-    axios
-      .get(
-        `https://api.nytimes.com/svc/search/v2/articlesearch.json?facet=true&facet_fields=day_of_week&fq=coin&q=crypto&sort=newest&api-key=${process.env.REACT_APP_NEWS_APIKEY}`
-      )
-      .then((res) => {
-        const newsFourHeadline = res.data.response.docs.slice(0, 3);
-        setNewsHeadlines(newsFourHeadline);
-      });
+    axios.request(options).then((res) => {
+      const newsFourHeadline = res.data.articles.slice(0, 3);
+      setNewsHeadlines(newsFourHeadline);
+    });
   };
 
   const renderNewsHeadline = () =>
     newsHeadlines.map((news) => (
-      <NewsCardsContainer key={news.pub_date}>
-        <NewsCardLink href={news.web_url}>
+      <NewsCardsContainer key={news.id}>
+        <NewsCardLink href={news.link}>
           <NewsCard
-            newsTitle={news.headline.main}
-            newsDescription={news.abstract}
-            newsUrlToImage={`https://www.nytimes.com/${news.multimedia[0].url}`}
+            newsTitle={news.title}
+            newsDescription={news.summary}
+            newsUrlToImage={news.media}
           />
         </NewsCardLink>
       </NewsCardsContainer>

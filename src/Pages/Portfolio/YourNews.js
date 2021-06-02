@@ -2,55 +2,216 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { space, typography, flexbox, layout } from "styled-system";
-import YourNewsCard from "./YourNewsCard";
 import { readWishList } from "../../Utils/firebase";
 
-const YourNewsTitle = styled.div`
-  ${space}
-  ${typography}
+const YourNewsSection = styled.section`
+  border-top: 1px solid rgb(236, 239, 241);
+  margin-top: 88px;
+  color: #fff;
 `;
 
 const YourNewsCardsContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  ${space}
-`;
-
-const YourNewsCardsSection = styled.div`
-  box-sizing: border-box;
-`;
-
-const FlexBox = styled.div`
-  box-sizing: border-box;
-  margin: 0;
   display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-  font-size: 12px;
-  flex-wrap: wrap;
-  flex-direction: row;
-  ${space}
+  flex-direction: column;
+  max-width: 1280px;
+  margin: 0px auto;
+  padding: 88px 16px;
+  @media only screen and (max-width: 768px) {
+    padding-top: 32px;
+  }
 `;
 
-const YourNewsCardItem = styled.div`
-  box-sizing: border-box;
-  ${space}
-  ${flexbox}
-  ${layout}
+const YourNewsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 88px 44px;
 `;
 
-const YourNewsCardLink = styled.a`
-  box-sizing: border-box;
-  padding: 16px;
-  display: block;
-  color: #1e2329;
-  position: relative;
-  border-radius: 3px;
-  box-shadow: rgb(0 0 0 / 4%) 0px 0px 20px 0px;
-  text-decoration: none;
+const YourNewsTitleContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 4px 44px;
+  text-align: center;
+  h2 {
+    margin: 0px;
+    font-size: 44px;
+    line-height: 52px;
+    font-weight: 700;
+  }
+  p {
+    margin: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #95a1bb;
+  }
+`;
+
+const YourNewsContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 56px 44px;
+`;
+
+const YourNewsContentTop = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  gap: 56px 44px;
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
+const YourNewsContentTopLink = styled.a`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
   cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  transition: color 0.25s ease 0s;
+  :hover {
+    color: #f0b90b;
+  }
+`;
+
+const YourNewsTopContent = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 16px 44px;
+`;
+
+const YourNewsTopImageContainer = styled.div`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+`;
+
+const YourNewsTopImage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 0px;
+  padding-top: calc(57.1429%);
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    object-fit: cover;
+    border-style: none;
+  }
+`;
+
+const YourNewsTopBottomContent = styled.div`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+`;
+
+const YourNewsTopBottomContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 8px 44px;
+  h2 {
+    margin: 0px;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+  }
+  p {
+    margin: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #95a1bb;
+  }
+`;
+
+const YourNewsContentBottom = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 56px 44px;
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media only screen and (max-width: 576px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
+const YourNewsContentBottomLink = styled.a`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  transition: color 0.25s ease 0s;
+  :hover {
+    color: #f0b90b;
+  }
+`;
+
+const YourNewsBottomContent = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 16px 44px;
+`;
+
+const YourNewsBottomTopImg = styled.div`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+`;
+
+const YourNewsBottomTopImgContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 0px;
+  padding-top: calc(133.333%);
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    object-fit: cover;
+  }
+`;
+
+const YourNewsBottomBottomTitle = styled.div`
+  height: 100%;
+  min-width: 0px;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+`;
+
+const YourNewsBottomBottomContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+  gap: 8px 44px;
+  h3 {
+    margin: 0px;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+  }
 `;
 
 const YourNews = (props) => {
@@ -58,16 +219,22 @@ const YourNews = (props) => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
   const { email } = props;
 
+  const options = {
+    method: "GET",
+    url: "https://free-news.p.rapidapi.com/v1/search",
+    params: { q: wishStr, lang: "en" },
+    headers: {
+      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+      "x-rapidapi-host": "free-news.p.rapidapi.com",
+    },
+  };
+
   const coinTopHeadline = () => {
     if (wishStr) {
-      axios
-        .get(
-          `https://api.nytimes.com/svc/search/v2/articlesearch.json?facet=true&facet_fields=day_of_week&fq=${wishStr}&q=crypto&sort=newest&api-key=${process.env.REACT_APP_NEWS_APIKEY}`
-        )
-        .then((res) => {
-          const newsFourHeadline = res.data.response.docs.slice(0, 4);
-          setNewsHeadlines(newsFourHeadline);
-        });
+      axios.request(options).then((res) => {
+        const newsFourHeadline = res.data.articles.slice(0, 6);
+        setNewsHeadlines(newsFourHeadline);
+      });
     }
   };
 
@@ -77,31 +244,52 @@ const YourNews = (props) => {
       const wishString = wishListData
         .toString()
         .replace(/USDT/g, "")
-        .replace(/,/g, " OR ");
+        .replace(/,/g, " || ");
       setWishStr(wishString);
     }
   };
-  const renderNewsHeadline = () =>
-    newsHeadlines.map((news) => (
-      <YourNewsCardItem
-        px={{ sm: 0, md: "12px", lg: "8px" }}
-        pb={{ sm: "16px", md: "24px", lg: 0 }}
-        width={{ sm: "100%", md: "50%", lg: "auto" }}
-        flex={{ sm: "none", md: "none", lg: 1 }}
-        key={news.pub_date}
-      >
-        <YourNewsCardLink href={news.web_url}>
-          <YourNewsCard
-            newsTitle={news.headline.main}
-            newsDescription={news.abstract}
-            newsUrlToImage={
-              news.multimedia.length > 0
-                ? `https://www.nytimes.com/${news.multimedia[0].url}`
-                : null
-            }
-          />
-        </YourNewsCardLink>
-      </YourNewsCardItem>
+
+  const renderYourNewsTop = () =>
+    newsHeadlines.slice(0, 2).map((news) => (
+      <YourNewsContentTopLink key={news.id} href={news.link}>
+        <YourNewsTopContent>
+          <YourNewsTopImageContainer>
+            <YourNewsTopImage>
+              <picture>
+                <source media="(max-width: 560px)" />
+                <img src={news.media} alt={news.title} loading="lazy" />
+              </picture>
+            </YourNewsTopImage>
+          </YourNewsTopImageContainer>
+          <YourNewsTopBottomContent>
+            <YourNewsTopBottomContainer>
+              <h2>{news.title}</h2>
+              <p>{news.summary}</p>
+            </YourNewsTopBottomContainer>
+          </YourNewsTopBottomContent>
+        </YourNewsTopContent>
+      </YourNewsContentTopLink>
+    ));
+
+  const renderYourNewsButtom = () =>
+    newsHeadlines.slice(2, 6).map((news) => (
+      <YourNewsContentBottomLink key={news.id} href={news.link}>
+        <YourNewsBottomContent>
+          <YourNewsBottomTopImg>
+            <YourNewsBottomTopImgContainer>
+              <picture>
+                <source media="(max-width: 560px)" />
+                <img src={news.media} alt={news.title} loading="lazy" />
+              </picture>
+            </YourNewsBottomTopImgContainer>
+          </YourNewsBottomTopImg>
+          <YourNewsBottomBottomTitle>
+            <YourNewsBottomBottomContainer>
+              <h4>{news.title}</h4>
+            </YourNewsBottomBottomContainer>
+          </YourNewsBottomBottomTitle>
+        </YourNewsBottomContent>
+      </YourNewsContentBottomLink>
     ));
 
   useEffect(() => {
@@ -110,25 +298,22 @@ const YourNews = (props) => {
   }, [email, wishStr]);
 
   return (
-    <YourNewsCardsContainer>
-      <YourNewsTitle
-        fontFamily="Roboto"
-        fontWeight="bold"
-        fontSize={28}
-        lineHeight="36px"
-        pl={3}
-      >
-        Your News
-      </YourNewsTitle>
-      <YourNewsCardsSection
-        px={{ sm: "16px", md: "4px", lg: "24px" }}
-        py="24px"
-      >
-        <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-          {renderNewsHeadline()}
-        </FlexBox>
-      </YourNewsCardsSection>
-    </YourNewsCardsContainer>
+    <YourNewsSection>
+      <YourNewsCardsContainer>
+        <YourNewsGrid>
+          <YourNewsTitleContainer>
+            <h2>Your News</h2>
+            <p>Welcome to check out the news dedicated to you!</p>
+          </YourNewsTitleContainer>
+          <YourNewsContentContainer>
+            <YourNewsContentTop>{renderYourNewsTop()}</YourNewsContentTop>
+            <YourNewsContentBottom>
+              {renderYourNewsButtom()}
+            </YourNewsContentBottom>
+          </YourNewsContentContainer>
+        </YourNewsGrid>
+      </YourNewsCardsContainer>
+    </YourNewsSection>
   );
 };
 
