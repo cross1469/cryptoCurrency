@@ -104,6 +104,44 @@ const WishListItemStyle = styled.div`
   }
 `;
 
+const WishListHoverButtonContainer = styled.div`
+  position: absolute;
+  inset: 0px;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease 0s;
+  border-radius: 4px;
+`;
+
+const WishListHoverButton = styled.button`
+  position: relative;
+  width: auto;
+  margin: 0px;
+  border-radius: 4px;
+  color: #121212;
+  cursor: pointer;
+  transition: all 80ms ease-in-out 0s;
+  padding: 12px 16px;
+  font-size: 14px;
+  border: none;
+  background-image: linear-gradient(
+    rgb(255, 226, 81) 0%,
+    rgb(237, 196, 35) 100%
+  );
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    pointer-events: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+`;
+
 const WishListMiniItem = styled.div`
   display: flex;
   position: relative;
@@ -225,7 +263,6 @@ const DisplayMobileWishList = styled(MobileWishList)`
 const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
-
   const { email } = props;
 
   const getWishListData = async () => {
@@ -233,6 +270,14 @@ const WishList = (props) => {
       const wishListData = await readWishList(email);
       setWishList(wishListData);
     }
+  };
+
+  const handleBlockButton = (e) => {
+    e.target.style.opacity = 1;
+  };
+
+  const handleNoneButton = (e) => {
+    e.target.style.opacity = 0;
   };
 
   useEffect(() => {
@@ -265,7 +310,12 @@ const WishList = (props) => {
               <WishListItemContainer>
                 <WishListItemModule>
                   <WishListItemStyle>
-                    <Link to={`/coinDetail/${wishData}`} key={item.s}>
+                    <Link
+                      to={`/coinDetail/${wishData}`}
+                      key={item.s}
+                      onMouseEnter={handleBlockButton}
+                      onMouseLeave={handleNoneButton}
+                    >
                       <WishListMiniItem>
                         <WishListMiniItemTop>
                           <label htmlFor="wishDataName">{wishData}</label>
@@ -279,6 +329,11 @@ const WishList = (props) => {
                         </WishListItemPricePercentage>
                         <miniChart />
                       </WishListMiniItem>
+                      <WishListHoverButtonContainer>
+                        <WishListHoverButton>
+                          <span>View asset</span>
+                        </WishListHoverButton>
+                      </WishListHoverButtonContainer>
                     </Link>
                   </WishListItemStyle>
                 </WishListItemModule>
