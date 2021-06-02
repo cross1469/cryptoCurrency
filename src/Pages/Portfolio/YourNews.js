@@ -58,16 +58,22 @@ const YourNews = (props) => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
   const { email } = props;
 
+  const options = {
+    method: "GET",
+    url: "https://free-news.p.rapidapi.com/v1/search",
+    params: { q: wishStr, lang: "en" },
+    headers: {
+      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+      "x-rapidapi-host": "free-news.p.rapidapi.com",
+    },
+  };
+
   const coinTopHeadline = () => {
     if (wishStr) {
-      axios
-        .get(
-          `https://api.nytimes.com/svc/search/v2/articlesearch.json?facet=true&facet_fields=day_of_week&fq=${wishStr}&q=crypto&sort=newest&api-key=${process.env.REACT_APP_NEWS_APIKEY}`
-        )
-        .then((res) => {
-          const newsFourHeadline = res.data.response.docs.slice(0, 4);
-          setNewsHeadlines(newsFourHeadline);
-        });
+      axios.request(options).then((res) => {
+        const newsFourHeadline = res.data.articles.slice(0, 3);
+        setNewsHeadlines(newsFourHeadline);
+      });
     }
   };
 
@@ -77,7 +83,7 @@ const YourNews = (props) => {
       const wishString = wishListData
         .toString()
         .replace(/USDT/g, "")
-        .replace(/,/g, " OR ");
+        .replace(/,/g, " || ");
       setWishStr(wishString);
     }
   };
@@ -88,17 +94,13 @@ const YourNews = (props) => {
         pb={{ sm: "16px", md: "24px", lg: 0 }}
         width={{ sm: "100%", md: "50%", lg: "auto" }}
         flex={{ sm: "none", md: "none", lg: 1 }}
-        key={news.pub_date}
+        key={news.id}
       >
-        <YourNewsCardLink href={news.web_url}>
+        <YourNewsCardLink href={news.link}>
           <YourNewsCard
-            newsTitle={news.headline.main}
-            newsDescription={news.abstract}
-            newsUrlToImage={
-              news.multimedia.length > 0
-                ? `https://www.nytimes.com/${news.multimedia[0].url}`
-                : null
-            }
+            newsTitle={news.title}
+            newsDescription={news.summary}
+            newsUrlToImage={news.media}
           />
         </YourNewsCardLink>
       </YourNewsCardItem>

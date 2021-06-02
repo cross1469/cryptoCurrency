@@ -38,10 +38,16 @@ const NewsColumsContainer = styled.div`
   display: flex;
   padding: 0 65px;
   justify-content: space-between;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const NewsCardsContainer = styled.div`
   width: calc(33.33% - 50px);
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const NewsCardLink = styled.a`

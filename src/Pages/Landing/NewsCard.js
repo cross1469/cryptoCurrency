@@ -22,6 +22,9 @@ const CardSubContent = styled.div`
   color: #95a1bb;
   line-height: 18px;
   text-align: left;
+  @media only screen and (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const NewsCard = (props) => {
