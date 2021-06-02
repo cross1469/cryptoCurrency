@@ -120,14 +120,16 @@ const Explore = () => {
     ));
 
   return (
-    <ExploreContainer mt={3}>
-      <ChartBox px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
-        <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
-          {renderChart()}
-        </FlexBox>
-      </ChartBox>
+    <>
+      <ExploreContainer mt={3}>
+        <ChartBox px={{ sm: "16px", md: "4px", lg: "24px" }} py="24px">
+          <FlexBox mb={{ sm: "-16px", md: "-24px", lg: 0 }}>
+            {renderChart()}
+          </FlexBox>
+        </ChartBox>
+      </ExploreContainer>
       <CoinData email={email} userId={userId} />
-    </ExploreContainer>
+    </>
   );
 };
 
