@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
+import MobileWishList from "./MobileWishList";
 
 const WishListContainer = styled.div`
   display: flex;
@@ -12,6 +13,9 @@ const WishListContainer = styled.div`
   margin-bottom: 22px;
   border-radius: 4px;
   border: 1px solid rgb(236, 239, 241);
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 const WishListHeader = styled.div`
   display: flex;
@@ -211,6 +215,13 @@ const WishListBottomContent = styled.div`
   }
 `;
 
+const DisplayMobileWishList = styled(MobileWishList)`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
@@ -303,6 +314,10 @@ const WishList = (props) => {
           </Link>
         </WishListBottom>
       </WishListContainer>
+      <DisplayMobileWishList
+        wishList={wishList}
+        realTimeDatas={realTimeDatas}
+      />
     </section>
   );
 };
