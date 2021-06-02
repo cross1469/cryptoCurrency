@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const MobileDataSection = styled.section`
   width: 100%;
@@ -51,6 +52,9 @@ const MobileBodyItem = styled.td`
     cursor: default;
     width: 70px;
   }
+  a {
+    color: #fff;
+  }
 `;
 
 const PriceColumn = styled.div`
@@ -79,8 +83,10 @@ const MobileTable = (props) => {
   const renderCoinDatas = () => {
     if (!searchTerm) {
       return currentData.map((realTimeData) => (
-        <tr>
-          <MobileBodyItem>{realTimeData.s}</MobileBodyItem>
+        <tr key={realTimeData.s}>
+          <MobileBodyItem>
+            <Link to={`/coinDetail/${realTimeData.s}`}>{realTimeData.s}</Link>
+          </MobileBodyItem>
           <MobileBodyItem>
             <PriceColumn>
               <h4>{Number(realTimeData.c).toFixed(5)}</h4>
@@ -91,8 +97,10 @@ const MobileTable = (props) => {
       ));
     }
     return searchResults.map((item) => (
-      <tr>
-        <MobileBodyItem>{item.s}</MobileBodyItem>
+      <tr key={item.s}>
+        <MobileBodyItem>
+          <Link to={`/coinDetail/${item.s}`}>{item.s}</Link>
+        </MobileBodyItem>
         <MobileBodyItem>
           <PriceColumn>
             <h4>{Number(item.c).toFixed(5)}</h4>

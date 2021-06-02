@@ -197,6 +197,7 @@ const TradeButton = styled.button`
   width: auto;
   margin: 0px;
   border-radius: 4px;
+  cursor: pointer;
   color: #212833;
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
