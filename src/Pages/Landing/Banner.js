@@ -72,7 +72,7 @@ const BannerSubtitle = styled.h3`
   font-weight: 500;
   line-height: 1.4;
   margin-bottom: 32px;
-  color: #fff;
+  color: #95a1bb;
   @media (max-width: 576px) {
     font-size: 16px;
     line-height: 24px;
