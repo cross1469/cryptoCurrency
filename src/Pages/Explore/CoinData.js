@@ -9,12 +9,12 @@ import Pagination from "../../Component/Pagination";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
+import MobileTable from "./MobileTable";
 
 const CoinDataSection = styled.section`
   background-color: #1c1c1e;
   display: flex;
   flex: 1 1 auto;
-  -webkit-box-align: center;
   align-items: center;
   flex-direction: column;
   padding: 0px 24px;
@@ -105,6 +105,16 @@ const CoinTableStyle = styled.section`
   width: 100%;
   color: #fff;
   margin-bottom: 24px;
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const DisplayMobileTable = styled(MobileTable)`
+  display: none;
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const CoinTableContainer = styled.div`
@@ -152,6 +162,9 @@ const CoinTableBody = styled.tbody`
   transition: opacity 300ms ease 0s;
   tr {
     user-select: none;
+    :hover {
+      background-color: #323539;
+    }
   }
 `;
 
@@ -171,6 +184,7 @@ const CoinTableBodyItem = styled.td`
   svg {
     width: 24px;
     height: 23px;
+    cursor: pointer;
   }
   .defaultStar {
     filter: invert(100%) sepia(93%) saturate(0%) hue-rotate(202deg)
@@ -184,7 +198,6 @@ const TradeButton = styled.button`
   margin: 0px;
   border-radius: 4px;
   color: #212833;
-  cursor: pointer;
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
   font-size: 14px;
@@ -253,10 +266,7 @@ const CoinData = (props) => {
   const handleClickToWish = async (e) => {
     e.preventDefault();
     if (email) {
-      await addAndRemoveWishList(
-        email,
-        e.target.parentNode.parentNode.parentNode.id
-      );
+      await addAndRemoveWishList(email, e.target.id);
       renderInitActiveStar();
     } else {
       showToast("danger");
@@ -353,7 +363,7 @@ const CoinData = (props) => {
   const renderCoinDatas = () => {
     if (!searchTerm) {
       return currentData.map((realTimeData) => (
-        <CoinTableBody mb={3} key={realTimeData.L} id={realTimeData.s}>
+        <tr key={realTimeData.L}>
           <CoinTableBodyItem>{realTimeData.s}</CoinTableBodyItem>
           <CoinTableBodyItem>
             {Number(realTimeData.c).toFixed(5)}
@@ -380,11 +390,11 @@ const CoinData = (props) => {
               <ActiveStar id={realTimeData.s} onClick={handleClickToWish} />
             )}
           </CoinTableBodyItem>
-        </CoinTableBody>
+        </tr>
       ));
     }
     return searchResults.map((item) => (
-      <CoinTableBody mb={3} key={item.L} id={item.s}>
+      <tr key={item.L}>
         <CoinTableBodyItem>{item.s}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
@@ -401,7 +411,7 @@ const CoinData = (props) => {
             <ActiveStar id={item.s} onClick={handleClickToWish} />
           )}
         </CoinTableBodyItem>
-      </CoinTableBody>
+      </tr>
     ));
   };
 
@@ -442,10 +452,16 @@ const CoinData = (props) => {
                   <CoinTableHeadItem>Watch</CoinTableHeadItem>
                 </tr>
               </CoinTableHead>
-              {renderCoinDatas()}
+              <CoinTableBody>{renderCoinDatas()}</CoinTableBody>
             </CoinTable>
           </CoinTableContainer>
         </CoinTableStyle>
+
+        <DisplayMobileTable
+          currentData={currentData}
+          searchTerm={searchTerm}
+          searchResults={searchResults}
+        />
         <div className="pagination-wrapper">
           <Pagination
             totalRecords={NUM_OF_RECORDS}
