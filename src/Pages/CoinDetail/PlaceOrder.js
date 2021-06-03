@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import AutosizeInput from "react-input-autosize";
 import { color, space, typography, flexbox } from "styled-system";
 import {
   updateUsdtPrice,
@@ -15,6 +16,285 @@ import firebaseAddOrder, {
 import Toast from "../../Component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
+import { ReactComponent as Switch } from "../../images/sort.svg";
+
+const BuySellStyle = styled.div`
+  display: flex;
+  width: 100%;
+  position: relative;
+  border-width: 2px 1px 1px;
+  border-style: solid;
+  border-color: #f0b90b rgb(236, 239, 241) rgb(236, 239, 241);
+  border-image: initial;
+  border-radius: 4px;
+  box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
+  padding-top: 0px;
+`;
+
+const BuySellContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 1 0%;
+  min-width: 0px;
+`;
+
+const CryptoContainer = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  z-index: 0;
+  transition: z-index 0ms ease-out 1000ms;
+`;
+
+const TrasitionerContainer = styled.div`
+  position: relative;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  transition: none 0s ease 0s;
+`;
+
+const ModuleFade = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 1;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  user-select: none;
+  align-self: stretch;
+  flex-direction: column;
+  flex: 1 1 0%;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 4px;
+  max-width: 100%;
+`;
+
+const BuySellHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  min-height: 64px;
+  padding-top: 2px;
+  border-bottom: none;
+  span {
+    text-align: center;
+    pointer-events: none;
+    width: 100%;
+    padding: 0px 24px;
+    font-weight: 500;
+    line-height: 1.5;
+    font-size: 18px;
+    display: inline-block;
+    word-break: break-word;
+  }
+`;
+
+const BuySellBody = styled.div`
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  flex: 1 0 0%;
+  padding-top: 32px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 0px;
+  @media only screen and (max-width: 768px) {
+    padding-top: 0px;
+  }
+`;
+
+const BuySellBodyItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 42px;
+  span {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 16px;
+  }
+`;
+
+const BuySellBodyInput = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  flex-direction: row;
+  overflow: hidden;
+  height: 60px;
+`;
+
+const BuySellBodyInputContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  transform: scale(1);
+  flex: 1 1 0%;
+  max-width: 250px;
+`;
+
+const BuySellInputText = styled.div`
+  display: flex;
+  align-items: baseline;
+  text-align: left;
+  color: #f0b90b;
+  font-weight: 400;
+  animation: 0.5s ease 0s 1 normal none running hBgzBc;
+  span {
+    font-weight: 500;
+    color: rgba(#f0b90b, 0.3);
+    font-size: 31px;
+    line-height: 1.5;
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+  input {
+    font-size: 62px;
+    text-align: left;
+    color: #f0b90b;
+    font-weight: 400;
+    background-color: #121212;
+    width: 40px;
+    padding: 0px;
+    margin: 0px;
+    box-shadow: none;
+    border: none;
+    overflow: hidden;
+    outline: none;
+  }
+`;
+
+const BuySellTradeColumn = styled.div`
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  border-radius: 4px;
+  border: 1px solid #fff;
+`;
+
+const BuySellTradeContainer = styled.div`
+  position: relative;
+  border-radius: 4px;
+  border-radius: 4px;
+  user-select: none;
+  text-decoration: none;
+  margin: 0;
+`;
+
+const BuySellTradeTopContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 16px;
+`;
+
+const BuySellTradeTopSubTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80px;
+  span {
+    font-size: 14px;
+    line-height: 16px;
+    transition: color 0.15s ease-out, opacity 0.15s ease-out;
+  }
+`;
+
+const BuySellTradeTopName = styled.div`
+  width: calc(100% - 80px);
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+`;
+
+const BuySellTradeTopNameContainer = styled.div`
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    text-align: left;
+  }
+`;
+
+const EntrySelector = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-radius: 100%;
+`;
+
+const EntrySelectorContainer = styled.div`
+  position: relative;
+  display: flex;
+  padding: 4px;
+`;
+
+const EntrySelectorSize = styled.div`
+  width: 13px;
+  height: 13px;
+  svg {
+    fill: #fff;
+  }
+`;
+
+const BuySellBodyButton = styled.button`
+  position: relative;
+  width: 100%;
+  margin: 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 80ms ease-in-out 0s;
+  padding: 24px;
+  font-size: 16px;
+  background-image: linear-gradient(
+    rgb(248, 209, 47) 0%,
+    rgb(240, 185, 11) 100%
+  );
+  :hover {
+    background-image: linear-gradient(
+      rgb(255, 226, 81) 0%,
+      rgb(237, 196, 35) 100%
+    );
+  }
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    pointer-events: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+`;
 
 const PlaceOrderTitle = styled.div`
   ${color}
@@ -103,7 +383,7 @@ const PlaceOrder = (props) => {
 
   const [list, setList] = useState([]);
   let toastProperties = null;
-
+  const [buyOrSellPrice, setBuyOrSellValue] = useState("");
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [limitOrMarket, setLimitOrMarket] = useState("limit");
   const [buyColor, setBuyColor] = useState({
@@ -167,6 +447,14 @@ const PlaceOrder = (props) => {
         color: "white",
         bg: "#14151a",
       });
+    }
+  };
+
+  const handleChangeInputNewValue = (e) => {
+    const re = /^[0-9\b]+$/;
+
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setBuyOrSellValue(e.target.value);
     }
   };
 
@@ -415,31 +703,112 @@ const PlaceOrder = (props) => {
   );
 
   return (
-    <RenderPlaceOrder className="placeOrder" ml={5}>
-      <PlaceOrderTitle
-        fontFamily="Roboto"
-        fontSize={28}
-        fontWeight="bold"
-        mb={2}
-      >
-        下單
-      </PlaceOrderTitle>
-      {renderBtn()}
-      {renderInput()}
-      <Button
-        onClick={handleClickUploadOrder}
-        px={3}
-        py={12}
-        mb={2}
-        bg={orderBtnColor.bg}
-        color={orderBtnColor.color}
-        fontFamily="Roboto"
-        fontSize={16}
-      >
-        Send
-      </Button>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
-    </RenderPlaceOrder>
+    <>
+      <BuySellStyle>
+        <BuySellContainer>
+          <CryptoContainer>
+            <TrasitionerContainer>
+              <ModuleFade>
+                <ContentContainer>
+                  <BuySellHeader>
+                    <span>Trade</span>
+                  </BuySellHeader>
+                  <BuySellBody>
+                    <BuySellBodyItem>
+                      <BuySellBodyInput>
+                        <BuySellBodyInputContainer>
+                          <BuySellInputText>
+                            <span>$</span>
+                            <AutosizeInput
+                              inputMode="decimal"
+                              inputStyle={{
+                                fontSize: 54,
+                              }}
+                              adjustsFontSizeToFit
+                              placeholder="0"
+                              value={buyOrSellPrice}
+                              onChange={handleChangeInputNewValue}
+                            />
+                          </BuySellInputText>
+                        </BuySellBodyInputContainer>
+                      </BuySellBodyInput>
+                    </BuySellBodyItem>
+                    <BuySellBodyItem>
+                      <BuySellTradeColumn>
+                        <BuySellTradeContainer>
+                          <BuySellTradeTopContainer>
+                            <BuySellTradeTopSubTitle>
+                              <span>From</span>
+                            </BuySellTradeTopSubTitle>
+                            <BuySellTradeTopName>
+                              <BuySellTradeTopNameContainer>
+                                <BuySellTradeTopNameContainer>
+                                  <span>{coin}</span>
+                                </BuySellTradeTopNameContainer>
+                              </BuySellTradeTopNameContainer>
+                            </BuySellTradeTopName>
+                          </BuySellTradeTopContainer>
+                        </BuySellTradeContainer>
+                        <BuySellTradeContainer>
+                          <BuySellTradeTopContainer>
+                            <BuySellTradeTopSubTitle>
+                              <span>To</span>
+                            </BuySellTradeTopSubTitle>
+                            <BuySellTradeTopName>
+                              <BuySellTradeTopNameContainer>
+                                <BuySellTradeTopNameContainer>
+                                  <span>USDT</span>
+                                </BuySellTradeTopNameContainer>
+                              </BuySellTradeTopNameContainer>
+                            </BuySellTradeTopName>
+                          </BuySellTradeTopContainer>
+                        </BuySellTradeContainer>
+                        <EntrySelector>
+                          <EntrySelectorContainer>
+                            <EntrySelectorSize>
+                              <Switch />
+                            </EntrySelectorSize>
+                          </EntrySelectorContainer>
+                        </EntrySelector>
+                      </BuySellTradeColumn>
+                      <span />
+                      <BuySellBodyButton>
+                        <span>Trade</span>
+                      </BuySellBodyButton>
+                    </BuySellBodyItem>
+                  </BuySellBody>
+                </ContentContainer>
+              </ModuleFade>
+            </TrasitionerContainer>
+          </CryptoContainer>
+        </BuySellContainer>
+      </BuySellStyle>
+      <RenderPlaceOrder className="placeOrder" ml={5}>
+        <PlaceOrderTitle
+          fontFamily="Roboto"
+          fontSize={28}
+          fontWeight="bold"
+          mb={2}
+        >
+          下單
+        </PlaceOrderTitle>
+        {renderBtn()}
+        {renderInput()}
+        <Button
+          onClick={handleClickUploadOrder}
+          px={3}
+          py={12}
+          mb={2}
+          bg={orderBtnColor.bg}
+          color={orderBtnColor.color}
+          fontFamily="Roboto"
+          fontSize={16}
+        >
+          Send
+        </Button>
+        <Toast toastList={list} autoDelete dismissTime={5000} />
+      </RenderPlaceOrder>
+    </>
   );
 };
 
