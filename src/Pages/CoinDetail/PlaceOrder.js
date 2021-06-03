@@ -278,6 +278,7 @@ const BuySellBodyButton = styled.button`
     rgb(248, 209, 47) 0%,
     rgb(240, 185, 11) 100%
   );
+
   :hover {
     background-image: linear-gradient(
       rgb(255, 226, 81) 0%,
@@ -452,7 +453,6 @@ const PlaceOrder = (props) => {
 
   const handleChangeInputNewValue = (e) => {
     const re = /^[0-9\b]+$/;
-
     if (e.target.value === "" || re.test(e.target.value)) {
       setBuyOrSellValue(e.target.value);
     }

@@ -25,7 +25,7 @@ import errorIcon from "../../images/error.svg";
 
 const Button = styled.div`
   box-sizing: border-box;
-  padding: 28px 16px;
+  padding: 16px 16px;
   justify-content: space-around;
   ${layout}
 `;
@@ -548,8 +548,8 @@ const MobileButton = (props) => {
   return (
     <div className={className}>
       <Button display={displayBtn}>
-        <PlaceOrderBtn onClick={handleClickPlaceOrderBtn}>下單</PlaceOrderBtn>
-        <AddValueBtn onClick={handleClickAddValueBtn}>加值</AddValueBtn>
+        <PlaceOrderBtn onClick={handleClickPlaceOrderBtn}>Trades</PlaceOrderBtn>
+        <AddValueBtn onClick={handleClickAddValueBtn}>Deposit</AddValueBtn>
       </Button>
       <PlaceOrderSection display={displayPlaceOrder}>
         <PlaceOrderTitleSection>
