@@ -2,66 +2,98 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { color, space, typography, flexbox } from "styled-system";
 import { firebaseReadCoinAsset } from "../../Utils/firebase";
 
+const AssetContainer = styled.section`
+  width: 100%;
+  padding-bottom: 24px;
+  flex-shrink: 0;
+`;
+
+const AssetInnerCard = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  position: relative;
+  flex-direction: column;
+  border: 1px solid rgb(236, 239, 241);
+  border-radius: 4px;
+  box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
+  overflow: hidden;
+`;
+
 const AssetTableTile = styled.div`
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const AssetTableHead = styled.div`
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const AssetTableHeadItem = styled.div`
-  width: 160px;
-  min-width: 160px;
-  text-align: center;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
-  @media only screen and (max-width: 996px) {
-    width: 120px;
-    min-width: 120px;
-  }
-  @media only screen and (max-width: 568px) {
-    width: 80px;
-    min-width: 80px;
+  flex-direction: row;
+  position: relative;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgb(236, 239, 241);
+  border-top: none;
+  flex-shrink: 0;
+  h3 {
+    display: block;
+    margin: 0px;
+    line-height: 23px;
+    font-size: 18px;
+    font-weight: 500;
+    font-variant: tabular-nums;
   }
 `;
 
-const AssetTableBody = styled.div`
+const AssetTrnsitioner = styled.div`
+  position: relative;
+  flex: 1 1 0%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  ${color}
-  ${space}
-  ${typography}
+  flex-direction: column;
+  width: 100%;
+  transition: none 0s ease 0s;
 `;
 
-const AssetTableBodyItem = styled.div`
-  width: 160px;
-  min-width: 160px;
-  text-align: center;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
-  @media only screen and (max-width: 996px) {
-    width: 120px;
-    min-width: 120px;
+const AssetModuleFade = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 1;
+`;
+
+const AssetTableWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const AssetTableColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: initial;
+  overflow: hidden;
+  width: unset;
+  flex-shrink: 1;
+  @media only screen and (max-width: 768px) {
+    width: 45%;
   }
-  @media only screen and (max-width: 568px) {
-    width: 80px;
-    min-width: 80px;
+`;
+
+const AssetTableContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0px 16px;
+  height: 75px;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  @media only screen and (max-width: 768px) {
+    padding: 0px 24px;
+  }
+  h4 {
+    line-height: 23px;
+    font-size: 18px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
@@ -83,27 +115,31 @@ const AssetTable = (props) => {
   }, [email]);
 
   return (
-    <>
-      <AssetTableTile
-        fontFamily="Roboto"
-        fontSize={28}
-        mt={3}
-        mb={3}
-        fontWeight="bold"
-      >
-        資產管理
-      </AssetTableTile>
-      <AssetTableHead fontFamily="Roboto" fontSize={16} py={2}>
-        <AssetTableHeadItem flexGrow={1}>幣種</AssetTableHeadItem>
-        <AssetTableHeadItem flexGrow={1}>可用資產</AssetTableHeadItem>
-      </AssetTableHead>
-      <AssetTableBody fontFamily="Roboto" fontSize={16} py={2}>
-        <AssetTableBodyItem flexGrow={1}>{coin}</AssetTableBodyItem>
-        <AssetTableBodyItem flexGrow={1}>
-          {coinData ? Number(coinData.qty).toFixed(2) : 0}
-        </AssetTableBodyItem>
-      </AssetTableBody>
-    </>
+    <AssetContainer>
+      <AssetInnerCard>
+        <AssetTableTile>
+          <h3>Coin asset</h3>
+        </AssetTableTile>
+        <AssetTrnsitioner>
+          <AssetModuleFade>
+            <AssetTableWrapper>
+              <AssetTableColumn>
+                <AssetTableContainer>
+                  <h4>{coin}</h4>
+                </AssetTableContainer>
+              </AssetTableColumn>
+              <AssetTableColumn>
+                <AssetTableContainer>
+                  <h4>
+                    {coinData ? Number(coinData.qty).toFixed(2) : 0} {coin}
+                  </h4>
+                </AssetTableContainer>
+              </AssetTableColumn>
+            </AssetTableWrapper>
+          </AssetModuleFade>
+        </AssetTrnsitioner>
+      </AssetInnerCard>
+    </AssetContainer>
   );
 };
 

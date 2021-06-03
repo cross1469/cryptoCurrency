@@ -294,7 +294,7 @@ const MobileButton = (props) => {
   const [userUsdt, setUserUsdt] = useState();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
-  const { email } = props;
+  const { email, className } = props;
   const [list, setList] = useState([]);
   let toastProperties = null;
 
@@ -546,7 +546,7 @@ const MobileButton = (props) => {
   }, [email]);
 
   return (
-    <>
+    <div className={className}>
       <Button display={displayBtn}>
         <PlaceOrderBtn onClick={handleClickPlaceOrderBtn}>下單</PlaceOrderBtn>
         <AddValueBtn onClick={handleClickAddValueBtn}>加值</AddValueBtn>
@@ -742,12 +742,13 @@ const MobileButton = (props) => {
         </PlaceOrderBody>
       </PlaceOrderSection>
       <Toast toastList={list} autoDelete dismissTime={5000} />
-    </>
+    </div>
   );
 };
 
 MobileButton.propTypes = {
   email: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
 export default MobileButton;
