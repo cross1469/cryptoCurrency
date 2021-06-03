@@ -10,6 +10,7 @@ const WishListContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #181a20;
+  margin-top: 56px;
   margin-bottom: 22px;
   border-radius: 4px;
   border: 1px solid rgb(236, 239, 241);

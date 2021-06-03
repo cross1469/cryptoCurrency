@@ -2,61 +2,116 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
-import { color, space, typography, flexbox } from "styled-system";
 import { firebaseReadOrder } from "../../Utils/firebase";
 
 const OrderContainer = styled.div`
-  box-shadow: rgb(0 0 0 / 8%) 0px 0px 4px;
+  color: #fff;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  flex-direction: column;
   overflow-x: auto;
-  ${color}
-  ${space}
+  margin-bottom: 56px;
 `;
 
-const OrderTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const OrderTableHead = styled.div`
+const OrderStyledContent = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  ${color}
-  ${space}
-  ${typography}
+  flex-direction: column;
+  flex: 0 1 auto;
+  height: 100%;
+  max-height: 100%;
+  margin: 0px;
+  padding: 25px 0px;
+  width: 100%;
+  max-width: 1280px;
 `;
 
-const OrderTableHeadItem = styled.div`
-  width: 120px;
-  min-width: 120px;
-  text-align: center;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
-`;
-
-const OrderTableBody = styled.div`
+const OrderHeaderContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  ${color}
-  ${space}
-  ${typography}
-  :hover {
-    background-color: rgba(249, 249, 250, 0.7);
+  align-items: flex-end;
+  margin-bottom: 32px;
+`;
+
+const OrderHeaderContent = styled.div`
+  flex: 1 1 0%;
+`;
+
+const OrderHeaderContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  h1 {
+    font-weight: 400;
+    margin: 0px;
+    padding: 0px;
+    span {
+      margin: 8px 0px 0px;
+      font-size: 24px;
+      font-weight: 500;
+    }
   }
 `;
 
-const OrderTableBodyItem = styled.div`
-  width: 120px;
-  min-width: 120px;
-  text-align: center;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
+const OrderSection = styled.section`
+  width: 100%;
+`;
+
+const OrderTableDiv = styled.div`
+  border: 1px solid rgb(236, 239, 241);
+  width: auto;
+  border-radius: 0px;
+  overflow-x: auto;
+`;
+
+const OrderTableContainer = styled.table`
+  width: 100%;
+  padding: 0px;
+  border-spacing: 0px;
+  border-collapse: separate;
+  caption-side: top;
+`;
+
+const OrderThead = styled.thead`
+  border: none;
+  tr {
+    border-bottom: 1px solid rgb(236, 239, 241);
+  }
+`;
+
+const OrderTheadItem = styled.th`
+  padding: 16px 48px 16px 0px;
+  border-bottom: none;
+  text-align: left;
+  :first-child {
+    padding-left: 32px;
+  }
+  :last-child {
+    padding-right: 32px;
+  }
+`;
+const OrderTbody = styled.tbody`
+  padding: 0px;
+  border: none;
+  transition: opacity 300ms ease 0s;
+  tr {
+    user-select: none;
+    :hover {
+      background-color: #323539;
+    }
+  }
+`;
+
+const OrderTbodyItem = styled.td`
+  padding: 14px 48px 14px 0px;
+  border-top: 1px solid rgb(236, 239, 241);
+  cursor: default;
+  position: relative;
+  width: 85px;
+  :first-child {
+    padding-left: 32px;
+  }
+  :last-child {
+    padding-right: 32px;
+  }
 `;
 
 const OrderTable = (props) => {
@@ -100,37 +155,29 @@ const OrderTable = (props) => {
 
         if (symbol === buyData.coinType) {
           return (
-            <OrderTableBody
-              key={buyData.timestamp}
-              fontFamily="Roboto"
-              fontSize={16}
-              py={2}
-            >
-              <OrderTableBodyItem flexGrow={1}>{index + 1}</OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
+            <tr key={buyData.timestamp}>
+              <OrderTbodyItem>
+                <h4>{index + 1}</h4>
+              </OrderTbodyItem>
+              <OrderTbodyItem>
                 {new Date(buyData.timestamp).toLocaleDateString()}
-              </OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
-                {buyData.coinType}
-              </OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
-                $ {buyData.coinPrice}
-              </OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
+              </OrderTbodyItem>
+              <OrderTbodyItem>{buyData.coinType}</OrderTbodyItem>
+              <OrderTbodyItem>$ {buyData.coinPrice}</OrderTbodyItem>
+              <OrderTbodyItem>
                 $ {Number(coinPrice.price).toFixed(2)}
-              </OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
-                {buyData.qty}
-              </OrderTableBodyItem>
-              <OrderTableBodyItem flexGrow={1}>
+              </OrderTbodyItem>
+              <OrderTbodyItem>{buyData.qty}</OrderTbodyItem>
+              <OrderTbodyItem>
+                {" "}
                 {(
                   (Number(coinPrice.price - buyData.coinPrice) /
                     Number(coinPrice.price)) *
                   100
                 ).toFixed(2)}{" "}
                 %
-              </OrderTableBodyItem>
-            </OrderTableBody>
+              </OrderTbodyItem>
+            </tr>
           );
         }
         return null;
@@ -139,27 +186,18 @@ const OrderTable = (props) => {
 
   const renderSellTable = () =>
     sellDatas.map((sellData, index) => (
-      <OrderTableBody
-        key={sellData.timestamp}
-        fontFamily="Roboto"
-        fontSize={16}
-        py={2}
-      >
-        <OrderTableBodyItem flexGrow={1}>{index + 1}</OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>
+      <tr key={sellData.timestamp}>
+        <OrderTbodyItem>{index + 1}</OrderTbodyItem>
+        <OrderTbodyItem>
           {new Date(sellData.timestamp).toLocaleDateString()}
-        </OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>
-          {sellData.coinType}
-        </OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>
-          $ {sellData.coinPrice}
-        </OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>{sellData.qty}</OrderTableBodyItem>
-        <OrderTableBodyItem flexGrow={1}>
+        </OrderTbodyItem>
+        <OrderTbodyItem>{sellData.coinType}</OrderTbodyItem>
+        <OrderTbodyItem>$ {sellData.coinPrice}</OrderTbodyItem>
+        <OrderTbodyItem>{sellData.qty}</OrderTbodyItem>
+        <OrderTbodyItem>
           $ {Number(sellData.coinPrice * sellData.qty).toFixed(2)}
-        </OrderTableBodyItem>
-      </OrderTableBody>
+        </OrderTbodyItem>
+      </tr>
     ));
 
   useEffect(() => {
@@ -172,58 +210,69 @@ const OrderTable = (props) => {
 
   return (
     <>
-      <OrderContainer bg="white" py={2} px={3} mb={4}>
-        <OrderTitle
-          fontFamily="Roboto"
-          fontSize={28}
-          mt={3}
-          mb={3}
-          fontWeight="bold"
-        >
-          買入清單
-        </OrderTitle>
-        <OrderTableHead
-          color="#707a8a"
-          bg="#f5f5f5"
-          fontFamily="Roboto"
-          fontSize={16}
-          py={2}
-        >
-          <OrderTableHeadItem flexGrow={1}>#</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>時間</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>幣別</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>購入價格</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>最新價格</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>數量</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>盈虧</OrderTableHeadItem>
-        </OrderTableHead>
-        {renderBuyTable()}
+      <OrderContainer>
+        <OrderStyledContent>
+          <OrderHeaderContainer>
+            <OrderHeaderContent>
+              <OrderHeaderContentContainer>
+                <h1>
+                  <span>Buy List</span>
+                </h1>
+              </OrderHeaderContentContainer>
+            </OrderHeaderContent>
+          </OrderHeaderContainer>
+
+          <OrderSection>
+            <OrderTableDiv>
+              <OrderTableContainer>
+                <OrderThead>
+                  <tr>
+                    <OrderTheadItem>#</OrderTheadItem>
+                    <OrderTheadItem>Time</OrderTheadItem>
+                    <OrderTheadItem>Name</OrderTheadItem>
+                    <OrderTheadItem>Buy Price</OrderTheadItem>
+                    <OrderTheadItem>Price</OrderTheadItem>
+                    <OrderTheadItem>Quantity</OrderTheadItem>
+                    <OrderTheadItem>Balance</OrderTheadItem>
+                  </tr>
+                </OrderThead>
+                <OrderTbody>{renderBuyTable()}</OrderTbody>
+              </OrderTableContainer>
+            </OrderTableDiv>
+          </OrderSection>
+        </OrderStyledContent>
       </OrderContainer>
-      <OrderContainer bg="white" py={2} px={3} mb={4}>
-        <OrderTitle
-          fontFamily="Roboto"
-          fontSize={28}
-          mt={3}
-          mb={3}
-          fontWeight="bold"
-        >
-          賣出清單
-        </OrderTitle>
-        <OrderTableHead
-          color="#707a8a"
-          bg="#f5f5f5"
-          fontFamily="Roboto"
-          fontSize={16}
-          py={2}
-        >
-          <OrderTableHeadItem flexGrow={1}>#</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>時間</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>幣別</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>賣出價格</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>賣出數量</OrderTableHeadItem>
-          <OrderTableHeadItem flexGrow={1}>賣出總金額</OrderTableHeadItem>
-        </OrderTableHead>
-        {renderSellTable()}
+
+      <OrderContainer>
+        <OrderStyledContent>
+          <OrderHeaderContainer>
+            <OrderHeaderContent>
+              <OrderHeaderContentContainer>
+                <h1>
+                  <span>Sell List</span>
+                </h1>
+              </OrderHeaderContentContainer>
+            </OrderHeaderContent>
+          </OrderHeaderContainer>
+
+          <OrderSection>
+            <OrderTableDiv>
+              <OrderTableContainer>
+                <OrderThead>
+                  <tr>
+                    <OrderTheadItem>#</OrderTheadItem>
+                    <OrderTheadItem>Time</OrderTheadItem>
+                    <OrderTheadItem>Name</OrderTheadItem>
+                    <OrderTheadItem>Sell Price</OrderTheadItem>
+                    <OrderTheadItem>Quantity</OrderTheadItem>
+                    <OrderTheadItem>Total</OrderTheadItem>
+                  </tr>
+                </OrderThead>
+                <OrderTbody>{renderSellTable()}</OrderTbody>
+              </OrderTableContainer>
+            </OrderTableDiv>
+          </OrderSection>
+        </OrderStyledContent>
       </OrderContainer>
     </>
   );
