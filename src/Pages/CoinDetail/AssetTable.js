@@ -7,7 +7,6 @@ import { firebaseReadCoinAsset } from "../../Utils/firebase";
 const AssetContainer = styled.section`
   width: 100%;
   padding-bottom: 24px;
-  flex-shrink: 0;
 `;
 
 const AssetInnerCard = styled.div`
@@ -34,8 +33,7 @@ const AssetTableTile = styled.div`
   h3 {
     display: block;
     margin: 0px;
-    line-height: 23px;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 500;
     font-variant: tabular-nums;
   }
