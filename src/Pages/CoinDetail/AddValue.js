@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
+import AutosizeInput from "react-input-autosize";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
 import { firebaseWriteCoinAsset } from "../../Utils/firebase";
@@ -9,65 +9,212 @@ import Toast from "../../Component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
 
-const RenderAddValue = styled.div`
-  ${space}
-`;
-
-const FlexBox = styled.div`
+const BuySellStyle = styled.div`
   display: flex;
-  justify-content: space-between;
-  ${space}
-`;
-
-const AddValueTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const AddValueBtn = styled.button`
-  outline: none;
-  border: none;
-  cursor: pointer;
-  ${color}
-  ${space}
-`;
-
-const Asset = styled.div`
-  display: flex;
-  justify-content: space-between;
-  ${space}
-  ${typography}
-`;
-const CoinText = styled.div``;
-const CoinSum = styled.div``;
-
-const InputGroup = styled.div`
-  ${space}
-  max-width:70%;
-  display: flex;
-  height: 32px;
-  border: 1px solid rgba(43, 47, 54, 0.8);
+  width: 100%;
+  position: relative;
+  border-width: 2px 1px 1px;
+  border-style: solid;
+  border-color: #f0b90b rgb(236, 239, 241) rgb(236, 239, 241);
+  border-image: initial;
   border-radius: 4px;
+  box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
+  padding-top: 0px;
+`;
+
+const BuySellContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 1 0%;
+  min-width: 0px;
+`;
+
+const CryptoContainer = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  z-index: 0;
+  transition: z-index 0ms ease-out 1000ms;
+`;
+
+const TrasitionerContainer = styled.div`
+  position: relative;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  transition: none 0s ease 0s;
+`;
+
+const ModuleFade = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 1;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  user-select: none;
+  align-self: stretch;
+  flex-direction: column;
+  flex: 1 1 0%;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 4px;
+  max-width: 100%;
+`;
+
+const BuySellHeader = styled.div`
+  display: flex;
+  justify-content: center;
   align-items: center;
-  :hover {
-    border-color: rgb(240, 185, 11);
+  flex-direction: row;
+  position: relative;
+  min-height: 64px;
+  padding-top: 2px;
+  border-bottom: none;
+  span {
+    text-align: center;
+    pointer-events: none;
+    width: 100%;
+    padding: 0px 24px;
+    font-weight: 500;
+    line-height: 1.5;
+    font-size: 18px;
+    display: inline-block;
+    word-break: break-word;
   }
 `;
-const Input = styled.input`
-  width: calc(100% - 40px);
-  outline: none;
-  border: none;
-  ${color}
-  ${space}
-  ${typography}
+
+const BuySellBody = styled.div`
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  flex: 1 0 0%;
+  padding-top: 32px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 0px;
+  @media only screen and (max-width: 768px) {
+    padding-top: 0px;
+  }
 `;
 
-const InputUnit = styled.div`
-  min-width: 40px;
-  ${color}
-  ${space}
-  ${typography}
+const BuySellBodyItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  span {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 16px;
+  }
+`;
+
+const BuySellBodyInput = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  flex-direction: row;
+  overflow: hidden;
+  height: 60px;
+`;
+
+const BuySellBodyInputContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  transform: scale(1);
+  flex: 1 1 0%;
+  max-width: 250px;
+`;
+
+const BuySellInputText = styled.div`
+  display: flex;
+  align-items: baseline;
+  text-align: left;
+  color: #f0b90b;
+  font-weight: 400;
+  animation: 0.5s ease 0s 1 normal none running hBgzBc;
+  span {
+    font-weight: 500;
+    color: rgba(#f0b90b, 0.3);
+    font-size: 31px;
+    line-height: 1.5;
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+  input {
+    font-size: 62px;
+    text-align: left;
+    color: #f0b90b;
+    font-weight: 400;
+    background-color: #121212;
+    width: 40px;
+    padding: 0px;
+    margin: 0px;
+    box-shadow: none;
+    border: none;
+    overflow: hidden;
+    outline: none;
+  }
+`;
+
+const BuySellBodyButton = styled.button`
+  position: relative;
+  width: 100%;
+  margin: 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 80ms ease-in-out 0s;
+  padding: 24px;
+  font-size: 16px;
+  border: 1px solid #f0b90b;
+  color: #fff;
+  :hover {
+    background-image: linear-gradient(
+      rgb(255, 226, 81) 0%,
+      rgb(237, 196, 35) 100%
+    );
+    color: #000;
+  }
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    pointer-events: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+`;
+
+const BuySellFooter = styled.div`
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding-right: 24px;
+  padding-left: 24px;
+  justify-content: space-between;
+  span {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    transition: color 0.15s ease-out, opacity 0.15s ease-out;
+    margin: 0;
+    color: #95a1bb;
+    :last-child {
+      color: #fff;
+    }
+  }
 `;
 
 const AddValue = (props) => {
@@ -82,7 +229,10 @@ const AddValue = (props) => {
   let toastProperties = null;
 
   const handlAddValueInput = (e) => {
-    setAddValue(e.target.value);
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setAddValue(e.target.value);
+    }
   };
 
   const showToast = (type) => {
@@ -137,41 +287,55 @@ const AddValue = (props) => {
   };
 
   return (
-    <RenderAddValue ml={5} mt={4}>
-      <AddValueTitle fontFamily="Roboto" fontSize={28} fontWeight="bold" mb={2}>
-        充值
-      </AddValueTitle>
-      <FlexBox mb={2}>
-        <InputGroup mr={2}>
-          <Input
-            value={addValue}
-            onChange={handlAddValueInput}
-            textAlign="right"
-            px={1}
-            fontFamily="Roboto"
-          />
-          <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-            USDT
-          </InputUnit>
-        </InputGroup>
-        <AddValueBtn
-          fontSize={{ _: 10, lg: 16 }}
-          fontFamily="Roboto"
-          bg="#02c077}"
-          px={{ _: 3 }}
-          color="white"
-          onClick={handleClickAddValue}
-        >
-          加值
-        </AddValueBtn>
-      </FlexBox>
-
-      <Asset fontFamily="Roboto" fontSize={16} mb={2}>
-        <CoinText>USDT 可用：</CoinText>
-        <CoinSum>{Number(usdtQty).toFixed(2)}</CoinSum>
-      </Asset>
+    <>
+      <BuySellStyle>
+        <BuySellContainer>
+          <CryptoContainer>
+            <TrasitionerContainer>
+              <ModuleFade>
+                <ContentContainer>
+                  <BuySellHeader>
+                    <span>Deposit</span>
+                  </BuySellHeader>
+                  <BuySellBody>
+                    <BuySellBodyItem>
+                      <BuySellBodyInput>
+                        <BuySellBodyInputContainer>
+                          <BuySellInputText>
+                            <span>USDT$</span>
+                            <AutosizeInput
+                              inputMode="decimal"
+                              inputStyle={{
+                                fontSize: 54,
+                              }}
+                              adjustsFontSizeToFit
+                              placeholder="0"
+                              value={addValue}
+                              onChange={handlAddValueInput}
+                            />
+                          </BuySellInputText>
+                        </BuySellBodyInputContainer>
+                      </BuySellBodyInput>
+                    </BuySellBodyItem>
+                    <BuySellBodyItem>
+                      <span />
+                      <BuySellBodyButton onClick={handleClickAddValue}>
+                        <span>Deposit</span>
+                      </BuySellBodyButton>
+                    </BuySellBodyItem>
+                  </BuySellBody>
+                  <BuySellFooter>
+                    <span>USDT</span>
+                    <span>{Number(usdtQty).toFixed(2)}</span>
+                  </BuySellFooter>
+                </ContentContainer>
+              </ModuleFade>
+            </TrasitionerContainer>
+          </CryptoContainer>
+        </BuySellContainer>
+      </BuySellStyle>
       <Toast toastList={list} autoDelete dismissTime={5000} />
-    </RenderAddValue>
+    </>
   );
 };
 

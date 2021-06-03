@@ -199,12 +199,13 @@ const Mobile = styled(MobileButton)`
   width: 100%;
   position: fixed;
   bottom: 0;
-  height: 92px;
   overflow-y: initial;
   overflow-x: visible;
   background-color: #1e2026;
   @media only screen and (max-width: 768px) {
     display: block;
+    z-index: 1;
+    height: 72px;
   }
 `;
 
@@ -223,69 +224,71 @@ const CoinDetail = () => {
   );
 
   return (
-    <LayoutWrapper>
-      <LayoutContainer>
-        <TransitionerContainer>
-          <ModuleFade>
-            <OuterHeader>
-              <TransitionerContainer>
-                <ModuleFade>
-                  <InnerContainer>
-                    <HeaderStyled>
-                      <CoinImgContainer />
-                      <CoinTitleContainer>
-                        <CoinTitleInner>
-                          <h1>{symbol}</h1>
-                        </CoinTitleInner>
-                      </CoinTitleContainer>
-                      <WishListBtn>
-                        <span>
-                          <span>WishList</span>
-                        </span>
-                      </WishListBtn>
-                    </HeaderStyled>
-                  </InnerContainer>
-                </ModuleFade>
-              </TransitionerContainer>
-            </OuterHeader>
-
-            <OuterContainer>
-              <InnerContainer>
+    <>
+      <LayoutWrapper>
+        <LayoutContainer>
+          <TransitionerContainer>
+            <ModuleFade>
+              <OuterHeader>
                 <TransitionerContainer>
                   <ModuleFade>
-                    <FlexBox>
-                      <FlexBoxContainer>
-                        <ChartColumn>
-                          <ChartContainer>
-                            <TransitionerContainer>
-                              <ModuleFade>
-                                <KLine />
-                              </ModuleFade>
-                            </TransitionerContainer>
-                          </ChartContainer>
-                          <TransitionerContainer>
-                            <AssetTable email={email} userId={userId} />
-                          </TransitionerContainer>
-                          <TransitionerContainer>
-                            <DealTable />
-                          </TransitionerContainer>
-                        </ChartColumn>
-                        <TradeColumn>
-                          <PlaceOrder email={email} userId={userId} />
-                          <AddValue email={email} userId={userId} />
-                        </TradeColumn>
-                      </FlexBoxContainer>
-                    </FlexBox>
-                    <Mobile email={email} userId={userId} />
-                    <Chat email={email} userId={userId} />
+                    <InnerContainer>
+                      <HeaderStyled>
+                        <CoinImgContainer />
+                        <CoinTitleContainer>
+                          <CoinTitleInner>
+                            <h1>{symbol}</h1>
+                          </CoinTitleInner>
+                        </CoinTitleContainer>
+                        <WishListBtn>
+                          <span>
+                            <span>WishList</span>
+                          </span>
+                        </WishListBtn>
+                      </HeaderStyled>
+                    </InnerContainer>
                   </ModuleFade>
                 </TransitionerContainer>
-              </InnerContainer>
-            </OuterContainer>
-          </ModuleFade>
-        </TransitionerContainer>
-      </LayoutContainer>
-    </LayoutWrapper>
+              </OuterHeader>
+
+              <OuterContainer>
+                <InnerContainer>
+                  <TransitionerContainer>
+                    <ModuleFade>
+                      <FlexBox>
+                        <FlexBoxContainer>
+                          <ChartColumn>
+                            <ChartContainer>
+                              <TransitionerContainer>
+                                <ModuleFade>
+                                  <KLine />
+                                </ModuleFade>
+                              </TransitionerContainer>
+                            </ChartContainer>
+                            <TransitionerContainer>
+                              <AssetTable email={email} userId={userId} />
+                            </TransitionerContainer>
+                            <TransitionerContainer>
+                              <DealTable />
+                            </TransitionerContainer>
+                          </ChartColumn>
+                          <TradeColumn>
+                            <PlaceOrder email={email} userId={userId} />
+                            <AddValue email={email} userId={userId} />
+                          </TradeColumn>
+                        </FlexBoxContainer>
+                      </FlexBox>
+                    </ModuleFade>
+                  </TransitionerContainer>
+                </InnerContainer>
+              </OuterContainer>
+            </ModuleFade>
+          </TransitionerContainer>
+        </LayoutContainer>
+      </LayoutWrapper>
+      <Mobile email={email} userId={userId} />
+      <Chat email={email} userId={userId} />
+    </>
   );
 };
 
