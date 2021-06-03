@@ -158,7 +158,13 @@ const FlexBoxContainer = styled.div`
 const ChartColumn = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 370px);
+  @media only screen and (max-width: 996px) {
+    width: calc(100% - 300px);
+  }
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ChartContainer = styled.div`
@@ -178,7 +184,14 @@ const TradeColumn = styled.div`
   flex-direction: column;
   flex-shrink: 0;
   width: 370px;
-  margin-left: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  @media only screen and (max-width: 996px) {
+    width: 320px;
+  }
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Mobile = styled(MobileButton)`
