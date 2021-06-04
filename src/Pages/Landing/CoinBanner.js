@@ -264,7 +264,7 @@ const StockBanner = () => {
               <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />
             </CoinLogoContainer>
             <div>
-              <CoinSymbol>{symbol}</CoinSymbol>
+              <CoinSymbol>{coin.symbol}</CoinSymbol>
             </div>
           </CoinInfoContainer>
           <CoinPriceContainer>

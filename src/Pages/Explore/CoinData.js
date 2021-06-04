@@ -192,6 +192,14 @@ const CoinTableBodyItem = styled.td`
     width: 70px;
     padding-top: 20px;
   }
+
+  img {
+    height: 20px;
+    aspect-ratio: auto 16 / 16;
+    width: 20px;
+    margin-right: 8px;
+  }
+
   svg {
     width: 24px;
     height: 23px;
@@ -374,36 +382,42 @@ const CoinData = (props) => {
 
   const renderCoinDatas = () => {
     if (!searchTerm) {
-      return currentData.map((realTimeData) => (
-        <tr key={realTimeData.L}>
-          <CoinTableBodyItem>{realTimeData.s}</CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.c).toFixed(5)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.P).toFixed(2)}%
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.n).toFixed(2)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
-              <TradeButton type="button">Trade</TradeButton>
-            </Link>
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {starList.indexOf(realTimeData.s) === -1 ? (
-              <DefaultStar
-                className="defaultStar"
-                id={realTimeData.s}
-                onClick={handleClickToWish}
-              />
-            ) : (
-              <ActiveStar id={realTimeData.s} onClick={handleClickToWish} />
-            )}
-          </CoinTableBodyItem>
-        </tr>
-      ));
+      return currentData.map((realTimeData) => {
+        const symbol = realTimeData.s.replace(/USDT/, "");
+        return (
+          <tr key={realTimeData.L}>
+            <CoinTableBodyItem>
+              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+              {realTimeData.s}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.c).toFixed(5)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.P).toFixed(2)}%
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.n).toFixed(2)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
+                <TradeButton type="button">Trade</TradeButton>
+              </Link>
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {starList.indexOf(realTimeData.s) === -1 ? (
+                <DefaultStar
+                  className="defaultStar"
+                  id={realTimeData.s}
+                  onClick={handleClickToWish}
+                />
+              ) : (
+                <ActiveStar id={realTimeData.s} onClick={handleClickToWish} />
+              )}
+            </CoinTableBodyItem>
+          </tr>
+        );
+      });
     }
     return searchResults.map((item) => (
       <tr key={item.L}>

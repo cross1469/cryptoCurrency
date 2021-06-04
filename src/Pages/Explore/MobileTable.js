@@ -48,7 +48,7 @@ const MobileBodyItem = styled.td`
     padding-left: 24px;
   }
   :last-child {
-    adding-right: 24px;
+    padding-right: 24px;
     cursor: default;
     width: 70px;
   }
