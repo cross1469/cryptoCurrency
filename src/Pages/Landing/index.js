@@ -4,7 +4,7 @@ import { layout, space, flexbox } from "styled-system";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Banner from "./Banner";
-import AreaSpline from "./AreaSpline";
+import Spline from "./Spline";
 import News from "./News";
 
 const ChartContainer = styled.div`
@@ -90,7 +90,7 @@ const Landing = () => {
         key={symbol}
       >
         <Link to={`/coinDetail/${symbol}`}>
-          <AreaSpline symbol={symbol} />
+          <Spline symbol={symbol} />
         </Link>
       </ChartItem>
     ));

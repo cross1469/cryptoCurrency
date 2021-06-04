@@ -24,7 +24,7 @@ const AreaSpline = (props) => {
         setOptions({
           series: [
             {
-              type: "areaspline",
+              type: "spline",
               name: `${symbol}`,
               data: currencyData,
             },
@@ -34,16 +34,32 @@ const AreaSpline = (props) => {
   };
 
   const [options, setOptions] = useState({
+    plotOptions: {
+      spline: {
+        color: "#F0B90B",
+      },
+    },
     chart: {
       zoomType: "x",
       height: 150,
+      backgroundColor: "#121212",
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      enabled: false,
     },
 
     title: {
-      text: `${symbol}`,
+      text: "",
     },
     xAxis: {
       type: "datetime",
+      visible: false,
+    },
+    yAxis: {
+      visible: false,
     },
     tooltip: {
       split: true,
