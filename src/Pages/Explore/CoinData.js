@@ -36,10 +36,17 @@ const CoinDataHeadContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
+  @media only screen and (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const CoinDataHeadLeft = styled.div`
   flex: 1 1 0%;
+  @media only screen and (max-width: 576px) {
+    margin-bottom: 26px;
+  }
 `;
 
 const CoinDataTitle = styled.h1`
@@ -55,6 +62,10 @@ const CoinDataHeadRight = styled.div`
   flex: 1 1 0%;
   max-width: 250px;
   justify-content: flex-end;
+  @media only screen and (max-width: 576px) {
+    max-width: none;
+    width: 100%;
+  }
 `;
 
 const SearchSection = styled.section`
