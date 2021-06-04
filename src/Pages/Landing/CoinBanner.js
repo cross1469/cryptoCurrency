@@ -8,6 +8,9 @@ const CoinBannerWrapper = styled.section`
   padding: 130px 0;
   background-color: #181a20;
   color: #fff;
+  @media only screen and (max-width: 768px) {
+    padding: 90px 0;
+  }
 `;
 
 const CoinBannerFlexContainer = styled.div`
@@ -17,10 +20,6 @@ const CoinBannerFlexContainer = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   @media only screen and (max-width: 768px) {
-    padding-left: 60px;
-    padding-right: 60px;
-  }
-  @media only screen and (max-width: 576px) {
     padding-left: 30px;
     padding-right: 30px;
   }
@@ -31,6 +30,11 @@ const CoinBannerContainer = styled.div`
   flex-flow: row wrap;
   flex-wrap: nowrap;
   justify-content: space-between;
+  @media only screen and (max-width: 768px) {
+    text-align: center;
+    align-items: center;
+    flex-direction: column-reverse;
+  }
 `;
 
 const CoinContainer = styled.div`
@@ -144,9 +148,6 @@ const CoinTextContainer = styled.div`
   position: relative;
   width: 41.67%;
   @media only screen and (max-width: 768px) {
-    width: 75%;
-  }
-  @media only screen and (max-width: 576px) {
     width: 100%;
   }
 `;
@@ -158,6 +159,13 @@ const CoinTextWrapper = styled.div`
   transform: translateY(-50%);
   display: flex;
   flex-flow: row wrap;
+  @media only screen and (max-width: 768px) {
+    position: relative;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    transform: translateY(0);
+  }
   h1 {
     font-weight: 500;
     font-size: 36px;
@@ -167,7 +175,7 @@ const CoinTextWrapper = styled.div`
     transform: translateY(0);
     width: 100%;
     @media only screen and (max-width: 768px) {
-      width: 66.67%;
+      width: 75%;
     }
     @media only screen and (max-width: 576px) {
       width: 100%;
@@ -198,6 +206,9 @@ const CoinTextBtnContainer = styled.div`
   transition-delay: 400ms;
   transition: opacity 600ms cubic-bezier(0.12, 1, 0.78, 0.97),
     transform 500ms cubic-bezier(0.12, 1, 0.78, 0.97);
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 70px;
+  }
 `;
 
 const BannerToExploreBtn = styled.button`
