@@ -9,8 +9,8 @@ const BannerBg = styled.section`
   flex-shrink: 0;
   width: 100%;
   margin: 0px auto;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   overflow: hidden;
   padding-left: 56px;
   padding-right: 56px;
@@ -97,9 +97,6 @@ const BannerToExploreBtn = styled.button`
       rgb(255, 226, 81) 0%,
       rgb(237, 196, 35) 100%
     );
-  }
-  a {
-    text-decoration: none;
   }
 `;
 
