@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
+import Spline from "./Spline";
 
 const WishListContainer = styled.div`
   display: flex;
@@ -328,7 +329,9 @@ const WishList = (props) => {
                         <WishListItemPricePercentage>
                           <h4>{Number(item.P).toFixed(2)}%</h4>
                         </WishListItemPricePercentage>
-                        <miniChart />
+                        <miniChart>
+                          <Spline symbol={wishData} />
+                        </miniChart>
                       </WishListMiniItem>
                       <WishListHoverButtonContainer>
                         <WishListHoverButton>

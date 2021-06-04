@@ -42,7 +42,7 @@ const AreaSpline = (props) => {
     chart: {
       zoomType: "x",
       height: 150,
-      backgroundColor: "#121212",
+      backgroundColor: "#181a20",
     },
     credits: {
       enabled: false,

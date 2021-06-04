@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
+import {
+  addWishList,
+  removeWishList,
+  readWishList,
+} from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
 import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
 import Pagination from "../../Component/Pagination";
@@ -206,8 +210,7 @@ const CoinTableBodyItem = styled.td`
     cursor: pointer;
   }
   .defaultStar {
-    filter: invert(100%) sepia(93%) saturate(0%) hue-rotate(202deg)
-      brightness(107%) contrast(109%);
+    fill: #fff;
   }
 `;
 
@@ -277,6 +280,7 @@ const CoinData = (props) => {
   const renderInitActiveStar = async () => {
     if (email) {
       const wishList = await readWishList(email);
+      console.log(wishList);
       setStarList(wishList);
     } else {
       setStarList([]);
@@ -284,10 +288,19 @@ const CoinData = (props) => {
   };
 
   const handleClickToWish = async (e) => {
-    e.preventDefault();
     if (email) {
-      await addAndRemoveWishList(email, e.target.id);
-      renderInitActiveStar();
+      if (starList.indexOf(e.target.parentNode.parentNode.id) === -1) {
+        await addWishList(email, e.target.parentNode.parentNode.id);
+        const newStarList = [...starList];
+        newStarList.push(e.target.parentNode.parentNode.id);
+        setStarList(newStarList);
+      } else {
+        await removeWishList(email, e.target.parentNode.parentNode.id);
+        const num = starList.indexOf(e.target.parentNode.parentNode.id);
+        const newStarList = [...starList];
+        newStarList.splice(num, 1);
+        setStarList(newStarList);
+      }
     } else {
       showToast("danger");
     }
@@ -348,16 +361,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      if (!dataFirstOpen) {
-        setRealTimeDatas((usdt) => {
-          const newUsdtDatas = [...usdt];
-          coinDatas.forEach((data) => {
-            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-            newUsdtDatas[index] = data;
-          });
-          return newUsdtDatas;
-        });
-      }
+      // if (!dataFirstOpen) {
+      //   setRealTimeDatas((usdt) => {
+      //     const newUsdtDatas = [...usdt];
+      //     coinDatas.forEach((data) => {
+      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+      //       newUsdtDatas[index] = data;
+      //     });
+      //     return newUsdtDatas;
+      //   });
+      // }
     };
 
     return () => socket.close();
@@ -385,7 +398,7 @@ const CoinData = (props) => {
       return currentData.map((realTimeData) => {
         const symbol = realTimeData.s.replace(/USDT/, "");
         return (
-          <tr key={realTimeData.L}>
+          <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
               <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
               {realTimeData.s}
@@ -404,15 +417,11 @@ const CoinData = (props) => {
                 <TradeButton type="button">Trade</TradeButton>
               </Link>
             </CoinTableBodyItem>
-            <CoinTableBodyItem>
+            <CoinTableBodyItem id={realTimeData.s} onClick={handleClickToWish}>
               {starList.indexOf(realTimeData.s) === -1 ? (
-                <DefaultStar
-                  className="defaultStar"
-                  id={realTimeData.s}
-                  onClick={handleClickToWish}
-                />
+                <DefaultStar className="defaultStar" />
               ) : (
-                <ActiveStar id={realTimeData.s} onClick={handleClickToWish} />
+                <ActiveStar />
               )}
             </CoinTableBodyItem>
           </tr>
@@ -420,7 +429,7 @@ const CoinData = (props) => {
       });
     }
     return searchResults.map((item) => (
-      <tr key={item.L}>
+      <tr key={item.L} id={item.s}>
         <CoinTableBodyItem>{item.s}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
@@ -430,11 +439,11 @@ const CoinData = (props) => {
             <TradeButton type="button">Trade</TradeButton>
           </Link>
         </CoinTableBodyItem>
-        <CoinTableBodyItem>
+        <CoinTableBodyItem id={item.s} onClick={handleClickToWish}>
           {starList.indexOf(item.s) === -1 ? (
-            <DefaultStar id={item.s} onClick={handleClickToWish} />
+            <DefaultStar className="defaultStar" />
           ) : (
-            <ActiveStar id={item.s} onClick={handleClickToWish} />
+            <ActiveStar />
           )}
         </CoinTableBodyItem>
       </tr>

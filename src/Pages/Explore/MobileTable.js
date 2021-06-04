@@ -123,10 +123,15 @@ const MobileTable = (props) => {
 };
 
 MobileTable.propTypes = {
-  currentData: PropTypes.arrayOf.isRequired,
-  searchResults: PropTypes.arrayOf.isRequired,
+  currentData: PropTypes.arrayOf(PropTypes.objectOf),
+  searchResults: PropTypes.arrayOf(PropTypes.objectOf),
   searchTerm: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
+};
+
+MobileTable.defaultProps = {
+  searchResults: [],
+  currentData: [],
 };
 
 export default MobileTable;
