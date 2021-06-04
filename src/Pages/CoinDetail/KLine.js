@@ -19,7 +19,6 @@ const KLine = () => {
       )
       .then((res) => {
         const currencyData = [];
-        const volumeData = [];
         for (let i = 0; i < res.data.length; i += 1) {
           currencyData.push([
             res.data[i][0],
@@ -28,7 +27,6 @@ const KLine = () => {
             Number(res.data[i][3]),
             Number(res.data[i][4]),
           ]);
-          volumeData.push([res.data[i][0], Number(res.data[i][5])]);
         }
         // eslint-disable-next-line no-use-before-define
         setOptions({
@@ -37,12 +35,6 @@ const KLine = () => {
               type: "candlestick",
               name: `${symbol}`,
               data: currencyData,
-            },
-            {
-              type: "column",
-              name: `Volume`,
-              data: volumeData,
-              yAxis: 1,
             },
           ],
         });
@@ -79,9 +71,20 @@ const KLine = () => {
   };
 
   const [options, setOptions] = useState({
+    plotOptions: {
+      candlestick: {
+        color: "#f84960",
+        upColor: "#02c076",
+        lineColor: "#f84960",
+        upLineColor: "#02c076",
+      },
+    },
+
     chart: {
       zoomType: "x",
+      backgroundColor: "#121212",
     },
+
     rangeSelector: {
       enabled: true,
       allButtonsEnabled: true,
@@ -146,42 +149,48 @@ const KLine = () => {
         },
       ],
     },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      enabled: false,
+    },
 
     title: {
       text: `${symbol}`,
+      style: { color: "#fff" },
     },
     xAxis: {
       type: "datetime",
+      zoomEnabled: true,
+      labels: {
+        style: {
+          color: "#fff",
+        },
+      },
     },
     yAxis: [
       {
-        labels: {
-          align: "right",
-          x: -3,
-        },
         title: {
           text: "OHLC",
+          style: { color: "#000" },
         },
-        height: "60%",
+        height: "100%",
         lineWidth: 2,
         resize: {
           enabled: true,
         },
-      },
-      {
         labels: {
-          align: "right",
-          x: -3,
+          style: {
+            color: "#fff",
+          },
         },
-        title: {
-          text: "Volume",
-        },
-        top: "65%",
-        height: "35%",
-        offset: 0,
-        lineWidth: 2,
       },
     ],
+
+    loading: {
+      showDuration: 1000,
+    },
 
     tooltip: {
       split: true,

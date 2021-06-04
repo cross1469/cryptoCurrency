@@ -6,7 +6,7 @@ import NewsCard from "./NewsCard";
 const NewsBg = styled.section`
   padding: 80px 0;
   text-align: center;
-  background-color: #181a20;
+  background-color: #0b0e11;
   color: #fff;
 `;
 const NewsCotainer = styled.div`

@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { addAndRemoveWishList, readWishList } from "../../Utils/firebase";
+import {
+  addWishList,
+  removeWishList,
+  readWishList,
+} from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
 import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
 import Pagination from "../../Component/Pagination";
@@ -36,10 +40,17 @@ const CoinDataHeadContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
+  @media only screen and (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const CoinDataHeadLeft = styled.div`
   flex: 1 1 0%;
+  @media only screen and (max-width: 576px) {
+    margin-bottom: 26px;
+  }
 `;
 
 const CoinDataTitle = styled.h1`
@@ -55,6 +66,10 @@ const CoinDataHeadRight = styled.div`
   flex: 1 1 0%;
   max-width: 250px;
   justify-content: flex-end;
+  @media only screen and (max-width: 576px) {
+    max-width: none;
+    width: 100%;
+  }
 `;
 
 const SearchSection = styled.section`
@@ -181,14 +196,21 @@ const CoinTableBodyItem = styled.td`
     width: 70px;
     padding-top: 20px;
   }
+
+  img {
+    height: 20px;
+    aspect-ratio: auto 16 / 16;
+    width: 20px;
+    margin-right: 8px;
+  }
+
   svg {
     width: 24px;
     height: 23px;
     cursor: pointer;
   }
   .defaultStar {
-    filter: invert(100%) sepia(93%) saturate(0%) hue-rotate(202deg)
-      brightness(107%) contrast(109%);
+    fill: #fff;
   }
 `;
 
@@ -258,6 +280,7 @@ const CoinData = (props) => {
   const renderInitActiveStar = async () => {
     if (email) {
       const wishList = await readWishList(email);
+      console.log(wishList);
       setStarList(wishList);
     } else {
       setStarList([]);
@@ -265,10 +288,19 @@ const CoinData = (props) => {
   };
 
   const handleClickToWish = async (e) => {
-    e.preventDefault();
     if (email) {
-      await addAndRemoveWishList(email, e.target.id);
-      renderInitActiveStar();
+      if (starList.indexOf(e.target.parentNode.parentNode.id) === -1) {
+        await addWishList(email, e.target.parentNode.parentNode.id);
+        const newStarList = [...starList];
+        newStarList.push(e.target.parentNode.parentNode.id);
+        setStarList(newStarList);
+      } else {
+        await removeWishList(email, e.target.parentNode.parentNode.id);
+        const num = starList.indexOf(e.target.parentNode.parentNode.id);
+        const newStarList = [...starList];
+        newStarList.splice(num, 1);
+        setStarList(newStarList);
+      }
     } else {
       showToast("danger");
     }
@@ -329,16 +361,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      if (!dataFirstOpen) {
-        setRealTimeDatas((usdt) => {
-          const newUsdtDatas = [...usdt];
-          coinDatas.forEach((data) => {
-            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-            newUsdtDatas[index] = data;
-          });
-          return newUsdtDatas;
-        });
-      }
+      // if (!dataFirstOpen) {
+      //   setRealTimeDatas((usdt) => {
+      //     const newUsdtDatas = [...usdt];
+      //     coinDatas.forEach((data) => {
+      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+      //       newUsdtDatas[index] = data;
+      //     });
+      //     return newUsdtDatas;
+      //   });
+      // }
     };
 
     return () => socket.close();
@@ -363,39 +395,41 @@ const CoinData = (props) => {
 
   const renderCoinDatas = () => {
     if (!searchTerm) {
-      return currentData.map((realTimeData) => (
-        <tr key={realTimeData.L}>
-          <CoinTableBodyItem>{realTimeData.s}</CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.c).toFixed(5)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.P).toFixed(2)}%
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {Number(realTimeData.n).toFixed(2)}
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
-              <TradeButton type="button">Trade</TradeButton>
-            </Link>
-          </CoinTableBodyItem>
-          <CoinTableBodyItem>
-            {starList.indexOf(realTimeData.s) === -1 ? (
-              <DefaultStar
-                className="defaultStar"
-                id={realTimeData.s}
-                onClick={handleClickToWish}
-              />
-            ) : (
-              <ActiveStar id={realTimeData.s} onClick={handleClickToWish} />
-            )}
-          </CoinTableBodyItem>
-        </tr>
-      ));
+      return currentData.map((realTimeData) => {
+        const symbol = realTimeData.s.replace(/USDT/, "");
+        return (
+          <tr key={realTimeData.L} id={realTimeData.s}>
+            <CoinTableBodyItem>
+              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+              {realTimeData.s}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.c).toFixed(5)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.P).toFixed(2)}%
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              {Number(realTimeData.n).toFixed(2)}
+            </CoinTableBodyItem>
+            <CoinTableBodyItem>
+              <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
+                <TradeButton type="button">Trade</TradeButton>
+              </Link>
+            </CoinTableBodyItem>
+            <CoinTableBodyItem id={realTimeData.s} onClick={handleClickToWish}>
+              {starList.indexOf(realTimeData.s) === -1 ? (
+                <DefaultStar className="defaultStar" />
+              ) : (
+                <ActiveStar />
+              )}
+            </CoinTableBodyItem>
+          </tr>
+        );
+      });
     }
     return searchResults.map((item) => (
-      <tr key={item.L}>
+      <tr key={item.L} id={item.s}>
         <CoinTableBodyItem>{item.s}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
         <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
@@ -405,11 +439,11 @@ const CoinData = (props) => {
             <TradeButton type="button">Trade</TradeButton>
           </Link>
         </CoinTableBodyItem>
-        <CoinTableBodyItem>
+        <CoinTableBodyItem id={item.s} onClick={handleClickToWish}>
           {starList.indexOf(item.s) === -1 ? (
-            <DefaultStar id={item.s} onClick={handleClickToWish} />
+            <DefaultStar className="defaultStar" />
           ) : (
-            <ActiveStar id={item.s} onClick={handleClickToWish} />
+            <ActiveStar />
           )}
         </CoinTableBodyItem>
       </tr>

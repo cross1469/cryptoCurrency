@@ -129,22 +129,20 @@ const readWishList = (email) =>
       return wishList;
     });
 
-const addAndRemoveWishList = async (email, wishList) => {
-  const wishListData = await readWishList(email);
+const addWishList = async (email, wishItem) => {
+  db.collection("users")
+    .doc(email)
+    .update({
+      wishList: firebase.firestore.FieldValue.arrayUnion(wishItem),
+    });
+};
 
-  if (wishListData.indexOf(wishList) === -1) {
-    db.collection("users")
-      .doc(email)
-      .update({
-        wishList: firebase.firestore.FieldValue.arrayUnion(wishList),
-      });
-  } else {
-    db.collection("users")
-      .doc(email)
-      .update({
-        wishList: firebase.firestore.FieldValue.arrayRemove(wishList),
-      });
-  }
+const removeWishList = async (email, wishItem) => {
+  db.collection("users")
+    .doc(email)
+    .update({
+      wishList: firebase.firestore.FieldValue.arrayRemove(wishItem),
+    });
 };
 
 const firebaseAuthSignUp = (email, password) =>
@@ -221,7 +219,8 @@ export {
   firebaseReadOrder,
   addChatData,
   readChatData,
-  addAndRemoveWishList,
+  addWishList,
+  removeWishList,
   readWishList,
   firebaseAuthSignUp,
   firebaseAuthSignIn,
