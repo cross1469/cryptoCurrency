@@ -57,13 +57,14 @@ const TrendingCardContainer = styled.div`
     white-space: nowrap;
     flex-direction: column;
     border-radius: 6px;
-    box-sizing: border-box;
     overflow: hidden;
     color: #fff;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
-    background-color: #232f3e80;
     :last-child {
       margin-right: 0;
+    }
+    :hover {
+      border: 1px solid #f0b90b;
     }
     @media only screen and (max-width: 768px) {
       padding: 16px;
