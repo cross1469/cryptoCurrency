@@ -57,7 +57,7 @@ const KLine = () => {
         Number(data.k.c)
       );
       // eslint-disable-next-line no-use-before-define
-      if (options.series[0].data) {
+      if (options.series[0]) {
         // eslint-disable-next-line no-use-before-define
         setOptions((op) => {
           const newOptions = { ...op };

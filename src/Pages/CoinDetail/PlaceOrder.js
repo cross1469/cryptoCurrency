@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import AutosizeInput from "react-input-autosize";
-import { color, space, typography, flexbox } from "styled-system";
 import {
   updateUsdtPrice,
   updateCoinPrice,
@@ -29,6 +28,7 @@ const BuySellStyle = styled.div`
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
+  margin-bottom: 56px;
 `;
 
 const BuySellContainer = styled.div`
@@ -191,6 +191,9 @@ const BuySellTradeContainer = styled.div`
   user-select: none;
   text-decoration: none;
   margin: 0;
+  :first-child {
+    border-bottom: 1px solid;
+  }
 `;
 
 const BuySellTradeTopContainer = styled.div`
@@ -249,6 +252,7 @@ const EntrySelector = styled.div`
   cursor: pointer;
   border: 1px solid #fff;
   border-radius: 100%;
+  background-color: #121212;
 `;
 
 const EntrySelectorContainer = styled.div`
@@ -297,81 +301,6 @@ const BuySellBodyButton = styled.button`
   }
 `;
 
-const PlaceOrderTitle = styled.div`
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const RenderPlaceOrder = styled.div`
-  display: flex;
-  flex-direction: column;
-  ${space}
-`;
-
-const PlaceOrderBtn = styled.div`
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  ${space}
-  ${flexbox}
-`;
-
-const Button = styled.button`
-  border: none;
-  outline: none;
-  cursor: pointer;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
-`;
-
-const AllInput = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-`;
-
-const InputGroup = styled.div`
-  ${space}
-  display: flex;
-  height: 32px;
-  border: 1px solid rgba(43, 47, 54, 0.8);
-  border-radius: 4px;
-  align-items: center;
-  :hover {
-    border-color: rgb(240, 185, 11);
-  }
-`;
-
-const InputText = styled.div`
-  min-width: 48px;
-  flex-grow: 1;
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const InputUnit = styled.div`
-  min-width: 40px;
-  ${color}
-  ${space}
-  ${typography}
-`;
-
-const Input = styled.input`
-  max-width: 40%;
-  outline: none;
-  border: none;
-  ${color}
-  ${space}
-  ${typography}
-`;
-
 const PlaceOrder = (props) => {
   const marketPrice = useSelector(
     (state) => state.coinDetailReducer.marketPrice
@@ -381,88 +310,47 @@ const PlaceOrder = (props) => {
   const coin = symbol.replace(/USDT/, "");
 
   const { email } = props;
-
+  const [inputTopContent, setInputTopContent] = useState("USDT");
+  const [inputBottomContent, setInputBottomContent] = useState(coin);
   const [list, setList] = useState([]);
   let toastProperties = null;
   const [buyOrSellPrice, setBuyOrSellValue] = useState("");
   const [buyOrSell, setBuyOrSell] = useState("buy");
-  const [limitOrMarket, setLimitOrMarket] = useState("limit");
-  const [buyColor, setBuyColor] = useState({
-    color: "white",
-    bg: "#02c077",
-  });
-  const [sellColor, setSellColor] = useState({
-    color: "#848e9c",
-    bg: "#2b3139",
-  });
-  const [marketColor, setMarketColor] = useState({
-    color: "white",
-    bg: "#14151a",
-  });
-  const [orderBtnColor, setOrderBtnColor] = useState({
-    color: "white",
-    bg: "#02c077",
-  });
-
-  const [coinPrice, setCoinPrice] = useState("");
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
   const [userUsdt, setUserUsdt] = useState();
-
-  const handleClickBuy = (e) => {
-    if (e.target.innerHTML === "買入") {
-      setBuyOrSell("buy");
-      setBuyColor({
-        color: "white",
-        bg: "#02c077",
-      });
-      setSellColor({
-        color: "#848e9c",
-        bg: "#2b3139",
-      });
-      setOrderBtnColor({
-        color: "white",
-        bg: "#02c077",
-      });
-    } else if (e.target.innerHTML === "賣出") {
-      setBuyOrSell("sell");
-      setBuyColor({
-        color: "#848e9c",
-        bg: "#2b3139",
-      });
-      setSellColor({
-        color: "white",
-        bg: "#f84960",
-      });
-      setOrderBtnColor({
-        color: "white",
-        bg: "#f84960",
-      });
-    }
-  };
-
-  const handleClickPrice = (e) => {
-    if (e.target.innerHTML === "市價") {
-      setLimitOrMarket("market");
-      setMarketColor({
-        color: "white",
-        bg: "#14151a",
-      });
-    }
-  };
+  const [userCoin, setUserCoin] = useState();
 
   const handleChangeInputNewValue = (e) => {
     const re = /^[0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       setBuyOrSellValue(e.target.value);
+      if (inputTopContent.indexOf("USDT") === -1) {
+        setInputTopContent(`${e.target.value} ${coin}`);
+        setInputBottomContent(
+          `${Number(Number(e.target.value) * Number(marketPrice)).toFixed(
+            5
+          )} USDT`
+        );
+        setBuyOrSell("sell");
+        setQty(e.target.value);
+      } else {
+        setInputTopContent(`${e.target.value} USDT`);
+        setInputBottomContent(
+          `${Number(Number(e.target.value) / Number(marketPrice)).toFixed(
+            5
+          )} ${coin}`
+        );
+        setBuyOrSell("buy");
+        setQty(Number(Number(e.target.value) / Number(marketPrice)).toFixed(5));
+        setTotal(e.target.value);
+      }
     }
   };
 
-  const handleChangeInputValue = (e) => {
-    const orderTotal = Number(marketPrice * e.target.value).toFixed(6);
-    setCoinPrice(marketPrice);
-    setQty(e.target.value);
-    setTotal(orderTotal);
+  const handleClickChangeCoin = () => {
+    setInputTopContent(inputBottomContent);
+    setInputBottomContent(inputTopContent);
   };
 
   const showToast = (type) => {
@@ -558,15 +446,19 @@ const PlaceOrder = (props) => {
     }
   };
 
-  const readUserUsdt = async () => {
+  const readUserUsdtAndCoin = async () => {
     if (email) {
       const userCoinAsset = await firebaseReadCoinAsset(email, coin);
       const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
-      setUserUsdt(userUsdtAsset.qty);
+
       if (userCoinAsset === null) {
+        setUserUsdt(userUsdtAsset.qty);
+        setUserCoin(0);
         dispatch(updateUsdtPrice(userUsdtAsset.qty));
         dispatch(updateCoinPrice(0));
       } else {
+        setUserUsdt(userUsdtAsset.qty);
+        setUserCoin(userCoinAsset.qty);
         dispatch(updateUsdtPrice(userUsdtAsset.qty));
         dispatch(updateCoinPrice(userCoinAsset.qty));
       }
@@ -574,20 +466,17 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickUploadOrder = () => {
-    if (email && total > 0 && userUsdt > total) {
+    if ((email && total > 0 && userUsdt > total) || userCoin > total) {
       const orderData = {
-        coinPrice,
+        coinPrice: marketPrice,
         coinType: coin,
         qty,
-        tradingType: limitOrMarket,
+        tradingType: "market",
         type: buyOrSell,
       };
       firebaseAddOrder(orderData, email);
-      calcAssetForUploadOrder(email, coin, coinPrice, qty);
+      calcAssetForUploadOrder(email, coin, marketPrice, qty);
       showToast("success");
-      setCoinPrice("");
-      setTotal("");
-      setQty("");
     } else if (!total) {
       showToast("dangerTotal");
     } else if (userUsdt < total) {
@@ -598,109 +487,8 @@ const PlaceOrder = (props) => {
   };
 
   useEffect(() => {
-    readUserUsdt();
+    readUserUsdtAndCoin();
   }, [email]);
-
-  const renderBtn = () => (
-    <PlaceOrderBtn>
-      <ButtonGroup onClick={handleClickBuy} mb={2}>
-        <Button
-          px={{ md: 3, lg: 4 }}
-          py={2}
-          bg={buyColor.bg}
-          color={buyColor.color}
-          lineHeight={2}
-          flexGrow={1}
-          fontSize={{ md: 14, lg: 16 }}
-          mr={2}
-          fontFamily="Roboto"
-          fontWeight="100"
-        >
-          買入
-        </Button>
-        <Button
-          px={{ md: 3, lg: 4 }}
-          py={2}
-          bg={sellColor.bg}
-          color={sellColor.color}
-          lineHeight={2}
-          flexGrow={1}
-          fontSize={{ md: 14, lg: 16 }}
-          fontFamily="Roboto"
-        >
-          賣出
-        </Button>
-      </ButtonGroup>
-      <ButtonGroup onClick={handleClickPrice} mb={2}>
-        <Button
-          id="marketPrice"
-          px={{ md: 3, lg: 4 }}
-          py={2}
-          bg={marketColor.bg}
-          color={marketColor.color}
-          lineHeight={2}
-          flexGrow={1}
-          fontSize={{ md: 14, lg: 16 }}
-          fontFamily="Roboto"
-        >
-          市價
-        </Button>
-      </ButtonGroup>
-    </PlaceOrderBtn>
-  );
-
-  const renderInput = () => (
-    <AllInput>
-      <InputGroup mb={2}>
-        <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          市價
-        </InputText>
-        <Input
-          id="price"
-          value={Number(marketPrice).toFixed(6)}
-          textAlign="right"
-          px={1}
-          fontFamily="Roboto"
-          disabled
-        />
-        <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          USDT
-        </InputUnit>
-      </InputGroup>
-      <InputGroup mb={2}>
-        <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          數量
-        </InputText>
-        <Input
-          id="qty"
-          value={qty}
-          onChange={handleChangeInputValue}
-          textAlign="right"
-          px={1}
-          fontFamily="Roboto"
-        />
-        <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          {coin}
-        </InputUnit>
-      </InputGroup>
-      <InputGroup mb={2}>
-        <InputText ml={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          成交額
-        </InputText>
-        <Input
-          id="orderTotal"
-          textAlign="right"
-          px={1}
-          fontFamily="Roboto"
-          value={total}
-          disabled
-        />
-        <InputUnit mr={2} fontSize={{ _: 14, lg: 16 }} fontFamily="Roboto">
-          USDT
-        </InputUnit>
-      </InputGroup>
-    </AllInput>
-  );
 
   return (
     <>
@@ -724,7 +512,6 @@ const PlaceOrder = (props) => {
                               inputStyle={{
                                 fontSize: 54,
                               }}
-                              adjustsFontSizeToFit
                               placeholder="0"
                               value={buyOrSellPrice}
                               onChange={handleChangeInputNewValue}
@@ -743,7 +530,7 @@ const PlaceOrder = (props) => {
                             <BuySellTradeTopName>
                               <BuySellTradeTopNameContainer>
                                 <BuySellTradeTopNameContainer>
-                                  <span>{coin}</span>
+                                  <span>{inputTopContent}</span>
                                 </BuySellTradeTopNameContainer>
                               </BuySellTradeTopNameContainer>
                             </BuySellTradeTopName>
@@ -757,14 +544,16 @@ const PlaceOrder = (props) => {
                             <BuySellTradeTopName>
                               <BuySellTradeTopNameContainer>
                                 <BuySellTradeTopNameContainer>
-                                  <span>USDT</span>
+                                  <span>{inputBottomContent}</span>
                                 </BuySellTradeTopNameContainer>
                               </BuySellTradeTopNameContainer>
                             </BuySellTradeTopName>
                           </BuySellTradeTopContainer>
                         </BuySellTradeContainer>
                         <EntrySelector>
-                          <EntrySelectorContainer>
+                          <EntrySelectorContainer
+                            onClick={handleClickChangeCoin}
+                          >
                             <EntrySelectorSize>
                               <Switch />
                             </EntrySelectorSize>
@@ -772,7 +561,7 @@ const PlaceOrder = (props) => {
                         </EntrySelector>
                       </BuySellTradeColumn>
                       <span />
-                      <BuySellBodyButton>
+                      <BuySellBodyButton onClick={handleClickUploadOrder}>
                         <span>Trade</span>
                       </BuySellBodyButton>
                     </BuySellBodyItem>
@@ -783,31 +572,8 @@ const PlaceOrder = (props) => {
           </CryptoContainer>
         </BuySellContainer>
       </BuySellStyle>
-      <RenderPlaceOrder className="placeOrder" ml={5}>
-        <PlaceOrderTitle
-          fontFamily="Roboto"
-          fontSize={28}
-          fontWeight="bold"
-          mb={2}
-        >
-          下單
-        </PlaceOrderTitle>
-        {renderBtn()}
-        {renderInput()}
-        <Button
-          onClick={handleClickUploadOrder}
-          px={3}
-          py={12}
-          mb={2}
-          bg={orderBtnColor.bg}
-          color={orderBtnColor.color}
-          fontFamily="Roboto"
-          fontSize={16}
-        >
-          Send
-        </Button>
-        <Toast toastList={list} autoDelete dismissTime={5000} />
-      </RenderPlaceOrder>
+
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };

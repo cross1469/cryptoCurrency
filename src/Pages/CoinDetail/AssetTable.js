@@ -7,6 +7,7 @@ import { firebaseReadCoinAsset } from "../../Utils/firebase";
 const AssetContainer = styled.section`
   width: 100%;
   padding-bottom: 24px;
+  padding-top: 24px;
 `;
 
 const AssetInnerCard = styled.div`
