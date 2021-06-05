@@ -57,14 +57,17 @@ const KLine = () => {
         Number(data.k.c)
       );
       // eslint-disable-next-line no-use-before-define
-      setOptions((op) => {
-        const newOptions = { ...op };
-        newOptions.series[0].data = [
-          ...newOptions.series[0].data,
-          newKLineData,
-        ];
-        return newOptions;
-      });
+      if (options.series[0].data) {
+        // eslint-disable-next-line no-use-before-define
+        setOptions((op) => {
+          const newOptions = { ...op };
+          newOptions.series[0].data = [
+            ...newOptions.series[0].data,
+            newKLineData,
+          ];
+          return newOptions;
+        });
+      }
     };
 
     return () => socket.close();

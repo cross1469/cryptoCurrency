@@ -159,6 +159,7 @@ const ForgetPasswordText = styled.div`
   font-size: 12px;
   display: inline-block;
   cursor: pointer;
+  margin-top: 16px;
   ${space}
   &:hover {
     color: #1e2329;
