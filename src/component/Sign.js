@@ -261,16 +261,6 @@ const Sign = (props) => {
     setList([...list, toastProperties]);
   };
 
-  // const resetValidators = () => {
-  //   Object.keys(validators).forEach((fieldName) => {
-  //     validators[fieldName].errors = [];
-  //     validators[fieldName].state = "";
-  //     validators[fieldName].valid = false;
-  //   });
-  // };
-
-  // resetValidators();
-
   const displayValidationErrors = (fieldName) => {
     const validator = validators[fieldName];
     const result = "";
@@ -435,8 +425,8 @@ const Sign = (props) => {
             )}
           </FormCard>
         </section>
-        <Toast toastList={list} autoDelete dismissTime={5000} />
       </Container>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };

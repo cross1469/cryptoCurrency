@@ -168,7 +168,7 @@ const Header = () => {
         toastProperties = {
           id,
           title: "Success",
-          description: "登出成功",
+          description: "Successful signout",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
         };
@@ -177,7 +177,7 @@ const Header = () => {
         toastProperties = {
           id,
           title: "Danger",
-          description: "進入 Portfolio 頁面前，請先登入",
+          description: "Before accessing the portfolio page, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
