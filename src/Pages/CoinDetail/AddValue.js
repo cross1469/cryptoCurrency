@@ -306,9 +306,9 @@ const AddValue = (props) => {
                             <AutosizeInput
                               inputMode="decimal"
                               inputStyle={{
-                                fontSize: 54,
+                                fontSize: 48,
                               }}
-                              adjustsFontSizeToFit
+                              maxLength="5"
                               placeholder="0"
                               value={addValue}
                               onChange={handlAddValueInput}

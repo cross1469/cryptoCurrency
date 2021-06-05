@@ -15,6 +15,7 @@ import logo from "../images/logo.svg";
 
 const Navigation = styled.header`
   width: 100%;
+  position: relative;
   border-bottom: 1px solid white;
   ${color}
   ${typography}
@@ -134,7 +135,6 @@ const Navigation = styled.header`
         font-size: 16px;
       }
 
-      li a,
       li button {
         display: block;
         padding: 20px 24px;

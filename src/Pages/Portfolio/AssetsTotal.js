@@ -132,6 +132,15 @@ const AccountPNLPrice = styled.div`
   span {
     font-size: 32px;
     line-height: 42px;
+    color: ${(props) => {
+      if (props.children[0] > 0) {
+        return "#0ecb81";
+      }
+      if (props.children[0] === 0) {
+        return "#707a8a";
+      }
+      return "#f6465d";
+    }};
   }
   @media only screen and (max-width: 768px) {
     align-items: flex-start;

@@ -111,6 +111,29 @@ const OrderTbodyItem = styled.td`
   }
   :last-child {
     padding-right: 32px;
+    color: ${(props) => {
+      if (props.children[0] > 0) {
+        return "#0ecb81";
+      }
+      if (props.children[0] === 0) {
+        return "#707a8a";
+      }
+      return "#f6465d";
+    }};
+  }
+`;
+
+const OrderTbodySellItem = styled.td`
+  padding: 14px 48px 14px 0px;
+  border-top: 1px solid rgb(236, 239, 241);
+  cursor: default;
+  position: relative;
+  width: 85px;
+  :first-child {
+    padding-left: 32px;
+  }
+  :last-child {
+    padding-right: 32px;
   }
 `;
 
@@ -171,12 +194,11 @@ const OrderTable = (props) => {
               </OrderTbodyItem>
               <OrderTbodyItem>{buyData.qty}</OrderTbodyItem>
               <OrderTbodyItem>
-                {" "}
                 {(
                   (Number(coinPrice.price - buyData.coinPrice) /
                     Number(coinPrice.price)) *
                   100
-                ).toFixed(2)}{" "}
+                ).toFixed(2)}
                 %
               </OrderTbodyItem>
             </tr>
@@ -191,16 +213,16 @@ const OrderTable = (props) => {
     sellDatas.sort((a, b) => a.timestamp - b.timestamp);
     return sellDatas.map((sellData, index) => (
       <tr key={sellData.timestamp}>
-        <OrderTbodyItem>{index + 1}</OrderTbodyItem>
-        <OrderTbodyItem>
+        <OrderTbodySellItem>{index + 1}</OrderTbodySellItem>
+        <OrderTbodySellItem>
           {new Date(sellData.timestamp).toLocaleDateString()}
-        </OrderTbodyItem>
-        <OrderTbodyItem>{sellData.coinType}</OrderTbodyItem>
-        <OrderTbodyItem>$ {sellData.coinPrice}</OrderTbodyItem>
-        <OrderTbodyItem>{sellData.qty}</OrderTbodyItem>
-        <OrderTbodyItem>
+        </OrderTbodySellItem>
+        <OrderTbodySellItem>{sellData.coinType}</OrderTbodySellItem>
+        <OrderTbodySellItem>$ {sellData.coinPrice}</OrderTbodySellItem>
+        <OrderTbodySellItem>{sellData.qty}</OrderTbodySellItem>
+        <OrderTbodySellItem>
           $ {Number(sellData.coinPrice * sellData.qty).toFixed(2)}
-        </OrderTbodyItem>
+        </OrderTbodySellItem>
       </tr>
     ));
   };

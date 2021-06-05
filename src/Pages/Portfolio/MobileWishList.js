@@ -147,6 +147,15 @@ const WishListPriceColumn = styled.div`
       font-size: 18px;
       font-weight: 400;
       margin: 0px;
+      color: ${(props) => {
+        if (props.children[0] > 0) {
+          return "#0ecb81";
+        }
+        if (props.children[0] === 0) {
+          return "#707a8a";
+        }
+        return "#f6465d";
+      }};
     }
   }
 `;

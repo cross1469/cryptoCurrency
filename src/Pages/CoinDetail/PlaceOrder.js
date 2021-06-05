@@ -155,13 +155,20 @@ const BuySellInputText = styled.div`
   span {
     font-weight: 500;
     color: rgba(#f0b90b, 0.3);
-    font-size: 31px;
     line-height: 1.5;
     align-self: flex-start;
     margin-top: 8px;
+    font-size: ${(props) => {
+      if (props.children[1].props.value.length < 3) {
+        return "32px";
+      }
+      if (props.children[1].props.value.length < 7) {
+        return "26px";
+      }
+      return "20px";
+    }};
   }
   input {
-    font-size: 62px;
     text-align: left;
     color: #f0b90b;
     font-weight: 400;
@@ -173,6 +180,15 @@ const BuySellInputText = styled.div`
     border: none;
     overflow: hidden;
     outline: none;
+    font-size: ${(props) => {
+      if (props.children[1].props.value.length < 3) {
+        return "54px";
+      }
+      if (props.children[1].props.value.length < 7) {
+        return "45px";
+      }
+      return "40px";
+    }};
   }
 `;
 
@@ -517,9 +533,7 @@ const PlaceOrder = (props) => {
                             <span>$</span>
                             <AutosizeInput
                               inputMode="decimal"
-                              inputStyle={{
-                                fontSize: 54,
-                              }}
+                              maxLength="7"
                               placeholder="0"
                               value={buyOrSellPrice}
                               onChange={handleChangeInputNewValue}
