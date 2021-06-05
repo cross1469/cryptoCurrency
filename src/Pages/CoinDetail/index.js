@@ -225,7 +225,6 @@ const Mobile = styled(MobileButton)`
 
 const CoinDetail = () => {
   const { symbol } = useParams();
-  const coin = symbol.replace(/USDT/, "");
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
@@ -238,14 +237,14 @@ const CoinDetail = () => {
   };
 
   const handleWishList = () => {
-    if (userWishList.indexOf(coin) === -1) {
-      addWishList(email, coin);
+    if (userWishList.indexOf(symbol) === -1) {
+      addWishList(email, symbol);
       const newStarList = [...userWishList];
-      newStarList.push(coin);
+      newStarList.push(symbol);
       setUserWishList(newStarList);
     } else {
-      removeWishList(email, coin);
-      const num = userWishList.indexOf(coin);
+      removeWishList(email, symbol);
+      const num = userWishList.indexOf(symbol);
       const newStarList = [...userWishList];
       newStarList.splice(num, 1);
       setUserWishList(newStarList);
@@ -284,7 +283,7 @@ const CoinDetail = () => {
                         </CoinTitleContainer>
                         <WishListBtn onClick={handleWishList}>
                           <span>
-                            {userWishList.indexOf(coin) === -1 ? (
+                            {userWishList.indexOf(symbol) === -1 ? (
                               <>
                                 <DefaultStar />
                                 <span>Add to WishList</span>
