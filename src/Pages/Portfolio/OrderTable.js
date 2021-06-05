@@ -148,8 +148,10 @@ const OrderTable = (props) => {
         setCoinLastPrice(usdtLastPrice);
       });
 
-  const renderBuyTable = () =>
-    buyDatas.map((buyData, index) =>
+  const renderBuyTable = () => {
+    buyDatas.sort((a, b) => a.timestamp - b.timestamp);
+
+    return buyDatas.map((buyData, index) =>
       coinLastPrice.map((coinPrice) => {
         const symbol = coinPrice.symbol.replace(/USDT/, "");
 
@@ -183,9 +185,11 @@ const OrderTable = (props) => {
         return null;
       })
     );
+  };
 
-  const renderSellTable = () =>
-    sellDatas.map((sellData, index) => (
+  const renderSellTable = () => {
+    sellDatas.sort((a, b) => a.timestamp - b.timestamp);
+    return sellDatas.map((sellData, index) => (
       <tr key={sellData.timestamp}>
         <OrderTbodyItem>{index + 1}</OrderTbodyItem>
         <OrderTbodyItem>
@@ -199,6 +203,7 @@ const OrderTable = (props) => {
         </OrderTbodyItem>
       </tr>
     ));
+  };
 
   useEffect(() => {
     getOrderData();
