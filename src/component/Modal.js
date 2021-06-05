@@ -18,7 +18,7 @@ const Modal = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(17, 51, 83, 0.6);
   width: 100%;
   height: 100%;
   display: flex;
@@ -48,7 +48,7 @@ const ModalClose = styled.div`
   cursor: pointer;
   font-size: 1.25em;
   padding: 7px;
-  background: rgba(255, 255, 255, 0.749);
+  background: #f6f9fc;
   border: 1px solid #c3c0c0;
   border-radius: 50%;
   width: 42px;
@@ -69,14 +69,23 @@ const ModalBody = styled.div`
   z-index: 2;
   position: relative;
   margin: 0 auto;
-  background-color: white;
+  background-color: #f6f9fc;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: 100%;
-  padding: 15px 20px;
+  padding: 20px 24px 56px;
   color: #c3c0c0;
+  width: 30%;
+  @media only screen and (max-width: 996px) {
+    width: 50%;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 65%;
+  }
+  @media only screen and (max-width: 576px) {
+    width: 85%;
+  }
 `;
 
 const CustomModal = ({ children, fade = false, defaultOpen = false }, ref) => {
