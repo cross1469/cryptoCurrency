@@ -141,6 +141,15 @@ const CoinPercerntage = styled.div`
   line-height: 18px;
   align-items: center;
   justify-content: flex-end;
+  color: ${(props) => {
+    if (props.children[0] > 0) {
+      return "#0ecb81";
+    }
+    if (props.children[0] === 0) {
+      return "#707a8a";
+    }
+    return "#f6465d";
+  }};
 `;
 
 const CoinTextContainer = styled.div`

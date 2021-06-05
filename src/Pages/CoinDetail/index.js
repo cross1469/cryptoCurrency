@@ -8,7 +8,14 @@ import AddValue from "./AddValue";
 import AssetTable from "./AssetTable";
 import DealTable from "./DealTable";
 import MobileButton from "./MobileButton";
-import { subscribeUserData } from "../../Utils/firebase";
+import {
+  subscribeUserData,
+  readWishList,
+  addWishList,
+  removeWishList,
+} from "../../Utils/firebase";
+import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
+import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -109,9 +116,13 @@ const WishListBtn = styled.button`
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
   font-size: 14px;
-  border: 1px solid rgb(236, 239, 241);
-  background-color: rgb(255, 255, 255);
-  color: rgb(5, 15, 25);
+  border: 1px solid #fff;
+  background-color: #121212;
+  color: #fff;
+  :hover {
+    color: #f0b90b;
+    border: 1px solid #f0b90b;
+  }
   span {
     display: flex;
     align-items: center;
@@ -124,6 +135,9 @@ const WishListBtn = styled.button`
     svg {
       stroke-width: 1px;
       cursor: pointer;
+      height: 24px;
+      width: 24px;
+      fill: #fff;
     }
     span {
       margin-left: 10px;
@@ -213,6 +227,29 @@ const CoinDetail = () => {
   const { symbol } = useParams();
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
+  const [userWishList, setUserWishList] = useState([]);
+
+  const getUserWishList = async () => {
+    if (email) {
+      const wishList = await readWishList(email);
+      setUserWishList(wishList);
+    }
+  };
+
+  const handleWishList = () => {
+    if (userWishList.indexOf(symbol) === -1) {
+      addWishList(email, symbol);
+      const newStarList = [...userWishList];
+      newStarList.push(symbol);
+      setUserWishList(newStarList);
+    } else {
+      removeWishList(email, symbol);
+      const num = userWishList.indexOf(symbol);
+      const newStarList = [...userWishList];
+      newStarList.splice(num, 1);
+      setUserWishList(newStarList);
+    }
+  };
 
   useEffect(
     () =>
@@ -222,6 +259,10 @@ const CoinDetail = () => {
       }),
     []
   );
+
+  useEffect(() => {
+    getUserWishList();
+  }, [email]);
 
   return (
     <>
@@ -240,9 +281,19 @@ const CoinDetail = () => {
                             <h1>{symbol}</h1>
                           </CoinTitleInner>
                         </CoinTitleContainer>
-                        <WishListBtn>
+                        <WishListBtn onClick={handleWishList}>
                           <span>
-                            <span>WishList</span>
+                            {userWishList.indexOf(symbol) === -1 ? (
+                              <>
+                                <DefaultStar />
+                                <span>Add to WishList</span>
+                              </>
+                            ) : (
+                              <>
+                                <ActiveStar />
+                                <span>WishList</span>
+                              </>
+                            )}
                           </span>
                         </WishListBtn>
                       </HeaderStyled>

@@ -196,6 +196,17 @@ const CoinTableBodyItem = styled.td`
     width: 70px;
     padding-top: 20px;
   }
+  :nth-child(3) {
+    color: ${(props) => {
+      if (props.children[0] > 0) {
+        return "#0ecb81";
+      }
+      if (props.children[0] === 0) {
+        return "#707a8a";
+      }
+      return "#f6465d";
+    }};
+  }
 
   img {
     height: 20px;
@@ -280,7 +291,6 @@ const CoinData = (props) => {
   const renderInitActiveStar = async () => {
     if (email) {
       const wishList = await readWishList(email);
-      console.log(wishList);
       setStarList(wishList);
     } else {
       setStarList([]);
@@ -428,26 +438,32 @@ const CoinData = (props) => {
         );
       });
     }
-    return searchResults.map((item) => (
-      <tr key={item.L} id={item.s}>
-        <CoinTableBodyItem>{item.s}</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
-        <CoinTableBodyItem>{Number(item.n).toFixed(2)}</CoinTableBodyItem>
-        <CoinTableBodyItem>
-          <Link to={`/coinDetail/${item.s}`} key={item.s}>
-            <TradeButton type="button">Trade</TradeButton>
-          </Link>
-        </CoinTableBodyItem>
-        <CoinTableBodyItem id={item.s} onClick={handleClickToWish}>
-          {starList.indexOf(item.s) === -1 ? (
-            <DefaultStar className="defaultStar" />
-          ) : (
-            <ActiveStar />
-          )}
-        </CoinTableBodyItem>
-      </tr>
-    ));
+    return searchResults.map((item) => {
+      const symbol = item.s.replace(/USDT/, "");
+      return (
+        <tr key={item.L} id={item.s}>
+          <CoinTableBodyItem>
+            <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+            {item.s}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
+          <CoinTableBodyItem>{Number(item.n).toFixed(2)}</CoinTableBodyItem>
+          <CoinTableBodyItem>
+            <Link to={`/coinDetail/${item.s}`} key={item.s}>
+              <TradeButton type="button">Trade</TradeButton>
+            </Link>
+          </CoinTableBodyItem>
+          <CoinTableBodyItem id={item.s} onClick={handleClickToWish}>
+            {starList.indexOf(item.s) === -1 ? (
+              <DefaultStar className="defaultStar" />
+            ) : (
+              <ActiveStar />
+            )}
+          </CoinTableBodyItem>
+        </tr>
+      );
+    });
   };
 
   return (

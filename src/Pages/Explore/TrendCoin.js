@@ -24,7 +24,6 @@ const TrendingTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   color: #fff;
-  position: relative;
   min-height: 28px;
   width: 100%;
   margin-bottom: 24px;
@@ -179,6 +178,15 @@ const TrendingCardXlFooterTextChange = styled.div`
   align-items: center;
   font-size: 14px;
   line-height: 20px;
+  color: ${(props) => {
+    if (props.children[0] > 0) {
+      return "#0ecb81";
+    }
+    if (props.children[0] === 0) {
+      return "#707a8a";
+    }
+    return "#f6465d";
+  }};
 `;
 
 const TrendingCardXlFooterTextVolumn = styled.div`
@@ -204,6 +212,15 @@ const TrendingCardMdFooterText = styled.div`
   align-items: center;
   font-size: 14px;
   line-height: 20px;
+  color: ${(props) => {
+    if (props.children[0] > 0) {
+      return "#0ecb81";
+    }
+    if (props.children[0] === 0) {
+      return "#707a8a";
+    }
+    return "#f6465d";
+  }};
 `;
 
 const TrendCoin = () => {

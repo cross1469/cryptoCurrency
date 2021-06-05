@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { firebaseReadCoinAsset } from "../../Utils/firebase";
 
 const AssetContainer = styled.section`
   width: 100%;
   padding-bottom: 24px;
+  padding-top: 24px;
 `;
 
 const AssetInnerCard = styled.div`
@@ -95,22 +95,10 @@ const AssetTableContainer = styled.div`
   }
 `;
 
-const AssetTable = (props) => {
+const AssetTable = () => {
+  const coinQty = useSelector((state) => state.coinDetailReducer.coinQty);
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
-  const { email } = props;
-  const [coinData, setCoinData] = useState({ profitLoss: "", qty: "" });
-
-  const getUserCoinAsset = async () => {
-    if (email) {
-      const coinAsset = await firebaseReadCoinAsset(email, coin);
-      setCoinData(coinAsset);
-    }
-  };
-
-  useEffect(() => {
-    getUserCoinAsset();
-  }, [email]);
 
   return (
     <AssetContainer>
@@ -129,7 +117,7 @@ const AssetTable = (props) => {
               <AssetTableColumn>
                 <AssetTableContainer>
                   <h4>
-                    {coinData ? Number(coinData.qty).toFixed(2) : 0} {coin}
+                    {coinQty} {coin}
                   </h4>
                 </AssetTableContainer>
               </AssetTableColumn>
@@ -139,10 +127,6 @@ const AssetTable = (props) => {
       </AssetInnerCard>
     </AssetContainer>
   );
-};
-
-AssetTable.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default AssetTable;

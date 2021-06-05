@@ -103,6 +103,7 @@ const WishListItemStyle = styled.div`
     color: #fff;
     display: flex;
     flex: 1 1 auto;
+    width: 100%;
   }
 `;
 
@@ -205,6 +206,15 @@ const WishListItemPricePercentage = styled.div`
   padding-bottom: 4px;
   font-size: 14px;
   font-weight: 500;
+  color: ${(props) => {
+    if (props.children[0] > 0) {
+      return "#0ecb81";
+    }
+    if (props.children[0] === 0) {
+      return "#707a8a";
+    }
+    return "#f6465d";
+  }};
   h4 {
     font-size: 14px;
     font-weight: 500;
@@ -212,9 +222,8 @@ const WishListItemPricePercentage = styled.div`
   }
 `;
 
-const miniChart = styled.div`
+const MiniChart = styled.div`
   width: 100%;
-  height: 85px;
   box-sizing: border-box;
   margin-top: 20px;
   overflow: hidden;
@@ -329,9 +338,9 @@ const WishList = (props) => {
                         <WishListItemPricePercentage>
                           <h4>{Number(item.P).toFixed(2)}%</h4>
                         </WishListItemPricePercentage>
-                        <miniChart>
+                        <MiniChart>
                           <Spline symbol={wishData} />
-                        </miniChart>
+                        </MiniChart>
                       </WishListMiniItem>
                       <WishListHoverButtonContainer>
                         <WishListHoverButton>

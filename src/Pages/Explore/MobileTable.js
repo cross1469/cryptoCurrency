@@ -46,6 +46,12 @@ const MobileBodyItem = styled.td`
   padding: 14px 24px 14px 0px;
   :first-child {
     padding-left: 24px;
+    img {
+      height: 20px;
+      aspect-ratio: auto 16 / 16;
+      width: 20px;
+      margin-right: 8px;
+    }
   }
   :last-child {
     padding-right: 24px;
@@ -73,6 +79,15 @@ const PriceColumn = styled.div`
       text-align: right;
       font-variant-numeric: tabular-nums;
       display: unset;
+      color: ${(props) => {
+        if (props.children[0] > 0) {
+          return "#0ecb81";
+        }
+        if (props.children[0] === 0) {
+          return "#707a8a";
+        }
+        return "#f6465d";
+      }};
     }
   }
 `;
@@ -82,33 +97,41 @@ const MobileTable = (props) => {
 
   const renderCoinDatas = () => {
     if (!searchTerm) {
-      return currentData.map((realTimeData) => (
-        <tr key={realTimeData.s}>
+      return currentData.map((realTimeData) => {
+        const symbol = realTimeData.s.replace(/USDT/, "");
+        return (
+          <tr key={realTimeData.s}>
+            <MobileBodyItem>
+              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />
+              <Link to={`/coinDetail/${realTimeData.s}`}>{realTimeData.s}</Link>
+            </MobileBodyItem>
+            <MobileBodyItem>
+              <PriceColumn>
+                <h4>{Number(realTimeData.c).toFixed(5)}</h4>
+                <h4>{Number(realTimeData.P).toFixed(2)}%</h4>
+              </PriceColumn>
+            </MobileBodyItem>
+          </tr>
+        );
+      });
+    }
+    return searchResults.map((item) => {
+      const symbol = item.s.replace(/USDT/, "");
+      return (
+        <tr key={item.s}>
           <MobileBodyItem>
-            <Link to={`/coinDetail/${realTimeData.s}`}>{realTimeData.s}</Link>
+            <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+            <Link to={`/coinDetail/${item.s}`}>{item.s}</Link>
           </MobileBodyItem>
           <MobileBodyItem>
             <PriceColumn>
-              <h4>{Number(realTimeData.c).toFixed(5)}</h4>
-              <h4>{Number(realTimeData.P).toFixed(2)}%</h4>
+              <h4>{Number(item.c).toFixed(5)}</h4>
+              <h4>{Number(item.P).toFixed(2)}%</h4>
             </PriceColumn>
           </MobileBodyItem>
         </tr>
-      ));
-    }
-    return searchResults.map((item) => (
-      <tr key={item.s}>
-        <MobileBodyItem>
-          <Link to={`/coinDetail/${item.s}`}>{item.s}</Link>
-        </MobileBodyItem>
-        <MobileBodyItem>
-          <PriceColumn>
-            <h4>{Number(item.c).toFixed(5)}</h4>
-            <h4>{Number(item.P).toFixed(2)}%</h4>
-          </PriceColumn>
-        </MobileBodyItem>
-      </tr>
-    ));
+      );
+    });
   };
 
   return (

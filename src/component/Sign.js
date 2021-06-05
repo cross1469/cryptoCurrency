@@ -28,13 +28,13 @@ const FormCard = styled.div`
   margin-right: auto;
   margin-left: auto;
   max-width: 430px;
-  text-align: center;
 `;
 
 const TabTitle = styled.div`
   display: flex;
   justify-content: space-around;
   margin-bottom: 8px;
+  text-align: center;
   a {
     cursor: pointer;
     display: block;
@@ -89,14 +89,14 @@ const InputGroup = styled.div`
     position: absolute;
     pointer-events: none;
     top: 32px;
-    left: 10px;
+    left: 9px;
     transition: 0.2s ease all;
     color: #c3c0c0;
   }
   input:focus ~ .floating-label,
   input:not(:focus):valid ~ .floating-label {
-    top: 0px;
-    left: 10px;
+    top: 5px;
+    left: 9px;
     font-size: 13px;
     opacity: 1;
     color: #1e2329;
@@ -157,9 +157,9 @@ const Button = styled.button`
 
 const ForgetPasswordText = styled.div`
   font-size: 12px;
-  display: flex;
-  justify-content: flex-start;
+  display: inline-block;
   cursor: pointer;
+  margin-top: 16px;
   ${space}
   &:hover {
     color: #1e2329;
