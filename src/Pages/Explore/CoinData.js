@@ -280,7 +280,6 @@ const CoinData = (props) => {
   const renderInitActiveStar = async () => {
     if (email) {
       const wishList = await readWishList(email);
-      console.log(wishList);
       setStarList(wishList);
     } else {
       setStarList([]);

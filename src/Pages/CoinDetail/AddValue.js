@@ -275,7 +275,7 @@ const AddValue = (props) => {
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue);
     if (email && addValue > 0) {
-      firebaseWriteCoinAsset(email, "USDT", total);
+      firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
       showToast("success");

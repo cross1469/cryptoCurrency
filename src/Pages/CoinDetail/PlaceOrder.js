@@ -407,6 +407,7 @@ const PlaceOrder = (props) => {
   ) => {
     const coinAsset = await firebaseReadCoinAsset(userEmail, coinType);
     const usdtAsset = await firebaseReadCoinAsset(userEmail, "USDT");
+
     if (buyOrSell === "buy") {
       const allcoinQty = Number(coinAsset.qty) + Number(coinQty);
       const allUsdtQty =
@@ -422,7 +423,7 @@ const PlaceOrder = (props) => {
         averageCoinPrice,
         coinAsset.profitLoss
       );
-      firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty, 0, 0);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     } else if (buyOrSell === "sell") {
@@ -440,7 +441,7 @@ const PlaceOrder = (props) => {
         averageCoinPrice,
         coinAsset.profitLoss
       );
-      firebaseWriteCoinAsset(email, "USDT", allUsdtQty);
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty, 0, 0);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     }
@@ -476,6 +477,13 @@ const PlaceOrder = (props) => {
       };
       firebaseAddOrder(orderData, email);
       calcAssetForUploadOrder(email, coin, marketPrice, qty);
+      if (buyOrSell === "buy") {
+        setInputTopContent("USDT");
+        setInputBottomContent(coin);
+      } else {
+        setInputTopContent(coin);
+        setInputBottomContent("USDT");
+      }
       showToast("success");
     } else if (!total) {
       showToast("dangerTotal");

@@ -42,7 +42,7 @@ const firebaseReadCoinAsset = (email, coinType) =>
     .get()
     .then((doc) => {
       if (doc.data() === undefined) {
-        return null;
+        return { profitLoss: 0, qty: 0, averagePrice: 0 };
       }
       const assetData = doc.data();
       const { profitLoss, qty, averagePrice } = assetData;
