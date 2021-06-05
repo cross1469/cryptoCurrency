@@ -13,20 +13,21 @@ import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
 import warningIcon from "../images/warning.svg";
+import googleIcon from "../images/google.svg";
 
 const Container = styled.div`
+  position: relative;
+  flex: 1 1 0%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
+  flex-direction: column;
+  width: 100%;
+  transition: none 0s ease 0s;
 `;
 
 const FormCard = styled.div`
   margin-right: auto;
   margin-left: auto;
   max-width: 430px;
-  padding: 15px;
   text-align: center;
 `;
 
@@ -38,19 +39,16 @@ const TabTitle = styled.div`
     cursor: pointer;
     display: block;
     width: 100%;
-    line-height: 2;
+    line-height: 32px;
     border-bottom: 1px solid #f0b90b;
     text-decoration: none;
     color: #707a8a;
     font-weight: bold;
-    font-family: Roboto;
+    border-radius: 4px;
   }
 
   a.active {
-    background-image: linear-gradient(
-      rgb(248, 209, 47) 0%,
-      rgb(240, 185, 11) 100%
-    );
+    background-color: #f0b90b;
     color: #1e2329;
   }
 `;
@@ -59,7 +57,24 @@ const InputGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   ${flexbox}
+  .divider {
+    border-bottom: 1px solid #d9dadc;
+    display: block;
+    line-height: 1px;
+    margin: 15px 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    ::before {
+      content: " ";
+      display: table;
+    }
+    ::after {
+      clear: both;
+    }
+  }
   span {
     flex: 0 0 auto;
     ${color}
@@ -70,51 +85,81 @@ const InputGroup = styled.div`
   input[type="password"] {
     appearance: none;
   }
-  /* input[type="email"]:focus,
-  input[type="password"]:focus {
-    border: 1px solid #f0b90b;
-    outline: none;
-  } */
+  .floating-label {
+    position: absolute;
+    pointer-events: none;
+    top: 32px;
+    left: 10px;
+    transition: 0.2s ease all;
+    color: #c3c0c0;
+  }
+  input:focus ~ .floating-label,
+  input:not(:focus):valid ~ .floating-label {
+    top: 0px;
+    left: 10px;
+    font-size: 13px;
+    opacity: 1;
+    color: #1e2329;
+  }
 `;
 
 const Input = styled.input`
   outline: none;
-  border: 1px solid #1e2329;
-  padding: 4px 8px;
+  border: 1px solid;
+  width: 100%;
+  height: 42px;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
+  padding: 9px;
+  font-size: 14px;
+  margin-top: 20px;
   ${space}
   ${border}
 `;
 
 const Button = styled.button`
   display: "inline-block";
-  padding: 0.5rem 3rem;
-  line-height: 1;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
-  border-radius: 0.5rem;
+  line-height: 16px;
+  background-color: #f0b90b;
+  border-radius: 4px;
   cursor: pointer;
   outline: none;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   border: none;
   color: #212833;
   font-weight: bold;
-  margin-bottom: 8px;
-  &:hover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 24px;
+  :nth-child(3) {
+    background-color: #f6f9fc;
+    border: 1px solid #f0b90b;
+    :hover {
+      background-color: #edc423;
+    }
+  }
+  :first-child {
+    margin-top: 16px;
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+  :hover {
     box-shadow: none;
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #edc423;
   }
 `;
 
 const ForgetPasswordText = styled.div`
   font-size: 12px;
-  text-align: right;
+  display: flex;
+  justify-content: flex-start;
   cursor: pointer;
-  font-family: Roboto;
   ${space}
   &:hover {
     color: #1e2329;
@@ -138,8 +183,8 @@ const Sign = (props) => {
   const [signUpactive, setSignUpActive] = useState(null);
   const [emailInfo, setEmailInfo] = useState("");
   const [validColor, setValidColor] = useState({
-    email: "#1e2329",
-    password: "#1e2329",
+    email: "#f1f3f5",
+    password: "#f1f3f5",
   });
 
   const [list, setList] = useState([]);
@@ -169,17 +214,17 @@ const Sign = (props) => {
         if (!rule.test.test(value)) {
           validators[fieldName].errors.push(rule.message);
           validators[fieldName].valid = false;
-          setValidColor({ ...validColor, email: "red" });
+          setValidColor({ ...validColor, email: "#f84960" });
         } else {
-          setValidColor({ ...validColor, email: "#1e2329" });
+          setValidColor({ ...validColor, email: "#f1f3f5" });
         }
       } else if (typeof rule.test === "function") {
         if (!rule.test(value)) {
           validators[fieldName].errors.push(rule.message);
           validators[fieldName].valid = false;
-          setValidColor({ ...validColor, password: "red" });
+          setValidColor({ ...validColor, password: "#f84960" });
         } else {
-          setValidColor({ ...validColor, password: "#1e2329" });
+          setValidColor({ ...validColor, password: "#f1f3f5" });
         }
       }
     });
@@ -261,16 +306,6 @@ const Sign = (props) => {
     setList([...list, toastProperties]);
   };
 
-  // const resetValidators = () => {
-  //   Object.keys(validators).forEach((fieldName) => {
-  //     validators[fieldName].errors = [];
-  //     validators[fieldName].state = "";
-  //     validators[fieldName].valid = false;
-  //   });
-  // };
-
-  // resetValidators();
-
   const displayValidationErrors = (fieldName) => {
     const validator = validators[fieldName];
     const result = "";
@@ -351,7 +386,7 @@ const Sign = (props) => {
                 data-value="signin"
                 onClick={handleSwitchTab}
               >
-                登入
+                Sign In
               </a>
               <a
                 className={signUpactive}
@@ -359,46 +394,43 @@ const Sign = (props) => {
                 data-value="create"
                 onClick={handleSwitchTab}
               >
-                註冊
+                Sign Up
               </a>
             </TabTitle>
-            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={1}>
-              <span>Email：</span>
+            <InputGroup>
               <Input
                 className="u-full-width"
                 id="email"
-                type="email"
-                placeholder="輸入Email"
+                type="text"
                 onChange={handleChangeEmail}
-                mb={2}
                 borderColor={validColor.email}
+                required
               />
+              <span className="floating-label">Email</span>
             </InputGroup>
             {displayValidationErrors("email")}
-            <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
-              <span>密碼：</span>
+            <InputGroup>
               <Input
                 className="u-full-width"
                 id="password"
                 type="password"
-                placeholder="輸入密碼"
                 onChange={handleChangePassword}
-                mb={2}
                 borderColor={validColor.password}
+                required
               />
+              <span className="floating-label">Password</span>
             </InputGroup>
 
             {displayValidationErrors("password")}
 
             {signInactive === "active" ? (
               <ForgetPasswordText
-                mb={2}
                 onClick={() => {
                   setIsOpen(false);
                   forgetModal.current.open();
                 }}
               >
-                忘記密碼？
+                Forget password？
               </ForgetPasswordText>
             ) : null}
 
@@ -409,16 +441,17 @@ const Sign = (props) => {
                   type="button"
                   onClick={checkType}
                   disabled={!isFormValid}
-                  mb={2}
                 >
-                  登入
+                  Sign in
                 </Button>
+                <div className="divider" />
                 <Button
                   id="google-sign-in"
                   type="button"
                   onClick={googleSignIn}
                 >
-                  Google 登入
+                  <img src={googleIcon} alt="Google Sign in" />
+                  Sign in with Google
                 </Button>
               </InputGroup>
             ) : (
@@ -429,14 +462,14 @@ const Sign = (props) => {
                   onClick={checkType}
                   disabled={!isFormValid}
                 >
-                  註冊
+                  Sign up
                 </Button>
               </InputGroup>
             )}
           </FormCard>
         </section>
-        <Toast toastList={list} autoDelete dismissTime={5000} />
       </Container>
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };

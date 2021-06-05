@@ -1,56 +1,54 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import {
-  color,
-  space,
-  typography,
-  flexbox,
-  position,
-  border,
-  layout,
-} from "styled-system";
+import { layout } from "styled-system";
 import { addChatData, readChatData } from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
+import { ReactComponent as ChatIcon } from "../../images/speech-bubble.svg";
+import { ReactComponent as ChatClose } from "../../images/cancel.svg";
+import { ReactComponent as ChatRoom } from "../../images/chatRoom.svg";
+import { ReactComponent as Send } from "../../images/send.svg";
 
 const OpenChat = styled.button`
-  outline: none;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 52px;
+  height: 52px;
+  color: #fff;
+  background-color: #f0b90b;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-shadow: 12px 15px 20px 0 rgb(46 61 73 / 15%);
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
-  border: none;
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-  ${color}
-  ${space} 
-  ${typography} 
-  ${flexbox}
-  ${position}
+  margin: 16px;
+  z-index: 1;
   ${layout}
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
-const MessageInput = styled.input`
-  width: 100%;
-  ${color}
-  ${space}
-  ${flexbox}
-  ${typography}
-`;
-
-const SendMessage = styled.button`
-  outline: none;
-  border: none;
-  ${color}
-  ${space}
-  ${flexbox}
-  ${typography}
-`;
-
-const ChatForm = styled.div`
-  height: calc(100vh - 88px);
-  width: 30%;
-  ${position}
-  ${color}
-  ${border}
+const ChatForm = styled.section`
+  display: flex;
+  position: fixed;
+  box-shadow: 5px 5px 25px 0 rgb(46 61 73 / 20%);
+  flex-direction: column;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1;
+  width: 350px;
+  max-width: 85vw;
+  max-height: 75vh;
+  background-color: #121212;
+  border-radius: 8px;
+  color: #fff;
+  border: 1px solid #fff;
+  border-top: 1px solid #f0b90b;
   ${layout}
   @media only screen and (max-width: 768px) {
     width: 50%;
@@ -61,36 +59,143 @@ const ChatForm = styled.div`
   }
 `;
 
-const SubmitChat = styled.form`
+const ChatHeader = styled.header`
+  box-sizing: border-box;
   display: flex;
   width: 100%;
-  ${flexbox}
-  ${position}
+  padding: 12px 16px;
+  color: #fff;
+  background-color: #12161c;
+  align-items: center;
+  justify-content: space-around;
+  flex: 0 0 auto;
+  border-bottom: 1px solid #fff;
 `;
 
-const ChatDataItem = styled.li`
-  ${color}
-  ${space}
-  ${typography}
+const ChatRoomIconContainer = styled.div`
+  flex: 2;
+  svg {
+    width: 36px;
+    height: 36px;
+    fill: #fff;
+  }
 `;
 
-const ChatData = styled.ul`
-  ${position}
+const ChatTitleContainer = styled.div`
+  flex: 6;
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+  }
 `;
 
-const ChatTitle = styled.div`
+const ChatCloseContainer = styled.div`
+  flex: 2;
+  text-align: right;
+  button {
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+  }
+`;
+
+const ChatMain = styled.main`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px 16px 8px;
+  line-height: 24px;
+  color: #fff;
+  flex: 1 1 auto;
+  overflow: auto;
+  height: 55vh;
+`;
+
+const ChatData = styled.article`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0;
   display: flex;
-  ${color}
-  ${space}
-  ${typography}
-  ${flexbox}
+  flex-direction: column;
+  :last-child {
+    margin-bottom: 0px;
+  }
+`;
+const ChatDataItem = styled.div`
+  padding: 10px 10px 10px 10px;
+  border-radius: 0 6px 6px 0;
+  max-width: 80%;
+  width: auto;
+  float: left;
+  box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
+  background-color: #2b3139;
+  margin-bottom: 20px;
+
+  .account {
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .message {
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .time {
+    font-size: 12px;
+    line-height: 12px;
+  }
 `;
 
-const Close = styled.div`
-  cursor: pointer;
-  ${color}
-  ${space}
-  ${typography}
+const ChatFooter = styled.footer`
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  align-items: center;
+  justify-content: space-around;
+  flex: 0 0 auto;
+`;
+
+const ChatInputContainer = styled.div`
+  flex: 10;
+`;
+
+const ChatInput = styled.input`
+  width: 100%;
+  margin: 0;
+  height: 24px;
+  padding: 0 8px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;
+  background-color: #121212;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+`;
+
+const ChatSendBtnContainer = styled.div`
+  flex: 1;
+  text-align: center;
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: #f0b90b;
+  }
 `;
 
 const Chat = (props) => {
@@ -160,95 +265,52 @@ const Chat = (props) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
       return (
-        <ChatDataItem
-          key={chatData.id}
-          color="black"
-          fontFamily="Roboto"
-          fontSize={16}
-          mb={3}
-          ml={2}
-        >
-          <div>{chatData.account}</div>
-          <div>{chatData.messages}</div>
-          <div>{time}</div>
+        <ChatDataItem key={chatData.id}>
+          <div className="account">{chatData.account}</div>
+          <div className="message">{chatData.messages}</div>
+          <div className="time">{time}</div>
         </ChatDataItem>
       );
     });
 
   return (
     <>
-      <ChatForm
-        position="fixed"
-        bottom="0"
-        right="0"
-        border="1px solid"
-        bg="white"
-        display={toggleChat}
-      >
-        <ChatTitle
-          fontFamily="Roboto"
-          fontSize={32}
-          fontWeight="bold"
-          mt={3}
-          ml={2}
-          justifyContent="space-between"
-        >
-          Chat Room
-          <Close mr={3} onClick={handleCloseChat}>
-            X
-          </Close>
-        </ChatTitle>
-        <ChatData position="absolute" bottom={32}>
-          {renderChatData()}
-        </ChatData>
-        <SubmitChat
-          onSubmit={handleOnSubmit}
-          position="absolute"
-          bottom="0"
-          right="0"
-        >
-          <MessageInput
-            type="text"
-            value={newMessage}
-            onChange={handleOnChange}
-            placeholder="Type your message here..."
-            px={2}
-            py={2}
-            fontFamily="Roboto"
-            fontSize={16}
-            flexGrow={3}
-            ml={2}
-          />
-          <SendMessage
-            type="submit"
-            disabled={!newMessage}
-            ml={2}
-            px={3}
-            py={2}
-            color="white"
-            bg="#02c077"
-            fontFamily="Roboto"
-            fontSize={16}
-            flexGrow={1}
-          >
-            Send
-          </SendMessage>
-        </SubmitChat>
+      <ChatForm display={toggleChat}>
+        <ChatHeader>
+          <ChatRoomIconContainer>
+            <ChatRoom />
+          </ChatRoomIconContainer>
+          <ChatTitleContainer>
+            <h1>
+              Crypto <br />
+              Chat Room
+            </h1>
+          </ChatTitleContainer>
+          <ChatCloseContainer>
+            <button type="button" onClick={handleCloseChat}>
+              <ChatClose />
+            </button>
+          </ChatCloseContainer>
+        </ChatHeader>
+        <ChatMain>
+          <ChatData>{renderChatData()}</ChatData>
+        </ChatMain>
+        <ChatFooter>
+          <ChatInputContainer>
+            <ChatInput
+              type="text"
+              value={newMessage}
+              onChange={handleOnChange}
+              placeholder="Type your message here..."
+            />
+          </ChatInputContainer>
+          <ChatSendBtnContainer>
+            <Send onClick={handleOnSubmit} disabled={!newMessage} />
+          </ChatSendBtnContainer>
+        </ChatFooter>
       </ChatForm>
-      <OpenChat
-        color="white"
-        bg="#02c077"
-        px={{ md: 3, lg: 4 }}
-        py={{ md: 3, lg: 3 }}
-        fontFamily="Roboto"
-        fontSize={{ md: 12, lg: 16 }}
-        position="fixed"
-        bottom="0"
-        right="0"
-        onClick={HandleOpenChat}
-        display={toggleChatBtn}
-      >
-        Open Chat
+      <OpenChat onClick={HandleOpenChat} display={toggleChatBtn}>
+        <ChatIcon />
       </OpenChat>
       <Toast toastList={list} autoDelete dismissTime={5000} />
     </>

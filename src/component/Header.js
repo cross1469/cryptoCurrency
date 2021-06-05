@@ -60,7 +60,6 @@ const Navigation = styled.header`
     }
     a {
       font-size: 1em;
-      margin: 0px 18px;
       text-decoration: none;
       letter-spacing: 1px;
       font-weight: 500;
@@ -81,6 +80,7 @@ const Navigation = styled.header`
       cursor: pointer;
       letter-spacing: 1px;
       font-weight: 500;
+      padding: 24px 0px;
       ${color}
       :hover {
         color: #f0b90b;
@@ -168,7 +168,7 @@ const Header = () => {
         toastProperties = {
           id,
           title: "Success",
-          description: "登出成功",
+          description: "Successful signout",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
         };
@@ -177,7 +177,7 @@ const Header = () => {
         toastProperties = {
           id,
           title: "Danger",
-          description: "進入 Portfolio 頁面前，請先登入",
+          description: "Before accessing the portfolio page, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -235,15 +235,11 @@ const Header = () => {
             <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
               <li>
                 <NavLink activeClassName="active" to="/explore">
-                  Explore
+                  <button type="button">Explore</button>
                 </NavLink>
               </li>
               <li>
-                <button
-                  type="button"
-                  activeClassName="active"
-                  onClick={handleClickCheckMember}
-                >
+                <button type="button" onClick={handleClickCheckMember}>
                   Portfolio
                 </button>
               </li>

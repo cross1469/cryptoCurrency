@@ -39,13 +39,13 @@ const BannerCotainer = styled.div`
       height: 608px;
     }
   }
-  @media (max-width: 996px) {
+  @media only screen and (max-width: 996px) {
     flex-wrap: wrap;
     .leftSection {
       align-items: center;
     }
   }
-  @media (max-width: 768px) {
+  @media only screen and (max-width: 768px) {
     .leftSection {
       align-items: flex-start;
     }
@@ -62,7 +62,7 @@ const BannerTitle = styled.h1`
   margin-top: 8px;
   margin-bottom: 16px;
   color: #fff;
-  @media (max-width: 576px) {
+  @media only screen and (max-width: 576px) {
     font-size: 34px;
     line-height: 40px;
   }
@@ -73,7 +73,7 @@ const BannerSubtitle = styled.h3`
   line-height: 1.4;
   margin-bottom: 32px;
   color: #95a1bb;
-  @media (max-width: 576px) {
+  @media only screen and (max-width: 576px) {
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
