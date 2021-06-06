@@ -12,7 +12,7 @@ const PortfolioContainer = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 0px 24px;
-  background: #181a20;
+  background: #14151a;
 `;
 
 const PortfolioContent = styled.div`

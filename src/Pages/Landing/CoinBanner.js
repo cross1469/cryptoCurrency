@@ -6,7 +6,7 @@ import { ReactComponent as Right } from "../../images/next.svg";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
-  background-color: #181a20;
+  background-color: #2b2f36;
   color: #fff;
   @media only screen and (max-width: 768px) {
     padding: 90px 0;

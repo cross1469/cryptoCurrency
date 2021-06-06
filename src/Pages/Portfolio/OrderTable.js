@@ -98,7 +98,7 @@ const OrderTbody = styled.tbody`
   tr {
     user-select: none;
     :hover {
-      background-color: #323539;
+      background-color: #2b2f36;
     }
   }
 `;

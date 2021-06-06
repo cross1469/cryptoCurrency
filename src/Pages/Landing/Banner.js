@@ -80,7 +80,7 @@ const BannerSubtitle = styled.h3`
     font-weight: 400;
   }
 `;
-const BannerToExploreBtn = styled.button`
+const BannerToSignUpBtn = styled.button`
   position: relative;
   width: 100%;
   padding: 24px;
@@ -98,7 +98,7 @@ const BannerToExploreBtn = styled.button`
 const Banner = () => {
   const signModal = useRef(null);
   return (
-    <BannerBg bg="#0b0e11">
+    <BannerBg bg="#14151a">
       <BannerCotainer>
         <div className="leftSection">
           <BannerTitle>
@@ -107,9 +107,9 @@ const Banner = () => {
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>
           </BannerSubtitle>
-          <BannerToExploreBtn onClick={() => signModal.current.open()}>
+          <BannerToSignUpBtn onClick={() => signModal.current.open()}>
             Sign Up
-          </BannerToExploreBtn>
+          </BannerToSignUpBtn>
         </div>
         <div className="rightSection">
           <BannerSvg />

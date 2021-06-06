@@ -65,7 +65,7 @@ const ChatHeader = styled.header`
   width: 100%;
   padding: 12px 16px;
   color: #fff;
-  background-color: #12161c;
+  background-color: #14151a;
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
@@ -88,7 +88,7 @@ const ChatTitleContainer = styled.div`
     font-size: 18px;
     line-height: 24px;
     text-align: center;
-    color: #fff;
+    color: #f0b90b;
   }
 `;
 
@@ -117,6 +117,7 @@ const ChatMain = styled.main`
   flex: 1 1 auto;
   overflow: auto;
   height: 55vh;
+  background-color: #14151a;
 `;
 
 const ChatData = styled.article`
@@ -138,7 +139,7 @@ const ChatDataItem = styled.div`
   width: auto;
   float: left;
   box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
-  background-color: #2b3139;
+  background-color: #2b2f36;
   margin-bottom: 20px;
 
   .account {
@@ -166,6 +167,7 @@ const ChatFooter = styled.footer`
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
+  background-color: #14151a;
 `;
 
 const ChatInputContainer = styled.div`
@@ -181,7 +183,7 @@ const ChatInput = styled.input`
   font-size: 16px;
   line-height: 24px;
   color: #fff;
-  background-color: #121212;
+  background-color: #14151a;
   border: 0;
   outline: none;
   resize: none;

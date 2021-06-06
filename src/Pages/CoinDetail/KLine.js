@@ -85,7 +85,7 @@ const KLine = () => {
 
     chart: {
       zoomType: "x",
-      backgroundColor: "#121212",
+      backgroundColor: "#14151a",
     },
 
     rangeSelector: {

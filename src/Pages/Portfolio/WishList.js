@@ -10,7 +10,7 @@ import Spline from "./Spline";
 const WishListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #181a20;
+  background-color: #14151a;
   margin-top: 56px;
   margin-bottom: 22px;
   border-radius: 4px;
@@ -317,13 +317,12 @@ const WishList = (props) => {
       realTimeDatas.map((item) => {
         if (wishData === item.s) {
           return (
-            <WishListItem>
+            <WishListItem key={item.E}>
               <WishListItemContainer>
                 <WishListItemModule>
                   <WishListItemStyle>
                     <Link
                       to={`/coinDetail/${wishData}`}
-                      key={item.s}
                       onMouseEnter={handleBlockButton}
                       onMouseLeave={handleNoneButton}
                     >

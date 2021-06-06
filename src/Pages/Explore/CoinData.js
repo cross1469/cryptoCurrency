@@ -16,7 +16,7 @@ import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
 
 const CoinDataSection = styled.section`
-  background-color: #1c1c1e;
+  background-color: #14151a;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -82,7 +82,7 @@ const SearchSection = styled.section`
   padding: 0px 16px;
   border: 1px solid #dfe1e5;
   border-radius: 4px;
-  background: #1c1c1e;
+  background: #14151a;
 `;
 
 const SearchInputContainer = styled.div`
@@ -142,7 +142,7 @@ const CoinTableContainer = styled.div`
 const CoinTable = styled.table`
   width: 100%;
   padding: 0px;
-  background: #1c1c1e;
+  background: #14151a;
   border-spacing: 0px;
   border-collapse: separate;
   caption-side: top;
@@ -178,7 +178,7 @@ const CoinTableBody = styled.tbody`
   tr {
     user-select: none;
     :hover {
-      background-color: #323539;
+      background-color: #2b2f36;
     }
   }
 `;

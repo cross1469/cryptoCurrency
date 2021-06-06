@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const TrendingContainer = styled.div`
-  background-color: #1c1c1e;
+  background-color: #14151a;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -48,6 +48,7 @@ const TrendingCardContainer = styled.div`
     outline: none;
     cursor: pointer;
     width: 100%;
+    background-color: #2b2f36;
     padding: 16px 20px;
     margin-right: 16px;
     min-width: 250px;

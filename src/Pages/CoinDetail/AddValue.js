@@ -160,7 +160,7 @@ const BuySellInputText = styled.div`
     font-size: 48px;
     text-align: left;
     font-weight: 400;
-    background-color: #121212;
+    background-color: #14151a;
     width: 40px;
     padding: 0px;
     margin: 0px;
@@ -350,7 +350,11 @@ const AddValue = (props) => {
 };
 
 AddValue.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
+};
+
+AddValue.defaultProps = {
+  email: undefined,
 };
 
 export default AddValue;

@@ -255,9 +255,14 @@ const MobileWishList = (props) => {
 };
 
 MobileWishList.propTypes = {
-  wishList: PropTypes.arrayOf.isRequired,
-  realTimeDatas: PropTypes.arrayOf.isRequired,
+  wishList: PropTypes.arrayOf(PropTypes.string),
+  realTimeDatas: PropTypes.arrayOf(PropTypes.objectOf),
   className: PropTypes.string.isRequired,
+};
+
+MobileWishList.defaultProps = {
+  wishList: undefined,
+  realTimeDatas: undefined,
 };
 
 export default MobileWishList;
