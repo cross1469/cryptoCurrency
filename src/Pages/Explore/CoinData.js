@@ -414,13 +414,13 @@ const CoinData = (props) => {
               {realTimeData.s}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              {Number(realTimeData.c).toFixed(5)}
+              {Number(realTimeData.c).toLocaleString()}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              {Number(realTimeData.P).toFixed(2)}%
+              {Number(realTimeData.P).toLocaleString()}%
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              {Number(realTimeData.n).toFixed(2)}
+              {Number(realTimeData.n).toLocaleString()}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
               <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
@@ -446,9 +446,15 @@ const CoinData = (props) => {
             <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
             {item.s}
           </CoinTableBodyItem>
-          <CoinTableBodyItem>{Number(item.c).toFixed(5)}</CoinTableBodyItem>
-          <CoinTableBodyItem>{Number(item.P).toFixed(2)}%</CoinTableBodyItem>
-          <CoinTableBodyItem>{Number(item.n).toFixed(2)}</CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(item.c).toLocaleString()}
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(item.P).toLocaleString()}%
+          </CoinTableBodyItem>
+          <CoinTableBodyItem>
+            {Number(item.n).toLocaleString()}
+          </CoinTableBodyItem>
           <CoinTableBodyItem>
             <Link to={`/coinDetail/${item.s}`} key={item.s}>
               <TradeButton type="button">Trade</TradeButton>

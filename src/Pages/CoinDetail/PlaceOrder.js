@@ -170,7 +170,6 @@ const BuySellInputText = styled.div`
   }
   input {
     text-align: left;
-    color: #f0b90b;
     font-weight: 400;
     background-color: #121212;
     width: 40px;
@@ -188,6 +187,12 @@ const BuySellInputText = styled.div`
         return "45px";
       }
       return "40px";
+    }};
+    color: ${(props) => {
+      if (props.children[1].props.value === "0") {
+        return "#757575";
+      }
+      return "#f0b90b";
     }};
   }
 `;
@@ -326,11 +331,11 @@ const PlaceOrder = (props) => {
   const coin = symbol.replace(/USDT/, "");
 
   const { email } = props;
+  const [inputValue, setInputValue] = useState("0");
   const [inputTopContent, setInputTopContent] = useState("USDT");
   const [inputBottomContent, setInputBottomContent] = useState(coin);
   const [list, setList] = useState([]);
   let toastProperties = null;
-  const [buyOrSellPrice, setBuyOrSellValue] = useState("");
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
@@ -338,28 +343,27 @@ const PlaceOrder = (props) => {
   const [userCoin, setUserCoin] = useState();
 
   const handleChangeInputNewValue = (e) => {
-    const re = /^[0-9\b]+$/;
+    const re = /^[-.,0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
-      setBuyOrSellValue(e.target.value);
+      const num = e.target.value.replace(/,/g, "");
+      setInputValue(num);
       if (inputTopContent.indexOf("USDT") === -1) {
         setInputTopContent(`${e.target.value} ${coin}`);
         setInputBottomContent(
-          `${Number(Number(e.target.value) * Number(marketPrice)).toFixed(
-            5
-          )} USDT`
+          `${Number(Number(num) * Number(marketPrice)).toLocaleString()} USDT`
         );
         setBuyOrSell("sell");
-        setQty(e.target.value);
+        setQty(num);
       } else {
-        setInputTopContent(`${e.target.value} USDT`);
+        setInputTopContent(`${Number(num).toLocaleString()} USDT`);
         setInputBottomContent(
-          `${Number(Number(e.target.value) / Number(marketPrice)).toFixed(
-            5
-          )} ${coin}`
+          `${Number(
+            Number(num) / Number(marketPrice)
+          ).toLocaleString()} ${coin}`
         );
         setBuyOrSell("buy");
-        setQty(Number(Number(e.target.value) / Number(marketPrice)).toFixed(5));
-        setTotal(e.target.value);
+        setQty(Number(Number(num) / Number(marketPrice)).toLocaleString());
+        setTotal(num);
       }
     }
   };
@@ -367,6 +371,15 @@ const PlaceOrder = (props) => {
   const handleClickChangeCoin = () => {
     setInputTopContent(inputBottomContent);
     setInputBottomContent(inputTopContent);
+    if (inputBottomContent.indexOf("USDT") === -1) {
+      const firstContent = inputBottomContent.replace(` ${coin}`, "");
+      const sencondContent = firstContent.replace(/,/g, "");
+      setInputValue(sencondContent);
+    } else {
+      const firstContent = inputBottomContent.replace(` USDT`, "");
+      const sencondContent = firstContent.replace(/,/g, "");
+      setInputValue(sencondContent);
+    }
   };
 
   const showToast = (type) => {
@@ -535,7 +548,7 @@ const PlaceOrder = (props) => {
                               inputMode="decimal"
                               maxLength="7"
                               placeholder="0"
-                              value={buyOrSellPrice}
+                              value={Number(inputValue).toLocaleString()}
                               onChange={handleChangeInputNewValue}
                             />
                           </BuySellInputText>

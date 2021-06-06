@@ -149,11 +149,13 @@ const BuySellInputText = styled.div`
     line-height: 1.5;
     align-self: flex-start;
     margin-top: 8px;
+    @media only screen and (max-width: 996px) {
+      font-size: 16px;
+    }
   }
   input {
-    font-size: 62px;
+    font-size: 48px;
     text-align: left;
-    color: #f0b90b;
     font-weight: 400;
     background-color: #121212;
     width: 40px;
@@ -163,6 +165,15 @@ const BuySellInputText = styled.div`
     border: none;
     overflow: hidden;
     outline: none;
+    color: ${(props) => {
+      if (props.children[1].props.value === "0") {
+        return "#757575";
+      }
+      return "#f0b90b";
+    }};
+    @media only screen and (max-width: 996px) {
+      font-size: 32px;
+    }
   }
 `;
 
@@ -229,9 +240,10 @@ const AddValue = (props) => {
   let toastProperties = null;
 
   const handlAddValueInput = (e) => {
-    const re = /^[0-9\b]+$/;
+    const re = /^[-,0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
-      setAddValue(e.target.value);
+      const addNum = e.target.value.replace(/,/g, "");
+      setAddValue(addNum);
     }
   };
 
@@ -305,12 +317,9 @@ const AddValue = (props) => {
                             <span>USDT$</span>
                             <AutosizeInput
                               inputMode="decimal"
-                              inputStyle={{
-                                fontSize: 48,
-                              }}
-                              maxLength="5"
+                              maxLength="7"
                               placeholder="0"
-                              value={addValue}
+                              value={Number(addValue).toLocaleString()}
                               onChange={handlAddValueInput}
                             />
                           </BuySellInputText>
@@ -326,7 +335,7 @@ const AddValue = (props) => {
                   </BuySellBody>
                   <BuySellFooter>
                     <span>USDT</span>
-                    <span>{Number(usdtQty).toFixed(2)}</span>
+                    <span>{Number(usdtQty).toLocaleString()}</span>
                   </BuySellFooter>
                 </ContentContainer>
               </ModuleFade>

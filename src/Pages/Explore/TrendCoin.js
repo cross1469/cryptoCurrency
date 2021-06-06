@@ -262,15 +262,15 @@ const TrendCoin = () => {
             </TrendingCoinSubtitleContainer>
           </TrendingCardTitle>
           <TrendingCardPrice>
-            <span>$ {Number(coin.lastPrice).toFixed(5)}</span>
+            <span>$ {Number(coin.lastPrice).toLocaleString()}</span>
           </TrendingCardPrice>
           <TrendingCardXlFooter>
             <TrendingCardXlFooterText>
               <TrendingCardXlFooterTextChange>
-                {coin.priceChangePercent} %
+                {Number(coin.priceChangePercent).toLocaleString()} %
               </TrendingCardXlFooterTextChange>
               <TrendingCardXlFooterTextVolumn>
-                {Number(coin.volume).toFixed(2)}
+                {Number(coin.volume).toLocaleString()}
               </TrendingCardXlFooterTextVolumn>
               <span>24h Change</span>
               <span>24h Volume</span>
@@ -278,7 +278,7 @@ const TrendCoin = () => {
           </TrendingCardXlFooter>
           <TrendingCardMdFooter>
             <TrendingCardMdFooterText>
-              {coin.priceChangePercent} %
+              {Number(coin.priceChangePercent).toLocaleString()} %
             </TrendingCardMdFooterText>
           </TrendingCardMdFooter>
         </Link>

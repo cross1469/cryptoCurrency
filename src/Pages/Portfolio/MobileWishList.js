@@ -213,8 +213,8 @@ const MobileWishList = (props) => {
               </WishListItem>
               <WishListItem>
                 <WishListPriceColumn>
-                  <h4>{Number(item.c).toFixed(5)}</h4>
-                  <h4>{Number(item.P).toFixed(2)}%</h4>
+                  <h4>{Number(item.c).toLocaleString()}</h4>
+                  <h4>{Number(item.P).toLocaleString()}%</h4>
                 </WishListPriceColumn>
               </WishListItem>
             </tr>

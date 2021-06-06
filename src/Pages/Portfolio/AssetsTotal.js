@@ -185,7 +185,7 @@ const AssetsTotal = (props) => {
               <span>Account balance</span>
             </AccountBalanceTitle>
             <AccountBalanceQty>
-              <span>{usdt.qty}</span>
+              <span>{Number(usdt.qty).toLocaleString()}</span>
               <span>USDT</span>
             </AccountBalanceQty>
           </AccountBalanceContainer>
@@ -197,7 +197,7 @@ const AssetsTotal = (props) => {
               </AccountPNLInfo>
             </AccountPNLTitle>
             <AccountPNLPrice>
-              <span>{Number(profitLoss).toFixed(2)} %</span>
+              <span>{Number(profitLoss).toLocaleString()} %</span>
             </AccountPNLPrice>
           </AccountPNLContainer>
         </AssetTableContent>
