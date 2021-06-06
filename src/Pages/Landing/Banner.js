@@ -1,7 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { color } from "styled-system";
+import Modal from "../../Component/Modal";
+import Sign from "../../Component/Sign";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
 
 const BannerBg = styled.section`
@@ -94,25 +95,31 @@ const BannerToExploreBtn = styled.button`
   }
 `;
 
-const Banner = () => (
-  <BannerBg bg="#0b0e11">
-    <BannerCotainer>
-      <div className="leftSection">
-        <BannerTitle>
-          <span>Cryptocurrency Exchange</span>
-        </BannerTitle>
-        <BannerSubtitle>
-          <span>Buy and sell cryptocurrency to connect to the world</span>
-        </BannerSubtitle>
-        <Link to="/explore">
-          <BannerToExploreBtn>Explore</BannerToExploreBtn>
-        </Link>
-      </div>
-      <div className="rightSection">
-        <BannerSvg />
-      </div>
-    </BannerCotainer>
-  </BannerBg>
-);
+const Banner = () => {
+  const signModal = useRef(null);
+  return (
+    <BannerBg bg="#0b0e11">
+      <BannerCotainer>
+        <div className="leftSection">
+          <BannerTitle>
+            <span>Cryptocurrency Exchange</span>
+          </BannerTitle>
+          <BannerSubtitle>
+            <span>Buy and sell cryptocurrency to connect to the world</span>
+          </BannerSubtitle>
+          <BannerToExploreBtn onClick={() => signModal.current.open()}>
+            Sign Up
+          </BannerToExploreBtn>
+        </div>
+        <div className="rightSection">
+          <BannerSvg />
+        </div>
+      </BannerCotainer>
+      <Modal ref={signModal}>
+        <Sign signType="create" />
+      </Modal>
+    </BannerBg>
+  );
+};
 
 export default Banner;

@@ -71,8 +71,8 @@ const Forget = () => {
       case "sentResetPassword":
         toastProperties = {
           id,
-          title: "Success",
-          description: "已寄出重設密碼，麻煩去 Mail 查收",
+          title: "Sent the reset password",
+          description: "Please check the mail to receive it.",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
         };
@@ -80,8 +80,8 @@ const Forget = () => {
       case "emailError":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "Email 錯誤，請重新輸入",
+          title: "Email error",
+          description: "Email error, please retype",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };

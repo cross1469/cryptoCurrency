@@ -255,7 +255,7 @@ const AddValue = (props) => {
         toastProperties = {
           id,
           title: "Success",
-          description: "加值成功",
+          description: "Successful add value",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
         };
@@ -263,8 +263,8 @@ const AddValue = (props) => {
       case "danger":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "加值前，請先登入",
+          title: "Please login",
+          description: "Before adding value, please login",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -273,7 +273,7 @@ const AddValue = (props) => {
         toastProperties = {
           id,
           title: "Danger",
-          description: "金額不得為 0",
+          description: "The value added cannot be 0",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };

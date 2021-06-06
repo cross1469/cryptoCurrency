@@ -151,7 +151,6 @@ const Header = () => {
   const [loginStatus, setLoginStatus] = useState("Sign In");
   let toastProperties = null;
   const [signType, setSignType] = useState("signin");
-
   const history = useHistory();
 
   const signModal = useRef(null);
@@ -181,6 +180,24 @@ const Header = () => {
           description: "Before accessing the portfolio page, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
+        };
+        break;
+      case "successSignIn":
+        toastProperties = {
+          id,
+          title: "Success signin",
+          description: "Successful signin",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successSignUp":
+        toastProperties = {
+          id,
+          title: "Success signup",
+          description: "Successful signup",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
         };
         break;
       default:
@@ -214,6 +231,10 @@ const Header = () => {
       setSignType("create");
       signModal.current.open();
     }
+  };
+
+  const getSignInfo = (sign) => {
+    showToast(sign);
   };
 
   useEffect(
@@ -283,7 +304,11 @@ const Header = () => {
         <Forget />
       </CustomModal>
       <CustomModal ref={signModal}>
-        <Sign forgetModal={forgetModal} signType={signType} />
+        <Sign
+          forgetModal={forgetModal}
+          signType={signType}
+          getSignInfo={getSignInfo}
+        />
       </CustomModal>
       <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
