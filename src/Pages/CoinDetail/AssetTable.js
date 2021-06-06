@@ -117,7 +117,7 @@ const AssetTable = () => {
               <AssetTableColumn>
                 <AssetTableContainer>
                   <h4>
-                    {coinQty} {coin}
+                    {Number(coinQty).toLocaleString()} {coin}
                   </h4>
                 </AssetTableContainer>
               </AssetTableColumn>

@@ -107,8 +107,8 @@ const MobileTable = (props) => {
             </MobileBodyItem>
             <MobileBodyItem>
               <PriceColumn>
-                <h4>{Number(realTimeData.c).toFixed(5)}</h4>
-                <h4>{Number(realTimeData.P).toFixed(2)}%</h4>
+                <h4>{Number(realTimeData.c).toLocaleString()}</h4>
+                <h4>{Number(realTimeData.P).toLocaleString()}%</h4>
               </PriceColumn>
             </MobileBodyItem>
           </tr>
@@ -125,8 +125,8 @@ const MobileTable = (props) => {
           </MobileBodyItem>
           <MobileBodyItem>
             <PriceColumn>
-              <h4>{Number(item.c).toFixed(5)}</h4>
-              <h4>{Number(item.P).toFixed(2)}%</h4>
+              <h4>{Number(item.c).toLocaleString()}</h4>
+              <h4>{Number(item.P).toLocaleString()}%</h4>
             </PriceColumn>
           </MobileBodyItem>
         </tr>

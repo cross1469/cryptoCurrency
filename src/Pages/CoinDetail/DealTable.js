@@ -180,10 +180,10 @@ const DealTable = () => {
           <DealTableTd>
             <DealTablePrice>
               <h4>
-                {Number(data.p).toFixed(2)} <span>USDT</span>
+                {Number(data.p).toLocaleString()} <span>USDT</span>
               </h4>
               <h4>
-                {Number(data.q).toFixed(2)} <span>Qty</span>
+                {Number(data.q).toLocaleString()} <span>Qty</span>
               </h4>
             </DealTablePrice>
           </DealTableTd>

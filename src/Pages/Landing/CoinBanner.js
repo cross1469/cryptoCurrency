@@ -278,8 +278,12 @@ const StockBanner = () => {
           </CoinInfoContainer>
           <CoinPriceContainer>
             <div>
-              <CoinLastPrice>{coin.lastPrice}</CoinLastPrice>
-              <CoinPercerntage>{coin.priceChangePercent} %</CoinPercerntage>
+              <CoinLastPrice>
+                {Number(coin.lastPrice).toLocaleString()}
+              </CoinLastPrice>
+              <CoinPercerntage>
+                {Number(coin.priceChangePercent).toLocaleString()} %
+              </CoinPercerntage>
             </div>
             <div className="right">
               <Right />

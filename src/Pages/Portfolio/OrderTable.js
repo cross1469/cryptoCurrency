@@ -188,11 +188,15 @@ const OrderTable = (props) => {
                 {new Date(buyData.timestamp).toLocaleDateString()}
               </OrderTbodyItem>
               <OrderTbodyItem>{buyData.coinType}</OrderTbodyItem>
-              <OrderTbodyItem>$ {buyData.coinPrice}</OrderTbodyItem>
               <OrderTbodyItem>
-                $ {Number(coinPrice.price).toFixed(2)}
+                $ {Number(buyData.coinPrice).toLocaleString()}
               </OrderTbodyItem>
-              <OrderTbodyItem>{buyData.qty}</OrderTbodyItem>
+              <OrderTbodyItem>
+                $ {Number(coinPrice.price).toLocaleString()}
+              </OrderTbodyItem>
+              <OrderTbodyItem>
+                {Number(buyData.qty).toLocaleString()}
+              </OrderTbodyItem>
               <OrderTbodyItem>
                 {(
                   (Number(coinPrice.price - buyData.coinPrice) /
@@ -218,10 +222,14 @@ const OrderTable = (props) => {
           {new Date(sellData.timestamp).toLocaleDateString()}
         </OrderTbodySellItem>
         <OrderTbodySellItem>{sellData.coinType}</OrderTbodySellItem>
-        <OrderTbodySellItem>$ {sellData.coinPrice}</OrderTbodySellItem>
-        <OrderTbodySellItem>{sellData.qty}</OrderTbodySellItem>
         <OrderTbodySellItem>
-          $ {Number(sellData.coinPrice * sellData.qty).toFixed(2)}
+          $ {Number(sellData.coinPrice).toLocaleString()}
+        </OrderTbodySellItem>
+        <OrderTbodySellItem>
+          {Number(sellData.qty).toLocaleString()}
+        </OrderTbodySellItem>
+        <OrderTbodySellItem>
+          {Number(sellData.coinPrice * sellData.qty).toLocaleString()}
         </OrderTbodySellItem>
       </tr>
     ));

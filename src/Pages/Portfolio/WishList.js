@@ -333,10 +333,10 @@ const WishList = (props) => {
                           <div>24h</div>
                         </WishListMiniItemTop>
                         <WishListItemPrice>
-                          <span>{Number(item.c).toFixed(5)}</span>
+                          <span>{Number(item.c).toLocaleString()}</span>
                         </WishListItemPrice>
                         <WishListItemPricePercentage>
-                          <h4>{Number(item.P).toFixed(2)}%</h4>
+                          <h4>{Number(item.P).toLocaleString()}%</h4>
                         </WishListItemPricePercentage>
                         <MiniChart>
                           <Spline symbol={wishData} />
