@@ -32,12 +32,14 @@ const PlaceOrderBtn = styled.button`
   padding: 6px 12px;
   min-height: 24px;
   border: none;
-  background-color: #02c076;
+  background-color: #f0b90b;
   width: 45%;
   height: 40px;
   border-radius: 4px;
-  color: white;
   ${space}
+  :hover {
+    background-color: #ffe251;
+  }
 `;
 const AddValueBtn = styled.button`
   appearance: none;
@@ -59,13 +61,17 @@ const AddValueBtn = styled.button`
   word-break: keep-all;
   padding: 6px 12px;
   min-height: 24px;
-  border: none;
-  background-color: #f84960;
   width: 45%;
   height: 40px;
   border-radius: 4px;
-  color: white;
+  color: #f0b90b;
+  border: 1px solid #f0b90b;
   ${space}
+  :hover {
+    background-color: #ffe251;
+    color: #000;
+    border: none;
+  }
 `;
 
 const MobileButton = (props) => {

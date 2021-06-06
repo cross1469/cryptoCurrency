@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
@@ -10,7 +11,7 @@ import Spline from "./Spline";
 const WishListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #181a20;
+  background-color: #14151a;
   margin-top: 56px;
   margin-bottom: 22px;
   border-radius: 4px;
@@ -273,8 +274,8 @@ const DisplayMobileWishList = styled(MobileWishList)`
 
 const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
-  const [realTimeDatas, setRealTimeDatas] = useState([]);
   const { email } = props;
+  const [coinLastPrice, setCoinLastPrice] = useState([]);
 
   const getWishListData = async () => {
     if (email) {
@@ -295,35 +296,37 @@ const WishList = (props) => {
     getWishListData();
   }, [email]);
 
-  useEffect(() => {
-    const socket = new WebSocket(
-      `wss://stream.binance.com:9443/ws/!ticker@arr`
-    );
-    socket.onmessage = (event) => {
-      const coinDatas = JSON.parse(event.data);
-      const usdtDatas = [];
-      coinDatas.forEach((data) => {
-        if (data.s.indexOf("USDT") !== -1) {
-          usdtDatas.push(data);
-        }
+  const getLastPrice = () =>
+    axios
+      .get(
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
+      )
+      .then((res) => {
+        const usdtLastPrice = [];
+        res.data.forEach((data) => {
+          if (data.symbol.indexOf("USDT", 2) !== -1) {
+            usdtLastPrice.push(data);
+          }
+        });
+
+        setCoinLastPrice(usdtLastPrice);
       });
-      setRealTimeDatas([...realTimeDatas, ...usdtDatas]);
-    };
-    return () => socket.close();
+
+  useEffect(() => {
+    getLastPrice();
   }, []);
 
   const renderWishList = () =>
     wishList.map((wishData) =>
-      realTimeDatas.map((item) => {
-        if (wishData === item.s) {
+      coinLastPrice.map((coin) => {
+        if (wishData === coin.symbol) {
           return (
-            <WishListItem>
+            <WishListItem key={coin.openTime}>
               <WishListItemContainer>
                 <WishListItemModule>
                   <WishListItemStyle>
                     <Link
                       to={`/coinDetail/${wishData}`}
-                      key={item.s}
                       onMouseEnter={handleBlockButton}
                       onMouseLeave={handleNoneButton}
                     >
@@ -333,10 +336,12 @@ const WishList = (props) => {
                           <div>24h</div>
                         </WishListMiniItemTop>
                         <WishListItemPrice>
-                          <span>{Number(item.c).toLocaleString()}</span>
+                          <span>{Number(coin.lastPrice).toLocaleString()}</span>
                         </WishListItemPrice>
                         <WishListItemPricePercentage>
-                          <h4>{Number(item.P).toLocaleString()}%</h4>
+                          <h4>
+                            {Number(coin.priceChangePercent).toLocaleString()}%
+                          </h4>
                         </WishListItemPricePercentage>
                         <MiniChart>
                           <Spline symbol={wishData} />
@@ -384,7 +389,7 @@ const WishList = (props) => {
       </WishListContainer>
       <DisplayMobileWishList
         wishList={wishList}
-        realTimeDatas={realTimeDatas}
+        coinLastPrice={coinLastPrice}
       />
     </section>
   );

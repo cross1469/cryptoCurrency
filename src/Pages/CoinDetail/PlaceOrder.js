@@ -623,7 +623,11 @@ const PlaceOrder = (props) => {
 };
 
 PlaceOrder.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
+};
+
+PlaceOrder.defaultProps = {
+  email: undefined,
 };
 
 export default PlaceOrder;

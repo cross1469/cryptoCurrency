@@ -251,7 +251,7 @@ const YourNews = (props) => {
 
   const renderYourNewsTop = () =>
     newsHeadlines.slice(0, 2).map((news) => (
-      <YourNewsContentTopLink key={news.id} href={news.link}>
+      <YourNewsContentTopLink key={news.summary} href={news.link}>
         <YourNewsTopContent>
           <YourNewsTopImageContainer>
             <YourNewsTopImage>
@@ -273,7 +273,7 @@ const YourNews = (props) => {
 
   const renderYourNewsButtom = () =>
     newsHeadlines.slice(2, 6).map((news) => (
-      <YourNewsContentBottomLink key={news.id} href={news.link}>
+      <YourNewsContentBottomLink key={news.summary} href={news.link}>
         <YourNewsBottomContent>
           <YourNewsBottomTopImg>
             <YourNewsBottomTopImgContainer>

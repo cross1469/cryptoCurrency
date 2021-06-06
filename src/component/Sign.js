@@ -41,7 +41,7 @@ const TabTitle = styled.div`
     line-height: 32px;
     border-bottom: 1px solid #f0b90b;
     text-decoration: none;
-    color: #707a8a;
+    color: #c3c0c0;
     font-weight: bold;
     border-radius: 4px;
   }
@@ -110,7 +110,7 @@ const Input = styled.input`
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
   padding: 20px;
   font-size: 14px;
-  background-color: #121212;
+  background-color: #14151a;
   color: #fff;
   margin-top: 20px;
   ${space}
@@ -137,7 +137,7 @@ const Button = styled.button`
   width: 100%;
   padding: 16px 24px;
   :nth-child(3) {
-    background-color: #121212;
+    background-color: #14151a;
     border: 1px solid #f0b90b;
     color: #f0b90b;
     :hover {
@@ -165,10 +165,11 @@ const ForgetPasswordText = styled.div`
   font-size: 12px;
   display: inline-block;
   cursor: pointer;
+  color: #c3c0c0;
   margin-top: 16px;
   ${space}
   &:hover {
-    color: #1e2329;
+    color: #f0b90b;
   }
 `;
 
@@ -471,15 +472,16 @@ const Sign = (props) => {
 
 Sign.propTypes = {
   setIsOpen: PropTypes.func,
-  forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func))
-    .isRequired,
+  forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func)),
   signType: PropTypes.string,
-  getSignInfo: PropTypes.func.isRequired,
+  getSignInfo: PropTypes.func,
 };
 
 Sign.defaultProps = {
   setIsOpen: undefined,
   signType: "signin",
+  forgetModal: undefined,
+  getSignInfo: undefined,
 };
 
 export default Sign;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
@@ -65,7 +65,7 @@ const ChatHeader = styled.header`
   width: 100%;
   padding: 12px 16px;
   color: #fff;
-  background-color: #12161c;
+  background-color: #14151a;
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
@@ -88,7 +88,7 @@ const ChatTitleContainer = styled.div`
     font-size: 18px;
     line-height: 24px;
     text-align: center;
-    color: #fff;
+    color: #f0b90b;
   }
 `;
 
@@ -117,6 +117,7 @@ const ChatMain = styled.main`
   flex: 1 1 auto;
   overflow: auto;
   height: 55vh;
+  background-color: #14151a;
 `;
 
 const ChatData = styled.article`
@@ -138,7 +139,7 @@ const ChatDataItem = styled.div`
   width: auto;
   float: left;
   box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
-  background-color: #2b3139;
+  background-color: #2b2f36;
   margin-bottom: 20px;
 
   .account {
@@ -166,6 +167,7 @@ const ChatFooter = styled.footer`
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
+  background-color: #14151a;
 `;
 
 const ChatInputContainer = styled.div`
@@ -181,7 +183,7 @@ const ChatInput = styled.input`
   font-size: 16px;
   line-height: 24px;
   color: #fff;
-  background-color: #121212;
+  background-color: #14151a;
   border: 0;
   outline: none;
   resize: none;
@@ -191,6 +193,7 @@ const ChatInput = styled.input`
 const ChatSendBtnContainer = styled.div`
   flex: 1;
   text-align: center;
+  cursor: pointer;
   svg {
     width: 18px;
     height: 18px;
@@ -206,7 +209,7 @@ const Chat = (props) => {
   const [toggleChatBtn, setToggleChatBtn] = useState("block");
   const [list, setList] = useState([]);
   let toastProperties = null;
-
+  const messagesContainer = useRef(null);
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
@@ -236,7 +239,7 @@ const Chat = (props) => {
       const trimmedMessage = newMessage.trim();
       if (trimmedMessage) {
         addChatData({
-          account: email,
+          account: email.substring(0, email.lastIndexOf("@")),
           messages: trimmedMessage,
         });
       }
@@ -246,10 +249,27 @@ const Chat = (props) => {
     }
   };
 
-  const HandleOpenChat = (e) => {
+  const handleOpenChat = (e) => {
     e.preventDefault();
     setToggleChat("block");
     setToggleChatBtn("none");
+  };
+
+  const handleOnKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      if (email) {
+        const trimmedMessage = newMessage.trim();
+        if (trimmedMessage) {
+          addChatData({
+            account: email.substring(0, email.lastIndexOf("@")),
+            messages: trimmedMessage,
+          });
+        }
+        setNewMessage("");
+      } else {
+        showToast("dangerChat");
+      }
+    }
   };
 
   const handleCloseChat = (e) => {
@@ -260,16 +280,25 @@ const Chat = (props) => {
 
   useEffect(() => readChatData(setChatDatas), [email]);
 
+  useEffect(() => {
+    messagesContainer.current.scrollTo(
+      0,
+      messagesContainer.current.scrollHeight
+    );
+  }, [toggleChat]);
+
   const renderChatData = () =>
     chatDatas.map((chatData) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
       return (
-        <ChatDataItem key={chatData.id}>
-          <div className="account">{chatData.account}</div>
-          <div className="message">{chatData.messages}</div>
-          <div className="time">{time}</div>
-        </ChatDataItem>
+        <>
+          <ChatDataItem key={chatData.id}>
+            <div className="account">{chatData.account}</div>
+            <div className="message">{chatData.messages}</div>
+            <div className="time">{time}</div>
+          </ChatDataItem>
+        </>
       );
     });
 
@@ -292,7 +321,7 @@ const Chat = (props) => {
             </button>
           </ChatCloseContainer>
         </ChatHeader>
-        <ChatMain>
+        <ChatMain ref={messagesContainer}>
           <ChatData>{renderChatData()}</ChatData>
         </ChatMain>
         <ChatFooter>
@@ -301,6 +330,7 @@ const Chat = (props) => {
               type="text"
               value={newMessage}
               onChange={handleOnChange}
+              onKeyDown={handleOnKeyDown}
               placeholder="Type your message here..."
             />
           </ChatInputContainer>
@@ -309,7 +339,7 @@ const Chat = (props) => {
           </ChatSendBtnContainer>
         </ChatFooter>
       </ChatForm>
-      <OpenChat onClick={HandleOpenChat} display={toggleChatBtn}>
+      <OpenChat onClick={handleOpenChat} display={toggleChatBtn}>
         <ChatIcon />
       </OpenChat>
       <Toast toastList={list} autoDelete dismissTime={5000} />

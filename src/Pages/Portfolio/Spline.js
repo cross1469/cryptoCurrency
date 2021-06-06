@@ -4,7 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 import PropTypes from "prop-types";
 
-const AreaSpline = (props) => {
+const Spline = (props) => {
   const { symbol } = props;
 
   const callBinanceAPI = (coinSymbol) => {
@@ -42,7 +42,7 @@ const AreaSpline = (props) => {
     chart: {
       zoomType: "x",
       height: 150,
-      backgroundColor: "#181a20",
+      backgroundColor: "#14151a",
     },
     credits: {
       enabled: false,
@@ -100,8 +100,8 @@ const AreaSpline = (props) => {
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
 
-AreaSpline.propTypes = {
+Spline.propTypes = {
   symbol: PropTypes.string.isRequired,
 };
 
-export default AreaSpline;
+export default Spline;

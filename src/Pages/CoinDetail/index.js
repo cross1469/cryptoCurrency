@@ -24,7 +24,7 @@ const LayoutWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 0px;
-  background: #121212;
+  background: #14151a;
   color: #fff;
 `;
 

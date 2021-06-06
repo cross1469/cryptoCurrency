@@ -69,13 +69,12 @@ const ModalBody = styled.div`
   z-index: 2;
   position: relative;
   margin: 0 auto;
-  background-color: #121212;
+  background-color: #14151a;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 20px 24px 56px;
-  color: #c3c0c0;
   width: 30%;
   @media only screen and (max-width: 996px) {
     width: 50%;
