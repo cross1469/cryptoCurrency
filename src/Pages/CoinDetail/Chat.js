@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
@@ -207,7 +207,7 @@ const Chat = (props) => {
   const [toggleChatBtn, setToggleChatBtn] = useState("block");
   const [list, setList] = useState([]);
   let toastProperties = null;
-
+  const messagesContainer = useRef(null);
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
@@ -278,16 +278,25 @@ const Chat = (props) => {
 
   useEffect(() => readChatData(setChatDatas), [email]);
 
+  useEffect(() => {
+    messagesContainer.current.scrollTo(
+      0,
+      messagesContainer.current.scrollHeight
+    );
+  }, [toggleChat]);
+
   const renderChatData = () =>
     chatDatas.map((chatData) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
       return (
-        <ChatDataItem key={chatData.id}>
-          <div className="account">{chatData.account}</div>
-          <div className="message">{chatData.messages}</div>
-          <div className="time">{time}</div>
-        </ChatDataItem>
+        <>
+          <ChatDataItem key={chatData.id}>
+            <div className="account">{chatData.account}</div>
+            <div className="message">{chatData.messages}</div>
+            <div className="time">{time}</div>
+          </ChatDataItem>
+        </>
       );
     });
 
@@ -310,7 +319,7 @@ const Chat = (props) => {
             </button>
           </ChatCloseContainer>
         </ChatHeader>
-        <ChatMain>
+        <ChatMain ref={messagesContainer}>
           <ChatData>{renderChatData()}</ChatData>
         </ChatMain>
         <ChatFooter>
