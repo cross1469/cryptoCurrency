@@ -220,8 +220,8 @@ const Chat = (props) => {
       case "dangerChat":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "送出前，請先登入",
+          title: "Please signin",
+          description: "Before sending a message, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -278,7 +278,7 @@ const Chat = (props) => {
     setToggleChatBtn("block");
   };
 
-  useEffect(() => readChatData(setChatDatas), [email]);
+  useEffect(() => readChatData(setChatDatas), []);
 
   useEffect(() => {
     messagesContainer.current.scrollTo(
@@ -292,13 +292,11 @@ const Chat = (props) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
       return (
-        <>
-          <ChatDataItem key={chatData.id}>
-            <div className="account">{chatData.account}</div>
-            <div className="message">{chatData.messages}</div>
-            <div className="time">{time}</div>
-          </ChatDataItem>
-        </>
+        <ChatDataItem key={chatData.id}>
+          <div className="account">{chatData.account}</div>
+          <div className="message">{chatData.messages}</div>
+          <div className="time">{time}</div>
+        </ChatDataItem>
       );
     });
 

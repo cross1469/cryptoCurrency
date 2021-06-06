@@ -387,7 +387,7 @@ const CoinData = (props) => {
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
       const results = realTimeDatas.filter((realTimeData) =>
-        realTimeData.s.includes(searchTerm)
+        realTimeData.s.includes(searchTerm.toUpperCase())
       );
       setSearchResults(results);
     }

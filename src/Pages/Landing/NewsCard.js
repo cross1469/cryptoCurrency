@@ -31,7 +31,10 @@ const NewsCard = (props) => {
   const { newsTitle, newsDescription, newsUrlToImage } = props;
   return (
     <>
-      <CardImg style={{ backgroundImage: `url(${newsUrlToImage})` }} />
+      <CardImg
+        style={{ backgroundImage: `url(${newsUrlToImage})` }}
+        loading="lazy"
+      />
       <div>
         <CardTitle>{newsTitle}</CardTitle>
         <CardSubContent>{newsDescription}</CardSubContent>

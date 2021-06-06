@@ -1,9 +1,11 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { color } from "styled-system";
 import Modal from "../../Component/Modal";
 import Sign from "../../Component/Sign";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
+import { subscribeUserData } from "../../Utils/firebase";
 
 const BannerBg = styled.section`
   display: flex;
@@ -96,6 +98,19 @@ const BannerToSignUpBtn = styled.button`
 `;
 
 const Banner = () => {
+  const [email, setEmail] = useState("");
+
+  useEffect(
+    () =>
+      subscribeUserData((userEmail) => {
+        if (userEmail) {
+          setEmail(userEmail);
+        } else {
+          setEmail("");
+        }
+      }),
+    [email]
+  );
   const signModal = useRef(null);
   return (
     <BannerBg bg="#14151a">
@@ -107,9 +122,15 @@ const Banner = () => {
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>
           </BannerSubtitle>
-          <BannerToSignUpBtn onClick={() => signModal.current.open()}>
-            Sign Up
-          </BannerToSignUpBtn>
+          {email ? (
+            <Link to="/explore">
+              <BannerToSignUpBtn>Explore</BannerToSignUpBtn>
+            </Link>
+          ) : (
+            <BannerToSignUpBtn onClick={() => signModal.current.open()}>
+              Sign Up
+            </BannerToSignUpBtn>
+          )}
         </div>
         <div className="rightSection">
           <BannerSvg />
