@@ -133,10 +133,10 @@ const AccountPNLPrice = styled.div`
     font-size: 32px;
     line-height: 42px;
     color: ${(props) => {
-      if (props.children[0] > 0) {
+      if (props.children.props.children[0] > 0) {
         return "#0ecb81";
       }
-      if (props.children[0] === 0) {
+      if (props.children.props.children[0] === 0) {
         return "#707a8a";
       }
       return "#f6465d";

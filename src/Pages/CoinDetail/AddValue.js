@@ -187,13 +187,11 @@ const BuySellBodyButton = styled.button`
   padding: 24px;
   font-size: 16px;
   border: 1px solid #f0b90b;
-  color: #fff;
+  color: #f0b90b;
   :hover {
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
-    color: #000;
+    background-color: #ffe251;
+    color: #1b1504;
+    border: none;
   }
   span {
     display: flex;

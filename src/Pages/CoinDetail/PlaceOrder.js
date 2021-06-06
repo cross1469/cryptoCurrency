@@ -299,16 +299,9 @@ const BuySellBodyButton = styled.button`
   transition: all 80ms ease-in-out 0s;
   padding: 24px;
   font-size: 16px;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
-
+  background-color: #f0b90b;
   :hover {
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
   span {
     display: flex;
@@ -421,6 +414,15 @@ const PlaceOrder = (props) => {
           icon: errorIcon,
         };
         break;
+      case "dangerCoin":
+        toastProperties = {
+          id,
+          title: "Danger",
+          description: `${coin} 數量不足，請降低賣出數量`,
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
       default:
         setList([]);
     }
@@ -518,6 +520,8 @@ const PlaceOrder = (props) => {
       showToast("dangerTotal");
     } else if (userUsdt < total) {
       showToast("dangerUsdt");
+    } else if (userCoin < total) {
+      showToast("dangerCoin");
     } else {
       showToast("danger");
     }
