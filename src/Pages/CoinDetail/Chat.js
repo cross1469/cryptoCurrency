@@ -191,6 +191,7 @@ const ChatInput = styled.input`
 const ChatSendBtnContainer = styled.div`
   flex: 1;
   text-align: center;
+  cursor: pointer;
   svg {
     width: 18px;
     height: 18px;
@@ -236,7 +237,7 @@ const Chat = (props) => {
       const trimmedMessage = newMessage.trim();
       if (trimmedMessage) {
         addChatData({
-          account: email,
+          account: email.substring(0, email.lastIndexOf("@")),
           messages: trimmedMessage,
         });
       }
@@ -246,10 +247,27 @@ const Chat = (props) => {
     }
   };
 
-  const HandleOpenChat = (e) => {
+  const handleOpenChat = (e) => {
     e.preventDefault();
     setToggleChat("block");
     setToggleChatBtn("none");
+  };
+
+  const handleOnKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      if (email) {
+        const trimmedMessage = newMessage.trim();
+        if (trimmedMessage) {
+          addChatData({
+            account: email.substring(0, email.lastIndexOf("@")),
+            messages: trimmedMessage,
+          });
+        }
+        setNewMessage("");
+      } else {
+        showToast("dangerChat");
+      }
+    }
   };
 
   const handleCloseChat = (e) => {
@@ -301,6 +319,7 @@ const Chat = (props) => {
               type="text"
               value={newMessage}
               onChange={handleOnChange}
+              onKeyDown={handleOnKeyDown}
               placeholder="Type your message here..."
             />
           </ChatInputContainer>
@@ -309,7 +328,7 @@ const Chat = (props) => {
           </ChatSendBtnContainer>
         </ChatFooter>
       </ChatForm>
-      <OpenChat onClick={HandleOpenChat} display={toggleChatBtn}>
+      <OpenChat onClick={handleOpenChat} display={toggleChatBtn}>
         <ChatIcon />
       </OpenChat>
       <Toast toastList={list} autoDelete dismissTime={5000} />
