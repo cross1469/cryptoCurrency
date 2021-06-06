@@ -10,7 +10,6 @@ import {
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
 import Toast from "./Toast";
-import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
 import warningIcon from "../images/warning.svg";
 import googleIcon from "../images/google.svg";
@@ -88,18 +87,18 @@ const InputGroup = styled.div`
   .floating-label {
     position: absolute;
     pointer-events: none;
-    top: 32px;
+    top: 40px;
     left: 9px;
     transition: 0.2s ease all;
     color: #c3c0c0;
   }
   input:focus ~ .floating-label,
   input:not(:focus):valid ~ .floating-label {
-    top: 5px;
+    top: 2px;
     left: 9px;
-    font-size: 13px;
+    font-size: 14px;
     opacity: 1;
-    color: #1e2329;
+    color: #fff;
   }
 `;
 
@@ -107,14 +106,18 @@ const Input = styled.input`
   outline: none;
   border: 1px solid;
   width: 100%;
-  height: 42px;
   border-radius: 2px;
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
-  padding: 9px;
+  padding: 20px;
   font-size: 14px;
+  background-color: #121212;
+  color: #fff;
   margin-top: 20px;
   ${space}
   ${border}
+  :hover {
+    border-color: #f0b90b;
+  }
 `;
 
 const Button = styled.button`
@@ -134,10 +137,13 @@ const Button = styled.button`
   width: 100%;
   padding: 16px 24px;
   :nth-child(3) {
-    background-color: #f6f9fc;
+    background-color: #121212;
     border: 1px solid #f0b90b;
+    color: #f0b90b;
     :hover {
       background-color: #edc423;
+      color: #212833;
+      border: none;
     }
   }
   :first-child {
@@ -176,7 +182,8 @@ const Errors = styled.div`
 `;
 
 const Sign = (props) => {
-  const [inputType, setInputType] = useState("signin");
+  const { setIsOpen, forgetModal, signType, getSignInfo } = props;
+  const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInactive, setSignInActive] = useState("active");
@@ -190,8 +197,6 @@ const Sign = (props) => {
   const [list, setList] = useState([]);
   const signModal = useRef(null);
   let toastProperties = null;
-
-  const { setIsOpen, forgetModal } = props;
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -243,29 +248,11 @@ const Sign = (props) => {
   const showToast = (type) => {
     const id = Math.floor(Math.random() * 101 + 1);
     switch (type) {
-      case "successSignIn":
-        toastProperties = {
-          id,
-          title: "Success",
-          description: "登入成功",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "successSignUp":
-        toastProperties = {
-          id,
-          title: "Success",
-          description: "註冊成功",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
       case "passwordError":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "密碼錯誤，請重新輸入",
+          title: "Password error",
+          description: "Password error, please retype",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -273,8 +260,8 @@ const Sign = (props) => {
       case "emailError":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "Email 錯誤，請重新輸入",
+          title: "Email error",
+          description: "Email error, please retype",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -283,8 +270,8 @@ const Sign = (props) => {
       case "signed":
         toastProperties = {
           id,
-          title: "Warning",
-          description: "已登入",
+          title: "Signed in",
+          description: "Signed in",
           backgroundColor: "#f0ad4e",
           icon: warningIcon,
         };
@@ -293,8 +280,8 @@ const Sign = (props) => {
       case "existed":
         toastProperties = {
           id,
-          title: "Warning",
-          description: "已有此使用者",
+          title: "Already have this user",
+          description: "This user already exists",
           backgroundColor: "#f0ad4e",
           icon: warningIcon,
         };
@@ -336,6 +323,13 @@ const Sign = (props) => {
     []
   );
 
+  useEffect(() => {
+    if (signType === "create") {
+      setSignInActive(null);
+      setSignUpActive("active");
+    }
+  }, []);
+
   const checkType = async () => {
     if (inputType === "signin") {
       const loginMessage = await firebaseAuthSignIn(email, password);
@@ -350,7 +344,7 @@ const Sign = (props) => {
         showToast("signed");
       } else {
         setIsOpen(false);
-        showToast("successSignIn");
+        getSignInfo("successSignIn");
       }
     } else if (inputType === "create") {
       const signUpMessage = await firebaseAuthSignUp(email, password);
@@ -362,7 +356,7 @@ const Sign = (props) => {
         showToast("existed");
       } else {
         setIsOpen(false);
-        showToast("successSignUp");
+        getSignInfo("successSignUp");
       }
     }
   };
@@ -372,6 +366,7 @@ const Sign = (props) => {
     const googleEmail = await firebaseAuthGoogleSignIn.email;
     setIsOpen(false);
     setEmail(googleEmail);
+    getSignInfo("successSignIn");
   };
 
   return (
@@ -478,10 +473,13 @@ Sign.propTypes = {
   setIsOpen: PropTypes.func,
   forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func))
     .isRequired,
+  signType: PropTypes.string,
+  getSignInfo: PropTypes.func.isRequired,
 };
 
 Sign.defaultProps = {
   setIsOpen: undefined,
+  signType: "signin",
 };
 
 export default Sign;

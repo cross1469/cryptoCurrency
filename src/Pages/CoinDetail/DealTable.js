@@ -80,6 +80,9 @@ const DealTableToContainer = styled.div`
   border-radius: 0px;
   overflow-y: auto;
   height: 500px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const DealTabletoTable = styled.table`

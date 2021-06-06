@@ -122,6 +122,9 @@ const readWishList = (email) =>
     .doc(email)
     .get()
     .then((wishLists) => {
+      if (wishLists.data() === undefined) {
+        return [];
+      }
       const wishList = [];
       wishLists.data().wishList.forEach((item) => {
         wishList.push(item);

@@ -93,16 +93,9 @@ const KLine = () => {
       allButtonsEnabled: true,
       buttons: [
         {
-          text: "1m",
-          events: {
-            click() {
-              callBinanceAPI(symbol, "1m");
-              setInterval(() => "1m");
-            },
-          },
-        },
-        {
+          type: "minute",
           text: "15m",
+          count: 60,
           events: {
             click() {
               callBinanceAPI(symbol, "15m");
@@ -111,7 +104,9 @@ const KLine = () => {
           },
         },
         {
+          type: "hour",
           text: "1h",
+          count: 24,
           events: {
             click() {
               callBinanceAPI(symbol, "1h");
@@ -120,7 +115,9 @@ const KLine = () => {
           },
         },
         {
+          type: "hour",
           text: "4h",
+          count: 24,
           events: {
             click() {
               callBinanceAPI(symbol, "4h");
@@ -129,7 +126,9 @@ const KLine = () => {
           },
         },
         {
+          type: "day",
           text: "1d",
+          count: 7,
           events: {
             click() {
               callBinanceAPI(symbol, "1d");
@@ -138,7 +137,9 @@ const KLine = () => {
           },
         },
         {
-          text: "週線",
+          type: "week",
+          text: "1w",
+          count: 4,
           events: {
             click() {
               callBinanceAPI(symbol, "1w");
@@ -151,6 +152,42 @@ const KLine = () => {
           text: "All",
         },
       ],
+      buttonTheme: {
+        fill: "none",
+        stroke: "none",
+        "stroke-width": 0,
+        r: 8,
+        style: {
+          color: "#fff",
+          fontWeight: 500,
+        },
+        states: {
+          hover: {
+            fill: "none",
+            stroke: "#ffe251",
+            "stroke-width": 1,
+            style: {
+              color: "#fff",
+            },
+          },
+          select: {
+            fill: "#ffe251",
+            style: {
+              color: "#1b1504",
+            },
+          },
+        },
+      },
+      buttonSpacing: 12,
+      inputSpacing: 8,
+      inputStyle: {
+        color: "#fff",
+      },
+      labelStyle: {
+        color: "silver",
+        fontWeight: "bold",
+      },
+      selected: 1,
     },
     credits: {
       enabled: false,
@@ -158,10 +195,8 @@ const KLine = () => {
     legend: {
       enabled: false,
     },
-
     title: {
-      text: `${symbol}`,
-      style: { color: "#fff" },
+      text: "",
     },
     xAxis: {
       type: "datetime",
@@ -203,7 +238,7 @@ const KLine = () => {
   });
 
   useEffect(() => {
-    callBinanceAPI(symbol, "1m");
+    callBinanceAPI(symbol, "1h");
   }, []);
 
   useEffect(() => {

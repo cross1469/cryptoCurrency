@@ -29,6 +29,10 @@ const BuySellStyle = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
   margin-bottom: 56px;
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 0;
+    margin-top: 36px;
+  }
 `;
 
 const BuySellContainer = styled.div`
@@ -299,16 +303,9 @@ const BuySellBodyButton = styled.button`
   transition: all 80ms ease-in-out 0s;
   padding: 24px;
   font-size: 16px;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
-
+  background-color: #f0b90b;
   :hover {
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
   span {
     display: flex;
@@ -389,7 +386,7 @@ const PlaceOrder = (props) => {
         toastProperties = {
           id,
           title: "Success",
-          description: "下單成功",
+          description: "Order successful",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
         };
@@ -397,8 +394,8 @@ const PlaceOrder = (props) => {
       case "danger":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "下單前，請先登入",
+          title: "Please signin",
+          description: "Before placing your order, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -407,7 +404,7 @@ const PlaceOrder = (props) => {
         toastProperties = {
           id,
           title: "Danger",
-          description: "金額不得為 0",
+          description: "The amount cannot be 0",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -415,8 +412,18 @@ const PlaceOrder = (props) => {
       case "dangerUsdt":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "USDT 可用金額不足，請先充值",
+          title: "Ｐlease deposit",
+          description:
+            "USDT available amount is not enough, please deposit first",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      case "dangerCoin":
+        toastProperties = {
+          id,
+          title: "Please reduce the sell quantity",
+          description: `The ${coin} quantity is not enough, please reduce the sell quantity`,
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -518,6 +525,8 @@ const PlaceOrder = (props) => {
       showToast("dangerTotal");
     } else if (userUsdt < total) {
       showToast("dangerUsdt");
+    } else if (userCoin < total) {
+      showToast("dangerCoin");
     } else {
       showToast("danger");
     }

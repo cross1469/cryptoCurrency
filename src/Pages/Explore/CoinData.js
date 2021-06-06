@@ -235,19 +235,13 @@ const TradeButton = styled.button`
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1px;
   border: 1px solid #f0b90b;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
+  background-color: #f0b90b;
   :hover {
     box-shadow: none;
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
 `;
 

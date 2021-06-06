@@ -229,15 +229,9 @@ const BannerToExploreBtn = styled.button`
   width: 120px;
   border-radius: 4px;
   font-family: "Exo 2", sans-serif;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
+  background-color: #f0b90b;
   :hover {
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
 `;
 
