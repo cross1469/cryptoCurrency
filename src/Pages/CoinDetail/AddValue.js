@@ -20,6 +20,9 @@ const BuySellStyle = styled.div`
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
+  @media only screen and (max-width: 768px) {
+    margin-top: 36px;
+  }
 `;
 
 const BuySellContainer = styled.div`

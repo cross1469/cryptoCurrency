@@ -150,6 +150,7 @@ const Header = () => {
   const [uid, setUid] = useState(null);
   const [loginStatus, setLoginStatus] = useState("Sign In");
   let toastProperties = null;
+  const [signType, setSignType] = useState("signin");
 
   const history = useHistory();
 
@@ -167,7 +168,7 @@ const Header = () => {
       case "successSignOut":
         toastProperties = {
           id,
-          title: "Success",
+          title: "Success signout",
           description: "Successful signout",
           backgroundColor: "#5cb85c",
           icon: checkIcon,
@@ -176,7 +177,7 @@ const Header = () => {
       case "dangerPortfolio":
         toastProperties = {
           id,
-          title: "Danger",
+          title: "Please signin",
           description: "Before accessing the portfolio page, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
@@ -202,6 +203,16 @@ const Header = () => {
       history.push("/portfolio");
     } else {
       showToast("dangerPortfolio");
+    }
+  };
+
+  const handleClickModal = (e) => {
+    if (e.target.innerHTML === "Sign In") {
+      setSignType("signin");
+      signModal.current.open();
+    } else {
+      setSignType("create");
+      signModal.current.open();
     }
   };
 
@@ -252,20 +263,12 @@ const Header = () => {
               ) : (
                 <>
                   <li>
-                    <button
-                      bg="black"
-                      type="button"
-                      onClick={() => signModal.current.open()}
-                    >
+                    <button bg="black" type="button" onClick={handleClickModal}>
                       {loginStatus}
                     </button>
                   </li>
                   <li>
-                    <button
-                      bg="black"
-                      type="button"
-                      onClick={() => signModal.current.open()}
-                    >
+                    <button bg="black" type="button" onClick={handleClickModal}>
                       Sign Up
                     </button>
                   </li>
@@ -280,7 +283,7 @@ const Header = () => {
         <Forget />
       </CustomModal>
       <CustomModal ref={signModal}>
-        <Sign forgetModal={forgetModal} />
+        <Sign forgetModal={forgetModal} signType={signType} />
       </CustomModal>
       <Toast toastList={list} autoDelete dismissTime={5000} />
     </>

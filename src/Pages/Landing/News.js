@@ -84,7 +84,7 @@ const News = () => {
 
   const renderNewsHeadline = () =>
     newsHeadlines.map((news) => (
-      <NewsCardsContainer key={news.id}>
+      <NewsCardsContainer key={news.title}>
         <NewsCardLink href={news.link}>
           <NewsCard
             newsTitle={news.title}

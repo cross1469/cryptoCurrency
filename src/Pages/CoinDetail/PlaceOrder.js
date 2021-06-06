@@ -29,6 +29,10 @@ const BuySellStyle = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
   margin-bottom: 56px;
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 0;
+    margin-top: 36px;
+  }
 `;
 
 const BuySellContainer = styled.div`

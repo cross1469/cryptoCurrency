@@ -60,6 +60,9 @@ const OrderTableDiv = styled.div`
   width: auto;
   border-radius: 0px;
   overflow-x: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const OrderTableContainer = styled.table`

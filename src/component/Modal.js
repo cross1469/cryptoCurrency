@@ -69,7 +69,7 @@ const ModalBody = styled.div`
   z-index: 2;
   position: relative;
   margin: 0 auto;
-  background-color: #f6f9fc;
+  background-color: #121212;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   overflow-x: hidden;

@@ -99,7 +99,7 @@ const InputGroup = styled.div`
     left: 9px;
     font-size: 13px;
     opacity: 1;
-    color: #1e2329;
+    color: #fff;
   }
 `;
 
@@ -112,6 +112,8 @@ const Input = styled.input`
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
   padding: 9px;
   font-size: 14px;
+  background-color: #121212;
+  color: #fff;
   margin-top: 20px;
   ${space}
   ${border}
@@ -134,10 +136,13 @@ const Button = styled.button`
   width: 100%;
   padding: 16px 24px;
   :nth-child(3) {
-    background-color: #f6f9fc;
+    background-color: #121212;
     border: 1px solid #f0b90b;
+    color: #f0b90b;
     :hover {
       background-color: #edc423;
+      color: #212833;
+      border: none;
     }
   }
   :first-child {
@@ -176,7 +181,8 @@ const Errors = styled.div`
 `;
 
 const Sign = (props) => {
-  const [inputType, setInputType] = useState("signin");
+  const { setIsOpen, forgetModal, signType } = props;
+  const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInactive, setSignInActive] = useState("active");
@@ -190,8 +196,6 @@ const Sign = (props) => {
   const [list, setList] = useState([]);
   const signModal = useRef(null);
   let toastProperties = null;
-
-  const { setIsOpen, forgetModal } = props;
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -336,6 +340,13 @@ const Sign = (props) => {
     []
   );
 
+  useEffect(() => {
+    if (signType === "create") {
+      setSignInActive(null);
+      setSignUpActive("active");
+    }
+  }, []);
+
   const checkType = async () => {
     if (inputType === "signin") {
       const loginMessage = await firebaseAuthSignIn(email, password);
@@ -478,10 +489,12 @@ Sign.propTypes = {
   setIsOpen: PropTypes.func,
   forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func))
     .isRequired,
+  signType: PropTypes.string,
 };
 
 Sign.defaultProps = {
   setIsOpen: undefined,
+  signType: "signin",
 };
 
 export default Sign;
