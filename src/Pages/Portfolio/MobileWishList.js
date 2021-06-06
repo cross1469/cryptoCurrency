@@ -82,7 +82,7 @@ const WishListTbody = styled.tbody`
   tr {
     user-select: none;
     :hover {
-      background-color: #323539;
+      background-color: #2b2f36;
     }
   }
 `;
@@ -196,16 +196,16 @@ const WishListFooterContent = styled.div`
 `;
 
 const MobileWishList = (props) => {
-  const { className, wishList, realTimeDatas } = props;
+  const { className, wishList, coinLastPrice } = props;
 
   const renderWishList = () =>
     wishList.map((wishData) =>
-      realTimeDatas.map((item) => {
-        if (wishData === item.s) {
+      coinLastPrice.map((item) => {
+        if (wishData === item.symbol) {
           return (
-            <tr>
+            <tr key={item.closeTime}>
               <WishListItem>
-                <Link to={`/coinDetail/${wishData}`} key={item.s}>
+                <Link to={`/coinDetail/${wishData}`}>
                   <WishListCoinName>
                     <h4>{wishData}</h4>
                   </WishListCoinName>
@@ -213,8 +213,8 @@ const MobileWishList = (props) => {
               </WishListItem>
               <WishListItem>
                 <WishListPriceColumn>
-                  <h4>{Number(item.c).toLocaleString()}</h4>
-                  <h4>{Number(item.P).toLocaleString()}%</h4>
+                  <h4>{Number(item.lastPrice).toLocaleString()}</h4>
+                  <h4>{Number(item.priceChangePercent).toLocaleString()}%</h4>
                 </WishListPriceColumn>
               </WishListItem>
             </tr>
@@ -256,13 +256,13 @@ const MobileWishList = (props) => {
 
 MobileWishList.propTypes = {
   wishList: PropTypes.arrayOf(PropTypes.string),
-  realTimeDatas: PropTypes.arrayOf(PropTypes.objectOf),
+  coinLastPrice: PropTypes.arrayOf(PropTypes.objectOf),
   className: PropTypes.string.isRequired,
 };
 
 MobileWishList.defaultProps = {
   wishList: undefined,
-  realTimeDatas: undefined,
+  coinLastPrice: undefined,
 };
 
 export default MobileWishList;

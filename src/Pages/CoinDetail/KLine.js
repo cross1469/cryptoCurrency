@@ -239,12 +239,12 @@ const KLine = () => {
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");
-  }, []);
+  }, [symbol]);
 
   useEffect(() => {
     const closeSocket = socketAPI(symbol, interval);
     return closeSocket;
-  }, [options, interval]);
+  }, [interval]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
