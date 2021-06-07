@@ -14,6 +14,7 @@ import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
+// import LoaderTable from "../../Component/loader/LoaderTable";
 
 const CoinDataSection = styled.section`
   background-color: #14151a;
@@ -365,16 +366,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      // if (!dataFirstOpen) {
-      //   setRealTimeDatas((usdt) => {
-      //     const newUsdtDatas = [...usdt];
-      //     coinDatas.forEach((data) => {
-      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-      //       newUsdtDatas[index] = data;
-      //     });
-      //     return newUsdtDatas;
-      //   });
-      // }
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
 
     return () => socket.close();
@@ -392,10 +393,6 @@ const CoinData = (props) => {
       setSearchResults(results);
     }
   }, [searchTerm]);
-
-  if (JSON.stringify(realTimeDatas) === "[]") {
-    return null;
-  }
 
   const renderCoinDatas = () => {
     if (!searchTerm) {

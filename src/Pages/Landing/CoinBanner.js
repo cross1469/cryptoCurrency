@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
+import HelpLinksLoader from "../../Component/loader/HelpLinksLoader";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
@@ -292,7 +293,13 @@ const StockBanner = () => {
       <CoinBannerFlexContainer>
         <CoinBannerContainer>
           <CoinContainer>
-            <CoinMarketData>{renderCoinMarket()}</CoinMarketData>
+            <CoinMarketData>
+              {coinLastPrice.length > 0 ? (
+                renderCoinMarket()
+              ) : (
+                <HelpLinksLoader />
+              )}
+            </CoinMarketData>
             <CoinMarketText>Trade over 200 Cryptocurrency</CoinMarketText>
           </CoinContainer>
           <CoinTextContainer>

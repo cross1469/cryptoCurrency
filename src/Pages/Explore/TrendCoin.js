@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import DashboardLoader from "../../Component/loader/DashboardLoader";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;
@@ -292,7 +293,9 @@ const TrendCoin = () => {
         <TrendingTitleContainer>
           <span>Trending</span>
         </TrendingTitleContainer>
-        <TrendingCardContainer>{renderTrendCard()}</TrendingCardContainer>
+        <TrendingCardContainer>
+          {coinLastPrice.length > 0 ? renderTrendCard() : <DashboardLoader />}
+        </TrendingCardContainer>
       </TrendinWrapper>
     </TrendingContainer>
   );

@@ -190,7 +190,7 @@ const ChartContainer = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   margin-bottom: 24px;
   min-height: 310px;
-  overflow: visible;
+  overflow: hidden;
 `;
 
 const TradeColumn = styled.div`

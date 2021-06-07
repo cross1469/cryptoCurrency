@@ -49,6 +49,7 @@ const ChatForm = styled.section`
   color: #fff;
   border: 1px solid #fff;
   border-top: 1px solid #f0b90b;
+  overflow: hidden;
   ${layout}
   @media only screen and (max-width: 768px) {
     width: 50%;
