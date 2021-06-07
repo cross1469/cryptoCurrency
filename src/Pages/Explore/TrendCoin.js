@@ -294,9 +294,12 @@ const TrendCoin = () => {
         <TrendingTitleContainer>
           <span>Trending</span>
         </TrendingTitleContainer>
-        <TrendingCardContainer>
-          {coinLastPrice.length > 0 ? renderTrendCard() : <DashboardLoader />}
-        </TrendingCardContainer>
+
+        {coinLastPrice.length > 0 ? (
+          <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+        ) : (
+          <DashboardLoader />
+        )}
       </TrendinWrapper>
     </TrendingContainer>
   );

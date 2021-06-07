@@ -2,11 +2,19 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
 import Spline from "./Spline";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
 
 const WishListContainer = styled.div`
   display: flex;
@@ -276,6 +284,7 @@ const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
   const { email } = props;
   const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getWishListData = async () => {
     if (email) {
@@ -310,6 +319,7 @@ const WishList = (props) => {
         });
 
         setCoinLastPrice(usdtLastPrice);
+        setLoading(false);
       });
 
   useEffect(() => {
@@ -374,7 +384,18 @@ const WishList = (props) => {
         <WishListBody>
           <WishListBodyContainer>
             <WishListBodyModule>
-              <WishListChartLayout>{renderWishList()}</WishListChartLayout>
+              <WishListChartLayout>
+                {coinLastPrice.length > 0 ? (
+                  renderWishList()
+                ) : (
+                  <ClipLoader
+                    color="#f0b90b"
+                    loading={loading}
+                    css={override}
+                    size={40}
+                  />
+                )}
+              </WishListChartLayout>
             </WishListBodyModule>
           </WishListBodyContainer>
         </WishListBody>
@@ -390,6 +411,7 @@ const WishList = (props) => {
       <DisplayMobileWishList
         wishList={wishList}
         coinLastPrice={coinLastPrice}
+        loading={loading}
       />
     </section>
   );

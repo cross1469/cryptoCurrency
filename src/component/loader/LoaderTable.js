@@ -4,15 +4,15 @@ import ContentLoader from "react-content-loader";
 const TableLoader = () => (
   <ContentLoader
     width="100%"
-    height="1366"
-    viewBox="0 0 1000 1366"
+    height="1338"
+    viewBox="0 0 1280 1338"
     backgroundColor="#687592"
     foregroundColor="#dbdbdb"
   >
-    <rect x="51" y="45" rx="3" ry="3" width="906" height="17" />
+    <rect x="0" y="0" rx="3" ry="3" width="1280" height="17" />
     <circle cx="879" cy="123" r="11" />
     <circle cx="914" cy="123" r="11" />
-    <rect x="104" y="115" rx="3" ry="3" width="141" height="15" />
+    {/* <rect x="104" y="115" rx="3" ry="3" width="141" height="15" />
     <rect x="305" y="114" rx="3" ry="3" width="299" height="15" />
     <rect x="661" y="114" rx="3" ry="3" width="141" height="15" />
     <rect x="55" y="155" rx="3" ry="3" width="897" height="2" />
@@ -59,7 +59,7 @@ const TableLoader = () => (
     <rect x="222" y="54" rx="3" ry="3" width="149" height="33" />
     <rect x="544" y="55" rx="3" ry="3" width="137" height="33" />
     <rect x="782" y="56" rx="3" ry="3" width="72" height="33" />
-    <rect x="933" y="54" rx="3" ry="3" width="24" height="33" />
+    <rect x="933" y="54" rx="3" ry="3" width="24" height="33" /> */}
   </ContentLoader>
 );
 

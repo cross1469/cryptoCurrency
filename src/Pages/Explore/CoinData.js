@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   addWishList,
   removeWishList,
@@ -14,7 +16,17 @@ import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
-// import LoaderTable from "../../Component/loader/LoaderTable";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+  height: 100vh;
+  background-color: #14151a;
+`;
 
 const CoinDataSection = styled.section`
   background-color: #14151a;
@@ -252,7 +264,7 @@ const CoinData = (props) => {
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const { email } = props;
 
   const [starList, setStarList] = useState([]);
@@ -342,6 +354,7 @@ const CoinData = (props) => {
       if (dataFirstOpen) {
         setRealTimeDatas(usdtDatas);
         dataFirstOpen = false;
+        setLoading(false);
       }
 
       /*
@@ -393,6 +406,19 @@ const CoinData = (props) => {
       setSearchResults(results);
     }
   }, [searchTerm]);
+
+  if (JSON.stringify(realTimeDatas) === "[]") {
+    return (
+      <LoadingContainer>
+        <ClipLoader
+          color="#f0b90b"
+          loading={loading}
+          css={override}
+          size={40}
+        />
+      </LoadingContainer>
+    );
+  }
 
   const renderCoinDatas = () => {
     if (!searchTerm) {
