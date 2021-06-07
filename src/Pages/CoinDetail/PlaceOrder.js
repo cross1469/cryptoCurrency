@@ -3,7 +3,6 @@ import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import AutosizeInput from "react-input-autosize";
 import {
   updateUsdtPrice,
   updateCoinPrice,
@@ -168,7 +167,7 @@ const BuySellInputText = styled.div`
         return "32px";
       }
       if (props.children[1].props.value.length < 7) {
-        return "26px";
+        return "24px";
       }
       return "20px";
     }};
@@ -176,8 +175,7 @@ const BuySellInputText = styled.div`
   input {
     text-align: left;
     font-weight: 400;
-    background-color: #121212;
-    width: 40px;
+    background-color: #14151a;
     padding: 0px;
     margin: 0px;
     box-shadow: none;
@@ -188,16 +186,34 @@ const BuySellInputText = styled.div`
       if (props.children[1].props.value.length < 3) {
         return "54px";
       }
-      if (props.children[1].props.value.length < 7) {
-        return "45px";
+      if (props.children[1].props.value.length < 5) {
+        return "48px";
       }
-      return "40px";
+      if (props.children[1].props.value.length < 7) {
+        return "42px";
+      }
+      return "36px";
     }};
     color: ${(props) => {
       if (props.children[1].props.value === "0") {
         return "#757575";
       }
       return "#f0b90b";
+    }};
+    width: ${(props) => {
+      if (props.children[1].props.value.length < 2) {
+        return "40px";
+      }
+      if (props.children[1].props.value.length < 4) {
+        return "80px";
+      }
+      if (props.children[1].props.value.length < 6) {
+        return "120px";
+      }
+      if (props.children[1].props.value.length < 8) {
+        return "160px";
+      }
+      return "200px";
     }};
   }
 `;
@@ -242,7 +258,7 @@ const BuySellTradeTopSubTitle = styled.div`
 `;
 
 const BuySellTradeTopName = styled.div`
-  width: calc(100% - 80px);
+  width: calc(100% - 70px);
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
@@ -344,7 +360,7 @@ const PlaceOrder = (props) => {
     const re = /^[-.,0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       const num = e.target.value.replace(/,/g, "");
-      setInputValue(num);
+      setInputValue(Number(num).toLocaleString());
       if (inputTopContent.indexOf("USDT") === -1) {
         setInputTopContent(`${e.target.value} ${coin}`);
         setInputBottomContent(
@@ -372,11 +388,19 @@ const PlaceOrder = (props) => {
     if (inputBottomContent.indexOf("USDT") === -1) {
       const firstContent = inputBottomContent.replace(` ${coin}`, "");
       const sencondContent = firstContent.replace(/,/g, "");
-      setInputValue(sencondContent);
+      if (sencondContent === coin) {
+        setInputValue("");
+      } else {
+        setInputValue(Number(sencondContent).toLocaleString());
+      }
     } else {
       const firstContent = inputBottomContent.replace(` USDT`, "");
       const sencondContent = firstContent.replace(/,/g, "");
-      setInputValue(sencondContent);
+      if (sencondContent === "USDT") {
+        setInputValue("");
+      } else {
+        setInputValue(Number(sencondContent).toLocaleString());
+      }
     }
   };
 
@@ -554,11 +578,11 @@ const PlaceOrder = (props) => {
                         <BuySellBodyInputContainer>
                           <BuySellInputText>
                             <span>$</span>
-                            <AutosizeInput
+                            <input
                               inputMode="decimal"
-                              maxLength="7"
+                              maxLength="11"
                               placeholder="0"
-                              value={Number(inputValue).toLocaleString()}
+                              value={inputValue}
                               onChange={handleChangeInputNewValue}
                             />
                           </BuySellInputText>
