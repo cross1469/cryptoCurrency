@@ -31,7 +31,6 @@ const BuySellStyle = styled.div`
   color: #fff;
   @media only screen and (max-width: 768px) {
     margin-bottom: 0;
-    margin-top: 36px;
   }
 `;
 

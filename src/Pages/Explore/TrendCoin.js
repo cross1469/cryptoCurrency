@@ -60,6 +60,7 @@ const TrendingCardContainer = styled.div`
     border-radius: 6px;
     overflow: hidden;
     color: #fff;
+    border: 1px solid #14151a;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
     :last-child {
       margin-right: 0;

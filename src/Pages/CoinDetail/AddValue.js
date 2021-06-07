@@ -20,9 +20,6 @@ const BuySellStyle = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
   color: #fff;
-  @media only screen and (max-width: 768px) {
-    margin-top: 36px;
-  }
 `;
 
 const BuySellContainer = styled.div`
@@ -218,7 +215,7 @@ const BuySellBodyButton = styled.button`
   :hover {
     background-color: #ffe251;
     color: #1b1504;
-    border: 1px solid;
+    border: 1px solid #ffe251;
   }
   span {
     display: flex;

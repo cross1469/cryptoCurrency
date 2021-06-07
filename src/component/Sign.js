@@ -136,28 +136,26 @@ const Button = styled.button`
   justify-content: center;
   width: 100%;
   padding: 16px 24px;
-  :nth-child(3) {
-    background-color: #14151a;
-    border: 1px solid #f0b90b;
-    color: #f0b90b;
-    :hover {
-      background-color: #edc423;
-      color: #212833;
-      border: none;
-    }
+  img {
+    width: 46px;
+    height: 46px;
+    margin-right: 8px;
   }
   :first-child {
     margin-top: 16px;
   }
-
-  img {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-  }
   :hover {
     box-shadow: none;
     background-color: #edc423;
+  }
+  :nth-child(3) {
+    background-color: #4285f4;
+    border: 1px solid transparent;
+    color: #fff;
+    padding: 0px 24px;
+    :hover {
+      box-shadow: 0 0 3px 3px rgb(66 133 244 / 30%);
+    }
   }
 `;
 
