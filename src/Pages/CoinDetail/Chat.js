@@ -133,16 +133,43 @@ const ChatData = styled.article`
     margin-bottom: 0px;
   }
 `;
+const ChatDataContainer = styled.div`
+  clear: both;
+`;
+
 const ChatDataItem = styled.div`
   padding: 10px 10px 10px 10px;
-  border-radius: 0 6px 6px 0;
-  max-width: 80%;
-  width: auto;
+  border-radius: 0 8px 8px 0;
+  width: 70%;
   float: left;
   box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
   background-color: #2b2f36;
   margin-bottom: 20px;
+  .account {
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .message {
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .time {
+    font-size: 12px;
+    line-height: 12px;
+  }
+`;
 
+const UserChatDataItem = styled.div`
+  padding: 10px 10px 10px 10px;
+  border-radius: 8px 0px 0px 8px;
+  width: 70%;
+  float: right;
+  box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
+  background-color: #2b2f36;
+  margin-bottom: 20px;
+  text-align: right;
   .account {
     font-size: 14px;
     line-height: 18px;
@@ -211,6 +238,7 @@ const Chat = (props) => {
   const [list, setList] = useState([]);
   let toastProperties = null;
   const messagesContainer = useRef(null);
+
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
@@ -292,12 +320,36 @@ const Chat = (props) => {
     chatDatas.map((chatData) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
+      if (email === null) {
+        return (
+          <ChatDataContainer>
+            <ChatDataItem key={chatData.id}>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </ChatDataItem>
+          </ChatDataContainer>
+        );
+      }
+      if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
+        return (
+          <ChatDataContainer>
+            <UserChatDataItem key={chatData.id}>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </UserChatDataItem>
+          </ChatDataContainer>
+        );
+      }
       return (
-        <ChatDataItem key={chatData.id}>
-          <div className="account">{chatData.account}</div>
-          <div className="message">{chatData.messages}</div>
-          <div className="time">{time}</div>
-        </ChatDataItem>
+        <ChatDataContainer>
+          <ChatDataItem key={chatData.id}>
+            <div className="account">{chatData.account}</div>
+            <div className="message">{chatData.messages}</div>
+            <div className="time">{time}</div>
+          </ChatDataItem>
+        </ChatDataContainer>
       );
     });
 
