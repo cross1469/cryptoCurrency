@@ -14,6 +14,7 @@ import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
 import Pagination from "../../Component/Pagination";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
+import checkIcon from "../../images/check.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
 
@@ -282,10 +283,28 @@ const CoinData = (props) => {
       case "danger":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "請先登入",
+          title: "Please signin",
+          description: "Before add your wishlist, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
+        };
+        break;
+      case "successAddWishList":
+        toastProperties = {
+          id,
+          title: "Add to wish list",
+          description: "Successfully add to wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successRemoveWishList":
+        toastProperties = {
+          id,
+          title: "Remove the wish list",
+          description: "Successfully remove the wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
         };
         break;
       default:
@@ -311,12 +330,14 @@ const CoinData = (props) => {
         const newStarList = [...starList];
         newStarList.push(e.target.parentNode.parentNode.id);
         setStarList(newStarList);
+        showToast("successAddWishList");
       } else {
         await removeWishList(email, e.target.parentNode.parentNode.id);
         const num = starList.indexOf(e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.splice(num, 1);
         setStarList(newStarList);
+        showToast("successRemoveWishList");
       }
     } else {
       showToast("danger");

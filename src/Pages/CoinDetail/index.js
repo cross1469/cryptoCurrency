@@ -16,6 +16,9 @@ import {
 } from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
 import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
+import Toast from "../../Component/Toast";
+import errorIcon from "../../images/error.svg";
+import checkIcon from "../../images/check.svg";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -228,6 +231,8 @@ const CoinDetail = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
+  const [list, setList] = useState([]);
+  let toastProperties = null;
 
   const getUserWishList = async () => {
     if (email) {
@@ -236,18 +241,61 @@ const CoinDetail = () => {
     }
   };
 
+  const showToast = (type) => {
+    const id = Math.floor(Math.random() * 101 + 1);
+    switch (type) {
+      case "successAddWishList":
+        toastProperties = {
+          id,
+          title: "Add to wish list",
+          description: "Successfully add to wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successRemoveWishList":
+        toastProperties = {
+          id,
+          title: "Remove the wish list",
+          description: "Successfully remove the wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "dangerWishList":
+        toastProperties = {
+          id,
+          title: "Please signin",
+          description: "Before add your wishlist, please signin",
+          backgroundColor: "#d9534f",
+          icon: errorIcon,
+        };
+        break;
+      default:
+        setList([]);
+    }
+
+    setList([...list, toastProperties]);
+  };
+
   const handleWishList = () => {
-    if (userWishList.indexOf(symbol) === -1) {
-      addWishList(email, symbol);
-      const newStarList = [...userWishList];
-      newStarList.push(symbol);
-      setUserWishList(newStarList);
+    if (email) {
+      if (userWishList.indexOf(symbol) === -1) {
+        addWishList(email, symbol);
+        const newStarList = [...userWishList];
+        newStarList.push(symbol);
+        setUserWishList(newStarList);
+        showToast("successAddWishList");
+      } else {
+        removeWishList(email, symbol);
+        const num = userWishList.indexOf(symbol);
+        const newStarList = [...userWishList];
+        newStarList.splice(num, 1);
+        setUserWishList(newStarList);
+        showToast("successRemoveWishList");
+      }
     } else {
-      removeWishList(email, symbol);
-      const num = userWishList.indexOf(symbol);
-      const newStarList = [...userWishList];
-      newStarList.splice(num, 1);
-      setUserWishList(newStarList);
+      showToast("dangerWishList");
     }
   };
 
@@ -339,6 +387,7 @@ const CoinDetail = () => {
       </LayoutWrapper>
       <Mobile email={email} userId={userId} />
       <Chat email={email} userId={userId} />
+      <Toast toastList={list} autoDelete dismissTime={5000} />
     </>
   );
 };
