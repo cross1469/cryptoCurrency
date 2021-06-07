@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import Tooltip from "rc-tooltip";
 import { ReactComponent as Info } from "../../images/information.svg";
 import { firebaseReadCoinAsset, firebaseReadAsset } from "../../Utils/firebase";
+import "rc-tooltip/assets/bootstrap.css";
 
 const AssetsContainer = styled.div`
   margin-top: 32px;
@@ -151,6 +153,14 @@ const AssetsTotal = (props) => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
   const [profitLoss, setProfitLoss] = useState(0);
   const { email } = props;
+  const text = (
+    <span>
+      Yesterday&apos;s PNL = Yesterday asset total in spot account （24:00:00
+      UTC+8） - Today&apos;s initial asset total（00:00:00 UTC+8） -
+      Yesterday&apos;s net transfer and deposit. Data update time refers to UTC
+      + 8 time zone. The data maintenance time is 0am (UTC+8) every day.
+    </span>
+  );
 
   const getAssetData = async () => {
     if (email) {
@@ -193,7 +203,14 @@ const AssetsTotal = (props) => {
             <AccountPNLTitle>
               Yesterday&apos;s PNL
               <AccountPNLInfo>
-                <Info />
+                <Tooltip
+                  placement="top"
+                  overlay={text}
+                  overlayStyle={{ width: "300px" }}
+                  trigger={["hover"]}
+                >
+                  <Info />
+                </Tooltip>
               </AccountPNLInfo>
             </AccountPNLTitle>
             <AccountPNLPrice>
