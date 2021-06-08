@@ -311,13 +311,14 @@ const AddValue = (props) => {
   };
 
   const handleClickAddValue = () => {
-    const total = Number(usdtQty) + Number(addValue);
-    if (email && addValue > 0) {
+    const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
+    console.log(addValue);
+    if (email && addValue.replace(/,/g, "") > 0) {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
       showToast("success");
-    } else if (!addValue) {
+    } else if (!addValue.replace(/,/g, "")) {
       showToast("dangerTotal");
     } else {
       showToast("danger");
