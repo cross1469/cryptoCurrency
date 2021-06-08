@@ -340,6 +340,7 @@ const PlaceOrder = (props) => {
     (state) => state.coinDetailReducer.marketPrice
   );
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
+  const userQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
@@ -361,10 +362,8 @@ const PlaceOrder = (props) => {
     if (e.target.value === "" || re.test(e.target.value)) {
       const num = e.target.value.replace(/,/g, "");
       if (num.indexOf(".") === -1) {
-        console.log(1);
         setInputValue(Number(num).toLocaleString());
       } else {
-        console.log(2);
         setInputValue(num);
       }
       if (inputTopContent.indexOf("USDT") === -1) {
@@ -534,7 +533,7 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickUploadOrder = () => {
-    if ((email && total > 0 && usdtQty > total) || userCoin > total) {
+    if ((email && total > 0 && usdtQty > total) || userQty > total) {
       const orderData = {
         coinPrice: marketPrice,
         coinType: coin,
