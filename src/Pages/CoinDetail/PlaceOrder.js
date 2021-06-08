@@ -339,6 +339,7 @@ const PlaceOrder = (props) => {
   const marketPrice = useSelector(
     (state) => state.coinDetailReducer.marketPrice
   );
+  const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
@@ -527,7 +528,7 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickUploadOrder = () => {
-    if ((email && total > 0 && userUsdt > total) || userCoin > total) {
+    if ((email && total > 0 && usdtQty > total) || userCoin > total) {
       const orderData = {
         coinPrice: marketPrice,
         coinType: coin,
