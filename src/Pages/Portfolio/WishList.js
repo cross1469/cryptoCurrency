@@ -11,9 +11,13 @@ import MobileWishList from "./MobileWishList";
 import Spline from "./Spline";
 
 const override = css`
-  margin: 0 auto;
   display: flex;
   justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+  padding: 122px;
+  margin: 0 auto;
 `;
 
 const WishListContainer = styled.div`
@@ -398,12 +402,14 @@ const WishList = (props) => {
                 {coinLastPrice.length > 0 ? (
                   renderWishList()
                 ) : (
-                  <ClipLoader
-                    color="#f0b90b"
-                    loading={loading}
-                    css={override}
-                    size={40}
-                  />
+                  <LoadingContainer>
+                    <ClipLoader
+                      color="#f0b90b"
+                      loading={loading}
+                      css={override}
+                      size={40}
+                    />
+                  </LoadingContainer>
                 )}
               </WishListChartLayout>
             </WishListBodyModule>
