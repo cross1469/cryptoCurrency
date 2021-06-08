@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import OrderTable from "./OrderTable";
-import AssetsTotal from "./AssetsTotal";
+import UserPNL from "./UserPNL";
 import WishList from "./WishList";
 import YourNews from "./YourNews";
 import { subscribeUserData } from "../../Utils/firebase";
@@ -64,7 +64,7 @@ const Portfolio = () => {
         <PortfolioStyleFlex>
           <PortfolioPanel>
             <PortfolioStyleFlex>
-              <AssetsTotal email={email} userId={userId} />
+              <UserPNL email={email} userId={userId} />
               <OrderTable email={email} userId={userId} />
               <WishList email={email} userId={userId} />
               <YourNews email={email} userId={userId} />
