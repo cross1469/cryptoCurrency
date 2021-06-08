@@ -361,7 +361,7 @@ const Sign = (props) => {
   };
 
   const googleSignIn = async () => {
-    firebaseAuthGoogleSignIn();
+    await firebaseAuthGoogleSignIn();
     const googleEmail = await firebaseAuthGoogleSignIn.email;
     setIsOpen(false);
     setEmail(googleEmail);
