@@ -1,28 +1,30 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { firebaseReadAsset } from "../../Utils/firebase";
 import DashboardLoader from "../../Component/loader/DashboardLoader";
 
-const TrendingContainer = styled.div`
+const UserAssetContainer = styled.div`
   background-color: #14151a;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
   flex-direction: column;
-  padding: 48px 24px;
+  padding: 48px 0;
   @media only screen and (max-width: 768px) {
-    padding: 32px 16px;
+    padding: 32px 0;
   }
 `;
 
-const TrendinWrapper = styled.div`
+const UserAssetWrapper = styled.div`
   max-width: 1280px;
   width: 100%;
 `;
 
-const TrendingTitleContainer = styled.div`
+const UserAssetTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   color: #fff;
@@ -36,10 +38,10 @@ const TrendingTitleContainer = styled.div`
   }
 `;
 
-const TrendingCardContainer = styled.div`
+const UserAssetCardContainer = styled.div`
   flex-direction: row;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -74,14 +76,14 @@ const TrendingCardContainer = styled.div`
   }
 `;
 
-const TrendingCardTitle = styled.div`
+const UserAssetCardTitle = styled.div`
   display: grid;
   justify-content: start;
   align-content: center;
   overflow: hidden;
 `;
 
-const TrendingCoinLogoContainer = styled.div`
+const UserAssetCoinLogoContainer = styled.div`
   grid-row: 1 / span 2;
   grid-column: 1;
   margin-right: 12px;
@@ -108,7 +110,7 @@ const TrendingCoinLogoContainer = styled.div`
   }
 `;
 
-const TrendingCoinNameContainer = styled.div`
+const UserAssetCoinNameContainer = styled.div`
   grid-row: 1;
   grid-column: 2;
   display: grid;
@@ -124,7 +126,7 @@ const TrendingCoinNameContainer = styled.div`
   }
 `;
 
-const TrendingCoinSubtitleContainer = styled.div`
+const UserAssetCoinSubtitleContainer = styled.div`
   grid-row: 2;
   grid-column: 2;
   display: grid;
@@ -139,7 +141,7 @@ const TrendingCoinSubtitleContainer = styled.div`
   }
 `;
 
-const TrendingCardPrice = styled.div`
+const UserAssetCardPrice = styled.div`
   margin-top: 46px;
   margin-bottom: 27px;
   font-size: 24px;
@@ -154,7 +156,7 @@ const TrendingCardPrice = styled.div`
   }
 `;
 
-const TrendingCardXlFooter = styled.div`
+const UserAssetCardXlFooter = styled.div`
   display: flex;
   flex-direction: column;
   @media only screen and (max-width: 768px) {
@@ -162,7 +164,7 @@ const TrendingCardXlFooter = styled.div`
   }
 `;
 
-const TrendingCardXlFooterText = styled.div`
+const UserAssetCardXlFooterText = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   grid-column-gap: 4px;
@@ -175,7 +177,7 @@ const TrendingCardXlFooterText = styled.div`
   }
 `;
 
-const TrendingCardXlFooterTextChange = styled.div`
+const UserAssetCardXlFooterTextChange = styled.div`
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -191,7 +193,7 @@ const TrendingCardXlFooterTextChange = styled.div`
   }};
 `;
 
-const TrendingCardXlFooterTextVolumn = styled.div`
+const UserAssetCardXlFooterTextVolumn = styled.div`
   margin: 0;
   text-decoration: none;
   font-size: 14px;
@@ -202,14 +204,14 @@ const TrendingCardXlFooterTextVolumn = styled.div`
   }
 `;
 
-const TrendingCardMdFooter = styled.div`
+const UserAssetCardMdFooter = styled.div`
   display: none;
   @media only screen and (max-width: 768px) {
     display: block;
   }
 `;
 
-const TrendingCardMdFooterText = styled.div`
+const UserAssetCardMdFooterText = styled.div`
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -225,8 +227,17 @@ const TrendingCardMdFooterText = styled.div`
   }};
 `;
 
-const TrendCoin = () => {
+const UserAsset = (props) => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const [userAsset, setUserAsset] = useState([]);
+  const { email } = props;
+
+  const getUserAsset = async () => {
+    if (email) {
+      const asset = await firebaseReadAsset(email);
+      setUserAsset(asset);
+    }
+  };
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -244,64 +255,76 @@ const TrendCoin = () => {
       )
       .then((res) => {
         const usdtLastPrice = [];
-        res.data.sort((a, b) => b.count - a.count);
         res.data.forEach((data) => {
           if (data.symbol.indexOf("USDT", 2) !== -1) {
             usdtLastPrice.push(data);
           }
         });
-
-        setCoinLastPrice(usdtLastPrice.slice(0, 4));
+        setCoinLastPrice(usdtLastPrice);
       });
 
   useEffect(() => {
     getLastPrice();
   }, []);
 
+  useEffect(() => {
+    getUserAsset();
+  }, [email]);
+
   const renderTrendCard = () =>
-    coinLastPrice.map((coin) => {
-      const symbol = coin.symbol.replace(/USDT/, "");
-      return (
-        <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
-          <TrendingCardTitle>
-            <TrendingCoinLogoContainer>
-              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />
-            </TrendingCoinLogoContainer>
-            <TrendingCoinNameContainer>{coin.symbol}</TrendingCoinNameContainer>
-            <TrendingCoinSubtitleContainer>
-              <span>Top trade count</span>
-            </TrendingCoinSubtitleContainer>
-          </TrendingCardTitle>
-          <TrendingCardPrice>
-            <span>$ {Number(coin.lastPrice).toLocaleString()}</span>
-          </TrendingCardPrice>
-          <TrendingCardXlFooter>
-            <TrendingCardXlFooterText>
-              <TrendingCardXlFooterTextChange>
-                {Number(coin.priceChangePercent).toLocaleString()} %
-              </TrendingCardXlFooterTextChange>
-              <TrendingCardXlFooterTextVolumn>
-                {Number(coin.volume).toLocaleString()}
-              </TrendingCardXlFooterTextVolumn>
-              <span>24h Change</span>
-              <span>24h Volume</span>
-            </TrendingCardXlFooterText>
-          </TrendingCardXlFooter>
-          <TrendingCardMdFooter>
-            <TrendingCardMdFooterText>
-              {Number(coin.priceChangePercent).toLocaleString()} %
-            </TrendingCardMdFooterText>
-          </TrendingCardMdFooter>
-        </Link>
-      );
-    });
+    userAsset.map((asset) =>
+      coinLastPrice.map((coin) => {
+        const symbol = coin.symbol.replace(/USDT/, "");
+        if (asset.coinType === symbol) {
+          return (
+            <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
+              <UserAssetCardTitle>
+                <UserAssetCoinLogoContainer>
+                  <img
+                    src={`/icon/${asset.coinType.toLowerCase()}.svg`}
+                    alt="CoinSymbol"
+                  />
+                </UserAssetCoinLogoContainer>
+                <UserAssetCoinNameContainer>
+                  {coin.symbol}
+                </UserAssetCoinNameContainer>
+                <UserAssetCoinSubtitleContainer>
+                  <span>my cryptocurrency</span>
+                </UserAssetCoinSubtitleContainer>
+              </UserAssetCardTitle>
+              <UserAssetCardPrice>
+                <span>$ {Number(coin.lastPrice).toLocaleString()}</span>
+              </UserAssetCardPrice>
+              <UserAssetCardXlFooter>
+                <UserAssetCardXlFooterText>
+                  <UserAssetCardXlFooterTextChange>
+                    {Number(coin.priceChangePercent).toLocaleString()} %
+                  </UserAssetCardXlFooterTextChange>
+                  <UserAssetCardXlFooterTextVolumn>
+                    {Number(asset.qty).toLocaleString()}
+                  </UserAssetCardXlFooterTextVolumn>
+                  <span>24h Change</span>
+                  <span>Qty</span>
+                </UserAssetCardXlFooterText>
+              </UserAssetCardXlFooter>
+              <UserAssetCardMdFooter>
+                <UserAssetCardMdFooterText>
+                  {Number(coin.priceChangePercent).toLocaleString()} %
+                </UserAssetCardMdFooterText>
+              </UserAssetCardMdFooter>
+            </Link>
+          );
+        }
+        return null;
+      })
+    );
 
   return (
-    <TrendingContainer>
-      <TrendinWrapper>
-        <TrendingTitleContainer>
-          <span>Trending</span>
-        </TrendingTitleContainer>
+    <UserAssetContainer>
+      <UserAssetWrapper>
+        <UserAssetTitleContainer>
+          <span>My cryptocurrencies</span>
+        </UserAssetTitleContainer>
 
         {coinLastPrice.length > 0 ? (
           <Scrollbars
@@ -311,14 +334,21 @@ const TrendCoin = () => {
             renderThumbHorizontal={renderThumb}
             style={{ width: "100%", height: "220px" }}
           >
-            <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+            <UserAssetCardContainer>
+              {" "}
+              {renderTrendCard()}
+            </UserAssetCardContainer>
           </Scrollbars>
         ) : (
           <DashboardLoader />
         )}
-      </TrendinWrapper>
-    </TrendingContainer>
+      </UserAssetWrapper>
+    </UserAssetContainer>
   );
 };
 
-export default TrendCoin;
+UserAsset.propTypes = {
+  email: PropTypes.string.isRequired,
+};
+
+export default UserAsset;

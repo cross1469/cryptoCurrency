@@ -15,7 +15,8 @@ const CoinBannerWrapper = styled.section`
 `;
 
 const CoinBannerFlexContainer = styled.div`
-  max-width: 134rem;
+  max-width: 1280px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding-left: 30px;

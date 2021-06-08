@@ -21,7 +21,7 @@ const TableContainer = styled.div`
 const MobileCoinTable = styled.table`
   width: 100%;
   padding: 0px;
-  background-color: #1c1c1e;
+  background-color: #14151a;
   border-spacing: 0px;
   border-collapse: separate;
   caption-side: top;
@@ -40,7 +40,7 @@ const MobileTbody = styled.tbody`
 `;
 
 const MobileBodyItem = styled.td`
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: pointer;
   min-width: 140px;
   padding: 14px 24px 14px 0px;

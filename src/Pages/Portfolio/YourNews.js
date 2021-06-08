@@ -6,7 +6,7 @@ import { readWishList } from "../../Utils/firebase";
 import defaultNewsImg from "../../images/defaultNews.jpg";
 
 const YourNewsSection = styled.section`
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   margin-top: 88px;
   color: #fff;
 `;
@@ -277,32 +277,29 @@ const YourNews = (props) => {
     ));
 
   const renderYourNewsButtom = () =>
-    newsHeadlines.slice(2, 6).map((news) => {
-      console.log(news.media);
-      return (
-        <YourNewsContentBottomLink key={news.summary} href={news.link}>
-          <YourNewsBottomContent>
-            <YourNewsBottomTopImg>
-              <YourNewsBottomTopImgContainer>
-                <picture>
-                  <source media="(max-width: 560px)" />
-                  <img
-                    src={news.media === "" ? defaultNewsImg : news.media}
-                    alt={news.title}
-                    loading="lazy"
-                  />
-                </picture>
-              </YourNewsBottomTopImgContainer>
-            </YourNewsBottomTopImg>
-            <YourNewsBottomBottomTitle>
-              <YourNewsBottomBottomContainer>
-                <h4>{news.title}</h4>
-              </YourNewsBottomBottomContainer>
-            </YourNewsBottomBottomTitle>
-          </YourNewsBottomContent>
-        </YourNewsContentBottomLink>
-      );
-    });
+    newsHeadlines.slice(2, 6).map((news) => (
+      <YourNewsContentBottomLink key={news.summary} href={news.link}>
+        <YourNewsBottomContent>
+          <YourNewsBottomTopImg>
+            <YourNewsBottomTopImgContainer>
+              <picture>
+                <source media="(max-width: 560px)" />
+                <img
+                  src={news.media === "" ? defaultNewsImg : news.media}
+                  alt={news.title}
+                  loading="lazy"
+                />
+              </picture>
+            </YourNewsBottomTopImgContainer>
+          </YourNewsBottomTopImg>
+          <YourNewsBottomBottomTitle>
+            <YourNewsBottomBottomContainer>
+              <h4>{news.title}</h4>
+            </YourNewsBottomBottomContainer>
+          </YourNewsBottomBottomTitle>
+        </YourNewsBottomContent>
+      </YourNewsContentBottomLink>
+    ));
 
   useEffect(() => {
     getWishListData();

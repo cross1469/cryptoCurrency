@@ -17,10 +17,12 @@ const BannerBg = styled.section`
   overflow: hidden;
   padding-left: 56px;
   padding-right: 56px;
+  justify-content: center;
   ${color}
 `;
 const BannerCotainer = styled.div`
   max-width: 1280px;
+  width: 100%;
   display: flex;
   align-items: center;
   flex-direction: row;

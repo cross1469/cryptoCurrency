@@ -14,7 +14,7 @@ const BuySellStyle = styled.div`
   position: relative;
   border-width: 2px 1px 1px;
   border-style: solid;
-  border-color: #f0b90b rgb(236, 239, 241) rgb(236, 239, 241);
+  border-color: #f0b90b #2f3336 #2f3336;
   border-image: initial;
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
@@ -311,13 +311,14 @@ const AddValue = (props) => {
   };
 
   const handleClickAddValue = () => {
-    const total = Number(usdtQty) + Number(addValue);
-    if (email && addValue > 0) {
+    const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
+    console.log(addValue);
+    if (email && addValue.replace(/,/g, "") > 0) {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
       showToast("success");
-    } else if (!addValue) {
+    } else if (!addValue.replace(/,/g, "")) {
       showToast("dangerTotal");
     } else {
       showToast("danger");
@@ -369,7 +370,7 @@ const AddValue = (props) => {
           </CryptoContainer>
         </BuySellContainer>
       </BuySellStyle>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

@@ -62,7 +62,7 @@ const ModuleFade = styled.div`
 const OuterHeader = styled.div`
   width: 100%;
   margin: 40px 0px;
-  border-bottom: 1px solid rgb(236, 239, 241);
+  border-bottom: 1px solid #2f3336;
   padding: 0px 24px;
 `;
 
@@ -119,8 +119,8 @@ const WishListBtn = styled.button`
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
   font-size: 14px;
-  border: 1px solid #fff;
-  background-color: #121212;
+  border: 1px solid #2f3336;
+  background-color: #14151a;
   color: #fff;
   :hover {
     color: #f0b90b;
@@ -188,8 +188,8 @@ const ChartContainer = styled.div`
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  border: 1px solid rgb(236, 239, 241);
-  border-radius: 6px;
+  border: 1px solid #2f3336;
+  border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   margin-bottom: 24px;
   min-height: 310px;
@@ -218,7 +218,7 @@ const Mobile = styled(MobileButton)`
   bottom: 0;
   overflow-y: initial;
   overflow-x: visible;
-  background-color: #1e2026;
+  background-color: #14151a;
   @media only screen and (max-width: 768px) {
     display: block;
     z-index: 1;
@@ -387,7 +387,7 @@ const CoinDetail = () => {
       </LayoutWrapper>
       <Mobile email={email} userId={userId} />
       <Chat email={email} userId={userId} />
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

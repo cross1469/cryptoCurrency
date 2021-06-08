@@ -14,7 +14,7 @@ const AssetInnerCard = styled.div`
   flex: 1 1 auto;
   position: relative;
   flex-direction: column;
-  border: 1px solid rgb(236, 239, 241);
+  border: 1px solid #2f3336;
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   overflow: hidden;
@@ -27,7 +27,7 @@ const AssetTableTile = styled.div`
   flex-direction: row;
   position: relative;
   padding: 16px 24px;
-  border-bottom: 1px solid rgb(236, 239, 241);
+  border-bottom: 1px solid #2f3336;
   border-top: none;
   flex-shrink: 0;
   h3 {

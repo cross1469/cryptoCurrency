@@ -22,7 +22,7 @@ const BuySellStyle = styled.div`
   position: relative;
   border-width: 2px 1px 1px;
   border-style: solid;
-  border-color: #f0b90b rgb(236, 239, 241) rgb(236, 239, 241);
+  border-color: #f0b90b #2f3336 #2f3336;
   border-image: initial;
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
@@ -647,7 +647,7 @@ const PlaceOrder = (props) => {
         </BuySellContainer>
       </BuySellStyle>
 
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

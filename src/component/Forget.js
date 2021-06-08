@@ -129,7 +129,7 @@ const Forget = () => {
           重設密碼
         </Button>
       </BtnContainer>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

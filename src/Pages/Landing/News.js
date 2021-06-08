@@ -10,7 +10,8 @@ const NewsBg = styled.section`
   color: #fff;
 `;
 const NewsCotainer = styled.div`
-  max-width: 1200px;
+  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -35,7 +36,9 @@ const NewsSubtitle = styled.div`
 
 const NewsColumsContainer = styled.div`
   width: 100%;
+  max-width: 1280px;
   display: flex;
+  margin: 0 auto;
   padding: 0 65px;
   justify-content: space-between;
   @media only screen and (max-width: 768px) {

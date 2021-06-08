@@ -94,7 +94,7 @@ const SearchSection = styled.section`
   width: 100%;
   height: 48px;
   padding: 0px 16px;
-  border: 1px solid #dfe1e5;
+  border: 1px solid #2f3336;
   border-radius: 4px;
   background: #14151a;
 `;
@@ -134,6 +134,7 @@ const CoinTableStyle = styled.section`
   width: 100%;
   color: #fff;
   margin-bottom: 24px;
+  min-height: calc(100vh - 499px);
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -147,7 +148,7 @@ const DisplayMobileTable = styled(MobileTable)`
 `;
 
 const CoinTableContainer = styled.div`
-  border: 1px solid #dfe1e5;
+  border: 1px solid #2f3336;
   width: auto;
   border-radius: 0px;
   overflow-x: auto;
@@ -172,16 +173,13 @@ const CoinTableHead = styled.thead`
 const CoinTableHeadItem = styled.th`
   padding: 16px 48px 16px 0px;
   border-bottom: none;
-  text-align: left;
+  text-align: center;
   :first-child {
     padding-left: 32px;
   }
   :last-child {
     width: 70px;
     padding-right: 32px;
-  }
-  :nth-child(5) {
-    padding-left: 16px;
   }
 `;
 
@@ -199,20 +197,28 @@ const CoinTableBody = styled.tbody`
 
 const CoinTableBodyItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
   position: relative;
+  text-align: center;
   width: 85px;
   :first-child {
     padding-left: 32px;
     .symbolContainer {
       display: flex;
       align-content: center;
+      justify-content: center;
     }
   }
   :last-child {
     width: 70px;
     padding-top: 20px;
+  }
+  :nth-child(2),
+  :nth-child(3),
+  :nth-child(4) {
+    min-width: 148px;
+    text-align: right;
   }
   :nth-child(3) {
     color: ${(props) => {
@@ -363,6 +369,11 @@ const CoinData = (props) => {
     (currentPage - 1) * limit + limit
   );
 
+  const searchCurrentData = searchResults.slice(
+    (currentPage - 1) * limit,
+    (currentPage - 1) * limit + limit
+  );
+
   useEffect(() => {
     const socket = new WebSocket(
       `wss://stream.binance.com:9443/ws/!ticker@arr`
@@ -404,16 +415,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      if (!dataFirstOpen) {
-        setRealTimeDatas((usdt) => {
-          const newUsdtDatas = [...usdt];
-          coinDatas.forEach((data) => {
-            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-            newUsdtDatas[index] = data;
-          });
-          return newUsdtDatas;
-        });
-      }
+      // if (!dataFirstOpen) {
+      //   setRealTimeDatas((usdt) => {
+      //     const newUsdtDatas = [...usdt];
+      //     coinDatas.forEach((data) => {
+      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+      //       newUsdtDatas[index] = data;
+      //     });
+      //     return newUsdtDatas;
+      //   });
+      // }
     };
 
     return () => socket.close();
@@ -446,7 +457,7 @@ const CoinData = (props) => {
   }
 
   const renderCoinDatas = () => {
-    if (!searchTerm) {
+    if (searchTerm === "") {
       return currentData.map((realTimeData) => {
         const symbol = realTimeData.s.replace(/USDT/, "");
         return (
@@ -482,7 +493,19 @@ const CoinData = (props) => {
         );
       });
     }
-    return searchResults.map((item) => {
+    if (searchCurrentData.length === 0) {
+      return (
+        <tr>
+          <CoinTableBodyItem> </CoinTableBodyItem>
+          <CoinTableBodyItem> </CoinTableBodyItem>
+          <CoinTableBodyItem>No data available</CoinTableBodyItem>
+          <CoinTableBodyItem> </CoinTableBodyItem>
+          <CoinTableBodyItem> </CoinTableBodyItem>
+          <CoinTableBodyItem> </CoinTableBodyItem>
+        </tr>
+      );
+    }
+    return searchCurrentData.map((item) => {
       const symbol = item.s.replace(/USDT/, "");
       return (
         <tr key={item.L} id={item.s}>
@@ -574,7 +597,7 @@ const CoinData = (props) => {
         </div>
       </CoinDataContainer>
 
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </CoinDataSection>
   );
 };

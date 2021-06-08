@@ -11,9 +11,13 @@ import MobileWishList from "./MobileWishList";
 import Spline from "./Spline";
 
 const override = css`
-  margin: 0 auto;
   display: flex;
   justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+  padding: 122px;
+  margin: 0 auto;
 `;
 
 const WishListContainer = styled.div`
@@ -22,7 +26,7 @@ const WishListContainer = styled.div`
   background-color: #14151a;
   margin-bottom: 22px;
   border-radius: 4px;
-  border: 1px solid rgb(236, 239, 241);
+  border: 1px solid #2f3336;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -88,7 +92,7 @@ const WishListItem = styled.div`
   position: relative;
   width: 25%;
   max-width: 25%;
-  border-right: 1px solid rgb(236, 239, 241);
+  border-right: 1px solid #2f3336;
 `;
 
 const WishListItemContainer = styled.div`
@@ -177,6 +181,10 @@ const WishListMiniItemTop = styled.div`
   align-items: center;
   flex-direction: row;
   margin-bottom: 8px;
+  img {
+    height: 24px;
+    width: 24px;
+  }
   label {
     font-size: 14px;
     font-weight: 500;
@@ -259,7 +267,7 @@ const WishListBottomContent = styled.div`
   flex-direction: row;
   flex-shrink: 0;
   height: 54px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   font-weight: 500;
   transition: all 0.25s ease 0s;
   cursor: pointer;
@@ -334,6 +342,7 @@ const WishList = (props) => {
   const renderWishList = () =>
     wishList.map((wishData) =>
       coinLastPrice.map((coin) => {
+        const symbol = wishData.replace(/USDT/, "");
         if (wishData === coin.symbol) {
           return (
             <WishListItem key={coin.openTime}>
@@ -347,6 +356,10 @@ const WishList = (props) => {
                     >
                       <WishListMiniItem>
                         <WishListMiniItemTop>
+                          <img
+                            src={`/icon/${symbol.toLowerCase()}.svg`}
+                            alt="coinIcon"
+                          />
                           <label htmlFor="wishDataName">{wishData}</label>
                           <div>24h</div>
                         </WishListMiniItemTop>
@@ -398,12 +411,14 @@ const WishList = (props) => {
                 {coinLastPrice.length > 0 ? (
                   renderWishList()
                 ) : (
-                  <ClipLoader
-                    color="#f0b90b"
-                    loading={loading}
-                    css={override}
-                    size={40}
-                  />
+                  <LoadingContainer>
+                    <ClipLoader
+                      color="#f0b90b"
+                      loading={loading}
+                      css={override}
+                      size={40}
+                    />
+                  </LoadingContainer>
                 )}
               </WishListChartLayout>
             </WishListBodyModule>

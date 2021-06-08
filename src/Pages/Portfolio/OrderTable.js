@@ -57,7 +57,7 @@ const OrderSection = styled.section`
 `;
 
 const OrderTableDiv = styled.div`
-  border: 1px solid rgb(236, 239, 241);
+  border: 1px solid #2f3336;
   width: auto;
   border-radius: 0px;
   overflow-x: auto;
@@ -77,14 +77,14 @@ const OrderTableContainer = styled.table`
 const OrderThead = styled.thead`
   border: none;
   tr {
-    border-bottom: 1px solid rgb(236, 239, 241);
+    border-bottom: 1px solid #2f3336;
   }
 `;
 
 const OrderTheadItem = styled.th`
   padding: 16px 48px 16px 0px;
   border-bottom: none;
-  text-align: left;
+  text-align: center;
   :first-child {
     padding-left: 32px;
   }
@@ -106,8 +106,9 @@ const OrderTbody = styled.tbody`
 
 const OrderTbodyItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
+  text-align: center;
   position: relative;
   width: 85px;
   :first-child {
@@ -116,6 +117,12 @@ const OrderTbodyItem = styled.td`
   :nth-child(4),
   :nth-child(5) {
     min-width: 135px;
+  }
+  :nth-child(4),
+  :nth-child(5),
+  :nth-child(6),
+  :nth-child(7) {
+    text-align: right;
   }
   :last-child {
     padding-right: 32px;
@@ -133,9 +140,10 @@ const OrderTbodyItem = styled.td`
 
 const OrderTbodySellItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
   position: relative;
+  text-align: center;
   width: 85px;
   :first-child {
     padding-left: 32px;
@@ -145,6 +153,11 @@ const OrderTbodySellItem = styled.td`
   }
   :last-child {
     padding-right: 32px;
+  }
+  :nth-child(4),
+  :nth-child(5),
+  :nth-child(6) {
+    text-align: right;
   }
 `;
 
@@ -156,8 +169,8 @@ const OrderTable = (props) => {
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
-      backgroundColor: "#2b2f36",
-      width: "5px",
+      backgroundColor: "#2f3336",
+      width: "3px",
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;
@@ -205,7 +218,11 @@ const OrderTable = (props) => {
                 <h4>{index + 1}</h4>
               </OrderTbodyItem>
               <OrderTbodyItem>
-                {new Date(buyData.timestamp).toLocaleDateString()}
+                {new Date(buyData.timestamp).toLocaleDateString("zh-TW", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
               </OrderTbodyItem>
               <OrderTbodyItem>{buyData.coinType}</OrderTbodyItem>
               <OrderTbodyItem>
@@ -239,7 +256,11 @@ const OrderTable = (props) => {
       <tr key={sellData.timestamp}>
         <OrderTbodySellItem>{index + 1}</OrderTbodySellItem>
         <OrderTbodySellItem>
-          {new Date(sellData.timestamp).toLocaleDateString()}
+          {new Date(sellData.timestamp).toLocaleDateString("zh-TW", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          })}
         </OrderTbodySellItem>
         <OrderTbodySellItem>{sellData.coinType}</OrderTbodySellItem>
         <OrderTbodySellItem>
