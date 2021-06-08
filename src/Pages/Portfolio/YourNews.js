@@ -277,32 +277,29 @@ const YourNews = (props) => {
     ));
 
   const renderYourNewsButtom = () =>
-    newsHeadlines.slice(2, 6).map((news) => {
-      console.log(news.media);
-      return (
-        <YourNewsContentBottomLink key={news.summary} href={news.link}>
-          <YourNewsBottomContent>
-            <YourNewsBottomTopImg>
-              <YourNewsBottomTopImgContainer>
-                <picture>
-                  <source media="(max-width: 560px)" />
-                  <img
-                    src={news.media === "" ? defaultNewsImg : news.media}
-                    alt={news.title}
-                    loading="lazy"
-                  />
-                </picture>
-              </YourNewsBottomTopImgContainer>
-            </YourNewsBottomTopImg>
-            <YourNewsBottomBottomTitle>
-              <YourNewsBottomBottomContainer>
-                <h4>{news.title}</h4>
-              </YourNewsBottomBottomContainer>
-            </YourNewsBottomBottomTitle>
-          </YourNewsBottomContent>
-        </YourNewsContentBottomLink>
-      );
-    });
+    newsHeadlines.slice(2, 6).map((news) => (
+      <YourNewsContentBottomLink key={news.summary} href={news.link}>
+        <YourNewsBottomContent>
+          <YourNewsBottomTopImg>
+            <YourNewsBottomTopImgContainer>
+              <picture>
+                <source media="(max-width: 560px)" />
+                <img
+                  src={news.media === "" ? defaultNewsImg : news.media}
+                  alt={news.title}
+                  loading="lazy"
+                />
+              </picture>
+            </YourNewsBottomTopImgContainer>
+          </YourNewsBottomTopImg>
+          <YourNewsBottomBottomTitle>
+            <YourNewsBottomBottomContainer>
+              <h4>{news.title}</h4>
+            </YourNewsBottomBottomContainer>
+          </YourNewsBottomBottomTitle>
+        </YourNewsBottomContent>
+      </YourNewsContentBottomLink>
+    ));
 
   useEffect(() => {
     getWishListData();
