@@ -340,7 +340,7 @@ const PlaceOrder = (props) => {
     (state) => state.coinDetailReducer.marketPrice
   );
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
-  const userQty = useSelector((state) => state.coinDetailReducer.usdtQty);
+  const coinsQty = useSelector((state) => state.coinDetailReducer.coinQty);
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
@@ -373,6 +373,7 @@ const PlaceOrder = (props) => {
         );
         setBuyOrSell("sell");
         setQty(num);
+        setTotal(num);
       } else {
         setInputTopContent(`${Number(num).toLocaleString()} USDT`);
         setInputBottomContent(
@@ -533,32 +534,52 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickUploadOrder = () => {
-    if ((email && total > 0 && usdtQty > total) || userQty > total) {
-      const orderData = {
-        coinPrice: marketPrice,
-        coinType: coin,
-        qty,
-        tradingType: "market",
-        type: buyOrSell,
-      };
-      firebaseAddOrder(orderData, email);
-      calcAssetForUploadOrder(email, coin, marketPrice, qty);
-      if (buyOrSell === "buy") {
+    console.log(userCoin, usdtQty, coinsQty, total);
+    if (buyOrSell === "buy") {
+      if (email && total > 0 && usdtQty > Number(total)) {
+        const orderData = {
+          coinPrice: marketPrice,
+          coinType: coin,
+          qty,
+          tradingType: "market",
+          type: buyOrSell,
+        };
+        firebaseAddOrder(orderData, email);
+        calcAssetForUploadOrder(email, coin, marketPrice, qty);
         setInputTopContent("USDT");
         setInputBottomContent(coin);
+        setInputValue("");
+        showToast("success");
+      } else if (!total) {
+        showToast("dangerTotal");
+      } else if (userUsdt < total) {
+        showToast("dangerUsdt");
       } else {
+        showToast("danger");
+      }
+    } else if (buyOrSell === "sell") {
+      console.log(coinsQty, total);
+      if (email && total > 0 && coinsQty > Number(total)) {
+        const orderData = {
+          coinPrice: marketPrice,
+          coinType: coin,
+          qty,
+          tradingType: "market",
+          type: buyOrSell,
+        };
+        firebaseAddOrder(orderData, email);
+        calcAssetForUploadOrder(email, coin, marketPrice, qty);
         setInputTopContent(coin);
         setInputBottomContent("USDT");
+        setInputValue("");
+        showToast("success");
+      } else if (!total) {
+        showToast("dangerTotal");
+      } else if (coinsQty < total) {
+        showToast("dangerCoin");
+      } else {
+        showToast("danger");
       }
-      showToast("success");
-    } else if (!total) {
-      showToast("dangerTotal");
-    } else if (userUsdt < total) {
-      showToast("dangerUsdt");
-    } else if (userCoin < total) {
-      showToast("dangerCoin");
-    } else {
-      showToast("danger");
     }
   };
 
