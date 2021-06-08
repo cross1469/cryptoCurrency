@@ -84,7 +84,7 @@ const OrderThead = styled.thead`
 const OrderTheadItem = styled.th`
   padding: 16px 48px 16px 0px;
   border-bottom: none;
-  text-align: left;
+  text-align: center;
   :first-child {
     padding-left: 32px;
   }
@@ -108,6 +108,7 @@ const OrderTbodyItem = styled.td`
   padding: 14px 48px 14px 0px;
   border-top: 1px solid rgb(236, 239, 241);
   cursor: default;
+  text-align: center;
   position: relative;
   width: 85px;
   :first-child {
@@ -116,6 +117,12 @@ const OrderTbodyItem = styled.td`
   :nth-child(4),
   :nth-child(5) {
     min-width: 135px;
+  }
+  :nth-child(4),
+  :nth-child(5),
+  :nth-child(6),
+  :nth-child(7) {
+    text-align: right;
   }
   :last-child {
     padding-right: 32px;
@@ -136,6 +143,7 @@ const OrderTbodySellItem = styled.td`
   border-top: 1px solid rgb(236, 239, 241);
   cursor: default;
   position: relative;
+  text-align: center;
   width: 85px;
   :first-child {
     padding-left: 32px;
@@ -145,6 +153,11 @@ const OrderTbodySellItem = styled.td`
   }
   :last-child {
     padding-right: 32px;
+  }
+  :nth-child(4),
+  :nth-child(5),
+  :nth-child(6) {
+    text-align: right;
   }
 `;
 
