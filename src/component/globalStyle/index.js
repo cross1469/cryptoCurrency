@@ -78,6 +78,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     font-family: 'Exo 2', sans-serif;
   }
+  body{
+    overscroll-behavior-y: none;
+  }
   .content-container {
     min-height: calc(100vh - 84px);
   }

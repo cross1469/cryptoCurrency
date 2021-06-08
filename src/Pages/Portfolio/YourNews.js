@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { readWishList } from "../../Utils/firebase";
+import defaultNewsImg from "../../images/defaultNews.jpg";
 
 const YourNewsSection = styled.section`
   border-top: 1px solid rgb(236, 239, 241);
@@ -257,7 +258,11 @@ const YourNews = (props) => {
             <YourNewsTopImage>
               <picture>
                 <source media="(max-width: 560px)" />
-                <img src={news.media} alt={news.title} loading="lazy" />
+                <img
+                  src={news.media === "" ? defaultNewsImg : news.media}
+                  alt={news.title}
+                  loading="lazy"
+                />
               </picture>
             </YourNewsTopImage>
           </YourNewsTopImageContainer>
@@ -272,25 +277,32 @@ const YourNews = (props) => {
     ));
 
   const renderYourNewsButtom = () =>
-    newsHeadlines.slice(2, 6).map((news) => (
-      <YourNewsContentBottomLink key={news.summary} href={news.link}>
-        <YourNewsBottomContent>
-          <YourNewsBottomTopImg>
-            <YourNewsBottomTopImgContainer>
-              <picture>
-                <source media="(max-width: 560px)" />
-                <img src={news.media} alt={news.title} loading="lazy" />
-              </picture>
-            </YourNewsBottomTopImgContainer>
-          </YourNewsBottomTopImg>
-          <YourNewsBottomBottomTitle>
-            <YourNewsBottomBottomContainer>
-              <h4>{news.title}</h4>
-            </YourNewsBottomBottomContainer>
-          </YourNewsBottomBottomTitle>
-        </YourNewsBottomContent>
-      </YourNewsContentBottomLink>
-    ));
+    newsHeadlines.slice(2, 6).map((news) => {
+      console.log(news.media);
+      return (
+        <YourNewsContentBottomLink key={news.summary} href={news.link}>
+          <YourNewsBottomContent>
+            <YourNewsBottomTopImg>
+              <YourNewsBottomTopImgContainer>
+                <picture>
+                  <source media="(max-width: 560px)" />
+                  <img
+                    src={news.media === "" ? defaultNewsImg : news.media}
+                    alt={news.title}
+                    loading="lazy"
+                  />
+                </picture>
+              </YourNewsBottomTopImgContainer>
+            </YourNewsBottomTopImg>
+            <YourNewsBottomBottomTitle>
+              <YourNewsBottomBottomContainer>
+                <h4>{news.title}</h4>
+              </YourNewsBottomBottomContainer>
+            </YourNewsBottomBottomTitle>
+          </YourNewsBottomContent>
+        </YourNewsContentBottomLink>
+      );
+    });
 
   useEffect(() => {
     getWishListData();

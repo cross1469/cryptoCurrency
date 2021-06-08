@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   addWishList,
   removeWishList,
@@ -12,8 +14,20 @@ import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
 import Pagination from "../../Component/Pagination";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
+import checkIcon from "../../images/check.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+  height: 100vh;
+  background-color: #14151a;
+`;
 
 const CoinDataSection = styled.section`
   background-color: #14151a;
@@ -191,6 +205,10 @@ const CoinTableBodyItem = styled.td`
   width: 85px;
   :first-child {
     padding-left: 32px;
+    .symbolContainer {
+      display: flex;
+      align-content: center;
+    }
   }
   :last-child {
     width: 70px;
@@ -209,9 +227,9 @@ const CoinTableBodyItem = styled.td`
   }
 
   img {
-    height: 20px;
+    height: 16px;
     aspect-ratio: auto 16 / 16;
-    width: 20px;
+    width: 16px;
     margin-right: 8px;
   }
 
@@ -251,7 +269,7 @@ const CoinData = (props) => {
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const { email } = props;
 
   const [starList, setStarList] = useState([]);
@@ -269,10 +287,28 @@ const CoinData = (props) => {
       case "danger":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "請先登入",
+          title: "Please signin",
+          description: "Before add your wishlist, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
+        };
+        break;
+      case "successAddWishList":
+        toastProperties = {
+          id,
+          title: "Add to wish list",
+          description: "Successfully add to wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
+        };
+        break;
+      case "successRemoveWishList":
+        toastProperties = {
+          id,
+          title: "Remove the wish list",
+          description: "Successfully remove the wish list",
+          backgroundColor: "#5cb85c",
+          icon: checkIcon,
         };
         break;
       default:
@@ -298,12 +334,14 @@ const CoinData = (props) => {
         const newStarList = [...starList];
         newStarList.push(e.target.parentNode.parentNode.id);
         setStarList(newStarList);
+        showToast("successAddWishList");
       } else {
         await removeWishList(email, e.target.parentNode.parentNode.id);
         const num = starList.indexOf(e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.splice(num, 1);
         setStarList(newStarList);
+        showToast("successRemoveWishList");
       }
     } else {
       showToast("danger");
@@ -341,6 +379,7 @@ const CoinData = (props) => {
       if (dataFirstOpen) {
         setRealTimeDatas(usdtDatas);
         dataFirstOpen = false;
+        setLoading(false);
       }
 
       /*
@@ -365,16 +404,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      // if (!dataFirstOpen) {
-      //   setRealTimeDatas((usdt) => {
-      //     const newUsdtDatas = [...usdt];
-      //     coinDatas.forEach((data) => {
-      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-      //       newUsdtDatas[index] = data;
-      //     });
-      //     return newUsdtDatas;
-      //   });
-      // }
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
 
     return () => socket.close();
@@ -387,14 +426,23 @@ const CoinData = (props) => {
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
       const results = realTimeDatas.filter((realTimeData) =>
-        realTimeData.s.includes(searchTerm)
+        realTimeData.s.includes(searchTerm.toUpperCase())
       );
       setSearchResults(results);
     }
   }, [searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {
-    return null;
+    return (
+      <LoadingContainer>
+        <ClipLoader
+          color="#f0b90b"
+          loading={loading}
+          css={override}
+          size={40}
+        />
+      </LoadingContainer>
+    );
   }
 
   const renderCoinDatas = () => {
@@ -404,8 +452,10 @@ const CoinData = (props) => {
         return (
           <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
-              {realTimeData.s}
+              <div className="symbolContainer">
+                <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+                {realTimeData.s}
+              </div>
             </CoinTableBodyItem>
             <CoinTableBodyItem>
               {Number(realTimeData.c).toLocaleString()}

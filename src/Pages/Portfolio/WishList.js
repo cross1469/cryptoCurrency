@@ -2,17 +2,24 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
 import Spline from "./Spline";
 
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
+
 const WishListContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #14151a;
-  margin-top: 56px;
   margin-bottom: 22px;
   border-radius: 4px;
   border: 1px solid rgb(236, 239, 241);
@@ -20,23 +27,29 @@ const WishListContainer = styled.div`
     display: none;
   }
 `;
-const WishListHeader = styled.div`
+
+const WishHeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  flex-shrink: 0;
-  color: #fff;
-  height: 54px;
-  padding: 0px 24px;
-  border-bottom: 1px solid rgb(236, 239, 241);
-  div {
-    display: flex;
-    flex-direction: row;
-    h2 {
-      font-size: 18px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+`;
+
+const WishHeaderContent = styled.div`
+  flex: 1 1 0%;
+`;
+
+const WishHeaderContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  h1 {
+    font-weight: 400;
+    margin: 0px;
+    padding: 0px;
+    span {
+      margin: 8px 0px 0px;
+      font-size: 24px;
       font-weight: 500;
-      line-height: 23px;
+      color: #fff;
     }
   }
 `;
@@ -276,6 +289,7 @@ const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
   const { email } = props;
   const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getWishListData = async () => {
     if (email) {
@@ -310,6 +324,7 @@ const WishList = (props) => {
         });
 
         setCoinLastPrice(usdtLastPrice);
+        setLoading(false);
       });
 
   useEffect(() => {
@@ -365,16 +380,32 @@ const WishList = (props) => {
 
   return (
     <section>
+      <WishHeaderContainer>
+        <WishHeaderContent>
+          <WishHeaderContentContainer>
+            <h1>
+              <span>WishList</span>
+            </h1>
+          </WishHeaderContentContainer>
+        </WishHeaderContent>
+      </WishHeaderContainer>
+
       <WishListContainer>
-        <WishListHeader>
-          <div>
-            <h2>WishList</h2>
-          </div>
-        </WishListHeader>
         <WishListBody>
           <WishListBodyContainer>
             <WishListBodyModule>
-              <WishListChartLayout>{renderWishList()}</WishListChartLayout>
+              <WishListChartLayout>
+                {coinLastPrice.length > 0 ? (
+                  renderWishList()
+                ) : (
+                  <ClipLoader
+                    color="#f0b90b"
+                    loading={loading}
+                    css={override}
+                    size={40}
+                  />
+                )}
+              </WishListChartLayout>
             </WishListBodyModule>
           </WishListBodyContainer>
         </WishListBody>
@@ -390,6 +421,7 @@ const WishList = (props) => {
       <DisplayMobileWishList
         wishList={wishList}
         coinLastPrice={coinLastPrice}
+        loading={loading}
       />
     </section>
   );

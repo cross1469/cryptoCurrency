@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
@@ -49,6 +50,7 @@ const ChatForm = styled.section`
   color: #fff;
   border: 1px solid #fff;
   border-top: 1px solid #f0b90b;
+  overflow: hidden;
   ${layout}
   @media only screen and (max-width: 768px) {
     width: 50%;
@@ -115,7 +117,6 @@ const ChatMain = styled.main`
   line-height: 24px;
   color: #fff;
   flex: 1 1 auto;
-  overflow: auto;
   height: 55vh;
   background-color: #14151a;
 `;
@@ -132,16 +133,43 @@ const ChatData = styled.article`
     margin-bottom: 0px;
   }
 `;
+const ChatDataContainer = styled.div`
+  clear: both;
+`;
+
 const ChatDataItem = styled.div`
   padding: 10px 10px 10px 10px;
-  border-radius: 0 6px 6px 0;
-  max-width: 80%;
-  width: auto;
+  border-radius: 0 8px 8px 0;
+  width: 70%;
   float: left;
   box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
   background-color: #2b2f36;
   margin-bottom: 20px;
+  .account {
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .message {
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .time {
+    font-size: 12px;
+    line-height: 12px;
+  }
+`;
 
+const UserChatDataItem = styled.div`
+  padding: 10px 10px 10px 10px;
+  border-radius: 8px 0px 0px 8px;
+  width: 70%;
+  float: right;
+  box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 2px 4px rgb(0 0 0 / 24%);
+  background-color: #2b2f36;
+  margin-bottom: 20px;
+  text-align: right;
   .account {
     font-size: 14px;
     line-height: 18px;
@@ -210,6 +238,7 @@ const Chat = (props) => {
   const [list, setList] = useState([]);
   let toastProperties = null;
   const messagesContainer = useRef(null);
+
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
@@ -220,8 +249,8 @@ const Chat = (props) => {
       case "dangerChat":
         toastProperties = {
           id,
-          title: "Danger",
-          description: "送出前，請先登入",
+          title: "Please signin",
+          description: "Before sending a message, please signin",
           backgroundColor: "#d9534f",
           icon: errorIcon,
         };
@@ -278,7 +307,16 @@ const Chat = (props) => {
     setToggleChatBtn("block");
   };
 
-  useEffect(() => readChatData(setChatDatas), [email]);
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2b2f36",
+      width: "5px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
+
+  useEffect(() => readChatData(setChatDatas), []);
 
   useEffect(() => {
     messagesContainer.current.scrollTo(
@@ -291,14 +329,36 @@ const Chat = (props) => {
     chatDatas.map((chatData) => {
       const { timestamp } = chatData;
       const time = new Date(timestamp).toLocaleTimeString();
+      if (email === null) {
+        return (
+          <ChatDataContainer>
+            <ChatDataItem key={chatData.id}>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </ChatDataItem>
+          </ChatDataContainer>
+        );
+      }
+      if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
+        return (
+          <ChatDataContainer>
+            <UserChatDataItem key={chatData.id}>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </UserChatDataItem>
+          </ChatDataContainer>
+        );
+      }
       return (
-        <>
+        <ChatDataContainer>
           <ChatDataItem key={chatData.id}>
             <div className="account">{chatData.account}</div>
             <div className="message">{chatData.messages}</div>
             <div className="time">{time}</div>
           </ChatDataItem>
-        </>
+        </ChatDataContainer>
       );
     });
 
@@ -322,8 +382,16 @@ const Chat = (props) => {
           </ChatCloseContainer>
         </ChatHeader>
         <ChatMain ref={messagesContainer}>
-          <ChatData>{renderChatData()}</ChatData>
+          <Scrollbars
+            autoHide
+            autoHideTimeout={1000}
+            autoHideDuration={200}
+            renderThumbVertical={renderThumb}
+          >
+            <ChatData>{renderChatData()}</ChatData>
+          </Scrollbars>
         </ChatMain>
+
         <ChatFooter>
           <ChatInputContainer>
             <ChatInput

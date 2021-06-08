@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import AutosizeInput from "react-input-autosize";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
 import { firebaseWriteCoinAsset } from "../../Utils/firebase";
@@ -20,9 +19,7 @@ const BuySellStyle = styled.div`
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
-  @media only screen and (max-width: 768px) {
-    margin-top: 36px;
-  }
+  color: #fff;
 `;
 
 const BuySellContainer = styled.div`
@@ -148,35 +145,59 @@ const BuySellInputText = styled.div`
   span {
     font-weight: 500;
     color: rgba(#f0b90b, 0.3);
-    font-size: 31px;
     line-height: 1.5;
     align-self: flex-start;
     margin-top: 8px;
-    @media only screen and (max-width: 996px) {
-      font-size: 16px;
-    }
+    font-size: ${(props) => {
+      if (props.children[1].props.value.length < 3) {
+        return "32px";
+      }
+      if (props.children[1].props.value.length < 7) {
+        return "26px";
+      }
+      return "22px";
+    }};
   }
   input {
-    font-size: 48px;
     text-align: left;
     font-weight: 400;
     background-color: #14151a;
-    width: 40px;
     padding: 0px;
     margin: 0px;
     box-shadow: none;
     border: none;
     overflow: hidden;
     outline: none;
+    font-size: ${(props) => {
+      if (props.children[1].props.value.length < 3) {
+        return "48px";
+      }
+      if (props.children[1].props.value.length < 7) {
+        return "42px";
+      }
+      return "36px";
+    }};
+    width: ${(props) => {
+      if (props.children[1].props.value.length < 2) {
+        return "80px";
+      }
+      if (props.children[1].props.value.length < 3) {
+        return "90px";
+      }
+      if (props.children[1].props.value.length < 6) {
+        return "120px";
+      }
+      if (props.children[1].props.value.length < 8) {
+        return "150px";
+      }
+      return "200px";
+    }};
     color: ${(props) => {
       if (props.children[1].props.value === "0") {
         return "#757575";
       }
       return "#f0b90b";
     }};
-    @media only screen and (max-width: 996px) {
-      font-size: 32px;
-    }
   }
 `;
 
@@ -194,7 +215,7 @@ const BuySellBodyButton = styled.button`
   :hover {
     background-color: #ffe251;
     color: #1b1504;
-    border: none;
+    border: 1px solid #ffe251;
   }
   span {
     display: flex;
@@ -316,9 +337,9 @@ const AddValue = (props) => {
                         <BuySellBodyInputContainer>
                           <BuySellInputText>
                             <span>USDT$</span>
-                            <AutosizeInput
+                            <input
                               inputMode="decimal"
-                              maxLength="7"
+                              maxLength="11"
                               placeholder="0"
                               value={Number(addValue).toLocaleString()}
                               onChange={handlAddValueInput}

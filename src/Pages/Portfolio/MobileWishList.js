@@ -2,7 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { ReactComponent as Right } from "../../images/next.svg";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
 
 const PanelContainer = styled.div`
   display: flex;
@@ -196,7 +204,7 @@ const WishListFooterContent = styled.div`
 `;
 
 const MobileWishList = (props) => {
-  const { className, wishList, coinLastPrice } = props;
+  const { className, wishList, coinLastPrice, loading } = props;
 
   const renderWishList = () =>
     wishList.map((wishData) =>
@@ -236,7 +244,18 @@ const MobileWishList = (props) => {
           <WishListBodyModule>
             <WishListTableContainer>
               <WishListTable>
-                <WishListTbody>{renderWishList()}</WishListTbody>
+                <WishListTbody>
+                  {coinLastPrice.length > 0 ? (
+                    renderWishList()
+                  ) : (
+                    <ClipLoader
+                      color="#f0b90b"
+                      loading={loading}
+                      css={override}
+                      size={40}
+                    />
+                  )}
+                </WishListTbody>
               </WishListTable>
             </WishListTableContainer>
           </WishListBodyModule>
@@ -258,6 +277,7 @@ MobileWishList.propTypes = {
   wishList: PropTypes.arrayOf(PropTypes.string),
   coinLastPrice: PropTypes.arrayOf(PropTypes.objectOf),
   className: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 MobileWishList.defaultProps = {

@@ -11,12 +11,13 @@ import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
-import logo from "../images/logo.svg";
+import logo from "../images/crypto-logo.svg";
 
 const Navigation = styled.header`
   width: 100%;
   position: relative;
   border-bottom: 1px solid white;
+
   ${color}
   ${typography}
   .container {
@@ -30,12 +31,13 @@ const Navigation = styled.header`
   }
   .logo a {
     display: flex;
-    flex-direction: column;
     text-decoration: none;
     ${color}
     ${space}
   }
   a {
+    height: 67px;
+    width: 100px;
     transition: all 0.6s;
     color: #222;
     font-size: 1em;
@@ -46,7 +48,7 @@ const Navigation = styled.header`
   }
   .fa-bars {
     display: none;
-    ${color}
+    color: #fff;
     font-size: 2rem;
   }
   nav {
@@ -78,6 +80,7 @@ const Navigation = styled.header`
       text-decoration: none;
       border: none;
       outline: none;
+      color: #fff;
       cursor: pointer;
       letter-spacing: 1px;
       font-weight: 500;
@@ -104,7 +107,6 @@ const Navigation = styled.header`
     }
     .logo {
       display: flex;
-      padding-top: 10px;
       padding-left: 20px;
     }
     .fa-bars {
@@ -255,7 +257,7 @@ const Header = () => {
 
   return (
     <>
-      <Navigation bg="black" color="white">
+      <Navigation bg="black">
         <div className="container">
           <div className="logo">
             <Link to="/">

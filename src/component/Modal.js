@@ -74,7 +74,7 @@ const ModalBody = styled.div`
   border-radius: 4px;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 20px 24px 56px;
+  padding: 56px 24px 56px;
   width: 30%;
   @media only screen and (max-width: 996px) {
     width: 50%;

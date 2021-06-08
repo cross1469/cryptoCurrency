@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import DashboardLoader from "../../Component/loader/DashboardLoader";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;
@@ -35,10 +37,8 @@ const TrendingTitleContainer = styled.div`
 `;
 
 const TrendingCardContainer = styled.div`
-  width: 100%;
   flex-direction: row;
   display: flex;
-  overflow-x: scroll;
   justify-content: space-between;
   ::-webkit-scrollbar {
     display: none;
@@ -59,6 +59,7 @@ const TrendingCardContainer = styled.div`
     border-radius: 6px;
     overflow: hidden;
     color: #fff;
+    border: 1px solid #14151a;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
     :last-child {
       margin-right: 0;
@@ -227,6 +228,15 @@ const TrendingCardMdFooterText = styled.div`
 const TrendCoin = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
 
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2b2f36",
+      width: "5px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
+
   const getLastPrice = () =>
     axios
       .get(
@@ -292,7 +302,20 @@ const TrendCoin = () => {
         <TrendingTitleContainer>
           <span>Trending</span>
         </TrendingTitleContainer>
-        <TrendingCardContainer>{renderTrendCard()}</TrendingCardContainer>
+
+        {coinLastPrice.length > 0 ? (
+          <Scrollbars
+            autoHide
+            autoHideTimeout={1000}
+            autoHideDuration={200}
+            renderThumbHorizontal={renderThumb}
+            style={{ width: "100%", height: "220px" }}
+          >
+            <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+          </Scrollbars>
+        ) : (
+          <DashboardLoader />
+        )}
       </TrendinWrapper>
     </TrendingContainer>
   );
