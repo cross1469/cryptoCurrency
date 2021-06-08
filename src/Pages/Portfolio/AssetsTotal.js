@@ -135,14 +135,19 @@ const AccountPNLPrice = styled.div`
     font-size: 32px;
     line-height: 42px;
     color: ${(props) => {
-      if (props.children.props.children[0] > 0) {
+      console.log(props);
+      if (props.children[0].props.children[0] > 0) {
         return "#0ecb81";
       }
-      if (props.children.props.children[0] === 0) {
+      if (props.children[0].props.children[0] === 0) {
         return "#707a8a";
       }
       return "#f6465d";
     }};
+    :last-child {
+      font-size: 14px;
+      line-height: 28px;
+    }
   }
   @media only screen and (max-width: 768px) {
     align-items: flex-start;
@@ -151,7 +156,7 @@ const AccountPNLPrice = styled.div`
 
 const AssetsTotal = (props) => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
-  const [profitLoss, setProfitLoss] = useState(0);
+  const [profitLoss, setProfitLoss] = useState("-");
   const { email } = props;
   const text = (
     <span>
@@ -195,8 +200,10 @@ const AssetsTotal = (props) => {
               <span>Account balance</span>
             </AccountBalanceTitle>
             <AccountBalanceQty>
-              <span>{Number(usdt.qty).toLocaleString()}</span>
-              <span>USDT</span>
+              <span>
+                {usdt.qty > 0 ? Number(usdt.qty).toLocaleString() : "-"}
+              </span>
+              <span> USDT</span>
             </AccountBalanceQty>
           </AccountBalanceContainer>
           <AccountPNLContainer>
@@ -214,7 +221,10 @@ const AssetsTotal = (props) => {
               </AccountPNLInfo>
             </AccountPNLTitle>
             <AccountPNLPrice>
-              <span>{Number(profitLoss).toLocaleString()} %</span>
+              <span>
+                {profitLoss > 0 ? Number(profitLoss).toLocaleString() : "-"}
+              </span>
+              <span> %</span>
             </AccountPNLPrice>
           </AccountPNLContainer>
         </AssetTableContent>
