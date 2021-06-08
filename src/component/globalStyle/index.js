@@ -82,7 +82,7 @@ const GlobalStyle = createGlobalStyle`
     overscroll-behavior-y: none;
   }
   .content-container {
-    min-height: calc(100vh - 84px);
+    min-height: calc(100vh - 133px);
   }
 `;
 
