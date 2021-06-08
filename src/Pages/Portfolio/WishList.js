@@ -26,7 +26,7 @@ const WishListContainer = styled.div`
   background-color: #14151a;
   margin-bottom: 22px;
   border-radius: 4px;
-  border: 1px solid rgb(236, 239, 241);
+  border: 1px solid #2f3336;
   @media only screen and (max-width: 768px) {
     display: none;
   }
@@ -92,7 +92,7 @@ const WishListItem = styled.div`
   position: relative;
   width: 25%;
   max-width: 25%;
-  border-right: 1px solid rgb(236, 239, 241);
+  border-right: 1px solid #2f3336;
 `;
 
 const WishListItemContainer = styled.div`
@@ -263,7 +263,7 @@ const WishListBottomContent = styled.div`
   flex-direction: row;
   flex-shrink: 0;
   height: 54px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   font-weight: 500;
   transition: all 0.25s ease 0s;
   cursor: pointer;

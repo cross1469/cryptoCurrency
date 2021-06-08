@@ -45,10 +45,10 @@ const ChatForm = styled.section`
   width: 350px;
   max-width: 85vw;
   max-height: 75vh;
-  background-color: #121212;
+  background-color: #14151a;
   border-radius: 8px;
   color: #fff;
-  border: 1px solid #fff;
+  border: 1px solid #2f3336;
   border-top: 1px solid #f0b90b;
   overflow: hidden;
   ${layout}
@@ -71,7 +71,7 @@ const ChatHeader = styled.header`
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #2f3336;
 `;
 
 const ChatRoomIconContainer = styled.div`
@@ -191,7 +191,7 @@ const ChatFooter = styled.footer`
   display: flex;
   width: 100%;
   padding: 16px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #2f3336;
   align-items: center;
   justify-content: space-around;
   flex: 0 0 auto;
@@ -309,8 +309,8 @@ const Chat = (props) => {
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
-      backgroundColor: "#2b2f36",
-      width: "5px",
+      backgroundColor: "#2f3336",
+      width: "3px",
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;

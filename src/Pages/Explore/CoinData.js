@@ -94,7 +94,7 @@ const SearchSection = styled.section`
   width: 100%;
   height: 48px;
   padding: 0px 16px;
-  border: 1px solid #dfe1e5;
+  border: 1px solid #2f3336;
   border-radius: 4px;
   background: #14151a;
 `;
@@ -148,7 +148,7 @@ const DisplayMobileTable = styled(MobileTable)`
 `;
 
 const CoinTableContainer = styled.div`
-  border: 1px solid #dfe1e5;
+  border: 1px solid #2f3336;
   width: auto;
   border-radius: 0px;
   overflow-x: auto;
@@ -197,7 +197,7 @@ const CoinTableBody = styled.tbody`
 
 const CoinTableBodyItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
   position: relative;
   text-align: center;

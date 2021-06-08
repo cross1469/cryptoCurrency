@@ -10,7 +10,7 @@ const AssetsContainer = styled.div`
   margin-top: 32px;
   color: #fff;
   margin-bottom: 32px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #2f3336;
 `;
 
 const AssetTitleContainer = styled.div`

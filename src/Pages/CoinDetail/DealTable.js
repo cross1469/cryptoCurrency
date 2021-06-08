@@ -21,7 +21,7 @@ const DealTableHeaderContainer = styled.div`
   z-index: 1;
   margin-bottom: -1px;
   transition: border-bottom-color 300ms ease 0s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0);
+  border-bottom: 1px solid #2f3336;
 `;
 
 const TransionerContainer = styled.div`
@@ -100,7 +100,7 @@ const DealTableTbody = styled.tbody`
 `;
 
 const DealTableTd = styled.td`
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   min-width: 140px;
   padding: 14px 24px 14px 0px;
   :first-child {
@@ -154,8 +154,8 @@ const DealTable = () => {
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
-      backgroundColor: "#2b2f36",
-      width: "5px",
+      backgroundColor: "#2f3336",
+      width: "3px",
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;

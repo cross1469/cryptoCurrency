@@ -16,32 +16,9 @@ const PanelContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 22px;
-  border-top: 1px solid rgb(236, 239, 241);
-  border-bottom: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
+  border-bottom: 1px solid #2f3336;
   color: #fff;
-`;
-
-const MobileWishListHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  flex-shrink: 0;
-  height: 54px;
-  padding: 0px 24px;
-  border-bottom: 1px solid rgb(236, 239, 241);
-`;
-
-const WishListTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-  h2 {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 23px;
-    display: block;
-    margin: 0px;
-  }
 `;
 
 const MobileWishListBody = styled.div`
@@ -96,7 +73,7 @@ const WishListTbody = styled.tbody`
 `;
 
 const WishListItem = styled.td`
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: pointer;
   min-width: 140px;
   padding: 14px 24px 14px 0px;
@@ -184,7 +161,7 @@ const WishListFooterContent = styled.div`
   flex-direction: row;
   flex-shrink: 0;
   height: 54px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   font-weight: 500;
   transition: all 0.25s ease 0s;
   cursor: pointer;
@@ -234,11 +211,6 @@ const MobileWishList = (props) => {
 
   return (
     <PanelContainer className={className}>
-      <MobileWishListHeader>
-        <WishListTitle>
-          <h2>WishList</h2>
-        </WishListTitle>
-      </MobileWishListHeader>
       <MobileWishListBody>
         <WishListBodyContainer>
           <WishListBodyModule>

@@ -57,7 +57,7 @@ const OrderSection = styled.section`
 `;
 
 const OrderTableDiv = styled.div`
-  border: 1px solid rgb(236, 239, 241);
+  border: 1px solid #2f3336;
   width: auto;
   border-radius: 0px;
   overflow-x: auto;
@@ -77,7 +77,7 @@ const OrderTableContainer = styled.table`
 const OrderThead = styled.thead`
   border: none;
   tr {
-    border-bottom: 1px solid rgb(236, 239, 241);
+    border-bottom: 1px solid #2f3336;
   }
 `;
 
@@ -106,7 +106,7 @@ const OrderTbody = styled.tbody`
 
 const OrderTbodyItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
   text-align: center;
   position: relative;
@@ -140,7 +140,7 @@ const OrderTbodyItem = styled.td`
 
 const OrderTbodySellItem = styled.td`
   padding: 14px 48px 14px 0px;
-  border-top: 1px solid rgb(236, 239, 241);
+  border-top: 1px solid #2f3336;
   cursor: default;
   position: relative;
   text-align: center;
@@ -169,8 +169,8 @@ const OrderTable = (props) => {
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
-      backgroundColor: "#2b2f36",
-      width: "5px",
+      backgroundColor: "#2f3336",
+      width: "3px",
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;

@@ -230,8 +230,8 @@ const TrendCoin = () => {
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
-      backgroundColor: "#2b2f36",
-      width: "5px",
+      backgroundColor: "#2f3336",
+      width: "3px",
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;
