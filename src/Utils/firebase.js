@@ -133,11 +133,21 @@ const readWishList = (email) =>
     });
 
 const addWishList = async (email, wishItem) => {
-  db.collection("users")
-    .doc(email)
-    .update({
-      wishList: firebase.firestore.FieldValue.arrayUnion(wishItem),
-    });
+  const wishList = await readWishList(email);
+  if (wishList.length > 0) {
+    db.collection("users")
+      .doc(email)
+      .update({
+        wishList: firebase.firestore.FieldValue.arrayUnion(wishItem),
+      });
+  } else {
+    console.log(wishList);
+    db.collection("users")
+      .doc(email)
+      .set({
+        wishList: [wishItem],
+      });
+  }
 };
 
 const removeWishList = async (email, wishItem) => {
