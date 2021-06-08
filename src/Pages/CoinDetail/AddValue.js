@@ -262,10 +262,14 @@ const AddValue = (props) => {
   let toastProperties = null;
 
   const handlAddValueInput = (e) => {
-    const re = /^[-,0-9\b]+$/;
+    const re = /^[.,0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       const addNum = e.target.value.replace(/,/g, "");
-      setAddValue(addNum);
+      if (addNum.indexOf(".") === -1) {
+        setAddValue(Number(addNum).toLocaleString());
+      } else {
+        setAddValue(addNum);
+      }
     }
   };
 
@@ -341,7 +345,7 @@ const AddValue = (props) => {
                               inputMode="decimal"
                               maxLength="11"
                               placeholder="0"
-                              value={Number(addValue).toLocaleString()}
+                              value={addValue}
                               onChange={handlAddValueInput}
                             />
                           </BuySellInputText>
