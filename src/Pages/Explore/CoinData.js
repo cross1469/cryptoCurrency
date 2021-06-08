@@ -214,6 +214,11 @@ const CoinTableBodyItem = styled.td`
     width: 70px;
     padding-top: 20px;
   }
+  :nth-child(2),
+  :nth-child(3),
+  :nth-child(4) {
+    min-width: 148px;
+  }
   :nth-child(3) {
     color: ${(props) => {
       if (props.children[0] > 0) {
