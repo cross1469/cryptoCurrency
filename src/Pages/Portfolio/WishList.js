@@ -181,6 +181,10 @@ const WishListMiniItemTop = styled.div`
   align-items: center;
   flex-direction: row;
   margin-bottom: 8px;
+  img {
+    height: 24px;
+    width: 24px;
+  }
   label {
     font-size: 14px;
     font-weight: 500;
@@ -338,6 +342,7 @@ const WishList = (props) => {
   const renderWishList = () =>
     wishList.map((wishData) =>
       coinLastPrice.map((coin) => {
+        const symbol = wishData.replace(/USDT/, "");
         if (wishData === coin.symbol) {
           return (
             <WishListItem key={coin.openTime}>
@@ -351,6 +356,10 @@ const WishList = (props) => {
                     >
                       <WishListMiniItem>
                         <WishListMiniItemTop>
+                          <img
+                            src={`/icon/${symbol.toLowerCase()}.svg`}
+                            alt="coinIcon"
+                          />
                           <label htmlFor="wishDataName">{wishData}</label>
                           <div>24h</div>
                         </WishListMiniItemTop>
