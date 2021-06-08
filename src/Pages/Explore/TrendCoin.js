@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import DashboardLoader from "../../Component/loader/DashboardLoader";
 
 const TrendingContainer = styled.div`
@@ -36,10 +37,8 @@ const TrendingTitleContainer = styled.div`
 `;
 
 const TrendingCardContainer = styled.div`
-  width: 100%;
   flex-direction: row;
   display: flex;
-  overflow-x: scroll;
   justify-content: space-between;
   ::-webkit-scrollbar {
     display: none;
@@ -229,6 +228,15 @@ const TrendingCardMdFooterText = styled.div`
 const TrendCoin = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
 
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2b2f36",
+      width: "5px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
+
   const getLastPrice = () =>
     axios
       .get(
@@ -296,7 +304,15 @@ const TrendCoin = () => {
         </TrendingTitleContainer>
 
         {coinLastPrice.length > 0 ? (
-          <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+          <Scrollbars
+            autoHide
+            autoHideTimeout={1000}
+            autoHideDuration={200}
+            renderThumbHorizontal={renderThumb}
+            style={{ width: "100%", height: "220px" }}
+          >
+            <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+          </Scrollbars>
         ) : (
           <DashboardLoader />
         )}

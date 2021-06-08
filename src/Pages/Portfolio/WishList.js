@@ -20,7 +20,6 @@ const WishListContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #14151a;
-  margin-top: 56px;
   margin-bottom: 22px;
   border-radius: 4px;
   border: 1px solid rgb(236, 239, 241);
@@ -28,23 +27,29 @@ const WishListContainer = styled.div`
     display: none;
   }
 `;
-const WishListHeader = styled.div`
+
+const WishHeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  flex-shrink: 0;
-  color: #fff;
-  height: 54px;
-  padding: 0px 24px;
-  border-bottom: 1px solid rgb(236, 239, 241);
-  div {
-    display: flex;
-    flex-direction: row;
-    h2 {
-      font-size: 18px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+`;
+
+const WishHeaderContent = styled.div`
+  flex: 1 1 0%;
+`;
+
+const WishHeaderContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  h1 {
+    font-weight: 400;
+    margin: 0px;
+    padding: 0px;
+    span {
+      margin: 8px 0px 0px;
+      font-size: 24px;
       font-weight: 500;
-      line-height: 23px;
+      color: #fff;
     }
   }
 `;
@@ -375,12 +380,17 @@ const WishList = (props) => {
 
   return (
     <section>
+      <WishHeaderContainer>
+        <WishHeaderContent>
+          <WishHeaderContentContainer>
+            <h1>
+              <span>WishList</span>
+            </h1>
+          </WishHeaderContentContainer>
+        </WishHeaderContent>
+      </WishHeaderContainer>
+
       <WishListContainer>
-        <WishListHeader>
-          <div>
-            <h2>WishList</h2>
-          </div>
-        </WishListHeader>
         <WishListBody>
           <WishListBodyContainer>
             <WishListBodyModule>

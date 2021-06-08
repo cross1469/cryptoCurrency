@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
 import Toast from "../../Component/Toast";
 import errorIcon from "../../images/error.svg";
@@ -116,7 +117,6 @@ const ChatMain = styled.main`
   line-height: 24px;
   color: #fff;
   flex: 1 1 auto;
-  overflow: auto;
   height: 55vh;
   background-color: #14151a;
 `;
@@ -307,6 +307,15 @@ const Chat = (props) => {
     setToggleChatBtn("block");
   };
 
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2b2f36",
+      width: "5px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
+
   useEffect(() => readChatData(setChatDatas), []);
 
   useEffect(() => {
@@ -373,8 +382,16 @@ const Chat = (props) => {
           </ChatCloseContainer>
         </ChatHeader>
         <ChatMain ref={messagesContainer}>
-          <ChatData>{renderChatData()}</ChatData>
+          <Scrollbars
+            autoHide
+            autoHideTimeout={1000}
+            autoHideDuration={200}
+            renderThumbVertical={renderThumb}
+          >
+            <ChatData>{renderChatData()}</ChatData>
+          </Scrollbars>
         </ChatMain>
+
         <ChatFooter>
           <ChatInputContainer>
             <ChatInput

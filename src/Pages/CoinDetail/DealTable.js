@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import styled from "styled-components";
 
 const DealTableContainer = styled.div`
@@ -78,11 +79,7 @@ const DealTableToContainer = styled.div`
   border-left: 0px;
   margin-top: -1px;
   border-radius: 0px;
-  overflow-y: auto;
   height: 500px;
-  ::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const DealTabletoTable = styled.table`
@@ -155,6 +152,15 @@ const DealTable = () => {
 
   const [dealDatas, setDealDatas] = useState([]);
 
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2b2f36",
+      width: "5px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
+
   useEffect(() => {
     const socket = new WebSocket(
       `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@aggTrade`
@@ -213,9 +219,16 @@ const DealTable = () => {
             <ModuleFade>
               <ModulSlide>
                 <DealTableToContainer>
-                  <DealTabletoTable>
-                    <DealTableTbody>{renderDealTable()}</DealTableTbody>
-                  </DealTabletoTable>
+                  <Scrollbars
+                    autoHide
+                    autoHideTimeout={1000}
+                    autoHideDuration={200}
+                    renderThumbVertical={renderThumb}
+                  >
+                    <DealTabletoTable>
+                      <DealTableTbody>{renderDealTable()}</DealTableTbody>
+                    </DealTabletoTable>
+                  </Scrollbars>
                 </DealTableToContainer>
               </ModulSlide>
             </ModuleFade>

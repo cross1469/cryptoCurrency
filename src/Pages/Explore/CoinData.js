@@ -205,6 +205,10 @@ const CoinTableBodyItem = styled.td`
   width: 85px;
   :first-child {
     padding-left: 32px;
+    .symbolContainer {
+      display: flex;
+      align-content: center;
+    }
   }
   :last-child {
     width: 70px;
@@ -223,9 +227,9 @@ const CoinTableBodyItem = styled.td`
   }
 
   img {
-    height: 20px;
+    height: 16px;
     aspect-ratio: auto 16 / 16;
-    width: 20px;
+    width: 16px;
     margin-right: 8px;
   }
 
@@ -448,8 +452,10 @@ const CoinData = (props) => {
         return (
           <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
-              {realTimeData.s}
+              <div className="symbolContainer">
+                <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+                {realTimeData.s}
+              </div>
             </CoinTableBodyItem>
             <CoinTableBodyItem>
               {Number(realTimeData.c).toLocaleString()}
