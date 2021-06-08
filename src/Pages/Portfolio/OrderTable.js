@@ -218,7 +218,11 @@ const OrderTable = (props) => {
                 <h4>{index + 1}</h4>
               </OrderTbodyItem>
               <OrderTbodyItem>
-                {new Date(buyData.timestamp).toLocaleDateString()}
+                {new Date(buyData.timestamp).toLocaleDateString("zh-TW", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
               </OrderTbodyItem>
               <OrderTbodyItem>{buyData.coinType}</OrderTbodyItem>
               <OrderTbodyItem>
@@ -252,7 +256,11 @@ const OrderTable = (props) => {
       <tr key={sellData.timestamp}>
         <OrderTbodySellItem>{index + 1}</OrderTbodySellItem>
         <OrderTbodySellItem>
-          {new Date(sellData.timestamp).toLocaleDateString()}
+          {new Date(sellData.timestamp).toLocaleDateString("zh-TW", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          })}
         </OrderTbodySellItem>
         <OrderTbodySellItem>{sellData.coinType}</OrderTbodySellItem>
         <OrderTbodySellItem>
