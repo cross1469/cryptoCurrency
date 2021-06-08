@@ -387,7 +387,7 @@ const CoinDetail = () => {
       </LayoutWrapper>
       <Mobile email={email} userId={userId} />
       <Chat email={email} userId={userId} />
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

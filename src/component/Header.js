@@ -312,7 +312,7 @@ const Header = () => {
           getSignInfo={getSignInfo}
         />
       </CustomModal>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

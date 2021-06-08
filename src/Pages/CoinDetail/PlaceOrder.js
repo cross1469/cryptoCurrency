@@ -647,7 +647,7 @@ const PlaceOrder = (props) => {
         </BuySellContainer>
       </BuySellStyle>
 
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

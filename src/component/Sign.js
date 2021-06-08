@@ -463,7 +463,7 @@ const Sign = (props) => {
           </FormCard>
         </section>
       </Container>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

@@ -8,8 +8,8 @@ const ToastContainer = styled.div`
   box-sizing: border-box;
   position: fixed;
   z-index: 999999;
-  top: 12px;
-  right: 12px;
+  top: 56px;
+  right: 14px;
   transition: transform 0.6s ease-in-out;
   animation: toast-in-right 0.7s;
 

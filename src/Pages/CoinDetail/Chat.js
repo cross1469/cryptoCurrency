@@ -410,7 +410,7 @@ const Chat = (props) => {
       <OpenChat onClick={handleOpenChat} display={toggleChatBtn}>
         <ChatIcon />
       </OpenChat>
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

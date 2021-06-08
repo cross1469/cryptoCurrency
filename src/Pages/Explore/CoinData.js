@@ -579,7 +579,7 @@ const CoinData = (props) => {
         </div>
       </CoinDataContainer>
 
-      <Toast toastList={list} autoDelete dismissTime={5000} />
+      <Toast toastList={list} autoDelete dismissTime={3000} />
     </CoinDataSection>
   );
 };
