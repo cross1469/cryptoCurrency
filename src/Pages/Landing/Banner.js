@@ -19,6 +19,10 @@ const BannerBg = styled.section`
   padding-right: 56px;
   justify-content: center;
   ${color}
+  @media only screen and (max-width: 576px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 `;
 const BannerCotainer = styled.div`
   max-width: 1280px;
@@ -45,7 +49,7 @@ const BannerCotainer = styled.div`
     }
   }
   @media only screen and (max-width: 996px) {
-    flex-wrap: wrap;
+    flex-direction: column;
     .leftSection {
       align-items: center;
     }
@@ -119,7 +123,10 @@ const Banner = () => {
       <BannerCotainer>
         <div className="leftSection">
           <BannerTitle>
-            <span>Cryptocurrency Exchange</span>
+            <span>
+              Cryptocurrency
+              <br /> Exchange
+            </span>
           </BannerTitle>
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>
