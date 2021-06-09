@@ -208,6 +208,9 @@ const CoinTableBodyItem = styled.td`
   text-align: center;
   width: 85px;
   :first-child {
+    a {
+      color: #d9d9d9;
+    }
     padding-left: 32px;
     .symbolContainer {
       display: flex;
@@ -469,10 +472,15 @@ const CoinData = (props) => {
         return (
           <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <div className="symbolContainer">
-                <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
-                {realTimeData.s}
-              </div>
+              <Link to={`/coinDetail/${realTimeData.s}`}>
+                <div className="symbolContainer">
+                  <img
+                    src={`/icon/${symbol.toLowerCase()}.svg`}
+                    alt="coinIcon"
+                  />
+                  {realTimeData.s}
+                </div>
+              </Link>
             </CoinTableBodyItem>
             <CoinTableBodyItem>
               {Number(realTimeData.c).toLocaleString()}
@@ -484,7 +492,7 @@ const CoinData = (props) => {
               {Number(realTimeData.n).toLocaleString()}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
+              <Link to={`/coinDetail/${realTimeData.s}`}>
                 <TradeButton type="button">Trade</TradeButton>
               </Link>
             </CoinTableBodyItem>
