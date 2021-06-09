@@ -18,7 +18,7 @@ const PanelContainer = styled.div`
   margin-bottom: 22px;
   border-top: 1px solid #2f3336;
   border-bottom: 1px solid #2f3336;
-  color: #fff;
+  color: #d9d9d9;
 `;
 
 const MobileWishListBody = styled.div`

@@ -6,7 +6,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadOrder } from "../../Utils/firebase";
 
 const OrderContainer = styled.div`
-  color: #fff;
+  color: #d9d9d9;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -88,8 +88,17 @@ const OrderTheadItem = styled.th`
   :first-child {
     padding-left: 32px;
   }
+  :nth-child(4) {
+    padding-right: 56px;
+  }
+  :nth-child(5) {
+    padding-right: 74px;
+  }
+  :nth-child(6) {
+    padding-right: 60px;
+  }
   :last-child {
-    padding-right: 32px;
+    padding-right: 46px;
   }
 `;
 const OrderTbody = styled.tbody`
@@ -117,12 +126,6 @@ const OrderTbodyItem = styled.td`
   :nth-child(4),
   :nth-child(5) {
     min-width: 135px;
-  }
-  :nth-child(4),
-  :nth-child(5),
-  :nth-child(6),
-  :nth-child(7) {
-    text-align: right;
   }
   :last-child {
     padding-right: 32px;
@@ -153,11 +156,6 @@ const OrderTbodySellItem = styled.td`
   }
   :last-child {
     padding-right: 32px;
-  }
-  :nth-child(4),
-  :nth-child(5),
-  :nth-child(6) {
-    text-align: right;
   }
 `;
 
@@ -348,7 +346,7 @@ const OrderTable = (props) => {
                 autoHideDuration={200}
                 renderThumbVertical={renderThumb}
                 renderThumbHorizontal={renderThumb}
-                style={{ width: "100%", height: "138px" }}
+                style={{ width: "100%", height: "275px" }}
               >
                 <OrderTableContainer>
                   <OrderThead>

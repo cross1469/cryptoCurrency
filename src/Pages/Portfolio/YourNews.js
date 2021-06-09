@@ -8,7 +8,7 @@ import defaultNewsImg from "../../images/defaultNews.jpg";
 const YourNewsSection = styled.section`
   border-top: 1px solid #2f3336;
   margin-top: 88px;
-  color: #fff;
+  color: #d9d9d9;
 `;
 
 const YourNewsCardsContainer = styled.div`

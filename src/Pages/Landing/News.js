@@ -7,7 +7,7 @@ const NewsBg = styled.section`
   padding: 80px 0;
   text-align: center;
   background-color: #14151a;
-  color: #fff;
+  color: #d9d9d9;
 `;
 const NewsCotainer = styled.div`
   max-width: 1280px;

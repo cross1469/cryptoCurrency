@@ -28,7 +28,7 @@ const BuySellStyle = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
   margin-bottom: 56px;
-  color: #fff;
+  color: #d9d9d9;
   @media only screen and (max-width: 768px) {
     margin-bottom: 0;
   }
@@ -222,7 +222,7 @@ const BuySellTradeColumn = styled.div`
   flex-direction: column;
   display: flex;
   border-radius: 4px;
-  border: 1px solid #fff;
+  border: 1px solid #d9d9d9;
 `;
 
 const BuySellTradeContainer = styled.div`
@@ -233,7 +233,7 @@ const BuySellTradeContainer = styled.div`
   text-decoration: none;
   margin: 0;
   :first-child {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #d9d9d9;
   }
 `;
 
@@ -291,9 +291,9 @@ const EntrySelector = styled.div`
   left: 16px;
   transform: translateY(-50%);
   cursor: pointer;
-  border: 1px solid #fff;
+  border: 1px solid #d9d9d9;
   border-radius: 100%;
-  background-color: #121212;
+  background-color: #14151a;
 `;
 
 const EntrySelectorContainer = styled.div`
@@ -306,7 +306,7 @@ const EntrySelectorSize = styled.div`
   width: 13px;
   height: 13px;
   svg {
-    fill: #fff;
+    fill: #d9d9d9;
   }
 `;
 

@@ -19,7 +19,7 @@ const BuySellStyle = styled.div`
   border-radius: 4px;
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
-  color: #fff;
+  color: #d9d9d9;
 `;
 
 const BuySellContainer = styled.div`
@@ -245,7 +245,7 @@ const BuySellFooter = styled.div`
     margin: 0;
     color: #95a1bb;
     :last-child {
-      color: #fff;
+      color: #d9d9d9;
     }
   }
 `;

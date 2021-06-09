@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const MobileDataSection = styled.section`
   width: 100%;
-  color: #fff;
+  color: #d9d9d9;
   margin-bottom: 24px;
 `;
 
@@ -59,7 +59,7 @@ const MobileBodyItem = styled.td`
     width: 70px;
   }
   a {
-    color: #fff;
+    color: #d9d9d9;
   }
 `;
 
@@ -70,7 +70,7 @@ const PriceColumn = styled.div`
   h4 {
     display: block;
     line-height: 23px;
-    color: #fff;
+    color: #d9d9d9;
     font-size: 18px;
     font-weight: 400;
     text-align: left;

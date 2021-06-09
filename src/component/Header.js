@@ -16,8 +16,7 @@ import logo from "../images/crypto-logo.svg";
 const Navigation = styled.header`
   width: 100%;
   position: relative;
-  border-bottom: 1px solid white;
-
+  border-bottom: 1px solid #d9d9d9;
   ${color}
   ${typography}
   .container {
@@ -48,7 +47,7 @@ const Navigation = styled.header`
   }
   .fa-bars {
     display: none;
-    color: #fff;
+    color: #d9d9d9;
     font-size: 2rem;
   }
   nav {
@@ -80,7 +79,7 @@ const Navigation = styled.header`
       text-decoration: none;
       border: none;
       outline: none;
-      color: #fff;
+      color: #d9d9d9;
       cursor: pointer;
       letter-spacing: 1px;
       font-weight: 500;

@@ -10,7 +10,7 @@ const CardImg = styled.div`
   background-repeat: no-repeat;
 `;
 const CardTitle = styled.div`
-  color: #fff;
+  color: #d9d9d9;
   font-size: 20px;
   line-height: 20px;
   font-weight: 500;

@@ -28,7 +28,7 @@ const LayoutWrapper = styled.div`
   flex-direction: column;
   padding: 0px;
   background: #14151a;
-  color: #fff;
+  color: #d9d9d9;
 `;
 
 const LayoutContainer = styled.div`
@@ -121,7 +121,7 @@ const WishListBtn = styled.button`
   font-size: 14px;
   border: 1px solid #2f3336;
   background-color: #14151a;
-  color: #fff;
+  color: #d9d9d9;
   :hover {
     color: #f0b90b;
     border: 1px solid #f0b90b;
@@ -140,7 +140,7 @@ const WishListBtn = styled.button`
       cursor: pointer;
       height: 24px;
       width: 24px;
-      fill: #fff;
+      fill: #d9d9d9;
     }
     span {
       margin-left: 10px;

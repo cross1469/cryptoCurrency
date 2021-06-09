@@ -66,7 +66,7 @@ const BannerTitle = styled.h1`
   line-height: 1.15;
   margin-top: 8px;
   margin-bottom: 16px;
-  color: #fff;
+  color: #d9d9d9;
   @media only screen and (max-width: 576px) {
     font-size: 34px;
     line-height: 40px;

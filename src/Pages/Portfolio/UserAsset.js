@@ -27,7 +27,7 @@ const UserAssetWrapper = styled.div`
 const UserAssetTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  color: #fff;
+  color: #d9d9d9;
   min-height: 28px;
   width: 100%;
   margin-bottom: 24px;
@@ -60,7 +60,7 @@ const UserAssetCardContainer = styled.div`
     flex-direction: column;
     border-radius: 6px;
     overflow: hidden;
-    color: #fff;
+    color: #d9d9d9;
     border: 1px solid #14151a;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
     :last-child {
@@ -171,7 +171,7 @@ const UserAssetCardXlFooterText = styled.div`
   column-gap: 4px;
   span {
     margin: 0;
-    color: rgba(255, 255, 255, 0.5);
+    color: #d9d9d9;
     font-size: 12px;
     line-height: 16px;
   }

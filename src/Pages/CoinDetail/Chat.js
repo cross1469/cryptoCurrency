@@ -17,7 +17,7 @@ const OpenChat = styled.button`
   right: 0;
   width: 52px;
   height: 52px;
-  color: #fff;
+  color: #d9d9d9;
   background-color: #f0b90b;
   background-position: center center;
   background-repeat: no-repeat;
@@ -47,7 +47,7 @@ const ChatForm = styled.section`
   max-height: 75vh;
   background-color: #14151a;
   border-radius: 8px;
-  color: #fff;
+  color: #d9d9d9;
   border: 1px solid #2f3336;
   border-top: 1px solid #f0b90b;
   overflow: hidden;
@@ -66,7 +66,7 @@ const ChatHeader = styled.header`
   display: flex;
   width: 100%;
   padding: 12px 16px;
-  color: #fff;
+  color: #d9d9d9;
   background-color: #14151a;
   align-items: center;
   justify-content: space-around;
@@ -79,7 +79,7 @@ const ChatRoomIconContainer = styled.div`
   svg {
     width: 36px;
     height: 36px;
-    fill: #fff;
+    fill: #d9d9d9;
   }
 `;
 
@@ -105,7 +105,7 @@ const ChatCloseContainer = styled.div`
     svg {
       width: 16px;
       height: 16px;
-      fill: #fff;
+      fill: #d9d9d9;
     }
   }
 `;
@@ -115,7 +115,7 @@ const ChatMain = styled.main`
   width: 100%;
   padding: 24px 16px 8px;
   line-height: 24px;
-  color: #fff;
+  color: #d9d9d9;
   flex: 1 1 auto;
   height: 55vh;
   background-color: #14151a;
@@ -210,7 +210,7 @@ const ChatInput = styled.input`
   font-family: inherit;
   font-size: 16px;
   line-height: 24px;
-  color: #fff;
+  color: #d9d9d9;
   background-color: #14151a;
   border: 0;
   outline: none;

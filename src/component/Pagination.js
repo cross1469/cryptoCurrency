@@ -25,10 +25,11 @@ const PagnitionUl = styled.ul`
     padding: 0px;
     background-color: transparent;
     border-radius: 4px;
-    color: #fff;
+    color: #d9d9d9;
     font-weight: 400;
     :hover {
       background-color: #eaecef;
+      color: #14151a;
     }
   }
   a.page-link.active {
