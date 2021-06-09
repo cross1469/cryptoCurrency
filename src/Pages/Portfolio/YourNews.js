@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { readWishList } from "../../Utils/firebase";
 import defaultNewsImg from "../../images/defaultNews.jpg";
@@ -55,6 +56,10 @@ const YourNewsContentContainer = styled.div`
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: auto;
   gap: 56px 44px;
+  a {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const YourNewsContentTop = styled.div`
@@ -215,6 +220,19 @@ const YourNewsBottomBottomContainer = styled.div`
   }
 `;
 
+const NoNewsBtn = styled.button`
+  padding: 16px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 180px;
+  border-radius: 4px;
+  font-family: "Exo 2", sans-serif;
+  background-color: #f0b90b;
+  :hover {
+    background-color: #ffe251;
+  }
+`;
+
 const YourNews = (props) => {
   const [wishStr, setWishStr] = useState("");
   const [newsHeadlines, setNewsHeadlines] = useState([]);
@@ -249,6 +267,11 @@ const YourNews = (props) => {
       setWishStr(wishString);
     }
   };
+
+  useEffect(() => {
+    getWishListData();
+    coinTopHeadline();
+  }, [email, wishStr]);
 
   const renderYourNewsTop = () =>
     newsHeadlines.slice(0, 2).map((news) => (
@@ -301,11 +324,6 @@ const YourNews = (props) => {
       </YourNewsContentBottomLink>
     ));
 
-  useEffect(() => {
-    getWishListData();
-    coinTopHeadline();
-  }, [email, wishStr]);
-
   return (
     <YourNewsSection>
       <YourNewsCardsContainer>
@@ -314,11 +332,20 @@ const YourNews = (props) => {
             <h2>Your News</h2>
             <p>Welcome to check out the news dedicated to you!</p>
           </YourNewsTitleContainer>
+
           <YourNewsContentContainer>
-            <YourNewsContentTop>{renderYourNewsTop()}</YourNewsContentTop>
-            <YourNewsContentBottom>
-              {renderYourNewsButtom()}
-            </YourNewsContentBottom>
+            {JSON.stringify(newsHeadlines) === "[]" ? (
+              <Link to="/explore">
+                <NoNewsBtn>Add to wishLsist</NoNewsBtn>
+              </Link>
+            ) : (
+              <>
+                <YourNewsContentTop>{renderYourNewsTop()}</YourNewsContentTop>
+                <YourNewsContentBottom>
+                  {renderYourNewsButtom()}
+                </YourNewsContentBottom>
+              </>
+            )}
           </YourNewsContentContainer>
         </YourNewsGrid>
       </YourNewsCardsContainer>

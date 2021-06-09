@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadOrder } from "../../Utils/firebase";
@@ -54,6 +55,11 @@ const OrderHeaderContentContainer = styled.div`
 
 const OrderSection = styled.section`
   width: 100%;
+  h3,
+  a {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const OrderTableDiv = styled.div`
@@ -157,6 +163,24 @@ const OrderTbodySellItem = styled.td`
   :last-child {
     padding-right: 32px;
   }
+`;
+
+const NoBuyDataBtn = styled.button`
+  padding: 16px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 180px;
+  border-radius: 4px;
+  font-family: "Exo 2", sans-serif;
+  background-color: #f0b90b;
+  :hover {
+    background-color: #ffe251;
+  }
+`;
+
+const NoSoldData = styled.h3`
+  margin: 0 auto;
+  color: #d9d9d9;
 `;
 
 const OrderTable = (props) => {
@@ -296,33 +320,41 @@ const OrderTable = (props) => {
             </OrderHeaderContent>
           </OrderHeaderContainer>
 
-          <OrderSection>
-            <OrderTableDiv>
-              <Scrollbars
-                autoHide
-                autoHideTimeout={1000}
-                autoHideDuration={200}
-                renderThumbVertical={renderThumb}
-                renderThumbHorizontal={renderThumb}
-                style={{ width: "100%", height: "275px" }}
-              >
-                <OrderTableContainer>
-                  <OrderThead>
-                    <tr>
-                      <OrderTheadItem>#</OrderTheadItem>
-                      <OrderTheadItem>Time</OrderTheadItem>
-                      <OrderTheadItem>Name</OrderTheadItem>
-                      <OrderTheadItem>Buy Price</OrderTheadItem>
-                      <OrderTheadItem>Price</OrderTheadItem>
-                      <OrderTheadItem>Quantity</OrderTheadItem>
-                      <OrderTheadItem>Balance</OrderTheadItem>
-                    </tr>
-                  </OrderThead>
-                  <OrderTbody>{renderBuyTable()}</OrderTbody>
-                </OrderTableContainer>
-              </Scrollbars>
-            </OrderTableDiv>
-          </OrderSection>
+          {JSON.stringify(buyDatas) === "[]" ? (
+            <OrderSection>
+              <Link to="/explore">
+                <NoBuyDataBtn>Sell all assets</NoBuyDataBtn>
+              </Link>
+            </OrderSection>
+          ) : (
+            <OrderSection>
+              <OrderTableDiv>
+                <Scrollbars
+                  autoHide
+                  autoHideTimeout={1000}
+                  autoHideDuration={200}
+                  renderThumbVertical={renderThumb}
+                  renderThumbHorizontal={renderThumb}
+                  style={{ width: "100%", height: "275px" }}
+                >
+                  <OrderTableContainer>
+                    <OrderThead>
+                      <tr>
+                        <OrderTheadItem>#</OrderTheadItem>
+                        <OrderTheadItem>Time</OrderTheadItem>
+                        <OrderTheadItem>Name</OrderTheadItem>
+                        <OrderTheadItem>Buy Price</OrderTheadItem>
+                        <OrderTheadItem>Price</OrderTheadItem>
+                        <OrderTheadItem>Quantity</OrderTheadItem>
+                        <OrderTheadItem>Balance</OrderTheadItem>
+                      </tr>
+                    </OrderThead>
+                    <OrderTbody>{renderBuyTable()}</OrderTbody>
+                  </OrderTableContainer>
+                </Scrollbars>
+              </OrderTableDiv>
+            </OrderSection>
+          )}
         </OrderStyledContent>
       </OrderContainer>
 
@@ -338,32 +370,38 @@ const OrderTable = (props) => {
             </OrderHeaderContent>
           </OrderHeaderContainer>
 
-          <OrderSection>
-            <OrderTableDiv>
-              <Scrollbars
-                autoHide
-                autoHideTimeout={1000}
-                autoHideDuration={200}
-                renderThumbVertical={renderThumb}
-                renderThumbHorizontal={renderThumb}
-                style={{ width: "100%", height: "275px" }}
-              >
-                <OrderTableContainer>
-                  <OrderThead>
-                    <tr>
-                      <OrderTheadItem>#</OrderTheadItem>
-                      <OrderTheadItem>Time</OrderTheadItem>
-                      <OrderTheadItem>Name</OrderTheadItem>
-                      <OrderTheadItem>Sell Price</OrderTheadItem>
-                      <OrderTheadItem>Quantity</OrderTheadItem>
-                      <OrderTheadItem>Total</OrderTheadItem>
-                    </tr>
-                  </OrderThead>
-                  <OrderTbody>{renderSellTable()}</OrderTbody>
-                </OrderTableContainer>
-              </Scrollbars>
-            </OrderTableDiv>
-          </OrderSection>
+          {JSON.stringify(sellDatas) === "[]" ? (
+            <OrderSection>
+              <NoSoldData>You haven&apos;t sold the data</NoSoldData>
+            </OrderSection>
+          ) : (
+            <OrderSection>
+              <OrderTableDiv>
+                <Scrollbars
+                  autoHide
+                  autoHideTimeout={1000}
+                  autoHideDuration={200}
+                  renderThumbVertical={renderThumb}
+                  renderThumbHorizontal={renderThumb}
+                  style={{ width: "100%", height: "275px" }}
+                >
+                  <OrderTableContainer>
+                    <OrderThead>
+                      <tr>
+                        <OrderTheadItem>#</OrderTheadItem>
+                        <OrderTheadItem>Time</OrderTheadItem>
+                        <OrderTheadItem>Name</OrderTheadItem>
+                        <OrderTheadItem>Sell Price</OrderTheadItem>
+                        <OrderTheadItem>Quantity</OrderTheadItem>
+                        <OrderTheadItem>Total</OrderTheadItem>
+                      </tr>
+                    </OrderThead>
+                    <OrderTbody>{renderSellTable()}</OrderTbody>
+                  </OrderTableContainer>
+                </Scrollbars>
+              </OrderTableDiv>
+            </OrderSection>
+          )}
         </OrderStyledContent>
       </OrderContainer>
     </>

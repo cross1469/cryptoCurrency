@@ -271,7 +271,7 @@ const UserAsset = (props) => {
     getUserAsset();
   }, [email]);
 
-  const renderTrendCard = () =>
+  const renderAssetCard = () =>
     userAsset.map((asset) =>
       coinLastPrice.map((coin) => {
         const symbol = coin.symbol.replace(/USDT/, "");
@@ -334,10 +334,7 @@ const UserAsset = (props) => {
             renderThumbHorizontal={renderThumb}
             style={{ width: "100%", height: "220px" }}
           >
-            <UserAssetCardContainer>
-              {" "}
-              {renderTrendCard()}
-            </UserAssetCardContainer>
+            <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>
           </Scrollbars>
         ) : (
           <DashboardLoader />
