@@ -104,7 +104,7 @@ const AssetTable = () => {
     <AssetContainer>
       <AssetInnerCard>
         <AssetTableTile>
-          <h3>Coin asset</h3>
+          <h3>Your coin wallet</h3>
         </AssetTableTile>
         <AssetTrnsitioner>
           <AssetModuleFade>
