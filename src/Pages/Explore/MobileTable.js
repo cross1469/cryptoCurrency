@@ -45,11 +45,13 @@ const MobileBodyItem = styled.td`
   min-width: 140px;
   padding: 14px 24px 14px 0px;
   :first-child {
+    display: flex;
+    align-content: center;
     padding-left: 24px;
     img {
-      height: 20px;
+      height: 16px;
       aspect-ratio: auto 16 / 16;
-      width: 20px;
+      width: 16px;
       margin-right: 8px;
     }
   }
