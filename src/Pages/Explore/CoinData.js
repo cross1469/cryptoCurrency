@@ -355,6 +355,7 @@ const CoinData = (props) => {
   };
 
   const NUM_OF_RECORDS = realTimeDatas.length;
+  const SEARCH_NUM_OF_RECORDS = searchResults.length;
   const limit = 15;
   const onPageChanged = useCallback(
     (e, page) => {
@@ -587,13 +588,23 @@ const CoinData = (props) => {
           searchResults={searchResults}
         />
         <div className="pagination-wrapper">
-          <Pagination
-            totalRecords={NUM_OF_RECORDS}
-            pageLimit={limit}
-            pageNeighbours={1}
-            onPageChanged={onPageChanged}
-            currentPage={currentPage}
-          />
+          {searchTerm ? (
+            <Pagination
+              totalRecords={SEARCH_NUM_OF_RECORDS}
+              pageLimit={limit}
+              pageNeighbours={1}
+              onPageChanged={onPageChanged}
+              currentPage={currentPage}
+            />
+          ) : (
+            <Pagination
+              totalRecords={NUM_OF_RECORDS}
+              pageLimit={limit}
+              pageNeighbours={1}
+              onPageChanged={onPageChanged}
+              currentPage={currentPage}
+            />
+          )}
         </div>
       </CoinDataContainer>
 

@@ -80,7 +80,7 @@ const Pagination = (props) => {
   const [totalPages, setTotalPages] = useState(0);
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / pageLimit));
-  }, []);
+  }, [totalRecords]);
 
   const fetchPageNumbers = () => {
     const totalNumbers = pageNeighbours * 2 + 3;
