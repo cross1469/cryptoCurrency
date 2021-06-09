@@ -26,7 +26,7 @@ const AssetTableTile = styled.div`
   align-items: center;
   flex-direction: row;
   position: relative;
-  padding: 16px 24px;
+  padding: 16px 24px 36px;
   border-bottom: 1px solid #2f3336;
   border-top: none;
   flex-shrink: 0;
@@ -102,10 +102,10 @@ const AssetTable = () => {
 
   return (
     <AssetContainer>
+      <AssetTableTile>
+        <h3>Your coin wallet</h3>
+      </AssetTableTile>
       <AssetInnerCard>
-        <AssetTableTile>
-          <h3>Your coin wallet</h3>
-        </AssetTableTile>
         <AssetTrnsitioner>
           <AssetModuleFade>
             <AssetTableWrapper>
