@@ -237,7 +237,7 @@ const Chat = (props) => {
   const [toggleChatBtn, setToggleChatBtn] = useState("block");
   const [list, setList] = useState([]);
   let toastProperties = null;
-  const messagesContainer = useRef(null);
+  const ref = useRef();
 
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
@@ -319,11 +319,8 @@ const Chat = (props) => {
   useEffect(() => readChatData(setChatDatas), []);
 
   useEffect(() => {
-    messagesContainer.current.scrollTo(
-      0,
-      messagesContainer.current.scrollHeight
-    );
-  }, [toggleChat]);
+    ref.current.scrollToBottom();
+  }, [chatDatas, toggleChat]);
 
   const renderChatData = () =>
     chatDatas.map((chatData) => {
@@ -331,24 +328,28 @@ const Chat = (props) => {
       const time = new Date(timestamp).toLocaleTimeString();
       if (email === null) {
         return (
-          <ChatDataContainer>
-            <ChatDataItem key={chatData.id}>
-              <div className="account">{chatData.account}</div>
-              <div className="message">{chatData.messages}</div>
-              <div className="time">{time}</div>
-            </ChatDataItem>
-          </ChatDataContainer>
+          <>
+            <ChatDataContainer>
+              <ChatDataItem key={chatData.id}>
+                <div className="account">{chatData.account}</div>
+                <div className="message">{chatData.messages}</div>
+                <div className="time">{time}</div>
+              </ChatDataItem>
+            </ChatDataContainer>
+          </>
         );
       }
       if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
         return (
-          <ChatDataContainer>
-            <UserChatDataItem key={chatData.id}>
-              <div className="account">{chatData.account}</div>
-              <div className="message">{chatData.messages}</div>
-              <div className="time">{time}</div>
-            </UserChatDataItem>
-          </ChatDataContainer>
+          <>
+            <ChatDataContainer>
+              <UserChatDataItem key={chatData.id}>
+                <div className="account">{chatData.account}</div>
+                <div className="message">{chatData.messages}</div>
+                <div className="time">{time}</div>
+              </UserChatDataItem>
+            </ChatDataContainer>
+          </>
         );
       }
       return (
@@ -381,12 +382,15 @@ const Chat = (props) => {
             </button>
           </ChatCloseContainer>
         </ChatHeader>
-        <ChatMain ref={messagesContainer}>
+        <ChatMain>
           <Scrollbars
             autoHide
             autoHideTimeout={1000}
             autoHideDuration={200}
             renderThumbVertical={renderThumb}
+            ref={(s) => {
+              ref.current = s;
+            }}
           >
             <ChatData>{renderChatData()}</ChatData>
           </Scrollbars>

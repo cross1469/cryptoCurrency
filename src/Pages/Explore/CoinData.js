@@ -218,6 +218,7 @@ const CoinTableBodyItem = styled.td`
   :nth-child(3),
   :nth-child(4) {
     min-width: 148px;
+    width: 148px;
     text-align: right;
   }
   :nth-child(3) {
@@ -574,7 +575,7 @@ const CoinData = (props) => {
                   <CoinTableHeadItem>Change</CoinTableHeadItem>
                   <CoinTableHeadItem>Market Cap</CoinTableHeadItem>
                   <CoinTableHeadItem>Trade</CoinTableHeadItem>
-                  <CoinTableHeadItem>Watch</CoinTableHeadItem>
+                  <CoinTableHeadItem>Wish</CoinTableHeadItem>
                 </tr>
               </CoinTableHead>
               <CoinTableBody>{renderCoinDatas()}</CoinTableBody>
