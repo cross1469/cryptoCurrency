@@ -9,10 +9,10 @@ import {
   removeWishList,
   readWishList,
 } from "../../Utils/firebase";
-import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
-import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
-import Pagination from "../../Component/Pagination";
-import Toast from "../../Component/Toast";
+import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
+import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
+import Pagination from "../../component/Pagination";
+import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
 import checkIcon from "../../images/check.svg";
 import { ReactComponent as Search } from "../../images/search.svg";

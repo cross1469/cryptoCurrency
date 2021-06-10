@@ -41,12 +41,12 @@ const firebaseReadCoinAsset = (email, coinType) =>
     .doc(coinType)
     .get()
     .then((doc) => {
-      if (doc.data() === undefined) {
-        return { profitLoss: 0, qty: 0, averagePrice: 0 };
+      if (doc.exists) {
+        const assetData = doc.data();
+        const { profitLoss, qty, averagePrice } = assetData;
+        return { profitLoss, qty, averagePrice };
       }
-      const assetData = doc.data();
-      const { profitLoss, qty, averagePrice } = assetData;
-      return { profitLoss, qty, averagePrice };
+      return { profitLoss: 0, qty: 0, averagePrice: 0 };
     });
 
 const firebaseReadAsset = (email) =>
@@ -55,15 +55,11 @@ const firebaseReadAsset = (email) =>
     .doc(email)
     .collection("assets")
     .get()
-    .then((docs) => {
-      const coinDatas = [];
-      docs.forEach((doc) => {
-        const coinData = doc.data();
-        coinDatas.push({
-          coinType: doc.id,
-          ...coinData,
-        });
-      });
+    .then((item) => {
+      const coinDatas = item.docs.map((doc) => ({
+        coinType: doc.id,
+        ...doc.data(),
+      }));
       return coinDatas;
     });
 
@@ -88,11 +84,8 @@ const firebaseReadOrder = (email) =>
     .doc(email)
     .collection("orders")
     .get()
-    .then((orders) => {
-      const orderData = [];
-      orders.forEach((order) => {
-        orderData.push(order.data());
-      });
+    .then((item) => {
+      const orderData = item.docs.map((order) => order.data());
       return orderData;
     });
 
@@ -122,14 +115,11 @@ const readWishList = (email) =>
     .doc(email)
     .get()
     .then((wishLists) => {
-      if (wishLists.data() === undefined) {
-        return [];
+      if (wishLists.exists) {
+        const wishList = wishLists.data().wishList.map((item) => item);
+        return wishList;
       }
-      const wishList = [];
-      wishLists.data().wishList.forEach((item) => {
-        wishList.push(item);
-      });
-      return wishList;
+      return [];
     });
 
 const addWishList = async (email, wishItem) => {
@@ -141,7 +131,6 @@ const addWishList = async (email, wishItem) => {
         wishList: firebase.firestore.FieldValue.arrayUnion(wishItem),
       });
   } else {
-    console.log(wishList);
     db.collection("users")
       .doc(email)
       .set({
@@ -210,23 +199,6 @@ const firebaseAuthGoogleSignIn = async () => {
     .catch((error) => error.code);
 };
 
-const firebaseGetLimitOrderData = (email, coinType) =>
-  db
-    .collection("users")
-    .doc(email)
-    .collection("orders")
-    .where("tradingType", "==", "limit")
-    .get()
-    .then((limitDatas) => {
-      const limitOrderData = [];
-      limitDatas.forEach((limitData) => {
-        if (limitData.data().coinType === coinType) {
-          limitOrderData.push(limitData.data());
-        }
-      });
-      return limitOrderData;
-    });
-
 export default firebaseAddOrder;
 export {
   firebaseReadOrder,
@@ -243,6 +215,5 @@ export {
   firebaseAuthGoogleSignIn,
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
-  firebaseGetLimitOrderData,
   firebaseReadAsset,
 };

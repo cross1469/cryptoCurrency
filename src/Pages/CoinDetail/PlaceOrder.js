@@ -11,7 +11,7 @@ import firebaseAddOrder, {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
 } from "../../Utils/firebase";
-import Toast from "../../Component/Toast";
+import Toast from "../../component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as Switch } from "../../images/sort.svg";

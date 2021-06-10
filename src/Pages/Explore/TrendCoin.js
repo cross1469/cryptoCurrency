@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import DashboardLoader from "../../Component/loader/DashboardLoader";
+import DashboardLoader from "../../component/loader/DashboardLoader";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;

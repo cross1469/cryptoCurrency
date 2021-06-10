@@ -221,7 +221,7 @@ const AssetsTotal = (props) => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {profitLoss > 0 ? Number(profitLoss).toLocaleString() : "-"}
+                {profitLoss === "-" ? "-" : Number(profitLoss).toLocaleString()}
               </span>
               <span> %</span>
             </AccountPNLPrice>

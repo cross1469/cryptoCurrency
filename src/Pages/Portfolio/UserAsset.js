@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadAsset } from "../../Utils/firebase";
-import DashboardLoader from "../../Component/loader/DashboardLoader";
+import DashboardLoader from "../../component/loader/DashboardLoader";
 
 const UserAssetContainer = styled.div`
   background-color: #14151a;
