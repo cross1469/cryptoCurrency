@@ -34,7 +34,6 @@ const UserAssetTitleContainer = styled.div`
   span {
     white-space: nowrap;
     font-size: 24px;
-    padding: 2px 8px;
   }
 `;
 
@@ -227,9 +226,27 @@ const UserAssetCardMdFooterText = styled.div`
   }};
 `;
 
+const NoDataBtn = styled.button`
+  padding: 16px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 180px;
+  border-radius: 4px;
+  font-family: "Exo 2", sans-serif;
+  background-color: #f0b90b;
+  :hover {
+    background-color: #ffe251;
+  }
+`;
+
+const NoDataContainer = styled.div`
+  margin: 85px 0px;
+`;
+
 const UserAsset = (props) => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [userAsset, setUserAsset] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { email } = props;
 
   const getUserAsset = async () => {
@@ -261,6 +278,7 @@ const UserAsset = (props) => {
           }
         });
         setCoinLastPrice(usdtLastPrice);
+        setIsLoading(false);
       });
 
   useEffect(() => {
@@ -319,26 +337,39 @@ const UserAsset = (props) => {
       })
     );
 
+  const renderLoadingAndAsset = () => {
+    if (isLoading) {
+      return <DashboardLoader />;
+    }
+    if (userAsset.length > 0) {
+      return (
+        <Scrollbars
+          autoHide
+          autoHideTimeout={1000}
+          autoHideDuration={200}
+          renderThumbHorizontal={renderThumb}
+          style={{ width: "100%", height: "220px" }}
+        >
+          <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>
+        </Scrollbars>
+      );
+    }
+    return (
+      <NoDataContainer>
+        <Link to="/explore">
+          <NoDataBtn>See all assets</NoDataBtn>
+        </Link>
+      </NoDataContainer>
+    );
+  };
+
   return (
     <UserAssetContainer>
       <UserAssetWrapper>
         <UserAssetTitleContainer>
           <span>My cryptocurrencies</span>
         </UserAssetTitleContainer>
-
-        {coinLastPrice.length > 0 ? (
-          <Scrollbars
-            autoHide
-            autoHideTimeout={1000}
-            autoHideDuration={200}
-            renderThumbHorizontal={renderThumb}
-            style={{ width: "100%", height: "220px" }}
-          >
-            <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>
-          </Scrollbars>
-        ) : (
-          <DashboardLoader />
-        )}
+        {renderLoadingAndAsset()}
       </UserAssetWrapper>
     </UserAssetContainer>
   );
