@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { ThemeProvider } from "styled-components";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
+import CoinDetail from "./Pages/CoinDetail";
+import Header from "./Component/Header";
+import Footer from "./Component/Footer";
+import Landing from "./Pages/Landing";
+import Explore from "./Pages/Explore";
+import Portfolio from "./Pages/Portfolio";
+import ScrollToTop from "./Component/ScrollToTop";
+import { subscribeUserData } from "./Utils/firebase";
+import theme from "./Utils/theme";
 
 function App() {
+  const [email, setEmail] = useState();
+
+  useEffect(
+    () =>
+      subscribeUserData((userEmail) => {
+        setEmail(userEmail);
+      }),
+    [email]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <ScrollToTop />
+      <div className="App">
+        <ResetStyle />
+        <GlobalStyle />
+        <Header />
+        <div className="content-container">
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/coindetail/:symbol" component={CoinDetail} />
+            <Route exact path="/explore" component={Explore} />
+            <Route exact path="/portfolio">
+              {email !== null ? <Portfolio /> : <Redirect to="/" />}
+            </Route>
+            <Redirect to="/404" />
+          </Switch>
+        </div>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
 

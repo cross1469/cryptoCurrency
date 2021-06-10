@@ -1,17 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./Redux/Reducers";
+import ErrorPage from "./Component/404";
+import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
+import App from "./App";
+
+const store = createStore(reducer);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ResetStyle />
+      <GlobalStyle />
+      <Router>
+        <Switch>
+          <Route path="/404" exact component={ErrorPage} />
+          <Route path="/" component={App} />
+        </Switch>
+      </Router>
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
