@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
+import { GlobalStyle, ResetStyle } from "./component/globalStyle";
 import CoinDetail from "./Pages/CoinDetail";
-import Header from "./Component/Header";
-import Footer from "./Component/Footer";
+import Header from "./component/Header";
+import Footer from "./component/Footer";
 import Landing from "./Pages/Landing";
 import Explore from "./Pages/Explore";
 import Portfolio from "./Pages/Portfolio";
-import ScrollToTop from "./Component/ScrollToTop";
+import ScrollToTop from "./component/ScrollToTop";
 import { subscribeUserData } from "./Utils/firebase";
 import theme from "./Utils/theme";
 

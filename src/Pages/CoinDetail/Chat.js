@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { layout } from "styled-system";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
-import Toast from "../../Component/Toast";
+import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as ChatIcon } from "../../images/speech-bubble.svg";
 import { ReactComponent as ChatClose } from "../../images/cancel.svg";

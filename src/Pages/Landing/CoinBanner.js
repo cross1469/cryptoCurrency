@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
-import HelpLinksLoader from "../../Component/loader/HelpLinksLoader";
+import HelpLinksLoader from "../../component/loader/HelpLinksLoader";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;

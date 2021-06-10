@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { color } from "styled-system";
-import Modal from "../../Component/Modal";
-import Sign from "../../Component/Sign";
+import Modal from "../../component/Modal";
+import Sign from "../../component/Sign";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
 import { subscribeUserData } from "../../Utils/firebase";
 

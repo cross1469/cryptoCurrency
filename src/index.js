@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./Redux/Reducers";
-import ErrorPage from "./Component/404";
-import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
+import ErrorPage from "./component/404";
+import { GlobalStyle, ResetStyle } from "./component/globalStyle";
 import App from "./App";
 
 const store = createStore(reducer);
