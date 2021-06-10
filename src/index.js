@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./Redux/Reducers";
-import ScrollToTop from "./Component/ScrollToTop";
+import ErrorPage from "./Component/404";
+import { GlobalStyle, ResetStyle } from "./Component/globalStyle";
 import App from "./App";
 
 const store = createStore(reducer);
@@ -12,10 +13,12 @@ const store = createStore(reducer);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ResetStyle />
+      <GlobalStyle />
       <Router>
-        <ScrollToTop />
         <Switch>
-          <App />
+          <Route path="/404" exact component={ErrorPage} />
+          <Route path="/" component={App} />
         </Switch>
       </Router>
     </Provider>
