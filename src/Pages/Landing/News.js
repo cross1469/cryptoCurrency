@@ -7,7 +7,7 @@ const NewsBg = styled.section`
   padding: 80px 0;
   text-align: center;
   background-color: #14151a;
-  color: #fff;
+  color: #d9d9d9;
 `;
 const NewsCotainer = styled.div`
   max-width: 1280px;
@@ -19,6 +19,10 @@ const NewsCotainer = styled.div`
   justify-content: center;
   padding-left: 60px;
   padding-right: 60px;
+  @media only screen and (max-width: 576px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 `;
 const NewsTitle = styled.div`
   font-weight: 500;
@@ -43,6 +47,10 @@ const NewsColumsContainer = styled.div`
   justify-content: space-between;
   @media only screen and (max-width: 768px) {
     flex-direction: column;
+  }
+  @media only screen and (max-width: 576px) {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 `;
 

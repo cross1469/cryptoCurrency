@@ -19,6 +19,10 @@ const BannerBg = styled.section`
   padding-right: 56px;
   justify-content: center;
   ${color}
+  @media only screen and (max-width: 576px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 `;
 const BannerCotainer = styled.div`
   max-width: 1280px;
@@ -45,7 +49,7 @@ const BannerCotainer = styled.div`
     }
   }
   @media only screen and (max-width: 996px) {
-    flex-wrap: wrap;
+    flex-direction: column;
     .leftSection {
       align-items: center;
     }
@@ -66,7 +70,7 @@ const BannerTitle = styled.h1`
   line-height: 1.15;
   margin-top: 8px;
   margin-bottom: 16px;
-  color: #fff;
+  color: #d9d9d9;
   @media only screen and (max-width: 576px) {
     font-size: 34px;
     line-height: 40px;
@@ -119,7 +123,10 @@ const Banner = () => {
       <BannerCotainer>
         <div className="leftSection">
           <BannerTitle>
-            <span>Cryptocurrency Exchange</span>
+            <span>
+              Cryptocurrency
+              <br /> Exchange
+            </span>
           </BannerTitle>
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>

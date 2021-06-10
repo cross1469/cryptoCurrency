@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const MobileDataSection = styled.section`
   width: 100%;
-  color: #fff;
+  color: #d9d9d9;
   margin-bottom: 24px;
 `;
 
@@ -45,11 +45,13 @@ const MobileBodyItem = styled.td`
   min-width: 140px;
   padding: 14px 24px 14px 0px;
   :first-child {
+    display: flex;
+    align-content: center;
     padding-left: 24px;
     img {
-      height: 20px;
+      height: 16px;
       aspect-ratio: auto 16 / 16;
-      width: 20px;
+      width: 16px;
       margin-right: 8px;
     }
   }
@@ -59,7 +61,7 @@ const MobileBodyItem = styled.td`
     width: 70px;
   }
   a {
-    color: #fff;
+    color: #d9d9d9;
   }
 `;
 
@@ -70,7 +72,7 @@ const PriceColumn = styled.div`
   h4 {
     display: block;
     line-height: 23px;
-    color: #fff;
+    color: #d9d9d9;
     font-size: 18px;
     font-weight: 400;
     text-align: left;

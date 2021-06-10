@@ -28,7 +28,7 @@ const BuySellStyle = styled.div`
   box-shadow: rgb(17 51 83 / 2%) 0px 4px 12px 0px;
   padding-top: 0px;
   margin-bottom: 56px;
-  color: #fff;
+  color: #d9d9d9;
   @media only screen and (max-width: 768px) {
     margin-bottom: 0;
   }
@@ -119,11 +119,13 @@ const BuySellBody = styled.div`
 const BuySellBodyItem = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 42px;
   span {
     flex-grow: 0;
     flex-shrink: 0;
     height: 16px;
+  }
+  :first-child {
+    margin-bottom: 24px;
   }
 `;
 
@@ -222,7 +224,7 @@ const BuySellTradeColumn = styled.div`
   flex-direction: column;
   display: flex;
   border-radius: 4px;
-  border: 1px solid #fff;
+  border: 1px solid #d9d9d9;
 `;
 
 const BuySellTradeContainer = styled.div`
@@ -233,7 +235,7 @@ const BuySellTradeContainer = styled.div`
   text-decoration: none;
   margin: 0;
   :first-child {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #d9d9d9;
   }
 `;
 
@@ -291,9 +293,9 @@ const EntrySelector = styled.div`
   left: 16px;
   transform: translateY(-50%);
   cursor: pointer;
-  border: 1px solid #fff;
+  border: 1px solid #d9d9d9;
   border-radius: 100%;
-  background-color: #121212;
+  background-color: #14151a;
 `;
 
 const EntrySelectorContainer = styled.div`
@@ -306,7 +308,7 @@ const EntrySelectorSize = styled.div`
   width: 13px;
   height: 13px;
   svg {
-    fill: #fff;
+    fill: #d9d9d9;
   }
 `;
 
@@ -335,6 +337,27 @@ const BuySellBodyButton = styled.button`
   }
 `;
 
+const BuySellFooter = styled.div`
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding-right: 24px;
+  padding-left: 24px;
+  justify-content: space-between;
+  span {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    transition: color 0.15s ease-out, opacity 0.15s ease-out;
+    margin: 0;
+    color: #95a1bb;
+    :last-child {
+      color: #d9d9d9;
+    }
+  }
+`;
+
 const PlaceOrder = (props) => {
   const marketPrice = useSelector(
     (state) => state.coinDetailReducer.marketPrice
@@ -354,8 +377,20 @@ const PlaceOrder = (props) => {
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
-  const [userUsdt, setUserUsdt] = useState();
-  const [userCoin, setUserCoin] = useState();
+
+  const readUserUsdtAndCoin = async () => {
+    if (email) {
+      const userCoinAsset = await firebaseReadCoinAsset(email, coin);
+      const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
+      if (userCoinAsset.qty === 0) {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(0));
+      } else {
+        dispatch(updateUsdtPrice(userUsdtAsset.qty));
+        dispatch(updateCoinPrice(userCoinAsset.qty));
+      }
+    }
+  };
 
   const handleChangeInputNewValue = (e) => {
     const re = /^[.,0-9\b]+$/;
@@ -366,8 +401,9 @@ const PlaceOrder = (props) => {
       } else {
         setInputValue(num);
       }
+
       if (inputTopContent.indexOf("USDT") === -1) {
-        setInputTopContent(`${e.target.value} ${coin}`);
+        setInputTopContent(`${Number(num).toLocaleString()} ${coin}`);
         setInputBottomContent(
           `${Number(Number(num) * Number(marketPrice)).toLocaleString()} USDT`
         );
@@ -382,31 +418,25 @@ const PlaceOrder = (props) => {
           ).toLocaleString()} ${coin}`
         );
         setBuyOrSell("buy");
-        setQty(Number(Number(num) / Number(marketPrice)).toLocaleString());
+        setQty(Number(Number(num) / Number(marketPrice)));
         setTotal(num);
       }
     }
   };
 
-  const handleClickChangeCoin = () => {
-    setInputTopContent(inputBottomContent);
-    setInputBottomContent(inputTopContent);
+  const handleClickChangeCoin = async () => {
+    await readUserUsdtAndCoin();
+
     if (inputBottomContent.indexOf("USDT") === -1) {
-      const firstContent = inputBottomContent.replace(` ${coin}`, "");
-      const sencondContent = firstContent.replace(/,/g, "");
-      if (sencondContent === coin) {
-        setInputValue("");
-      } else {
-        setInputValue(Number(sencondContent).toLocaleString());
-      }
+      setBuyOrSell("buy");
+      setInputValue("");
+      setInputTopContent(coin);
+      setInputBottomContent("USDT");
     } else {
-      const firstContent = inputBottomContent.replace(` USDT`, "");
-      const sencondContent = firstContent.replace(/,/g, "");
-      if (sencondContent === "USDT") {
-        setInputValue("");
-      } else {
-        setInputValue(Number(sencondContent).toLocaleString());
-      }
+      setBuyOrSell("sell");
+      setInputValue("");
+      setInputTopContent("USDT");
+      setInputBottomContent(coin);
     }
   };
 
@@ -477,8 +507,9 @@ const PlaceOrder = (props) => {
 
     if (buyOrSell === "buy") {
       const allcoinQty = Number(coinAsset.qty) + Number(coinQty);
-      const allUsdtQty =
-        Number(usdtAsset.qty) - Number(coinPriceForUSDT * coinQty);
+      const allUsdtQty = Number(
+        Number(usdtAsset.qty) - Number(coinPriceForUSDT * coinQty)
+      ).toLocaleString();
       const averageCoinPrice =
         (Number(coinAsset.averagePrice) * Number(coinAsset.qty) +
           Number(coinPriceForUSDT) * Number(coinQty)) /
@@ -494,7 +525,9 @@ const PlaceOrder = (props) => {
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     } else if (buyOrSell === "sell") {
-      const allcoinQty = Number(coinAsset.qty) - Number(coinQty);
+      const allcoinQty = Number(
+        Number(coinAsset.qty) - Number(coinQty)
+      ).toLocaleString();
       const allUsdtQty =
         Number(usdtAsset.qty) + Number(coinPriceForUSDT * coinQty);
       const averageCoinPrice =
@@ -514,29 +547,9 @@ const PlaceOrder = (props) => {
     }
   };
 
-  const readUserUsdtAndCoin = async () => {
-    if (email) {
-      const userCoinAsset = await firebaseReadCoinAsset(email, coin);
-      const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
-
-      if (userCoinAsset === null) {
-        setUserUsdt(userUsdtAsset.qty);
-        setUserCoin(0);
-        dispatch(updateUsdtPrice(userUsdtAsset.qty));
-        dispatch(updateCoinPrice(0));
-      } else {
-        setUserUsdt(userUsdtAsset.qty);
-        setUserCoin(userCoinAsset.qty);
-        dispatch(updateUsdtPrice(userUsdtAsset.qty));
-        dispatch(updateCoinPrice(userCoinAsset.qty));
-      }
-    }
-  };
-
   const handleClickUploadOrder = () => {
-    console.log(userCoin, usdtQty, coinsQty, total);
     if (buyOrSell === "buy") {
-      if (email && total > 0 && usdtQty > Number(total)) {
+      if (email && total > 0 && usdtQty >= Number(total)) {
         const orderData = {
           coinPrice: marketPrice,
           coinType: coin,
@@ -549,17 +562,17 @@ const PlaceOrder = (props) => {
         setInputTopContent("USDT");
         setInputBottomContent(coin);
         setInputValue("");
+        setTotal(0);
         showToast("success");
       } else if (!total) {
         showToast("dangerTotal");
-      } else if (userUsdt < total) {
+      } else if (usdtQty < total) {
         showToast("dangerUsdt");
       } else {
         showToast("danger");
       }
     } else if (buyOrSell === "sell") {
-      console.log(coinsQty, total);
-      if (email && total > 0 && coinsQty > Number(total)) {
+      if (email && total > 0 && coinsQty >= Number(total)) {
         const orderData = {
           coinPrice: marketPrice,
           coinType: coin,
@@ -572,6 +585,7 @@ const PlaceOrder = (props) => {
         setInputTopContent(coin);
         setInputBottomContent("USDT");
         setInputValue("");
+        setTotal(0);
         showToast("success");
       } else if (!total) {
         showToast("dangerTotal");
@@ -661,6 +675,12 @@ const PlaceOrder = (props) => {
                       </BuySellBodyButton>
                     </BuySellBodyItem>
                   </BuySellBody>
+                  <BuySellFooter>
+                    <span>{coin}</span>
+                    <span>
+                      {Number(coinsQty).toLocaleString()} {coin}
+                    </span>
+                  </BuySellFooter>
                 </ContentContainer>
               </ModuleFade>
             </TrasitionerContainer>

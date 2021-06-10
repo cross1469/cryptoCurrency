@@ -53,7 +53,7 @@ const WishHeaderContentContainer = styled.div`
       margin: 8px 0px 0px;
       font-size: 24px;
       font-weight: 500;
-      color: #fff;
+      color: #d9d9d9;
     }
   }
 `;
@@ -118,7 +118,7 @@ const WishListItemStyle = styled.div`
   a {
     text-decoration: none;
     cursor: pointer;
-    color: #fff;
+    color: #d9d9d9;
     display: flex;
     flex: 1 1 auto;
     width: 100%;
@@ -141,7 +141,7 @@ const WishListHoverButton = styled.button`
   width: auto;
   margin: 0px;
   border-radius: 4px;
-  color: #121212;
+  color: #14151a;
   cursor: pointer;
   transition: all 80ms ease-in-out 0s;
   padding: 12px 16px;
@@ -189,7 +189,7 @@ const WishListMiniItemTop = styled.div`
     font-size: 14px;
     font-weight: 500;
     line-height: 22px;
-    transition: color 80ms ease-in-out 0s;
+    transition: #d9d9d9 80ms ease-in-out 0s;
     display: block;
     margin-left: 8px;
   }
@@ -271,8 +271,8 @@ const WishListBottomContent = styled.div`
   font-weight: 500;
   transition: all 0.25s ease 0s;
   cursor: pointer;
-  color: #fff;
-  fill: #fff;
+  color: #d9d9d9;
+  fill: #d9d9d9;
   svg {
     width: 10px;
     height: 10px;

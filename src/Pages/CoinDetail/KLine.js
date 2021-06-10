@@ -86,9 +86,14 @@ const KLine = () => {
     chart: {
       zoomType: "x",
       backgroundColor: "#14151a",
+      marginTop: 24,
+      marginBottom: 48,
+      marginLeft: 60,
+      marginRight: 24,
     },
 
     rangeSelector: {
+      x: -9,
       enabled: true,
       allButtonsEnabled: true,
       buttons: [
@@ -158,7 +163,7 @@ const KLine = () => {
         "stroke-width": 0,
         r: 8,
         style: {
-          color: "#fff",
+          color: "#d9d9d9",
           fontWeight: 500,
         },
         states: {
@@ -167,7 +172,7 @@ const KLine = () => {
             stroke: "#ffe251",
             "stroke-width": 1,
             style: {
-              color: "#fff",
+              color: "#d9d9d9",
             },
           },
           select: {
@@ -181,7 +186,7 @@ const KLine = () => {
       buttonSpacing: 12,
       inputSpacing: 8,
       inputStyle: {
-        color: "#fff",
+        color: "#d9d9d9",
       },
       labelStyle: {
         color: "silver",
@@ -203,24 +208,18 @@ const KLine = () => {
       zoomEnabled: true,
       labels: {
         style: {
-          color: "#fff",
+          color: "#d9d9d9",
         },
       },
     },
     yAxis: [
       {
         title: {
-          text: "OHLC",
-          style: { color: "#000" },
-        },
-        height: "100%",
-        lineWidth: 2,
-        resize: {
-          enabled: true,
+          text: "",
         },
         labels: {
           style: {
-            color: "#fff",
+            color: "#d9d9d9",
           },
         },
       },

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import defaultNewsImg from "../../images/defaultNews.jpg";
 
 const CardImg = styled.div`
   min-height: 230px;
@@ -10,7 +11,7 @@ const CardImg = styled.div`
   background-repeat: no-repeat;
 `;
 const CardTitle = styled.div`
-  color: #fff;
+  color: #d9d9d9;
   font-size: 20px;
   line-height: 20px;
   font-weight: 500;
@@ -32,7 +33,11 @@ const NewsCard = (props) => {
   return (
     <>
       <CardImg
-        style={{ backgroundImage: `url(${newsUrlToImage})` }}
+        style={
+          newsUrlToImage === ""
+            ? { backgroundImage: `url(${defaultNewsImg})` }
+            : { backgroundImage: `url(${newsUrlToImage})` }
+        }
         loading="lazy"
       />
       <div>

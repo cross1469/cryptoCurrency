@@ -27,14 +27,13 @@ const UserAssetWrapper = styled.div`
 const UserAssetTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  color: #fff;
+  color: #d9d9d9;
   min-height: 28px;
   width: 100%;
   margin-bottom: 24px;
   span {
     white-space: nowrap;
     font-size: 24px;
-    padding: 2px 8px;
   }
 `;
 
@@ -60,7 +59,7 @@ const UserAssetCardContainer = styled.div`
     flex-direction: column;
     border-radius: 6px;
     overflow: hidden;
-    color: #fff;
+    color: #d9d9d9;
     border: 1px solid #14151a;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
     :last-child {
@@ -171,7 +170,7 @@ const UserAssetCardXlFooterText = styled.div`
   column-gap: 4px;
   span {
     margin: 0;
-    color: rgba(255, 255, 255, 0.5);
+    color: #d9d9d9;
     font-size: 12px;
     line-height: 16px;
   }
@@ -227,9 +226,27 @@ const UserAssetCardMdFooterText = styled.div`
   }};
 `;
 
+const NoDataBtn = styled.button`
+  padding: 16px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 180px;
+  border-radius: 4px;
+  font-family: "Exo 2", sans-serif;
+  background-color: #f0b90b;
+  :hover {
+    background-color: #ffe251;
+  }
+`;
+
+const NoDataContainer = styled.div`
+  margin: 85px 0px;
+`;
+
 const UserAsset = (props) => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [userAsset, setUserAsset] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { email } = props;
 
   const getUserAsset = async () => {
@@ -261,6 +278,7 @@ const UserAsset = (props) => {
           }
         });
         setCoinLastPrice(usdtLastPrice);
+        setIsLoading(false);
       });
 
   useEffect(() => {
@@ -271,7 +289,7 @@ const UserAsset = (props) => {
     getUserAsset();
   }, [email]);
 
-  const renderTrendCard = () =>
+  const renderAssetCard = () =>
     userAsset.map((asset) =>
       coinLastPrice.map((coin) => {
         const symbol = coin.symbol.replace(/USDT/, "");
@@ -319,29 +337,39 @@ const UserAsset = (props) => {
       })
     );
 
+  const renderLoadingAndAsset = () => {
+    if (isLoading) {
+      return <DashboardLoader />;
+    }
+    if (userAsset.length > 0) {
+      return (
+        <Scrollbars
+          autoHide
+          autoHideTimeout={1000}
+          autoHideDuration={200}
+          renderThumbHorizontal={renderThumb}
+          style={{ width: "100%", height: "220px" }}
+        >
+          <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>
+        </Scrollbars>
+      );
+    }
+    return (
+      <NoDataContainer>
+        <Link to="/explore">
+          <NoDataBtn>See all assets</NoDataBtn>
+        </Link>
+      </NoDataContainer>
+    );
+  };
+
   return (
     <UserAssetContainer>
       <UserAssetWrapper>
         <UserAssetTitleContainer>
           <span>My cryptocurrencies</span>
         </UserAssetTitleContainer>
-
-        {coinLastPrice.length > 0 ? (
-          <Scrollbars
-            autoHide
-            autoHideTimeout={1000}
-            autoHideDuration={200}
-            renderThumbHorizontal={renderThumb}
-            style={{ width: "100%", height: "220px" }}
-          >
-            <UserAssetCardContainer>
-              {" "}
-              {renderTrendCard()}
-            </UserAssetCardContainer>
-          </Scrollbars>
-        ) : (
-          <DashboardLoader />
-        )}
+        {renderLoadingAndAsset()}
       </UserAssetWrapper>
     </UserAssetContainer>
   );

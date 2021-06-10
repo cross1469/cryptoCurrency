@@ -98,20 +98,20 @@ const InputGroup = styled.div`
     left: 9px;
     font-size: 14px;
     opacity: 1;
-    color: #fff;
+    color: #d9d9d9;
   }
 `;
 
 const Input = styled.input`
   outline: none;
-  border: 1px solid;
+  border: 1px solid #d9d9d9;
   width: 100%;
   border-radius: 2px;
   box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
   padding: 20px;
   font-size: 14px;
   background-color: #14151a;
-  color: #fff;
+  color: #d9d9d9;
   margin-top: 20px;
   ${space}
   ${border}

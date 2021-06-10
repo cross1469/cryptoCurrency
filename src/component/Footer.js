@@ -4,7 +4,7 @@ import { color } from "styled-system";
 
 const FooterStyled = styled.footer`
   position: relative;
-  border-top: 1px solid #fff;
+  border-top: 1px solid #d9d9d9;
   bottom: 0;
   ${color}
   .container {
@@ -14,7 +14,7 @@ const FooterStyled = styled.footer`
   }
   .disclaimer {
     display: flex;
-    color: #fff;
+    color: #d9d9d9;
     font-size: 14px;
     line-height: 16px;
     justify-content: center;

@@ -25,7 +25,7 @@ const TrendinWrapper = styled.div`
 const TrendingTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  color: #fff;
+  color: #d9d9d9;
   min-height: 28px;
   width: 100%;
   margin-bottom: 24px;
@@ -58,7 +58,7 @@ const TrendingCardContainer = styled.div`
     flex-direction: column;
     border-radius: 6px;
     overflow: hidden;
-    color: #fff;
+    color: #d9d9d9;
     border: 1px solid #14151a;
     box-shadow: var(inset 0 0 0 0.5px rgba(255, 255, 255, 0.1));
     :last-child {

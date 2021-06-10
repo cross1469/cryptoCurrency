@@ -70,7 +70,7 @@ const CoinDataHeadLeft = styled.div`
 const CoinDataTitle = styled.h1`
   font-size: 24px;
   font-weight: 500;
-  color: #fff;
+  color: #d9d9d9;
   margin: 0px;
   padding: 0px;
 `;
@@ -87,7 +87,7 @@ const CoinDataHeadRight = styled.div`
 `;
 
 const SearchSection = styled.section`
-  color: #fff;
+  color: #d9d9d9;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,13 +111,12 @@ const SearchInputIconContainer = styled.div`
   width: 20px;
   height: 20px;
   svg {
-    filter: invert(100%) sepia(0%) saturate(7471%) hue-rotate(99deg)
-      brightness(102%) contrast(100%);
+    fill: #d9d9d9;
   }
 `;
 
 const SearchInput = styled.input`
-  color: #fff;
+  color: #d9d9d9;
   width: 100%;
   border: none;
   background-image: none;
@@ -132,7 +131,7 @@ const SearchInput = styled.input`
 
 const CoinTableStyle = styled.section`
   width: 100%;
-  color: #fff;
+  color: #d9d9d9;
   margin-bottom: 24px;
   min-height: calc(100vh - 499px);
   @media only screen and (max-width: 768px) {
@@ -177,6 +176,12 @@ const CoinTableHeadItem = styled.th`
   :first-child {
     padding-left: 32px;
   }
+  :nth-child(2) {
+    padding-left: 28px;
+  }
+  :nth-child(4) {
+    padding-right: 66px;
+  }
   :last-child {
     width: 70px;
     padding-right: 32px;
@@ -203,6 +208,9 @@ const CoinTableBodyItem = styled.td`
   text-align: center;
   width: 85px;
   :first-child {
+    a {
+      color: #d9d9d9;
+    }
     padding-left: 32px;
     .symbolContainer {
       display: flex;
@@ -218,7 +226,7 @@ const CoinTableBodyItem = styled.td`
   :nth-child(3),
   :nth-child(4) {
     min-width: 148px;
-    text-align: right;
+    width: 148px;
   }
   :nth-child(3) {
     color: ${(props) => {
@@ -245,7 +253,7 @@ const CoinTableBodyItem = styled.td`
     cursor: pointer;
   }
   .defaultStar {
-    fill: #fff;
+    fill: #d9d9d9;
   }
 `;
 
@@ -355,6 +363,7 @@ const CoinData = (props) => {
   };
 
   const NUM_OF_RECORDS = realTimeDatas.length;
+  const SEARCH_NUM_OF_RECORDS = searchResults.length;
   const limit = 15;
   const onPageChanged = useCallback(
     (e, page) => {
@@ -463,10 +472,15 @@ const CoinData = (props) => {
         return (
           <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <div className="symbolContainer">
-                <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
-                {realTimeData.s}
-              </div>
+              <Link to={`/coinDetail/${realTimeData.s}`}>
+                <div className="symbolContainer">
+                  <img
+                    src={`/icon/${symbol.toLowerCase()}.svg`}
+                    alt="coinIcon"
+                  />
+                  {realTimeData.s}
+                </div>
+              </Link>
             </CoinTableBodyItem>
             <CoinTableBodyItem>
               {Number(realTimeData.c).toLocaleString()}
@@ -478,7 +492,7 @@ const CoinData = (props) => {
               {Number(realTimeData.n).toLocaleString()}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              <Link to={`/coinDetail/${realTimeData.s}`} key={realTimeData.s}>
+              <Link to={`/coinDetail/${realTimeData.s}`}>
                 <TradeButton type="button">Trade</TradeButton>
               </Link>
             </CoinTableBodyItem>
@@ -573,7 +587,7 @@ const CoinData = (props) => {
                   <CoinTableHeadItem>Change</CoinTableHeadItem>
                   <CoinTableHeadItem>Market Cap</CoinTableHeadItem>
                   <CoinTableHeadItem>Trade</CoinTableHeadItem>
-                  <CoinTableHeadItem>Watch</CoinTableHeadItem>
+                  <CoinTableHeadItem>Wish</CoinTableHeadItem>
                 </tr>
               </CoinTableHead>
               <CoinTableBody>{renderCoinDatas()}</CoinTableBody>
@@ -587,13 +601,23 @@ const CoinData = (props) => {
           searchResults={searchResults}
         />
         <div className="pagination-wrapper">
-          <Pagination
-            totalRecords={NUM_OF_RECORDS}
-            pageLimit={limit}
-            pageNeighbours={1}
-            onPageChanged={onPageChanged}
-            currentPage={currentPage}
-          />
+          {searchTerm ? (
+            <Pagination
+              totalRecords={SEARCH_NUM_OF_RECORDS}
+              pageLimit={limit}
+              pageNeighbours={1}
+              onPageChanged={onPageChanged}
+              currentPage={currentPage}
+            />
+          ) : (
+            <Pagination
+              totalRecords={NUM_OF_RECORDS}
+              pageLimit={limit}
+              pageNeighbours={1}
+              onPageChanged={onPageChanged}
+              currentPage={currentPage}
+            />
+          )}
         </div>
       </CoinDataContainer>
 

@@ -8,7 +8,7 @@ import "rc-tooltip/assets/bootstrap.css";
 
 const AssetsContainer = styled.div`
   margin-top: 32px;
-  color: #fff;
+  color: #d9d9d9;
   margin-bottom: 32px;
   border-bottom: 1px solid #2f3336;
 `;
@@ -22,7 +22,7 @@ const AssetTitle = styled.div`
   display: flex;
   align-items: center;
   flex: 0 0 auto;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #d9d9d9;
   span {
     font-weight: 700;
     font-size: 24px;

@@ -8,7 +8,7 @@ import HelpLinksLoader from "../../Component/loader/HelpLinksLoader";
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
   background-color: #2b2f36;
-  color: #fff;
+  color: #d9d9d9;
   @media only screen and (max-width: 768px) {
     padding: 90px 0;
   }
@@ -63,7 +63,7 @@ const CoinMarketData = styled.div`
     border-radius: 8px;
     margin-bottom: 10px;
     padding: 15px 10px 15px 20px;
-    color: #fff;
+    color: #d9d9d9;
     justify-content: space-between;
     background-color: rgba(24, 34, 47, 0.03);
     transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;

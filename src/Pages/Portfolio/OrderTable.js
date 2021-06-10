@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadOrder } from "../../Utils/firebase";
 
 const OrderContainer = styled.div`
-  color: #fff;
+  color: #d9d9d9;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -54,6 +55,11 @@ const OrderHeaderContentContainer = styled.div`
 
 const OrderSection = styled.section`
   width: 100%;
+  h3,
+  a {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const OrderTableDiv = styled.div`
@@ -88,8 +94,17 @@ const OrderTheadItem = styled.th`
   :first-child {
     padding-left: 32px;
   }
+  :nth-child(4) {
+    padding-right: 56px;
+  }
+  :nth-child(5) {
+    padding-right: 74px;
+  }
+  :nth-child(6) {
+    padding-right: 60px;
+  }
   :last-child {
-    padding-right: 32px;
+    padding-right: 46px;
   }
 `;
 const OrderTbody = styled.tbody`
@@ -117,12 +132,6 @@ const OrderTbodyItem = styled.td`
   :nth-child(4),
   :nth-child(5) {
     min-width: 135px;
-  }
-  :nth-child(4),
-  :nth-child(5),
-  :nth-child(6),
-  :nth-child(7) {
-    text-align: right;
   }
   :last-child {
     padding-right: 32px;
@@ -154,10 +163,23 @@ const OrderTbodySellItem = styled.td`
   :last-child {
     padding-right: 32px;
   }
-  :nth-child(4),
-  :nth-child(5),
-  :nth-child(6) {
-    text-align: right;
+`;
+
+const NoSoldData = styled.h3`
+  color: #d9d9d9;
+  padding: 56px;
+  cursor: pointer;
+  :hover {
+    color: #f6465d;
+  }
+`;
+
+const NoBuyData = styled(Link)`
+  color: #d9d9d9;
+  padding: 56px;
+  cursor: pointer;
+  :hover {
+    color: #f6465d;
   }
 `;
 
@@ -297,7 +319,6 @@ const OrderTable = (props) => {
               </OrderHeaderContentContainer>
             </OrderHeaderContent>
           </OrderHeaderContainer>
-
           <OrderSection>
             <OrderTableDiv>
               <Scrollbars
@@ -320,7 +341,19 @@ const OrderTable = (props) => {
                       <OrderTheadItem>Balance</OrderTheadItem>
                     </tr>
                   </OrderThead>
-                  <OrderTbody>{renderBuyTable()}</OrderTbody>
+                  <OrderTbody>
+                    {JSON.stringify(buyDatas) === "[]" ? (
+                      <tr>
+                        <td colSpan="7">
+                          <NoBuyData to="/explore">
+                            You haven&apos;t Buy the data
+                          </NoBuyData>
+                        </td>
+                      </tr>
+                    ) : (
+                      renderBuyTable()
+                    )}
+                  </OrderTbody>
                 </OrderTableContainer>
               </Scrollbars>
             </OrderTableDiv>
@@ -348,7 +381,7 @@ const OrderTable = (props) => {
                 autoHideDuration={200}
                 renderThumbVertical={renderThumb}
                 renderThumbHorizontal={renderThumb}
-                style={{ width: "100%", height: "138px" }}
+                style={{ width: "100%", height: "275px" }}
               >
                 <OrderTableContainer>
                   <OrderThead>
@@ -361,7 +394,19 @@ const OrderTable = (props) => {
                       <OrderTheadItem>Total</OrderTheadItem>
                     </tr>
                   </OrderThead>
-                  <OrderTbody>{renderSellTable()}</OrderTbody>
+                  <OrderTbody>
+                    {JSON.stringify(sellDatas) === "[]" ? (
+                      <tr>
+                        <td colSpan="7">
+                          <NoSoldData to="/explore">
+                            You haven&apos;t Sell the data
+                          </NoSoldData>
+                        </td>
+                      </tr>
+                    ) : (
+                      renderSellTable()
+                    )}
+                  </OrderTbody>
                 </OrderTableContainer>
               </Scrollbars>
             </OrderTableDiv>
