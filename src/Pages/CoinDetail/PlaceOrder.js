@@ -119,11 +119,13 @@ const BuySellBody = styled.div`
 const BuySellBodyItem = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 42px;
   span {
     flex-grow: 0;
     flex-shrink: 0;
     height: 16px;
+  }
+  :first-child {
+    margin-bottom: 24px;
   }
 `;
 
@@ -332,6 +334,27 @@ const BuySellBodyButton = styled.button`
     flex-wrap: nowrap;
     white-space: nowrap;
     font-weight: 500;
+  }
+`;
+
+const BuySellFooter = styled.div`
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding-right: 24px;
+  padding-left: 24px;
+  justify-content: space-between;
+  span {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    transition: color 0.15s ease-out, opacity 0.15s ease-out;
+    margin: 0;
+    color: #95a1bb;
+    :last-child {
+      color: #d9d9d9;
+    }
   }
 `;
 
@@ -652,6 +675,12 @@ const PlaceOrder = (props) => {
                       </BuySellBodyButton>
                     </BuySellBodyItem>
                   </BuySellBody>
+                  <BuySellFooter>
+                    <span>{coin}</span>
+                    <span>
+                      {Number(coinsQty).toLocaleString()} {coin}
+                    </span>
+                  </BuySellFooter>
                 </ContentContainer>
               </ModuleFade>
             </TrasitionerContainer>

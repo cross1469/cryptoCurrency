@@ -5,7 +5,6 @@ import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
 import AddValue from "./AddValue";
-import AssetTable from "./AssetTable";
 import DealTable from "./DealTable";
 import MobileButton from "./MobileButton";
 import {
@@ -364,9 +363,6 @@ const CoinDetail = () => {
                                 </ModuleFade>
                               </TransitionerContainer>
                             </ChartContainer>
-                            <TransitionerContainer>
-                              <AssetTable email={email} userId={userId} />
-                            </TransitionerContainer>
                             <TransitionerContainer>
                               <DealTable />
                             </TransitionerContainer>
