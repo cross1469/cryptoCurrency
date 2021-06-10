@@ -8,7 +8,7 @@ import Footer from "./component/Footer";
 import Landing from "./Pages/Landing";
 import Explore from "./Pages/Explore";
 import Portfolio from "./Pages/Portfolio";
-import ScrollToTop from "./component/ScrollToTop";
+import ScrollToTop from "./Hooks/ScrollToTop";
 import { subscribeUserData } from "./Utils/firebase";
 import theme from "./Utils/theme";
 
