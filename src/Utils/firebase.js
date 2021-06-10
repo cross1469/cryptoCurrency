@@ -55,8 +55,8 @@ const firebaseReadAsset = (email) =>
     .doc(email)
     .collection("assets")
     .get()
-    .then((docs) => {
-      const coinDatas = docs.map((doc) => ({
+    .then((item) => {
+      const coinDatas = item.docs.map((doc) => ({
         coinType: doc.id,
         ...doc.data(),
       }));
@@ -84,8 +84,8 @@ const firebaseReadOrder = (email) =>
     .doc(email)
     .collection("orders")
     .get()
-    .then((orders) => {
-      const orderData = orders.map((order) => order.data());
+    .then((item) => {
+      const orderData = item.docs.map((order) => order.data());
       return orderData;
     });
 
