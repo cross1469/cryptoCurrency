@@ -11,7 +11,7 @@ import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
-import logo from "../images/crypto-logo.svg";
+import logo from "../images/cryptoLogo.svg";
 
 const Navigation = styled.header`
   width: 100%;

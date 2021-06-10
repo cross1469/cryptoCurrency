@@ -6,7 +6,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
 import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
-import { ReactComponent as ChatIcon } from "../../images/speech-bubble.svg";
+import { ReactComponent as ChatIcon } from "../../images/speechBubble.svg";
 import { ReactComponent as ChatClose } from "../../images/cancel.svg";
 import { ReactComponent as ChatRoom } from "../../images/chatRoom.svg";
 import { ReactComponent as Send } from "../../images/send.svg";

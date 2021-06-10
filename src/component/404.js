@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ReactComponent as Error404Icon } from "../images/error-404.svg";
+import { ReactComponent as Error404Icon } from "../images/error404.svg";
 
 const Content = styled.div`
   height: 100vh;
