@@ -267,6 +267,7 @@ const YourNews = (props) => {
     if (wishStr) {
       axios.request(options).then((res) => {
         const newsFourHeadline = res.data.articles.slice(0, 6);
+        console.log(newsFourHeadline);
         setNewsHeadlines(newsFourHeadline);
       });
     }
@@ -281,7 +282,11 @@ const YourNews = (props) => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={news.media === "" ? defaultNewsImg : news.media}
+                  src={
+                    news.media === "" || news.media === null
+                      ? defaultNewsImg
+                      : news.media
+                  }
                   alt={news.title}
                   loading="lazy"
                 />
@@ -307,7 +312,11 @@ const YourNews = (props) => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={news.media === "" ? defaultNewsImg : news.media}
+                  src={
+                    news.media === "" || news.media === null
+                      ? defaultNewsImg
+                      : news.media
+                  }
                   alt={news.title}
                   loading="lazy"
                 />
