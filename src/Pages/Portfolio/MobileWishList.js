@@ -220,12 +220,16 @@ const MobileWishList = (props) => {
                   {coinLastPrice.length > 0 ? (
                     renderWishList()
                   ) : (
-                    <ClipLoader
-                      color="#f0b90b"
-                      loading={loading}
-                      css={override}
-                      size={40}
-                    />
+                    <tr>
+                      <td>
+                        <ClipLoader
+                          color="#f0b90b"
+                          loading={loading}
+                          css={override}
+                          size={40}
+                        />
+                      </td>
+                    </tr>
                   )}
                 </WishListTbody>
               </WishListTable>

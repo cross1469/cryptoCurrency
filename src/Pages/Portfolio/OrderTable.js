@@ -215,11 +215,9 @@ const OrderTable = (props) => {
 
   const renderBuyTable = () => {
     buyDatas.sort((a, b) => a.timestamp - b.timestamp);
-
     return buyDatas.map((buyData, index) =>
       coinLastPrice.map((coinPrice) => {
         const symbol = coinPrice.symbol.replace(/USDT/, "");
-
         if (symbol === buyData.coinType) {
           return (
             <tr key={buyData.timestamp}>
