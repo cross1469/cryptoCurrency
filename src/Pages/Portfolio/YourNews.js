@@ -238,18 +238,17 @@ const YourNews = (props) => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
   const { email } = props;
 
-  const getWishListData = async () => {
-    if (email) {
-      const wishListData = await readWishList(email);
-      const wishString = wishListData
-        .toString()
-        .replace(/USDT/g, "")
-        .replace(/,/g, " || ");
-      setWishStr(wishString);
-    }
-  };
-
   useEffect(() => {
+    const getWishListData = async () => {
+      if (email) {
+        const wishListData = await readWishList(email);
+        const wishString = wishListData
+          .toString()
+          .replace(/USDT/g, "")
+          .replace(/,/g, " || ");
+        setWishStr(wishString);
+      }
+    };
     getWishListData();
   }, [email]);
 
@@ -267,7 +266,6 @@ const YourNews = (props) => {
     if (wishStr) {
       axios.request(options).then((res) => {
         const newsFourHeadline = res.data.articles.slice(0, 6);
-        console.log(newsFourHeadline);
         setNewsHeadlines(newsFourHeadline);
       });
     }

@@ -278,7 +278,7 @@ const TradeButton = styled.button`
 `;
 
 const CoinData = (props) => {
-  let dataFirstOpen = true;
+  const [dataFirstOpen, setDataFirstOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -330,15 +330,6 @@ const CoinData = (props) => {
     }
 
     setList([...list, toastProperties]);
-  };
-
-  const renderInitActiveStar = async () => {
-    if (email) {
-      const wishList = await readWishList(email);
-      setStarList(wishList);
-    } else {
-      setStarList([]);
-    }
   };
 
   const handleClickToWish = async (e) => {
@@ -398,7 +389,7 @@ const CoinData = (props) => {
 
       if (dataFirstOpen) {
         setRealTimeDatas(usdtDatas);
-        dataFirstOpen = false;
+        setDataFirstOpen(false);
         setLoading(false);
       }
 
@@ -437,9 +428,17 @@ const CoinData = (props) => {
     };
 
     return () => socket.close();
-  }, []);
+  }, [dataFirstOpen]);
 
   useEffect(() => {
+    const renderInitActiveStar = async () => {
+      if (email) {
+        const wishList = await readWishList(email);
+        setStarList(wishList);
+      } else {
+        setStarList([]);
+      }
+    };
     renderInitActiveStar();
   }, [email]);
 

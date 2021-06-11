@@ -7,32 +7,6 @@ import PropTypes from "prop-types";
 const Spline = (props) => {
   const { symbol } = props;
 
-  const callBinanceAPI = (coinSymbol) => {
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/1m`
-      )
-      .then((res) => {
-        const currencyData = [];
-        for (let i = 0; i < res.data.length; i += 1) {
-          currencyData.push([
-            res.data[i][0],
-            (Number(res.data[i][2]) + Number(res.data[i][3])) / 2,
-          ]);
-        }
-        // eslint-disable-next-line no-use-before-define
-        setOptions({
-          series: [
-            {
-              type: "spline",
-              name: `${symbol}`,
-              data: currencyData,
-            },
-          ],
-        });
-      });
-  };
-
   const [options, setOptions] = useState({
     plotOptions: {
       spline: {
@@ -69,6 +43,31 @@ const Spline = (props) => {
   });
 
   useEffect(() => {
+    const callBinanceAPI = (coinSymbol) => {
+      axios
+        .get(
+          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/1m`
+        )
+        .then((res) => {
+          const currencyData = [];
+          for (let i = 0; i < res.data.length; i += 1) {
+            currencyData.push([
+              res.data[i][0],
+              (Number(res.data[i][2]) + Number(res.data[i][3])) / 2,
+            ]);
+          }
+          // eslint-disable-next-line no-use-before-define
+          setOptions({
+            series: [
+              {
+                type: "spline",
+                name: `${symbol}`,
+                data: currencyData,
+              },
+            ],
+          });
+        });
+    };
     callBinanceAPI(symbol);
   }, [symbol]);
 
