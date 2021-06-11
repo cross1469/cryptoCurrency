@@ -95,7 +95,6 @@ const Forget = () => {
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
-    console.log(forgetMessage);
     if (
       forgetMessage === "auth/invalid-email" ||
       forgetMessage === "auth/user-not-found"

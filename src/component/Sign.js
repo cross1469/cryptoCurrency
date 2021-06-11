@@ -314,16 +314,18 @@ const Sign = (props) => {
     return status;
   };
 
-  useEffect(
-    () => subscribeUserData((userEmail) => setEmailInfo(userEmail)),
-    []
-  );
+  useEffect(() => {
+    const unsubscribe = subscribeUserData((userEmail) =>
+      setEmailInfo(userEmail)
+    );
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     if (signType === "create") {
       setActive("create");
     }
-  }, []);
+  }, [signType]);
 
   const checkType = async () => {
     if (inputType === "signin") {
