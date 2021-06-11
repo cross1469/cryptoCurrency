@@ -198,19 +198,6 @@ const OrderTable = (props) => {
     return <div style={{ ...style, ...thumbStyle }} />;
   };
 
-  const getOrderData = async () => {
-    if (email) {
-      const orderDatas = await firebaseReadOrder(email);
-      orderDatas.forEach((orderData) => {
-        if (orderData.type === "buy") {
-          setBuyDatas((buy) => [...buy, orderData]);
-        } else if (orderData.type === "sell") {
-          setSellDatas((sell) => [...sell, orderData]);
-        }
-      });
-    }
-  };
-
   const getLastPrice = () =>
     axios
       .get(
@@ -299,6 +286,18 @@ const OrderTable = (props) => {
   };
 
   useEffect(() => {
+    const getOrderData = async () => {
+      if (email) {
+        const orderDatas = await firebaseReadOrder(email);
+        orderDatas.forEach((orderData) => {
+          if (orderData.type === "buy") {
+            setBuyDatas((buy) => [...buy, orderData]);
+          } else if (orderData.type === "sell") {
+            setSellDatas((sell) => [...sell, orderData]);
+          }
+        });
+      }
+    };
     getOrderData();
   }, [email]);
 

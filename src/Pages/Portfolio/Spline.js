@@ -91,7 +91,7 @@ const Spline = (props) => {
     };
 
     return () => socket.close();
-  }, []);
+  }, [symbol]);
 
   if (symbol === "") {
     return null;

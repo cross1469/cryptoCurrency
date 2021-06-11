@@ -249,13 +249,6 @@ const UserAsset = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const { email } = props;
 
-  const getUserAsset = async () => {
-    if (email) {
-      const asset = await firebaseReadAsset(email);
-      setUserAsset(asset);
-    }
-  };
-
   const renderThumb = ({ style }) => {
     const thumbStyle = {
       backgroundColor: "#2f3336",
@@ -286,6 +279,12 @@ const UserAsset = (props) => {
   }, []);
 
   useEffect(() => {
+    const getUserAsset = async () => {
+      if (email) {
+        const asset = await firebaseReadAsset(email);
+        setUserAsset(asset);
+      }
+    };
     getUserAsset();
   }, [email]);
 

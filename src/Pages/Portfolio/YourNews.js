@@ -238,25 +238,6 @@ const YourNews = (props) => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
   const { email } = props;
 
-  const options = {
-    method: "GET",
-    url: "https://free-news.p.rapidapi.com/v1/search",
-    params: { q: wishStr, lang: "en" },
-    headers: {
-      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
-      "x-rapidapi-host": "free-news.p.rapidapi.com",
-    },
-  };
-
-  const coinTopHeadline = () => {
-    if (wishStr) {
-      axios.request(options).then((res) => {
-        const newsFourHeadline = res.data.articles.slice(0, 6);
-        setNewsHeadlines(newsFourHeadline);
-      });
-    }
-  };
-
   const getWishListData = async () => {
     if (email) {
       const wishListData = await readWishList(email);
@@ -270,8 +251,26 @@ const YourNews = (props) => {
 
   useEffect(() => {
     getWishListData();
-    coinTopHeadline();
-  }, [email, wishStr]);
+  }, [email]);
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: "https://free-news.p.rapidapi.com/v1/search",
+      params: { q: wishStr, lang: "en" },
+      headers: {
+        "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+        "x-rapidapi-host": "free-news.p.rapidapi.com",
+      },
+    };
+
+    if (wishStr) {
+      axios.request(options).then((res) => {
+        const newsFourHeadline = res.data.articles.slice(0, 6);
+        setNewsHeadlines(newsFourHeadline);
+      });
+    }
+  }, [wishStr]);
 
   const renderYourNewsTop = () =>
     newsHeadlines.slice(0, 2).map((news) => (

@@ -76,23 +76,6 @@ const NewsCardLink = styled.a`
 const News = () => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
 
-  const options = {
-    method: "GET",
-    url: "https://free-news.p.rapidapi.com/v1/search",
-    params: { q: "Crypto", lang: "en" },
-    headers: {
-      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
-      "x-rapidapi-host": "free-news.p.rapidapi.com",
-    },
-  };
-
-  const coinTopHeadline = () => {
-    axios.request(options).then((res) => {
-      const newsFourHeadline = res.data.articles.slice(0, 3);
-      setNewsHeadlines(newsFourHeadline);
-    });
-  };
-
   const renderNewsHeadline = () =>
     newsHeadlines.map((news) => (
       <NewsCardsContainer key={news.title}>
@@ -107,7 +90,19 @@ const News = () => {
     ));
 
   useEffect(() => {
-    coinTopHeadline();
+    const options = {
+      method: "GET",
+      url: "https://free-news.p.rapidapi.com/v1/search",
+      params: { q: "Crypto", lang: "en" },
+      headers: {
+        "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+        "x-rapidapi-host": "free-news.p.rapidapi.com",
+      },
+    };
+    axios.request(options).then((res) => {
+      const newsFourHeadline = res.data.articles.slice(0, 3);
+      setNewsHeadlines(newsFourHeadline);
+    });
   }, []);
 
   return (

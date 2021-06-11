@@ -424,16 +424,16 @@ const CoinData = (props) => {
 
       // useReducer
 
-      // if (!dataFirstOpen) {
-      //   setRealTimeDatas((usdt) => {
-      //     const newUsdtDatas = [...usdt];
-      //     coinDatas.forEach((data) => {
-      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-      //       newUsdtDatas[index] = data;
-      //     });
-      //     return newUsdtDatas;
-      //   });
-      // }
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
 
     return () => socket.close();
@@ -450,7 +450,7 @@ const CoinData = (props) => {
       );
       setSearchResults(results);
     }
-  }, [searchTerm]);
+  }, [realTimeDatas, searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {
     return (
