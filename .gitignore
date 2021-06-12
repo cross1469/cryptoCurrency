@@ -30,3 +30,6 @@ firestore-debug.log
 firestore.indexes.json
 firestore.rules
 ui-debug.log
+
+#vscode
+.vscode
