@@ -238,7 +238,7 @@ const KLine = () => {
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");
-  }, [symbol]);
+  }, []);
 
   useEffect(() => {
     const closeSocket = socketAPI(symbol, interval);

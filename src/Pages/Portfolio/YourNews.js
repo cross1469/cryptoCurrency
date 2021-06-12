@@ -238,40 +238,38 @@ const YourNews = (props) => {
   const [newsHeadlines, setNewsHeadlines] = useState([]);
   const { email } = props;
 
-  const options = {
-    method: "GET",
-    url: "https://free-news.p.rapidapi.com/v1/search",
-    params: { q: wishStr, lang: "en" },
-    headers: {
-      "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
-      "x-rapidapi-host": "free-news.p.rapidapi.com",
-    },
-  };
+  useEffect(() => {
+    const getWishListData = async () => {
+      if (email) {
+        const wishListData = await readWishList(email);
+        const wishString = wishListData
+          .toString()
+          .replace(/USDT/g, "")
+          .replace(/,/g, " || ");
+        setWishStr(wishString);
+      }
+    };
+    getWishListData();
+  }, [email]);
 
-  const coinTopHeadline = () => {
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: "https://free-news.p.rapidapi.com/v1/search",
+      params: { q: wishStr, lang: "en" },
+      headers: {
+        "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
+        "x-rapidapi-host": "free-news.p.rapidapi.com",
+      },
+    };
+
     if (wishStr) {
       axios.request(options).then((res) => {
         const newsFourHeadline = res.data.articles.slice(0, 6);
         setNewsHeadlines(newsFourHeadline);
       });
     }
-  };
-
-  const getWishListData = async () => {
-    if (email) {
-      const wishListData = await readWishList(email);
-      const wishString = wishListData
-        .toString()
-        .replace(/USDT/g, "")
-        .replace(/,/g, " || ");
-      setWishStr(wishString);
-    }
-  };
-
-  useEffect(() => {
-    getWishListData();
-    coinTopHeadline();
-  }, [email, wishStr]);
+  }, [wishStr]);
 
   const renderYourNewsTop = () =>
     newsHeadlines.slice(0, 2).map((news) => (
@@ -282,7 +280,11 @@ const YourNews = (props) => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={news.media === "" ? defaultNewsImg : news.media}
+                  src={
+                    news.media === "" || news.media === null
+                      ? defaultNewsImg
+                      : news.media
+                  }
                   alt={news.title}
                   loading="lazy"
                 />
@@ -308,7 +310,11 @@ const YourNews = (props) => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={news.media === "" ? defaultNewsImg : news.media}
+                  src={
+                    news.media === "" || news.media === null
+                      ? defaultNewsImg
+                      : news.media
+                  }
                   alt={news.title}
                   loading="lazy"
                 />

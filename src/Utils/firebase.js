@@ -168,7 +168,7 @@ const firebaseAuthSignOut = () => {
     .then(() => {});
 };
 
-const subscribeUserData = (callback) => {
+const subscribeUserData = (callback) =>
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       const { email } = user;
@@ -178,7 +178,6 @@ const subscribeUserData = (callback) => {
       callback(null, null);
     }
   });
-};
 
 const firebaseAuthForget = (email) =>
   firebase

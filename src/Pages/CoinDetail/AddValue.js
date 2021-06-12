@@ -312,7 +312,6 @@ const AddValue = (props) => {
 
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
-    console.log(addValue);
     if (email && addValue.replace(/,/g, "") > 0) {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));

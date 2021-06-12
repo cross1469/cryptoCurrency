@@ -299,13 +299,6 @@ const WishList = (props) => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getWishListData = async () => {
-    if (email) {
-      const wishListData = await readWishList(email);
-      setWishList(wishListData);
-    }
-  };
-
   const handleBlockButton = (e) => {
     e.target.style.opacity = 1;
   };
@@ -315,27 +308,32 @@ const WishList = (props) => {
   };
 
   useEffect(() => {
+    const getWishListData = async () => {
+      if (email) {
+        const wishListData = await readWishList(email);
+        setWishList(wishListData);
+      }
+    };
     getWishListData();
   }, [email]);
 
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-
-        setCoinLastPrice(usdtLastPrice);
-        setLoading(false);
-      });
-
   useEffect(() => {
+    const getLastPrice = () =>
+      axios
+        .get(
+          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
+        )
+        .then((res) => {
+          const usdtLastPrice = [];
+          res.data.forEach((data) => {
+            if (data.symbol.indexOf("USDT", 2) !== -1) {
+              usdtLastPrice.push(data);
+            }
+          });
+
+          setCoinLastPrice(usdtLastPrice);
+          setLoading(false);
+        });
     getLastPrice();
   }, []);
 

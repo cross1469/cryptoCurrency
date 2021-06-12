@@ -171,7 +171,7 @@ const DealTable = () => {
     };
 
     return () => socket.close();
-  }, []);
+  }, [symbol]);
 
   const renderDealTable = () =>
     dealDatas.map((data) => {
