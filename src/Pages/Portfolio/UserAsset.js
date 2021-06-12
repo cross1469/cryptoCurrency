@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadAsset } from "../../Utils/firebase";
-import DashboardLoader from "../../Component/loader/DashboardLoader";
+import DashboardLoader from "../../component/loader/DashboardLoader";
 
 const UserAssetContainer = styled.div`
   background-color: #14151a;
@@ -249,13 +249,6 @@ const UserAsset = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const { email } = props;
 
-  const getUserAsset = async () => {
-    if (email) {
-      const asset = await firebaseReadAsset(email);
-      setUserAsset(asset);
-    }
-  };
-
   const renderThumb = ({ style }) => {
     const thumbStyle = {
       backgroundColor: "#2f3336",
@@ -286,6 +279,12 @@ const UserAsset = (props) => {
   }, []);
 
   useEffect(() => {
+    const getUserAsset = async () => {
+      if (email) {
+        const asset = await firebaseReadAsset(email);
+        setUserAsset(asset);
+      }
+    };
     getUserAsset();
   }, [email]);
 

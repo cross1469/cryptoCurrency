@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
+import axios from "axios";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
@@ -13,9 +14,9 @@ import {
   addWishList,
   removeWishList,
 } from "../../Utils/firebase";
-import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
-import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
-import Toast from "../../Component/Toast";
+import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
+import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
+import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
 import checkIcon from "../../images/check.svg";
 
@@ -227,18 +228,35 @@ const Mobile = styled(MobileButton)`
 
 const CoinDetail = () => {
   const { symbol } = useParams();
+  const [coinSymbol, setCoinSymbol] = useState();
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
   const [list, setList] = useState([]);
   let toastProperties = null;
+  const history = useHistory();
 
-  const getUserWishList = async () => {
-    if (email) {
-      const wishList = await readWishList(email);
-      setUserWishList(wishList);
+  const getSymbol = () =>
+    axios
+      .get(
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
+      )
+      .then((res) => {
+        const coinType = res.data.map((data) => data.symbol);
+        setCoinSymbol(coinType);
+      });
+
+  useEffect(() => {
+    getSymbol();
+  }, []);
+
+  useEffect(() => {
+    if (coinSymbol) {
+      if (coinSymbol.indexOf(symbol) === -1) {
+        history.push("/404");
+      }
     }
-  };
+  }, [history, symbol, coinSymbol]);
 
   const showToast = (type) => {
     const id = Math.floor(Math.random() * 101 + 1);
@@ -308,6 +326,12 @@ const CoinDetail = () => {
   );
 
   useEffect(() => {
+    const getUserWishList = async () => {
+      if (email) {
+        const wishList = await readWishList(email);
+        setUserWishList(wishList);
+      }
+    };
     getUserWishList();
   }, [email]);
 

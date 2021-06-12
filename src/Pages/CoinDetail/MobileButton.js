@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { space } from "styled-system";
-import Modal from "../../Component/Modal";
+import Modal from "../../component/Modal";
 import PlaceOrder from "./PlaceOrder";
 import AddValue from "./AddValue";
 

@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { layout } from "styled-system";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
-import Toast from "../../Component/Toast";
+import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
-import { ReactComponent as ChatIcon } from "../../images/speech-bubble.svg";
+import { ReactComponent as ChatIcon } from "../../images/speechBubble.svg";
 import { ReactComponent as ChatClose } from "../../images/cancel.svg";
 import { ReactComponent as ChatRoom } from "../../images/chatRoom.svg";
 import { ReactComponent as Send } from "../../images/send.svg";
@@ -328,33 +328,29 @@ const Chat = (props) => {
       const time = new Date(timestamp).toLocaleTimeString();
       if (email === null) {
         return (
-          <>
-            <ChatDataContainer>
-              <ChatDataItem key={chatData.id}>
-                <div className="account">{chatData.account}</div>
-                <div className="message">{chatData.messages}</div>
-                <div className="time">{time}</div>
-              </ChatDataItem>
-            </ChatDataContainer>
-          </>
+          <ChatDataContainer key={chatData.id}>
+            <ChatDataItem>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </ChatDataItem>
+          </ChatDataContainer>
         );
       }
       if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
         return (
-          <>
-            <ChatDataContainer>
-              <UserChatDataItem key={chatData.id}>
-                <div className="account">{chatData.account}</div>
-                <div className="message">{chatData.messages}</div>
-                <div className="time">{time}</div>
-              </UserChatDataItem>
-            </ChatDataContainer>
-          </>
+          <ChatDataContainer key={chatData.id}>
+            <UserChatDataItem>
+              <div className="account">{chatData.account}</div>
+              <div className="message">{chatData.messages}</div>
+              <div className="time">{time}</div>
+            </UserChatDataItem>
+          </ChatDataContainer>
         );
       }
       return (
-        <ChatDataContainer>
-          <ChatDataItem key={chatData.id}>
+        <ChatDataContainer key={chatData.id}>
+          <ChatDataItem>
             <div className="account">{chatData.account}</div>
             <div className="message">{chatData.messages}</div>
             <div className="time">{time}</div>
@@ -420,7 +416,11 @@ const Chat = (props) => {
 };
 
 Chat.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
+};
+
+Chat.defaultProps = {
+  email: "",
 };
 
 export default Chat;

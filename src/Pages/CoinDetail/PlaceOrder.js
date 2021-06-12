@@ -11,7 +11,7 @@ import firebaseAddOrder, {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
 } from "../../Utils/firebase";
-import Toast from "../../Component/Toast";
+import Toast from "../../component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
 import { ReactComponent as Switch } from "../../images/sort.svg";
@@ -378,20 +378,6 @@ const PlaceOrder = (props) => {
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
 
-  const readUserUsdtAndCoin = async () => {
-    if (email) {
-      const userCoinAsset = await firebaseReadCoinAsset(email, coin);
-      const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
-      if (userCoinAsset.qty === 0) {
-        dispatch(updateUsdtPrice(userUsdtAsset.qty));
-        dispatch(updateCoinPrice(0));
-      } else {
-        dispatch(updateUsdtPrice(userUsdtAsset.qty));
-        dispatch(updateCoinPrice(userCoinAsset.qty));
-      }
-    }
-  };
-
   const handleChangeInputNewValue = (e) => {
     const re = /^[.,0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
@@ -425,8 +411,6 @@ const PlaceOrder = (props) => {
   };
 
   const handleClickChangeCoin = async () => {
-    await readUserUsdtAndCoin();
-
     if (inputBottomContent.indexOf("USDT") === -1) {
       setBuyOrSell("buy");
       setInputValue("");
@@ -598,8 +582,21 @@ const PlaceOrder = (props) => {
   };
 
   useEffect(() => {
+    const readUserUsdtAndCoin = async () => {
+      if (email) {
+        const userCoinAsset = await firebaseReadCoinAsset(email, coin);
+        const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
+        if (userCoinAsset.qty === 0) {
+          dispatch(updateUsdtPrice(userUsdtAsset.qty));
+          dispatch(updateCoinPrice(0));
+        } else {
+          dispatch(updateUsdtPrice(userUsdtAsset.qty));
+          dispatch(updateCoinPrice(userCoinAsset.qty));
+        }
+      }
+    };
     readUserUsdtAndCoin();
-  }, [email]);
+  }, [coin, dispatch, email]);
 
   return (
     <>

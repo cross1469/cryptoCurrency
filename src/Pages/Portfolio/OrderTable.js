@@ -198,19 +198,6 @@ const OrderTable = (props) => {
     return <div style={{ ...style, ...thumbStyle }} />;
   };
 
-  const getOrderData = async () => {
-    if (email) {
-      const orderDatas = await firebaseReadOrder(email);
-      orderDatas.forEach((orderData) => {
-        if (orderData.type === "buy") {
-          setBuyDatas((buy) => [...buy, orderData]);
-        } else if (orderData.type === "sell") {
-          setSellDatas((sell) => [...sell, orderData]);
-        }
-      });
-    }
-  };
-
   const getLastPrice = () =>
     axios
       .get(
@@ -228,11 +215,9 @@ const OrderTable = (props) => {
 
   const renderBuyTable = () => {
     buyDatas.sort((a, b) => a.timestamp - b.timestamp);
-
     return buyDatas.map((buyData, index) =>
       coinLastPrice.map((coinPrice) => {
         const symbol = coinPrice.symbol.replace(/USDT/, "");
-
         if (symbol === buyData.coinType) {
           return (
             <tr key={buyData.timestamp}>
@@ -299,6 +284,18 @@ const OrderTable = (props) => {
   };
 
   useEffect(() => {
+    const getOrderData = async () => {
+      if (email) {
+        const orderDatas = await firebaseReadOrder(email);
+        orderDatas.forEach((orderData) => {
+          if (orderData.type === "buy") {
+            setBuyDatas((buy) => [...buy, orderData]);
+          } else if (orderData.type === "sell") {
+            setSellDatas((sell) => [...sell, orderData]);
+          }
+        });
+      }
+    };
     getOrderData();
   }, [email]);
 

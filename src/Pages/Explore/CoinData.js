@@ -9,10 +9,10 @@ import {
   removeWishList,
   readWishList,
 } from "../../Utils/firebase";
-import { ReactComponent as DefaultStar } from "../../images/default_star.svg";
-import { ReactComponent as ActiveStar } from "../../images/active_star.svg";
-import Pagination from "../../Component/Pagination";
-import Toast from "../../Component/Toast";
+import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
+import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
+import Pagination from "../../component/Pagination";
+import Toast from "../../component/Toast";
 import errorIcon from "../../images/error.svg";
 import checkIcon from "../../images/check.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
@@ -278,7 +278,7 @@ const TradeButton = styled.button`
 `;
 
 const CoinData = (props) => {
-  let dataFirstOpen = true;
+  const [dataFirstOpen, setDataFirstOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -330,15 +330,6 @@ const CoinData = (props) => {
     }
 
     setList([...list, toastProperties]);
-  };
-
-  const renderInitActiveStar = async () => {
-    if (email) {
-      const wishList = await readWishList(email);
-      setStarList(wishList);
-    } else {
-      setStarList([]);
-    }
   };
 
   const handleClickToWish = async (e) => {
@@ -398,7 +389,7 @@ const CoinData = (props) => {
 
       if (dataFirstOpen) {
         setRealTimeDatas(usdtDatas);
-        dataFirstOpen = false;
+        setDataFirstOpen(false);
         setLoading(false);
       }
 
@@ -424,22 +415,30 @@ const CoinData = (props) => {
 
       // useReducer
 
-      // if (!dataFirstOpen) {
-      //   setRealTimeDatas((usdt) => {
-      //     const newUsdtDatas = [...usdt];
-      //     coinDatas.forEach((data) => {
-      //       const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
-      //       newUsdtDatas[index] = data;
-      //     });
-      //     return newUsdtDatas;
-      //   });
-      // }
+      if (!dataFirstOpen) {
+        setRealTimeDatas((usdt) => {
+          const newUsdtDatas = [...usdt];
+          coinDatas.forEach((data) => {
+            const index = newUsdtDatas.findIndex((coin) => coin.s === data.s);
+            newUsdtDatas[index] = data;
+          });
+          return newUsdtDatas;
+        });
+      }
     };
 
     return () => socket.close();
-  }, []);
+  }, [dataFirstOpen]);
 
   useEffect(() => {
+    const renderInitActiveStar = async () => {
+      if (email) {
+        const wishList = await readWishList(email);
+        setStarList(wishList);
+      } else {
+        setStarList([]);
+      }
+    };
     renderInitActiveStar();
   }, [email]);
 
@@ -450,7 +449,7 @@ const CoinData = (props) => {
       );
       setSearchResults(results);
     }
-  }, [searchTerm]);
+  }, [realTimeDatas, searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {
     return (

@@ -11,10 +11,11 @@ import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
-import logo from "../images/crypto-logo.svg";
+import logo from "../images/cryptoLogo.svg";
 
 const Navigation = styled.header`
   width: 100%;
+  z-index: 1;
   position: relative;
   border-bottom: 1px solid #d9d9d9;
   ${color}
@@ -139,6 +140,9 @@ const Navigation = styled.header`
       li button {
         display: block;
         padding: 20px 24px;
+        width: 100%;
+        margin: 0px;
+        text-align: left;
       }
     }
   }

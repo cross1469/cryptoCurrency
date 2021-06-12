@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
 import { firebaseWriteCoinAsset } from "../../Utils/firebase";
-import Toast from "../../Component/Toast";
+import Toast from "../../component/Toast";
 import checkIcon from "../../images/check.svg";
 import errorIcon from "../../images/error.svg";
 
@@ -312,7 +312,6 @@ const AddValue = (props) => {
 
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
-    console.log(addValue);
     if (email && addValue.replace(/,/g, "") > 0) {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));

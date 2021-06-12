@@ -185,8 +185,7 @@ const Sign = (props) => {
   const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signInactive, setSignInActive] = useState("active");
-  const [signUpactive, setSignUpActive] = useState(null);
+  const [active, setActive] = useState("signin");
   const [emailInfo, setEmailInfo] = useState("");
   const [validColor, setValidColor] = useState({
     email: "#f1f3f5",
@@ -201,11 +200,9 @@ const Sign = (props) => {
     e.preventDefault();
     setInputType(e.target.dataset.value);
     if (e.target.dataset.value === "signin") {
-      setSignInActive("active");
-      setSignUpActive(null);
+      setActive("signin");
     } else if (e.target.dataset.value === "create") {
-      setSignInActive(null);
-      setSignUpActive("active");
+      setActive("create");
     }
   };
 
@@ -317,17 +314,18 @@ const Sign = (props) => {
     return status;
   };
 
-  useEffect(
-    () => subscribeUserData((userEmail) => setEmailInfo(userEmail)),
-    []
-  );
+  useEffect(() => {
+    const unsubscribe = subscribeUserData((userEmail) =>
+      setEmailInfo(userEmail)
+    );
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     if (signType === "create") {
-      setSignInActive(null);
-      setSignUpActive("active");
+      setActive("create");
     }
-  }, []);
+  }, [signType]);
 
   const checkType = async () => {
     if (inputType === "signin") {
@@ -375,7 +373,7 @@ const Sign = (props) => {
           <FormCard>
             <TabTitle>
               <a
-                className={signInactive}
+                className={active === "signin" ? "active" : null}
                 href="true"
                 data-value="signin"
                 onClick={handleSwitchTab}
@@ -383,7 +381,7 @@ const Sign = (props) => {
                 Sign In
               </a>
               <a
-                className={signUpactive}
+                className={active === "create" ? "active" : null}
                 href="true"
                 data-value="create"
                 onClick={handleSwitchTab}
@@ -417,7 +415,7 @@ const Sign = (props) => {
 
             {displayValidationErrors("password")}
 
-            {signInactive === "active" ? (
+            {active === "signin" ? (
               <ForgetPasswordText
                 onClick={() => {
                   setIsOpen(false);
@@ -428,7 +426,7 @@ const Sign = (props) => {
               </ForgetPasswordText>
             ) : null}
 
-            {signInactive === "active" ? (
+            {active === "signin" ? (
               <InputGroup flexDirection="column">
                 <Button
                   id="sign-in"

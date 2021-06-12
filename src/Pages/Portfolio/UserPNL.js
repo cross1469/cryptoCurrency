@@ -166,22 +166,21 @@ const AssetsTotal = (props) => {
     </span>
   );
 
-  const getAssetData = async () => {
-    if (email) {
-      const usdtData = await firebaseReadCoinAsset(email, "USDT");
-      const coinProfitLoss = await firebaseReadAsset(email);
-      let coinAllprofitLoss = 0;
-      coinProfitLoss.forEach((coin) => {
-        if (coin.coinType !== "USDT") {
-          coinAllprofitLoss += coin.profitLoss;
-        }
-      });
-      setProfitLoss(coinAllprofitLoss);
-      setUsdt(usdtData);
-    }
-  };
-
   useEffect(() => {
+    const getAssetData = async () => {
+      if (email) {
+        const usdtData = await firebaseReadCoinAsset(email, "USDT");
+        const coinProfitLoss = await firebaseReadAsset(email);
+        let coinAllprofitLoss = 0;
+        coinProfitLoss.forEach((coin) => {
+          if (coin.coinType !== "USDT") {
+            coinAllprofitLoss += coin.profitLoss;
+          }
+        });
+        setProfitLoss(coinAllprofitLoss);
+        setUsdt(usdtData);
+      }
+    };
     getAssetData();
   }, [email]);
 
@@ -221,7 +220,7 @@ const AssetsTotal = (props) => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {profitLoss > 0 ? Number(profitLoss).toLocaleString() : "-"}
+                {profitLoss === "-" ? "-" : Number(profitLoss).toLocaleString()}
               </span>
               <span> %</span>
             </AccountPNLPrice>
