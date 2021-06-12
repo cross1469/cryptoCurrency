@@ -548,12 +548,12 @@ const PlaceOrder = (props) => {
         setInputValue("");
         setTotal(0);
         showToast("success");
+      } else if (!email) {
+        showToast("danger");
       } else if (!total) {
         showToast("dangerTotal");
       } else if (usdtQty < total) {
         showToast("dangerUsdt");
-      } else {
-        showToast("danger");
       }
     } else if (buyOrSell === "sell") {
       if (email && total > 0 && coinsQty >= Number(total)) {
@@ -571,12 +571,12 @@ const PlaceOrder = (props) => {
         setInputValue("");
         setTotal(0);
         showToast("success");
+      } else if (!email) {
+        showToast("danger");
       } else if (!total) {
         showToast("dangerTotal");
       } else if (coinsQty < total) {
         showToast("dangerCoin");
-      } else {
-        showToast("danger");
       }
     }
   };
