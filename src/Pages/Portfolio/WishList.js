@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -8,6 +9,7 @@ import { Link } from "react-router-dom";
 import { readWishList } from "../../Utils/firebase";
 import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 import Spline from "./Spline";
 
 const override = css`
@@ -295,6 +297,7 @@ const DisplayMobileWishList = styled(MobileWishList)`
 
 const WishList = (props) => {
   const [wishList, setWishList] = useState([]);
+  const dispatch = useDispatch();
   const { email } = props;
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -351,6 +354,7 @@ const WishList = (props) => {
                       to={`/coinDetail/${wishData}`}
                       onMouseEnter={handleBlockButton}
                       onMouseLeave={handleNoneButton}
+                      onClick={() => dispatch(updatePageName("coinDetail"))}
                     >
                       <WishListMiniItem>
                         <WishListMiniItemTop>
@@ -423,7 +427,10 @@ const WishList = (props) => {
           </WishListBodyContainer>
         </WishListBody>
         <WishListBottom>
-          <Link to="/explore">
+          <Link
+            to="/explore"
+            onClick={() => dispatch(updatePageName("explore"))}
+          >
             <WishListBottomContent>
               Discover more assets
               <Right />

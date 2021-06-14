@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { ReactComponent as Right } from "../../images/next.svg";
 
 const override = css`
@@ -182,6 +184,7 @@ const WishListFooterContent = styled.div`
 
 const MobileWishList = (props) => {
   const { className, wishList, coinLastPrice, loading } = props;
+  const dispatch = useDispatch();
 
   const renderWishList = () =>
     wishList.map((wishData) =>
@@ -190,7 +193,10 @@ const MobileWishList = (props) => {
           return (
             <tr key={item.closeTime}>
               <WishListItem>
-                <Link to={`/coinDetail/${wishData}`}>
+                <Link
+                  to={`/coinDetail/${wishData}`}
+                  onClick={() => dispatch(updatePageName("coinDetail"))}
+                >
                   <WishListCoinName>
                     <h4>{wishData}</h4>
                   </WishListCoinName>
@@ -238,7 +244,7 @@ const MobileWishList = (props) => {
         </WishListBodyContainer>
       </MobileWishListBody>
       <MobileWishListFooter>
-        <Link to="/explore">
+        <Link to="/explore" onClick={() => dispatch(updatePageName("explore"))}>
           <WishListFooterContent>
             Discover more assets
             <Right />

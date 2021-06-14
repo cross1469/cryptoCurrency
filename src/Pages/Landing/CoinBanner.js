@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
 import HelpLinksLoader from "../../component/loader/HelpLinksLoader";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
@@ -239,7 +241,7 @@ const BannerToExploreBtn = styled.button`
 
 const StockBanner = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
-
+  const dispatch = useDispatch();
   const getLastPrice = () =>
     axios
       .get(
@@ -314,7 +316,10 @@ const StockBanner = () => {
                 expansive marketplace listings.
               </CoinTextDescription>
               <CoinTextBtnContainer>
-                <Link to="/explore">
+                <Link
+                  to="/explore"
+                  onClick={() => dispatch(updatePageName("explore"))}
+                >
                   <BannerToExploreBtn>Explore</BannerToExploreBtn>
                 </Link>
               </CoinTextBtnContainer>

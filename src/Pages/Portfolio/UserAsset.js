@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadAsset } from "../../Utils/firebase";
 import DashboardLoader from "../../component/loader/DashboardLoader";
 
@@ -247,6 +249,7 @@ const UserAsset = (props) => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [userAsset, setUserAsset] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
   const { email } = props;
 
   const renderThumb = ({ style }) => {
@@ -294,7 +297,11 @@ const UserAsset = (props) => {
         const symbol = coin.symbol.replace(/USDT/, "");
         if (asset.coinType === symbol) {
           return (
-            <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
+            <Link
+              to={`/coinDetail/${coin.symbol}`}
+              key={coin.openTime}
+              onClick={() => dispatch(updatePageName("coinDetail"))}
+            >
               <UserAssetCardTitle>
                 <UserAssetCoinLogoContainer>
                   <img
@@ -355,7 +362,7 @@ const UserAsset = (props) => {
     }
     return (
       <NoDataContainer>
-        <Link to="/explore">
+        <Link to="/explore" onClick={() => dispatch(updatePageName("explore"))}>
           <NoDataBtn>See all assets</NoDataBtn>
         </Link>
       </NoDataContainer>

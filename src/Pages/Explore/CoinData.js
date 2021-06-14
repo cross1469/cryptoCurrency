@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useDispatch } from "react-redux";
 import {
   addWishList,
   removeWishList,
@@ -17,6 +18,7 @@ import errorIcon from "../../images/error.svg";
 import checkIcon from "../../images/check.svg";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const override = css`
   margin: 0 auto;
@@ -285,6 +287,7 @@ const CoinData = (props) => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const { email } = props;
+  const dispatch = useDispatch();
 
   const [starList, setStarList] = useState([]);
 
@@ -471,7 +474,10 @@ const CoinData = (props) => {
         return (
           <tr key={realTimeData.L} id={realTimeData.s}>
             <CoinTableBodyItem>
-              <Link to={`/coinDetail/${realTimeData.s}`}>
+              <Link
+                to={`/coinDetail/${realTimeData.s}`}
+                onClick={() => dispatch(updatePageName("coinDetail"))}
+              >
                 <div className="symbolContainer">
                   <img
                     src={`/icon/${symbol.toLowerCase()}.svg`}
@@ -491,7 +497,10 @@ const CoinData = (props) => {
               {Number(realTimeData.n).toLocaleString()}
             </CoinTableBodyItem>
             <CoinTableBodyItem>
-              <Link to={`/coinDetail/${realTimeData.s}`}>
+              <Link
+                to={`/coinDetail/${realTimeData.s}`}
+                onClick={() => dispatch(updatePageName("coinDetail"))}
+              >
                 <TradeButton type="button">Trade</TradeButton>
               </Link>
             </CoinTableBodyItem>
@@ -523,8 +532,15 @@ const CoinData = (props) => {
       return (
         <tr key={item.L} id={item.s}>
           <CoinTableBodyItem>
-            <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
-            {item.s}
+            <Link
+              to={`/coinDetail/${item.s}`}
+              onClick={() => dispatch(updatePageName("coinDetail"))}
+            >
+              <div className="symbolContainer">
+                <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="coinIcon" />
+                {item.s}
+              </div>
+            </Link>
           </CoinTableBodyItem>
           <CoinTableBodyItem>
             {Number(item.c).toLocaleString()}
@@ -536,7 +552,10 @@ const CoinData = (props) => {
             {Number(item.n).toLocaleString()}
           </CoinTableBodyItem>
           <CoinTableBodyItem>
-            <Link to={`/coinDetail/${item.s}`} key={item.s}>
+            <Link
+              to={`/coinDetail/${item.s}`}
+              onClick={() => dispatch(updatePageName("coinDetail"))}
+            >
               <TradeButton type="button">Trade</TradeButton>
             </Link>
           </CoinTableBodyItem>
