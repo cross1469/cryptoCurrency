@@ -2,6 +2,7 @@ import {
   MARKET_PRICE_VALUE_HANDLE,
   USDT_PRICE_VALUE_HANDLE,
   COIN_PRICE_VALUE_HANDLE,
+  PAGE_NAME,
 } from "./actionType";
 
 const getMarketPrice = (value) => ({
@@ -19,4 +20,9 @@ const updateCoinPrice = (value) => ({
   value,
 });
 
-export { getMarketPrice, updateUsdtPrice, updateCoinPrice };
+const updatePageName = (name) => ({
+  type: PAGE_NAME,
+  name,
+});
+
+export { getMarketPrice, updateUsdtPrice, updateCoinPrice, updatePageName };

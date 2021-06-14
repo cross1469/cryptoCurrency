@@ -491,9 +491,8 @@ const PlaceOrder = (props) => {
 
     if (buyOrSell === "buy") {
       const allcoinQty = Number(coinAsset.qty) + Number(coinQty);
-      const allUsdtQty = Number(
-        Number(usdtAsset.qty) - Number(coinPriceForUSDT * coinQty)
-      ).toLocaleString();
+      const allUsdtQty =
+        Number(usdtAsset.qty) - Number(inputValue.replace(/,/g, ""));
       const averageCoinPrice =
         (Number(coinAsset.averagePrice) * Number(coinAsset.qty) +
           Number(coinPriceForUSDT) * Number(coinQty)) /
@@ -509,9 +508,7 @@ const PlaceOrder = (props) => {
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     } else if (buyOrSell === "sell") {
-      const allcoinQty = Number(
-        Number(coinAsset.qty) - Number(coinQty)
-      ).toLocaleString();
+      const allcoinQty = Number(coinAsset.qty) - Number(inputValue);
       const allUsdtQty =
         Number(usdtAsset.qty) + Number(coinPriceForUSDT * coinQty);
       const averageCoinPrice =
