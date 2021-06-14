@@ -158,6 +158,12 @@ const ChatDataItem = styled.div`
     font-size: 16px;
     line-height: 18px;
     margin-bottom: 8px;
+    a {
+      color: #f0b90b;
+      font-size: 16px;
+      line-height: 18px;
+      cursor: pointer;
+    }
   }
   .time {
     font-size: 12px;
