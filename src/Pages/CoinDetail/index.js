@@ -229,6 +229,7 @@ const Mobile = styled(MobileButton)`
 const CoinDetail = () => {
   const { symbol } = useParams();
   const [coinSymbol, setCoinSymbol] = useState();
+  const [coinUsdtSymbol, setCoinUsdtSymbol] = useState();
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
@@ -244,6 +245,13 @@ const CoinDetail = () => {
       .then((res) => {
         const coinType = res.data.map((data) => data.symbol);
         setCoinSymbol(coinType);
+        const coinUsdtType = [];
+        res.data.forEach((data) => {
+          if (data.symbol.indexOf("USDT", 2) !== -1) {
+            coinUsdtType.push(data.symbol);
+          }
+        });
+        setCoinUsdtSymbol(coinUsdtType);
       });
 
   useEffect(() => {
@@ -406,7 +414,7 @@ const CoinDetail = () => {
         </LayoutContainer>
       </LayoutWrapper>
       <Mobile email={email} userId={userId} />
-      <Chat email={email} userId={userId} />
+      <Chat email={email} userId={userId} coinUsdtSymbol={coinUsdtSymbol} />
       <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );

@@ -156,6 +156,7 @@ const AccountPNLPrice = styled.div`
 const AssetsTotal = (props) => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
   const [profitLoss, setProfitLoss] = useState("-");
+  const [isLoading, setIsLoading] = useState(true);
   const { email } = props;
   const text = (
     <span>
@@ -179,6 +180,7 @@ const AssetsTotal = (props) => {
         });
         setProfitLoss(coinAllprofitLoss);
         setUsdt(usdtData);
+        setIsLoading(false);
       }
     };
     getAssetData();
@@ -199,7 +201,7 @@ const AssetsTotal = (props) => {
             </AccountBalanceTitle>
             <AccountBalanceQty>
               <span>
-                {usdt.qty > 0 ? Number(usdt.qty).toLocaleString() : "-"}
+                {isLoading === false ? Number(usdt.qty).toLocaleString() : "-"}
               </span>
               <span> USDT</span>
             </AccountBalanceQty>
@@ -220,7 +222,9 @@ const AssetsTotal = (props) => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {profitLoss === "-" ? "-" : Number(profitLoss).toLocaleString()}
+                {isLoading === false
+                  ? Number(profitLoss).toLocaleString()
+                  : "-"}
               </span>
               <span> %</span>
             </AccountPNLPrice>

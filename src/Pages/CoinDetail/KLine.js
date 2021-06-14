@@ -90,6 +90,10 @@ const KLine = () => {
       marginBottom: 48,
       marginLeft: 60,
       marginRight: 24,
+      events: {
+        render: () => "renderings",
+        redraw: () => "redrawing",
+      },
     },
 
     rangeSelector: {
@@ -238,12 +242,12 @@ const KLine = () => {
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");
-  }, []);
+  }, [symbol]);
 
   useEffect(() => {
     const closeSocket = socketAPI(symbol, interval);
     return closeSocket;
-  }, [interval]);
+  }, [symbol, interval]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };

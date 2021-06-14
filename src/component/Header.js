@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useHistory } from "react-router-dom";
 import CustomModal from "./Modal";
 import Sign from "./Sign";
 import Forget from "./Forget";
 import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
+import { updatePageName } from "../Redux/Actions/actionCreator";
 import Toast from "./Toast";
 import checkIcon from "../images/check.svg";
 import errorIcon from "../images/error.svg";
@@ -90,6 +92,9 @@ const Navigation = styled.header`
         color: #f0b90b;
       }
     }
+    button.active {
+      color: #f0b90b;
+    }
   }
 
   @media only screen and (max-width: 768px) {
@@ -157,9 +162,10 @@ const Header = () => {
   let toastProperties = null;
   const [signType, setSignType] = useState("signin");
   const history = useHistory();
-
+  const page = useSelector((state) => state.pageReducer.name);
   const signModal = useRef(null);
   const forgetModal = createRef();
+  const dispatch = useDispatch();
 
   const handleToggle = (e) => {
     e.preventDefault();
@@ -223,6 +229,7 @@ const Header = () => {
     e.preventDefault();
     if (email) {
       history.push("/portfolio");
+      dispatch(updatePageName("portfolio"));
     } else {
       showToast("dangerPortfolio");
     }
@@ -263,7 +270,7 @@ const Header = () => {
       <Navigation bg="black">
         <div className="container">
           <div className="logo">
-            <Link to="/">
+            <Link to="/" onClick={() => dispatch(updatePageName("landing"))}>
               <img src={logo} alt="logo" />
             </Link>
           </div>
@@ -271,12 +278,25 @@ const Header = () => {
             <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
             <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
               <li>
-                <NavLink activeClassName="active" to="/explore">
-                  <button type="button">Explore</button>
+                <NavLink
+                  onClick={() => dispatch(updatePageName("explore"))}
+                  activeClassName="active"
+                  to="/explore"
+                >
+                  <button
+                    className={page === "explore" ? "active" : null}
+                    type="button"
+                  >
+                    Explore
+                  </button>
                 </NavLink>
               </li>
               <li>
-                <button type="button" onClick={handleClickCheckMember}>
+                <button
+                  className={page === "portfolio" ? "active" : null}
+                  type="button"
+                  onClick={handleClickCheckMember}
+                >
                   Portfolio
                 </button>
               </li>

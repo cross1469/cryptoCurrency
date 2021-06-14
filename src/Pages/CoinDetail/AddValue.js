@@ -317,10 +317,10 @@ const AddValue = (props) => {
       dispatch(updateUsdtPrice(total));
       setAddValue("");
       showToast("success");
+    } else if (!email) {
+      showToast("danger");
     } else if (!addValue.replace(/,/g, "")) {
       showToast("dangerTotal");
-    } else {
-      showToast("danger");
     }
   };
 
