@@ -136,12 +136,12 @@ const WishListPriceColumn = styled.div`
       margin: 0px;
       color: ${(props) => {
         if (props.children[0] > 0) {
-          return "#0ecb81";
+          return "#f6465d";
         }
         if (props.children[0] === 0) {
           return "#707a8a";
         }
-        return "#f6465d";
+        return "#0ecb81";
       }};
     }
   }

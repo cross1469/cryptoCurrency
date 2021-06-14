@@ -149,10 +149,7 @@ const WishListHoverButton = styled.button`
   padding: 12px 16px;
   font-size: 14px;
   border: none;
-  background-image: linear-gradient(
-    rgb(255, 226, 81) 0%,
-    rgb(237, 196, 35) 100%
-  );
+  background-color: #f0b90b;
   span {
     display: flex;
     align-items: center;
@@ -232,12 +229,12 @@ const WishListItemPricePercentage = styled.div`
   font-weight: 500;
   color: ${(props) => {
     if (props.children[0] > 0) {
-      return "#0ecb81";
+      return "#f6465d";
     }
     if (props.children[0] === 0) {
       return "#707a8a";
     }
-    return "#f6465d";
+    return "#0ecb81";
   }};
   h4 {
     font-size: 14px;

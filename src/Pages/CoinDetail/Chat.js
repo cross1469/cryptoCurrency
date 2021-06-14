@@ -251,22 +251,52 @@ const ChatFooter = styled.footer`
 const ChatInputContainer = styled.div`
   flex: 10;
   position: relative;
+  overflow-y: visible;
+  display: inline-block;
+  .inputValueContainer {
+    position: relative;
+    font-size: 14px;
+    font-weight: normal;
+  }
+  .inputValue {
+    display: inline-block;
+    color: transparent;
+    width: 100%;
+    border: none;
+    padding: 1px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    text-align: start;
+    white-space: pre;
+    color: #d9d9d9;
+    span {
+      visibility: hidden;
+    }
+    strong {
+      color: #f0b90b;
+      z-index: 1;
+      position: relative;
+    }
+  }
 `;
 
 const ChatInput = styled.input`
+  top: -2px;
+  left: 0px;
   width: 100%;
-  margin: 0;
-  height: 24px;
-  padding: 0 8px;
-  font-family: inherit;
-  font-size: 16px;
-  line-height: 24px;
-  color: #d9d9d9;
-  background-color: #14151a;
-  border: 0;
+  border: none;
   outline: none;
-  resize: none;
-  overflow: hidden;
+  margin: 0px;
+  display: block;
+  padding: 1px;
+  position: absolute;
+  font-size: inherit;
+  box-sizing: border-box;
+  font-family: inherit;
+  letter-spacing: inherit;
+  background-color: transparent;
+  color: #d9d9d9;
 `;
 
 const ChatSendBtnContainer = styled.div`
@@ -527,6 +557,26 @@ const Chat = (props) => {
       </Scrollbars>
     </SuggestionUl>
   );
+
+  const renderInputValue = () => {
+    const pattern = /\B@[a-z0-9]+/gi;
+    const atSymbol = newMessage.match(pattern);
+    const modMessages = newMessage.replace(atSymbol, `,${atSymbol},`);
+    if (atSymbol) {
+      const symbol = atSymbol[0].replace("@", "");
+      const inputValue = modMessages.split(",").map((item) =>
+        item.match(atSymbol) ? (
+          <strong key={symbol} to={`/coinDetail/${symbol}`}>
+            {atSymbol}
+          </strong>
+        ) : (
+          <span key={item}>{item}</span>
+        )
+      );
+      return inputValue;
+    }
+    return <span>{newMessage}</span>;
+  };
   return (
     <>
       <ChatForm display={toggleChat === false ? "none" : "block"}>
@@ -562,14 +612,17 @@ const Chat = (props) => {
 
         <ChatFooter>
           <ChatInputContainer>
-            {renderSuggestions()}
-            <ChatInput
-              type="text"
-              value={newMessage}
-              onChange={handleOnChange}
-              onKeyDown={handleOnKeyDown}
-              placeholder="Type your message here..."
-            />
+            <div className="inputValueContainer">
+              {renderSuggestions()}
+              <div className="inputValue">{renderInputValue()}</div>
+              <ChatInput
+                type="text"
+                value={newMessage}
+                onChange={handleOnChange}
+                onKeyDown={handleOnKeyDown}
+                placeholder="Type your message here..."
+              />
+            </div>
           </ChatInputContainer>
           <ChatSendBtnContainer>
             <Send onClick={handleOnSubmit} disabled={!newMessage} />

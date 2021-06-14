@@ -284,7 +284,7 @@ const Header = () => {
                   to="/explore"
                 >
                   <button
-                    className={page === "explore" && "active"}
+                    className={page === "explore" ? "active" : null}
                     type="button"
                   >
                     Explore
@@ -293,7 +293,7 @@ const Header = () => {
               </li>
               <li>
                 <button
-                  className={page === "portfolio" && "active"}
+                  className={page === "portfolio" ? "active" : null}
                   type="button"
                   onClick={handleClickCheckMember}
                 >
