@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import OrderTable from "./OrderTable";
 import UserPNL from "./UserPNL";
 import UserAsset from "./UserAsset";
 import WishList from "./WishList";
 import YourNews from "./YourNews";
 import { subscribeUserData } from "../../Utils/firebase";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const PortfolioContainer = styled.div`
   display: flex;
@@ -45,19 +47,16 @@ const PortfolioPanel = styled.div`
 const Portfolio = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    subscribeUserData((userEmail, uid) => {
+    const unsubscribe = subscribeUserData((userEmail, uid) => {
+      dispatch(updatePageName("portfolio"));
       setEmail(userEmail);
       setUserId(uid);
     });
-    return () => {
-      subscribeUserData((userEmail, uid) => {
-        setEmail(userEmail);
-        setUserId(uid);
-      });
-    };
-  }, []);
+    return unsubscribe;
+  }, [dispatch]);
 
   return (
     <PortfolioContainer>

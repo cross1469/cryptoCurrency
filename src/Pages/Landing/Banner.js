@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { color } from "styled-system";
 import Modal from "../../component/Modal";
 import Sign from "../../component/Sign";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
 import { subscribeUserData } from "../../Utils/firebase";
 
@@ -105,6 +107,7 @@ const BannerToSignUpBtn = styled.button`
 
 const Banner = () => {
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(
     () =>
@@ -132,7 +135,10 @@ const Banner = () => {
             <span>Buy and sell cryptocurrency to connect to the world</span>
           </BannerSubtitle>
           {email ? (
-            <Link to="/explore">
+            <Link
+              to="/explore"
+              onClick={() => dispatch(updatePageName("explore"))}
+            >
               <BannerToSignUpBtn>Explore</BannerToSignUpBtn>
             </Link>
           ) : (

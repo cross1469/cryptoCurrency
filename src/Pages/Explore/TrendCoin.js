@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import DashboardLoader from "../../component/loader/DashboardLoader";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;
@@ -227,6 +229,7 @@ const TrendingCardMdFooterText = styled.div`
 
 const TrendCoin = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const dispatch = useDispatch();
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -262,7 +265,11 @@ const TrendCoin = () => {
     coinLastPrice.map((coin) => {
       const symbol = coin.symbol.replace(/USDT/, "");
       return (
-        <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
+        <Link
+          to={`/coinDetail/${coin.symbol}`}
+          onClick={() => dispatch(updatePageName("coinDetail"))}
+          key={coin.openTime}
+        >
           <TrendingCardTitle>
             <TrendingCoinLogoContainer>
               <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />

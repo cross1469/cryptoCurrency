@@ -33,6 +33,9 @@ const MobileTbody = styled.tbody`
   transition: opacity 300ms ease 0s;
   tr {
     user-select: none;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #2f3336;
     :hover {
       background-color: #323539;
     }
@@ -40,7 +43,6 @@ const MobileTbody = styled.tbody`
 `;
 
 const MobileBodyItem = styled.td`
-  border-top: 1px solid #2f3336;
   cursor: pointer;
   min-width: 140px;
   padding: 14px 24px 14px 0px;

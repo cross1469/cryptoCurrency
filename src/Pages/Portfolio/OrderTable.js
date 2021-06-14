@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadOrder } from "../../Utils/firebase";
 
 const OrderContainer = styled.div`
@@ -188,6 +190,7 @@ const OrderTable = (props) => {
   const [sellDatas, setSellDatas] = useState([]);
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const { email } = props;
+  const dispatch = useDispatch();
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -342,7 +345,10 @@ const OrderTable = (props) => {
                     {JSON.stringify(buyDatas) === "[]" ? (
                       <tr>
                         <td colSpan="7">
-                          <NoBuyData to="/explore">
+                          <NoBuyData
+                            to="/explore"
+                            onClick={() => dispatch(updatePageName("explore"))}
+                          >
                             You haven&apos;t Buy the data
                           </NoBuyData>
                         </td>
@@ -395,7 +401,10 @@ const OrderTable = (props) => {
                     {JSON.stringify(sellDatas) === "[]" ? (
                       <tr>
                         <td colSpan="7">
-                          <NoSoldData to="/explore">
+                          <NoSoldData
+                            to="/explore"
+                            onClick={() => dispatch(updatePageName("explore"))}
+                          >
                             You haven&apos;t Sell the data
                           </NoSoldData>
                         </td>
