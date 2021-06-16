@@ -7,7 +7,7 @@ import Modal from "../../component/Modal";
 import Sign from "../../component/Sign";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const BannerBg = styled.section`
   display: flex;
@@ -107,7 +107,7 @@ const BannerToSignUpBtn = styled.button`
 
 const Banner = () => {
   const dispatch = useDispatch();
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   const signModal = useRef(null);
   return (
@@ -123,7 +123,7 @@ const Banner = () => {
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>
           </BannerSubtitle>
-          {context.email ? (
+          {email ? (
             <Link
               to="/explore"
               onClick={() => dispatch(updatePageName("explore"))}

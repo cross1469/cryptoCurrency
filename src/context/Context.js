@@ -1,5 +1,6 @@
 import React from "react";
 
-const Context = React.createContext();
+const ShowToastContext = React.createContext();
+const EmailContext = React.createContext();
 
-export default Context;
+export { ShowToastContext, EmailContext };

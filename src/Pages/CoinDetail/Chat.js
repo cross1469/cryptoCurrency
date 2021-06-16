@@ -9,7 +9,7 @@ import { ReactComponent as ChatIcon } from "../../images/speechBubble.svg";
 import { ReactComponent as ChatClose } from "../../images/cancel.svg";
 import { ReactComponent as ChatRoom } from "../../images/chatRoom.svg";
 import { ReactComponent as Send } from "../../images/send.svg";
-import Context from "../../context/Context";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 
 const OpenChat = styled.button`
   position: fixed;
@@ -349,7 +349,8 @@ const Chat = (props) => {
   const [toggleChat, setToggleChat] = useState(false);
   const ref = useRef();
   const suggestRef = useRef();
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
 
   const handleOnChange = (e) => {
     const lastChar = e.target.value.split("")[e.target.value.length - 1];
@@ -378,17 +379,17 @@ const Chat = (props) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    if (context.email) {
+    if (email) {
       const trimmedMessage = newMessage.trim();
       if (trimmedMessage) {
         addChatData({
-          account: context.email.substring(0, context.email.lastIndexOf("@")),
+          account: email.substring(0, email.lastIndexOf("@")),
           messages: trimmedMessage,
         });
       }
       setNewMessage("");
     } else {
-      context.showToast("dangerChat");
+      showToast("dangerChat");
     }
   };
 
@@ -399,17 +400,17 @@ const Chat = (props) => {
 
   const handleOnKeyDown = (e) => {
     if (e.keyCode === 13) {
-      if (context.email) {
+      if (email) {
         const trimmedMessage = newMessage.trim();
         if (trimmedMessage) {
           addChatData({
-            account: context.email.substring(0, context.email.lastIndexOf("@")),
+            account: email.substring(0, email.lastIndexOf("@")),
             messages: trimmedMessage,
           });
         }
         setNewMessage("");
       } else {
-        context.showToast("dangerChat");
+        showToast("dangerChat");
       }
     }
   };
@@ -477,7 +478,7 @@ const Chat = (props) => {
         );
       }
 
-      if (context.email === null) {
+      if (email === null) {
         return (
           <ChatDataContainer key={chatData.id}>
             <ChatDataItem>
@@ -492,10 +493,7 @@ const Chat = (props) => {
           </ChatDataContainer>
         );
       }
-      if (
-        chatData.account ===
-        context.email.substring(0, context.email.lastIndexOf("@"))
-      ) {
+      if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
         return (
           <ChatDataContainer key={chatData.id}>
             <UserChatDataItem>

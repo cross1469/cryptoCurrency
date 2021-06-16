@@ -4,7 +4,7 @@ import Tooltip from "rc-tooltip";
 import { ReactComponent as Info } from "../../images/information.svg";
 import { firebaseReadCoinAsset, firebaseReadAsset } from "../../Utils/firebase";
 import "rc-tooltip/assets/bootstrap.css";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const AssetsContainer = styled.div`
   margin-top: 32px;
@@ -157,7 +157,7 @@ const AssetsTotal = () => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
   const [profitLoss, setProfitLoss] = useState("-");
   const [isLoading, setIsLoading] = useState(true);
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   const text = (
     <span>
@@ -170,9 +170,9 @@ const AssetsTotal = () => {
 
   useEffect(() => {
     const getAssetData = async () => {
-      if (context.email) {
-        const usdtData = await firebaseReadCoinAsset(context.email, "USDT");
-        const coinProfitLoss = await firebaseReadAsset(context.email);
+      if (email) {
+        const usdtData = await firebaseReadCoinAsset(email, "USDT");
+        const coinProfitLoss = await firebaseReadAsset(email);
         let coinAllprofitLoss = 0;
         coinProfitLoss.forEach((coin) => {
           if (coin.coinType !== "USDT") {
@@ -185,7 +185,7 @@ const AssetsTotal = () => {
       }
     };
     getAssetData();
-  }, [context.email]);
+  }, [email]);
 
   return (
     <AssetsContainer>

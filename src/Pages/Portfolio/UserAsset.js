@@ -7,7 +7,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadAsset } from "../../Utils/firebase";
 import DashboardLoader from "../../component/loader/DashboardLoader";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const UserAssetContainer = styled.div`
   background-color: #14151a;
@@ -250,7 +250,7 @@ const UserAsset = () => {
   const [userAsset, setUserAsset] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -283,13 +283,13 @@ const UserAsset = () => {
 
   useEffect(() => {
     const getUserAsset = async () => {
-      if (context.email) {
-        const asset = await firebaseReadAsset(context.email);
+      if (email) {
+        const asset = await firebaseReadAsset(email);
         setUserAsset(asset);
       }
     };
     getUserAsset();
-  }, [context.email]);
+  }, [email]);
 
   const renderAssetCard = () =>
     userAsset.map((asset) =>

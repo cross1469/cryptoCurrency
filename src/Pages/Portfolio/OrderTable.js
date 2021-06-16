@@ -6,7 +6,7 @@ import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadOrder } from "../../Utils/firebase";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const OrderContainer = styled.div`
   color: #d9d9d9;
@@ -190,7 +190,7 @@ const OrderTable = () => {
   const [sellDatas, setSellDatas] = useState([]);
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const dispatch = useDispatch();
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -288,8 +288,8 @@ const OrderTable = () => {
 
   useEffect(() => {
     const getOrderData = async () => {
-      if (context.email) {
-        const orderDatas = await firebaseReadOrder(context.email);
+      if (email) {
+        const orderDatas = await firebaseReadOrder(email);
         orderDatas.forEach((orderData) => {
           if (orderData.type === "buy") {
             setBuyDatas((buy) => [...buy, orderData]);
@@ -300,7 +300,7 @@ const OrderTable = () => {
       }
     };
     getOrderData();
-  }, [context.email]);
+  }, [email]);
 
   useEffect(() => {
     getLastPrice();

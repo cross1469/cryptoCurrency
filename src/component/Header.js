@@ -17,7 +17,7 @@ import Forget from "./Forget";
 import { firebaseAuthSignOut } from "../Utils/firebase";
 import { updatePageName } from "../Redux/Actions/actionCreator";
 import logo from "../images/cryptoLogo.svg";
-import Context from "../context/Context";
+import { ShowToastContext, EmailContext } from "../context/Context";
 
 const Navigation = styled.header`
   width: 100%;
@@ -166,7 +166,8 @@ const Header = () => {
   const signModal = useRef(null);
   const forgetModal = createRef();
   const dispatch = useDispatch();
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
+  const showToast = useContext(ShowToastContext);
 
   const handleToggle = (e) => {
     e.preventDefault();
@@ -175,17 +176,17 @@ const Header = () => {
 
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
-    context.showToast("successSignOut");
+    showToast("successSignOut");
     setLoginStatus("Login");
   };
 
   const handleClickCheckMember = (e) => {
     e.preventDefault();
-    if (context.email) {
+    if (email) {
       history.push("/portfolio");
       dispatch(updatePageName("portfolio"));
     } else {
-      context.showToast("dangerPortfolio");
+      showToast("dangerPortfolio");
     }
   };
 
@@ -200,16 +201,16 @@ const Header = () => {
   };
 
   const getSignInfo = (sign) => {
-    context.showToast(sign);
+    showToast(sign);
   };
 
   useEffect(() => {
-    if (context.email) {
+    if (email) {
       setLoginStatus("Sign Out");
     } else {
       setLoginStatus("Sign In");
     }
-  }, [context.email]);
+  }, [email]);
 
   return (
     <>
@@ -246,7 +247,7 @@ const Header = () => {
                   Portfolio
                 </button>
               </li>
-              {context.email ? (
+              {email ? (
                 <li>
                   <button bg="black" type="button" onClick={handleClickSignOut}>
                     {loginStatus}

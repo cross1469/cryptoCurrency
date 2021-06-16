@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { readWishList } from "../../Utils/firebase";
 import defaultNewsImg from "../../images/defaultNews.jpg";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const YourNewsSection = styled.section`
   border-top: 1px solid #2f3336;
@@ -236,12 +236,12 @@ const NoNewsBtn = styled.button`
 const YourNews = () => {
   const [wishStr, setWishStr] = useState("");
   const [newsHeadlines, setNewsHeadlines] = useState([]);
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   useEffect(() => {
     const getWishListData = async () => {
-      if (context.email) {
-        const wishListData = await readWishList(context.email);
+      if (email) {
+        const wishListData = await readWishList(email);
         const wishString = wishListData
           .toString()
           .replace(/USDT/g, "")
@@ -250,7 +250,7 @@ const YourNews = () => {
       }
     };
     getWishListData();
-  }, [context.email]);
+  }, [email]);
 
   useEffect(() => {
     const options = {

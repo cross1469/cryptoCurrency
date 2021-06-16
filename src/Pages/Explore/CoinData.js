@@ -12,7 +12,7 @@ import {
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
 import Pagination from "../../component/Pagination";
-import Context from "../../context/Context";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
@@ -284,7 +284,8 @@ const CoinData = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
   const [starList, setStarList] = useState([]);
 
   const handleChange = (e) => {
@@ -292,23 +293,23 @@ const CoinData = () => {
   };
 
   const handleClickToWish = async (e) => {
-    if (context.email) {
+    if (email) {
       if (starList.indexOf(e.target.parentNode.parentNode.id) === -1) {
-        await addWishList(context.email, e.target.parentNode.parentNode.id);
+        await addWishList(email, e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.push(e.target.parentNode.parentNode.id);
         setStarList(newStarList);
-        context.showToast("successAddWishList");
+        showToast("successAddWishList");
       } else {
-        await removeWishList(context.email, e.target.parentNode.parentNode.id);
+        await removeWishList(email, e.target.parentNode.parentNode.id);
         const num = starList.indexOf(e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.splice(num, 1);
         setStarList(newStarList);
-        context.showToast("successRemoveWishList");
+        showToast("successRemoveWishList");
       }
     } else {
-      context.showToast("dangerWishList");
+      showToast("dangerWishList");
     }
   };
 
@@ -391,15 +392,15 @@ const CoinData = () => {
 
   useEffect(() => {
     const renderInitActiveStar = async () => {
-      if (context.email) {
-        const wishList = await readWishList(context.email);
+      if (email) {
+        const wishList = await readWishList(email);
         setStarList(wishList);
       } else {
         setStarList([]);
       }
     };
     renderInitActiveStar();
-  }, [context.email]);
+  }, [email]);
 
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {

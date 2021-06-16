@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
 import { firebaseWriteCoinAsset } from "../../Utils/firebase";
-import Context from "../../context/Context";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 
 const BuySellStyle = styled.div`
   display: flex;
@@ -251,7 +251,8 @@ const AddValue = () => {
   const dispatch = useDispatch();
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const [addValue, setAddValue] = useState("");
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
 
   const handlAddValueInput = (e) => {
     const re = /^[.,0-9\b]+$/;
@@ -267,15 +268,15 @@ const AddValue = () => {
 
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
-    if (context.email && addValue.replace(/,/g, "") > 0) {
-      firebaseWriteCoinAsset(context.email, "USDT", total, 0, 0);
+    if (email && addValue.replace(/,/g, "") > 0) {
+      firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
-      context.showToast("SuccessAddValue");
-    } else if (!context.email) {
-      context.showToast("dangerAddValueLogin");
+      showToast("SuccessAddValue");
+    } else if (!email) {
+      showToast("dangerAddValueLogin");
     } else if (!addValue.replace(/,/g, "")) {
-      context.showToast("dangerAddValueTotal");
+      showToast("dangerAddValueTotal");
     }
   };
 

@@ -15,7 +15,7 @@ import {
 } from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
-import Context from "../../context/Context";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -229,7 +229,8 @@ const CoinDetail = () => {
   const [coinUsdtSymbol, setCoinUsdtSymbol] = useState();
   const [userWishList, setUserWishList] = useState([]);
   const history = useHistory();
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
 
   const getSymbol = () =>
     axios
@@ -261,35 +262,35 @@ const CoinDetail = () => {
   }, [history, symbol, coinSymbol]);
 
   const handleWishList = () => {
-    if (context.email) {
+    if (email) {
       if (userWishList.indexOf(symbol) === -1) {
-        addWishList(context.email, symbol);
+        addWishList(email, symbol);
         const newStarList = [...userWishList];
         newStarList.push(symbol);
         setUserWishList(newStarList);
-        context.showToast("successAddWishList");
+        showToast("successAddWishList");
       } else {
-        removeWishList(context.email, symbol);
+        removeWishList(email, symbol);
         const num = userWishList.indexOf(symbol);
         const newStarList = [...userWishList];
         newStarList.splice(num, 1);
         setUserWishList(newStarList);
-        context.showToast("successRemoveWishList");
+        showToast("successRemoveWishList");
       }
     } else {
-      context.showToast("dangerWishList");
+      showToast("dangerWishList");
     }
   };
 
   useEffect(() => {
     const getUserWishList = async () => {
-      if (context.email) {
-        const wishList = await readWishList(context.email);
+      if (email) {
+        const wishList = await readWishList(email);
         setUserWishList(wishList);
       }
     };
     getUserWishList();
-  }, [context.email]);
+  }, [email]);
 
   return (
     <>

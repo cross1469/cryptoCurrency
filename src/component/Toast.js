@@ -130,7 +130,7 @@ const Toast = (props) => {
     <>
       <ToastContainer>
         {list.map((toast) => (
-          <Notification key={toast} bg={toast.backgroundColor}>
+          <Notification key={toast.id} bg={toast.backgroundColor}>
             <CloseButton onClick={() => deleteToast(toast.id)}>X</CloseButton>
             <NotificationImage>
               <img src={toast.icon} alt="" />

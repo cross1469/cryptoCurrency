@@ -10,7 +10,7 @@ import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import Spline from "./Spline";
-import Context from "../../context/Context";
+import { EmailContext } from "../../context/Context";
 
 const override = css`
   display: flex;
@@ -297,7 +297,7 @@ const WishList = () => {
   const dispatch = useDispatch();
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [loading, setLoading] = useState(true);
-  const context = useContext(Context);
+  const email = useContext(EmailContext);
 
   const handleBlockButton = (e) => {
     e.target.style.opacity = 1;
@@ -309,13 +309,13 @@ const WishList = () => {
 
   useEffect(() => {
     const getWishListData = async () => {
-      if (context.email) {
-        const wishListData = await readWishList(context.email);
+      if (email) {
+        const wishListData = await readWishList(email);
         setWishList(wishListData);
       }
     };
     getWishListData();
-  }, [context.email]);
+  }, [email]);
 
   useEffect(() => {
     const getLastPrice = () =>

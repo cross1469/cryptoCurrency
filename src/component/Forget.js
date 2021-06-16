@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { firebaseAuthForget } from "../Utils/firebase";
-import Context from "../context/Context";
+import { ShowToastContext } from "../context/Context";
 
 const BtnContainer = styled.div`
   display: flex;
@@ -60,7 +60,7 @@ const Input = styled.input`
 
 const Forget = () => {
   const [email, setEmail] = useState("");
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -68,9 +68,9 @@ const Forget = () => {
       forgetMessage === "auth/invalid-email" ||
       forgetMessage === "auth/user-not-found"
     ) {
-      context.showToast("emailError");
+      showToast("emailError");
     } else {
-      context.showToast("sentResetPassword");
+      showToast("sentResetPassword");
       window.location.reload();
     }
   };

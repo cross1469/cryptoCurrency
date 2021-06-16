@@ -11,7 +11,7 @@ import firebaseAddOrder, {
   firebaseReadCoinAsset,
 } from "../../Utils/firebase";
 import { ReactComponent as Switch } from "../../images/sort.svg";
-import Context from "../../context/Context";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 
 const BuySellStyle = styled.div`
   display: flex;
@@ -364,7 +364,8 @@ const PlaceOrder = () => {
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
 
   const [inputValue, setInputValue] = useState("0");
   const [inputTopContent, setInputTopContent] = useState("USDT");
@@ -437,13 +438,13 @@ const PlaceOrder = () => {
           Number(coinPriceForUSDT) * Number(coinQty)) /
         allcoinQty;
       firebaseWriteCoinAsset(
-        context.email,
+        email,
         coin,
         allcoinQty,
         averageCoinPrice,
         coinAsset.profitLoss
       );
-      firebaseWriteCoinAsset(context.email, "USDT", allUsdtQty, 0, 0);
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty, 0, 0);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     } else if (buyOrSell === "sell") {
@@ -456,13 +457,13 @@ const PlaceOrder = () => {
           Number(coinPriceForUSDT) * Number(coinQty)) /
         allcoinQty;
       firebaseWriteCoinAsset(
-        context.email,
+        email,
         coin,
         allcoinQty,
         averageCoinPrice,
         coinAsset.profitLoss
       );
-      firebaseWriteCoinAsset(context.email, "USDT", allUsdtQty, 0, 0);
+      firebaseWriteCoinAsset(email, "USDT", allUsdtQty, 0, 0);
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     }
@@ -470,7 +471,7 @@ const PlaceOrder = () => {
 
   const handleClickUploadOrder = () => {
     if (buyOrSell === "buy") {
-      if (context.email && total > 0 && usdtQty >= Number(total)) {
+      if (email && total > 0 && usdtQty >= Number(total)) {
         const orderData = {
           coinPrice: marketPrice,
           coinType: coin,
@@ -478,22 +479,22 @@ const PlaceOrder = () => {
           tradingType: "market",
           type: buyOrSell,
         };
-        firebaseAddOrder(orderData, context.email);
-        calcAssetForUploadOrder(context.email, coin, marketPrice, qty);
+        firebaseAddOrder(orderData, email);
+        calcAssetForUploadOrder(email, coin, marketPrice, qty);
         setInputTopContent("USDT");
         setInputBottomContent(coin);
         setInputValue("");
         setTotal(0);
-        context.showToast("successBuyCoin");
-      } else if (!context.email) {
-        context.showToast("dangerPlaceOrderSignin");
+        showToast("successBuyCoin");
+      } else if (!email) {
+        showToast("dangerPlaceOrderSignin");
       } else if (!total) {
-        context.showToast("dangerTotal");
+        showToast("dangerTotal");
       } else if (usdtQty < total) {
-        context.showToast("dangerUsdt");
+        showToast("dangerUsdt");
       }
     } else if (buyOrSell === "sell") {
-      if (context.email && total > 0 && coinsQty >= Number(total)) {
+      if (email && total > 0 && coinsQty >= Number(total)) {
         const orderData = {
           coinPrice: marketPrice,
           coinType: coin,
@@ -501,31 +502,28 @@ const PlaceOrder = () => {
           tradingType: "market",
           type: buyOrSell,
         };
-        firebaseAddOrder(orderData, context.email);
-        calcAssetForUploadOrder(context.email, coin, marketPrice, qty);
+        firebaseAddOrder(orderData, email);
+        calcAssetForUploadOrder(email, coin, marketPrice, qty);
         setInputTopContent(coin);
         setInputBottomContent("USDT");
         setInputValue("");
         setTotal(0);
-        context.showToast("successBuyCoin");
-      } else if (!context.email) {
-        context.showToast("dangerPlaceOrderSignin");
+        showToast("successBuyCoin");
+      } else if (!email) {
+        showToast("dangerPlaceOrderSignin");
       } else if (!total) {
-        context.showToast("dangerTotal");
+        showToast("dangerTotal");
       } else if (coinsQty < total) {
-        context.showToast("dangerCoin", coin);
+        showToast("dangerCoin", coin);
       }
     }
   };
 
   useEffect(() => {
     const readUserUsdtAndCoin = async () => {
-      if (context.email) {
-        const userCoinAsset = await firebaseReadCoinAsset(context.email, coin);
-        const userUsdtAsset = await firebaseReadCoinAsset(
-          context.email,
-          "USDT"
-        );
+      if (email) {
+        const userCoinAsset = await firebaseReadCoinAsset(email, coin);
+        const userUsdtAsset = await firebaseReadCoinAsset(email, "USDT");
         if (userCoinAsset.qty === 0) {
           dispatch(updateUsdtPrice(userUsdtAsset.qty));
           dispatch(updateCoinPrice(0));
@@ -538,7 +536,7 @@ const PlaceOrder = () => {
     readUserUsdtAndCoin();
     setInputTopContent("USDT");
     setInputBottomContent(coin);
-  }, [coin, dispatch, context.email, symbol]);
+  }, [coin, dispatch, email, symbol]);
 
   return (
     <>

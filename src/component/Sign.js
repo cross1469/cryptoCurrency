@@ -9,7 +9,7 @@ import {
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
 import googleIcon from "../images/google.svg";
-import Context from "../context/Context";
+import { ShowToastContext } from "../context/Context";
 
 const Container = styled.div`
   position: relative;
@@ -188,7 +188,7 @@ const Sign = (props) => {
     password: "#f1f3f5",
   });
   const signModal = useRef(null);
-  const context = useContext(Context);
+  const showToast = useContext(ShowToastContext);
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -270,14 +270,14 @@ const Sign = (props) => {
     if (inputType === "signin") {
       const loginMessage = await firebaseAuthSignIn(email, password);
       if (loginMessage === "auth/wrong-password") {
-        context.showToast("passwordError");
+        showToast("passwordError");
       } else if (
         loginMessage === "auth/invalid-email" ||
         loginMessage === "auth/user-not-found"
       ) {
-        context.showToast("emailError");
-      } else if (context.email) {
-        context.showToast("signed");
+        showToast("emailError");
+      } else if (email) {
+        showToast("signed");
       } else {
         setIsOpen(false);
         getSignInfo("successSignIn");
@@ -285,11 +285,11 @@ const Sign = (props) => {
     } else if (inputType === "create") {
       const signUpMessage = await firebaseAuthSignUp(email, password);
       if (signUpMessage === "auth/wrong-password") {
-        context.showToast("passwordError");
+        showToast("passwordError");
       } else if (signUpMessage === "auth/invalid-email") {
-        context.showToast("emailError");
+        showToast("emailError");
       } else if (signUpMessage === "auth/email-already-in-use") {
-        context.showToast("existed");
+        showToast("existed");
       } else {
         setIsOpen(false);
         getSignInfo("successSignUp");
