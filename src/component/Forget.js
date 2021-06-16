@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { firebaseAuthForget } from "../Utils/firebase";
-import Toast from "./Toast";
-import checkIcon from "../images/check.svg";
-import errorIcon from "../images/error.svg";
+import Context from "../context/Context";
 
 const BtnContainer = styled.div`
   display: flex;
@@ -62,36 +60,7 @@ const Input = styled.input`
 
 const Forget = () => {
   const [email, setEmail] = useState("");
-  const [list, setList] = useState([]);
-  let toastProperties = null;
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "sentResetPassword":
-        toastProperties = {
-          id,
-          title: "Sent the reset password",
-          description: "Please check the mail to receive it.",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "emailError":
-        toastProperties = {
-          id,
-          title: "Email error",
-          description: "Email error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
+  const showToast = useContext(Context);
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -128,7 +97,6 @@ const Forget = () => {
           重設密碼
         </Button>
       </BtnContainer>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

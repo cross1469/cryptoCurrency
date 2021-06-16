@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styled from "styled-components";
 import { color, flexbox, space, typography, border } from "styled-system";
 import PropTypes from "prop-types";
@@ -9,10 +9,8 @@ import {
   firebaseAuthGoogleSignIn,
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
-import Toast from "./Toast";
-import errorIcon from "../images/error.svg";
-import warningIcon from "../images/warning.svg";
 import googleIcon from "../images/google.svg";
+import Context from "../context/Context";
 
 const Container = styled.div`
   position: relative;
@@ -191,10 +189,8 @@ const Sign = (props) => {
     email: "#f1f3f5",
     password: "#f1f3f5",
   });
-
-  const [list, setList] = useState([]);
   const signModal = useRef(null);
-  let toastProperties = null;
+  const showToast = useContext(Context);
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -239,54 +235,6 @@ const Sign = (props) => {
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
     updateValidators("password", e.target.value);
-  };
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "passwordError":
-        toastProperties = {
-          id,
-          title: "Password error",
-          description: "Password error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "emailError":
-        toastProperties = {
-          id,
-          title: "Email error",
-          description: "Email error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-
-      case "signed":
-        toastProperties = {
-          id,
-          title: "Signed in",
-          description: "Signed in",
-          backgroundColor: "#f0ad4e",
-          icon: warningIcon,
-        };
-        break;
-
-      case "existed":
-        toastProperties = {
-          id,
-          title: "Already have this user",
-          description: "This user already exists",
-          backgroundColor: "#f0ad4e",
-          icon: warningIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
   };
 
   const displayValidationErrors = (fieldName) => {
@@ -461,7 +409,6 @@ const Sign = (props) => {
           </FormCard>
         </section>
       </Container>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

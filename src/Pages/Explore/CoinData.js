@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -13,9 +13,7 @@ import {
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
 import Pagination from "../../component/Pagination";
-import Toast from "../../component/Toast";
-import errorIcon from "../../images/error.svg";
-import checkIcon from "../../images/check.svg";
+import Context from "../../context/Context";
 import { ReactComponent as Search } from "../../images/search.svg";
 import MobileTable from "./MobileTable";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
@@ -288,51 +286,11 @@ const CoinData = (props) => {
   const [loading, setLoading] = useState(true);
   const { email } = props;
   const dispatch = useDispatch();
-
+  const showToast = useContext(Context);
   const [starList, setStarList] = useState([]);
-
-  const [list, setList] = useState([]);
-  let toastProperties = null;
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
-  };
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "danger":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before add your wishlist, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "successAddWishList":
-        toastProperties = {
-          id,
-          title: "Add to wish list",
-          description: "Successfully add to wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "successRemoveWishList":
-        toastProperties = {
-          id,
-          title: "Remove the wish list",
-          description: "Successfully remove the wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
   };
 
   const handleClickToWish = async (e) => {
@@ -352,7 +310,7 @@ const CoinData = (props) => {
         showToast("successRemoveWishList");
       }
     } else {
-      showToast("danger");
+      showToast("dangerWishList");
     }
   };
 
@@ -638,8 +596,6 @@ const CoinData = (props) => {
           )}
         </div>
       </CoinDataContainer>
-
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </CoinDataSection>
   );
 };

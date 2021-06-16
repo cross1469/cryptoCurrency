@@ -12,67 +12,6 @@ const KLine = () => {
 
   const [interval, setInterval] = useState("1m");
 
-  const callBinanceAPI = (coinSymbol, APIInterval) => {
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
-      )
-      .then((res) => {
-        const currencyData = [];
-        for (let i = 0; i < res.data.length; i += 1) {
-          currencyData.push([
-            res.data[i][0],
-            Number(res.data[i][1]),
-            Number(res.data[i][2]),
-            Number(res.data[i][3]),
-            Number(res.data[i][4]),
-          ]);
-        }
-        // eslint-disable-next-line no-use-before-define
-        setOptions({
-          series: [
-            {
-              type: "candlestick",
-              name: `${symbol}`,
-              data: currencyData,
-            },
-          ],
-        });
-      });
-  };
-
-  const socketAPI = (socketSymbol, socketInterval) => {
-    const socket = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
-    );
-    socket.onmessage = (event) => {
-      const newKLineData = [];
-      const data = JSON.parse(event.data);
-      dispatch(getMarketPrice(data.k.o));
-      newKLineData.push(
-        data.k.t,
-        Number(data.k.o),
-        Number(data.k.h),
-        Number(data.k.l),
-        Number(data.k.c)
-      );
-      // eslint-disable-next-line no-use-before-define
-      if (options.series[0]) {
-        // eslint-disable-next-line no-use-before-define
-        setOptions((op) => {
-          const newOptions = { ...op };
-          newOptions.series[0].data = [
-            ...newOptions.series[0].data,
-            newKLineData,
-          ];
-          return newOptions;
-        });
-      }
-    };
-
-    return () => socket.close();
-  };
-
   const [options, setOptions] = useState({
     plotOptions: {
       candlestick: {
@@ -107,6 +46,7 @@ const KLine = () => {
           count: 60,
           events: {
             click() {
+              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "15m");
               setInterval(() => "15m");
             },
@@ -118,6 +58,7 @@ const KLine = () => {
           count: 24,
           events: {
             click() {
+              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1h");
               setInterval(() => "1h");
             },
@@ -129,6 +70,7 @@ const KLine = () => {
           count: 24,
           events: {
             click() {
+              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "4h");
               setInterval(() => "4h");
             },
@@ -140,6 +82,7 @@ const KLine = () => {
           count: 7,
           events: {
             click() {
+              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1d");
               setInterval(() => "1d");
             },
@@ -151,6 +94,7 @@ const KLine = () => {
           count: 4,
           events: {
             click() {
+              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1w");
               setInterval(() => "1w");
             },
@@ -239,6 +183,64 @@ const KLine = () => {
 
     series: [],
   });
+
+  const callBinanceAPI = (coinSymbol, APIInterval) => {
+    axios
+      .get(
+        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
+      )
+      .then((res) => {
+        const currencyData = [];
+        for (let i = 0; i < res.data.length; i += 1) {
+          currencyData.push([
+            res.data[i][0],
+            Number(res.data[i][1]),
+            Number(res.data[i][2]),
+            Number(res.data[i][3]),
+            Number(res.data[i][4]),
+          ]);
+        }
+        setOptions({
+          series: [
+            {
+              type: "candlestick",
+              name: `${symbol}`,
+              data: currencyData,
+            },
+          ],
+        });
+      });
+  };
+
+  const socketAPI = (socketSymbol, socketInterval) => {
+    const socket = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
+    );
+    socket.onmessage = (event) => {
+      const newKLineData = [];
+      const data = JSON.parse(event.data);
+      dispatch(getMarketPrice(data.k.o));
+      newKLineData.push(
+        data.k.t,
+        Number(data.k.o),
+        Number(data.k.h),
+        Number(data.k.l),
+        Number(data.k.c)
+      );
+      if (options.series[0]) {
+        setOptions((op) => {
+          const newOptions = { ...op };
+          newOptions.series[0].data = [
+            ...newOptions.series[0].data,
+            newKLineData,
+          ];
+          return newOptions;
+        });
+      }
+    };
+
+    return () => socket.close();
+  };
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");

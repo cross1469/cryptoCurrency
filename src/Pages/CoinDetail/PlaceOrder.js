@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -11,10 +11,8 @@ import firebaseAddOrder, {
   firebaseWriteCoinAsset,
   firebaseReadCoinAsset,
 } from "../../Utils/firebase";
-import Toast from "../../component/Toast";
-import checkIcon from "../../images/check.svg";
-import errorIcon from "../../images/error.svg";
 import { ReactComponent as Switch } from "../../images/sort.svg";
+import Context from "../../context/Context";
 
 const BuySellStyle = styled.div`
   display: flex;
@@ -367,13 +365,12 @@ const PlaceOrder = (props) => {
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
+  const showToast = useContext(Context);
 
   const { email } = props;
   const [inputValue, setInputValue] = useState("0");
   const [inputTopContent, setInputTopContent] = useState("USDT");
   const [inputBottomContent, setInputBottomContent] = useState(coin);
-  const [list, setList] = useState([]);
-  let toastProperties = null;
   const [buyOrSell, setBuyOrSell] = useState("buy");
   const [qty, setQty] = useState("");
   const [total, setTotal] = useState("");
@@ -424,62 +421,6 @@ const PlaceOrder = (props) => {
     }
   };
 
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "success":
-        toastProperties = {
-          id,
-          title: "Success",
-          description: "Order successful",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "danger":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before placing your order, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "dangerTotal":
-        toastProperties = {
-          id,
-          title: "Danger",
-          description: "The amount cannot be 0",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "dangerUsdt":
-        toastProperties = {
-          id,
-          title: "Ｐlease deposit",
-          description:
-            "USDT available amount is not enough, please deposit first",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "dangerCoin":
-        toastProperties = {
-          id,
-          title: "Please reduce the sell quantity",
-          description: `The ${coin} quantity is not enough, please reduce the sell quantity`,
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
-
   const calcAssetForUploadOrder = async (
     userEmail,
     coinType,
@@ -508,7 +449,8 @@ const PlaceOrder = (props) => {
       dispatch(updateUsdtPrice(allUsdtQty));
       dispatch(updateCoinPrice(allcoinQty));
     } else if (buyOrSell === "sell") {
-      const allcoinQty = Number(coinAsset.qty) - Number(inputValue);
+      const allcoinQty =
+        Number(coinAsset.qty) - Number(inputValue.replace(/,/g, ""));
       const allUsdtQty =
         Number(usdtAsset.qty) + Number(coinPriceForUSDT * coinQty);
       const averageCoinPrice =
@@ -544,9 +486,9 @@ const PlaceOrder = (props) => {
         setInputBottomContent(coin);
         setInputValue("");
         setTotal(0);
-        showToast("success");
+        showToast("successBuyCoin");
       } else if (!email) {
-        showToast("danger");
+        showToast("dangerPlaceOrderSignin");
       } else if (!total) {
         showToast("dangerTotal");
       } else if (usdtQty < total) {
@@ -567,13 +509,13 @@ const PlaceOrder = (props) => {
         setInputBottomContent("USDT");
         setInputValue("");
         setTotal(0);
-        showToast("success");
+        showToast("successBuyCoin");
       } else if (!email) {
-        showToast("danger");
+        showToast("dangerPlaceOrderSignin");
       } else if (!total) {
         showToast("dangerTotal");
       } else if (coinsQty < total) {
-        showToast("dangerCoin");
+        showToast("dangerCoin", coin);
       }
     }
   };
@@ -593,7 +535,9 @@ const PlaceOrder = (props) => {
       }
     };
     readUserUsdtAndCoin();
-  }, [coin, dispatch, email]);
+    setInputTopContent("USDT");
+    setInputBottomContent(coin);
+  }, [coin, dispatch, email, symbol]);
 
   return (
     <>
@@ -681,8 +625,6 @@ const PlaceOrder = (props) => {
           </CryptoContainer>
         </BuySellContainer>
       </BuySellStyle>
-
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

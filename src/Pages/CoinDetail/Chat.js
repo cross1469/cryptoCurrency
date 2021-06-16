@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
 import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { addChatData, readChatData } from "../../Utils/firebase";
-import Toast from "../../component/Toast";
-import errorIcon from "../../images/error.svg";
 import { ReactComponent as ChatIcon } from "../../images/speechBubble.svg";
 import { ReactComponent as ChatClose } from "../../images/cancel.svg";
 import { ReactComponent as ChatRoom } from "../../images/chatRoom.svg";
 import { ReactComponent as Send } from "../../images/send.svg";
+import Context from "../../context/Context";
 
 const OpenChat = styled.button`
   position: fixed;
@@ -348,10 +347,9 @@ const Chat = (props) => {
   const [chatDatas, setChatDatas] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [toggleChat, setToggleChat] = useState(false);
-  const [list, setList] = useState([]);
-  let toastProperties = null;
   const ref = useRef();
   const suggestRef = useRef();
+  const showToast = useContext(Context);
 
   const handleOnChange = (e) => {
     const lastChar = e.target.value.split("")[e.target.value.length - 1];
@@ -376,25 +374,6 @@ const Chat = (props) => {
     setNewMessage(
       newMessage.substr(0, newMessage.length - coinName.length) + value
     );
-  };
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "dangerChat":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before sending a message, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
   };
 
   const handleOnSubmit = (e) => {
@@ -641,7 +620,6 @@ const Chat = (props) => {
       >
         <ChatIcon />
       </OpenChat>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

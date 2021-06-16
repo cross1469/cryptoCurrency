@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router";
 import axios from "axios";
@@ -16,9 +16,7 @@ import {
 } from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
-import Toast from "../../component/Toast";
-import errorIcon from "../../images/error.svg";
-import checkIcon from "../../images/check.svg";
+import Context from "../../context/Context";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -233,9 +231,8 @@ const CoinDetail = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
-  const [list, setList] = useState([]);
-  let toastProperties = null;
   const history = useHistory();
+  const showToast = useContext(Context);
 
   const getSymbol = () =>
     axios
@@ -265,43 +262,6 @@ const CoinDetail = () => {
       }
     }
   }, [history, symbol, coinSymbol]);
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "successAddWishList":
-        toastProperties = {
-          id,
-          title: "Add to wish list",
-          description: "Successfully add to wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "successRemoveWishList":
-        toastProperties = {
-          id,
-          title: "Remove the wish list",
-          description: "Successfully remove the wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "dangerWishList":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before add your wishlist, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
 
   const handleWishList = () => {
     if (email) {
@@ -415,7 +375,6 @@ const CoinDetail = () => {
       </LayoutWrapper>
       <Mobile email={email} userId={userId} />
       <Chat email={email} userId={userId} coinUsdtSymbol={coinUsdtSymbol} />
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };
