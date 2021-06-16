@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -11,6 +10,7 @@ import { ReactComponent as Right } from "../../images/next.svg";
 import MobileWishList from "./MobileWishList";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import Spline from "./Spline";
+import Context from "../../context/Context";
 
 const override = css`
   display: flex;
@@ -292,12 +292,12 @@ const DisplayMobileWishList = styled(MobileWishList)`
   }
 `;
 
-const WishList = (props) => {
+const WishList = () => {
   const [wishList, setWishList] = useState([]);
   const dispatch = useDispatch();
-  const { email } = props;
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
 
   const handleBlockButton = (e) => {
     e.target.style.opacity = 1;
@@ -309,13 +309,13 @@ const WishList = (props) => {
 
   useEffect(() => {
     const getWishListData = async () => {
-      if (email) {
-        const wishListData = await readWishList(email);
+      if (context.email) {
+        const wishListData = await readWishList(context.email);
         setWishList(wishListData);
       }
     };
     getWishListData();
-  }, [email]);
+  }, [context.email]);
 
   useEffect(() => {
     const getLastPrice = () =>
@@ -442,10 +442,6 @@ const WishList = (props) => {
       />
     </section>
   );
-};
-
-WishList.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default WishList;

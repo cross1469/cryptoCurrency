@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Tooltip from "rc-tooltip";
 import { ReactComponent as Info } from "../../images/information.svg";
 import { firebaseReadCoinAsset, firebaseReadAsset } from "../../Utils/firebase";
 import "rc-tooltip/assets/bootstrap.css";
+import Context from "../../context/Context";
 
 const AssetsContainer = styled.div`
   margin-top: 32px;
@@ -153,11 +153,12 @@ const AccountPNLPrice = styled.div`
   }
 `;
 
-const AssetsTotal = (props) => {
+const AssetsTotal = () => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
   const [profitLoss, setProfitLoss] = useState("-");
   const [isLoading, setIsLoading] = useState(true);
-  const { email } = props;
+  const context = useContext(Context);
+
   const text = (
     <span>
       Yesterday&apos;s PNL = Yesterday asset total in spot account （24:00:00
@@ -169,9 +170,9 @@ const AssetsTotal = (props) => {
 
   useEffect(() => {
     const getAssetData = async () => {
-      if (email) {
-        const usdtData = await firebaseReadCoinAsset(email, "USDT");
-        const coinProfitLoss = await firebaseReadAsset(email);
+      if (context.email) {
+        const usdtData = await firebaseReadCoinAsset(context.email, "USDT");
+        const coinProfitLoss = await firebaseReadAsset(context.email);
         let coinAllprofitLoss = 0;
         coinProfitLoss.forEach((coin) => {
           if (coin.coinType !== "USDT") {
@@ -184,7 +185,7 @@ const AssetsTotal = (props) => {
       }
     };
     getAssetData();
-  }, [email]);
+  }, [context.email]);
 
   return (
     <AssetsContainer>
@@ -233,10 +234,6 @@ const AssetsTotal = (props) => {
       </AssetTableContainer>
     </AssetsContainer>
   );
-};
-
-AssetsTotal.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default AssetsTotal;

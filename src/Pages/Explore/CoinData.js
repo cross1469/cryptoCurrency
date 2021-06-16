@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -277,14 +276,13 @@ const TradeButton = styled.button`
   }
 `;
 
-const CoinData = (props) => {
+const CoinData = () => {
   const [dataFirstOpen, setDataFirstOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [realTimeDatas, setRealTimeDatas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { email } = props;
   const dispatch = useDispatch();
   const context = useContext(Context);
   const [starList, setStarList] = useState([]);
@@ -294,15 +292,15 @@ const CoinData = (props) => {
   };
 
   const handleClickToWish = async (e) => {
-    if (email) {
+    if (context.email) {
       if (starList.indexOf(e.target.parentNode.parentNode.id) === -1) {
-        await addWishList(email, e.target.parentNode.parentNode.id);
+        await addWishList(context.email, e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.push(e.target.parentNode.parentNode.id);
         setStarList(newStarList);
         context.showToast("successAddWishList");
       } else {
-        await removeWishList(email, e.target.parentNode.parentNode.id);
+        await removeWishList(context.email, e.target.parentNode.parentNode.id);
         const num = starList.indexOf(e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.splice(num, 1);
@@ -393,15 +391,15 @@ const CoinData = (props) => {
 
   useEffect(() => {
     const renderInitActiveStar = async () => {
-      if (email) {
-        const wishList = await readWishList(email);
+      if (context.email) {
+        const wishList = await readWishList(context.email);
         setStarList(wishList);
       } else {
         setStarList([]);
       }
     };
     renderInitActiveStar();
-  }, [email]);
+  }, [context.email]);
 
   useEffect(() => {
     if (JSON.stringify(realTimeDatas) !== "[]") {
@@ -598,10 +596,6 @@ const CoinData = (props) => {
       </CoinDataContainer>
     </CoinDataSection>
   );
-};
-
-CoinData.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default CoinData;

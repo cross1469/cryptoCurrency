@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
   firebaseAuthSignUp,
-  subscribeUserData,
   firebaseAuthGoogleSignIn,
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
@@ -184,7 +183,6 @@ const Sign = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [active, setActive] = useState("signin");
-  const [emailInfo, setEmailInfo] = useState("");
   const [validColor, setValidColor] = useState({
     email: "#f1f3f5",
     password: "#f1f3f5",
@@ -263,13 +261,6 @@ const Sign = (props) => {
   };
 
   useEffect(() => {
-    const unsubscribe = subscribeUserData((userEmail) =>
-      setEmailInfo(userEmail)
-    );
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
     if (signType === "create") {
       setActive("create");
     }
@@ -285,7 +276,7 @@ const Sign = (props) => {
         loginMessage === "auth/user-not-found"
       ) {
         context.showToast("emailError");
-      } else if (emailInfo) {
+      } else if (context.email) {
         context.showToast("signed");
       } else {
         setIsOpen(false);

@@ -14,7 +14,7 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import CustomModal from "./Modal";
 import Sign from "./Sign";
 import Forget from "./Forget";
-import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
+import { firebaseAuthSignOut } from "../Utils/firebase";
 import { updatePageName } from "../Redux/Actions/actionCreator";
 import logo from "../images/cryptoLogo.svg";
 import Context from "../context/Context";
@@ -159,8 +159,6 @@ const Navigation = styled.header`
 
 const Header = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [email, setemail] = useState(null);
-  const [uid, setUid] = useState(null);
   const [loginStatus, setLoginStatus] = useState("Sign In");
   const [signType, setSignType] = useState("signin");
   const history = useHistory();
@@ -179,12 +177,11 @@ const Header = () => {
     firebaseAuthSignOut();
     context.showToast("successSignOut");
     setLoginStatus("Login");
-    setUid(null);
   };
 
   const handleClickCheckMember = (e) => {
     e.preventDefault();
-    if (email) {
+    if (context.email) {
       history.push("/portfolio");
       dispatch(updatePageName("portfolio"));
     } else {
@@ -206,21 +203,13 @@ const Header = () => {
     context.showToast(sign);
   };
 
-  useEffect(
-    () =>
-      subscribeUserData((userEmail, userUid) => {
-        if (userEmail) {
-          setemail(userEmail);
-          setUid(userUid);
-          setLoginStatus("Sign Out");
-        } else {
-          setemail(userEmail);
-          setUid(userUid);
-          setLoginStatus("Sign In");
-        }
-      }),
-    []
-  );
+  useEffect(() => {
+    if (context.email) {
+      setLoginStatus("Sign Out");
+    } else {
+      setLoginStatus("Sign In");
+    }
+  }, [context.email]);
 
   return (
     <>
@@ -257,7 +246,7 @@ const Header = () => {
                   Portfolio
                 </button>
               </li>
-              {email || uid ? (
+              {context.email ? (
                 <li>
                   <button bg="black" type="button" onClick={handleClickSignOut}>
                     {loginStatus}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -7,7 +7,7 @@ import Modal from "../../component/Modal";
 import Sign from "../../component/Sign";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { ReactComponent as BannerSvg } from "../../images/banner.svg";
-import { subscribeUserData } from "../../Utils/firebase";
+import Context from "../../context/Context";
 
 const BannerBg = styled.section`
   display: flex;
@@ -106,20 +106,9 @@ const BannerToSignUpBtn = styled.button`
 `;
 
 const Banner = () => {
-  const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+  const context = useContext(Context);
 
-  useEffect(
-    () =>
-      subscribeUserData((userEmail) => {
-        if (userEmail) {
-          setEmail(userEmail);
-        } else {
-          setEmail("");
-        }
-      }),
-    [email]
-  );
   const signModal = useRef(null);
   return (
     <BannerBg bg="#14151a">
@@ -134,7 +123,7 @@ const Banner = () => {
           <BannerSubtitle>
             <span>Buy and sell cryptocurrency to connect to the world</span>
           </BannerSubtitle>
-          {email ? (
+          {context.email ? (
             <Link
               to="/explore"
               onClick={() => dispatch(updatePageName("explore"))}

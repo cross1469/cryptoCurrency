@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
@@ -248,13 +247,11 @@ const BuySellFooter = styled.div`
   }
 `;
 
-const AddValue = (props) => {
+const AddValue = () => {
   const dispatch = useDispatch();
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const [addValue, setAddValue] = useState("");
   const context = useContext(Context);
-
-  const { email } = props;
 
   const handlAddValueInput = (e) => {
     const re = /^[.,0-9\b]+$/;
@@ -270,12 +267,12 @@ const AddValue = (props) => {
 
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
-    if (email && addValue.replace(/,/g, "") > 0) {
-      firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
+    if (context.email && addValue.replace(/,/g, "") > 0) {
+      firebaseWriteCoinAsset(context.email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
       context.showToast("SuccessAddValue");
-    } else if (!email) {
+    } else if (!context.email) {
       context.showToast("dangerAddValueLogin");
     } else if (!addValue.replace(/,/g, "")) {
       context.showToast("dangerAddValueTotal");
@@ -329,14 +326,6 @@ const AddValue = (props) => {
       </BuySellStyle>
     </>
   );
-};
-
-AddValue.propTypes = {
-  email: PropTypes.string,
-};
-
-AddValue.defaultProps = {
-  email: undefined,
 };
 
 export default AddValue;

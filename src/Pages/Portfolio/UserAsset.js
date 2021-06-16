@@ -1,13 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadAsset } from "../../Utils/firebase";
 import DashboardLoader from "../../component/loader/DashboardLoader";
+import Context from "../../context/Context";
 
 const UserAssetContainer = styled.div`
   background-color: #14151a;
@@ -245,12 +245,12 @@ const NoDataContainer = styled.div`
   margin: 85px 0px;
 `;
 
-const UserAsset = (props) => {
+const UserAsset = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const [userAsset, setUserAsset] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const { email } = props;
+  const context = useContext(Context);
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -283,13 +283,13 @@ const UserAsset = (props) => {
 
   useEffect(() => {
     const getUserAsset = async () => {
-      if (email) {
-        const asset = await firebaseReadAsset(email);
+      if (context.email) {
+        const asset = await firebaseReadAsset(context.email);
         setUserAsset(asset);
       }
     };
     getUserAsset();
-  }, [email]);
+  }, [context.email]);
 
   const renderAssetCard = () =>
     userAsset.map((asset) =>
@@ -379,10 +379,6 @@ const UserAsset = (props) => {
       </UserAssetWrapper>
     </UserAssetContainer>
   );
-};
-
-UserAsset.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default UserAsset;

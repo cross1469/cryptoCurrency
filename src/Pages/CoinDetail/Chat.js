@@ -340,7 +340,7 @@ const SuggestionLi = styled.li`
 `;
 
 const Chat = (props) => {
-  const { email, coinUsdtSymbol } = props;
+  const { coinUsdtSymbol } = props;
   const [suggestions, setSuggestions] = useState([]);
   const [coinName, setCoinName] = useState({});
   const [isTypingName, setIsTypingName] = useState(false);
@@ -378,11 +378,11 @@ const Chat = (props) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    if (email) {
+    if (context.email) {
       const trimmedMessage = newMessage.trim();
       if (trimmedMessage) {
         addChatData({
-          account: email.substring(0, email.lastIndexOf("@")),
+          account: context.email.substring(0, context.email.lastIndexOf("@")),
           messages: trimmedMessage,
         });
       }
@@ -399,11 +399,11 @@ const Chat = (props) => {
 
   const handleOnKeyDown = (e) => {
     if (e.keyCode === 13) {
-      if (email) {
+      if (context.email) {
         const trimmedMessage = newMessage.trim();
         if (trimmedMessage) {
           addChatData({
-            account: email.substring(0, email.lastIndexOf("@")),
+            account: context.email.substring(0, context.email.lastIndexOf("@")),
             messages: trimmedMessage,
           });
         }
@@ -477,7 +477,7 @@ const Chat = (props) => {
         );
       }
 
-      if (email === null) {
+      if (context.email === null) {
         return (
           <ChatDataContainer key={chatData.id}>
             <ChatDataItem>
@@ -492,7 +492,10 @@ const Chat = (props) => {
           </ChatDataContainer>
         );
       }
-      if (chatData.account === email.substring(0, email.lastIndexOf("@"))) {
+      if (
+        chatData.account ===
+        context.email.substring(0, context.email.lastIndexOf("@"))
+      ) {
         return (
           <ChatDataContainer key={chatData.id}>
             <UserChatDataItem>
@@ -625,12 +628,10 @@ const Chat = (props) => {
 };
 
 Chat.propTypes = {
-  email: PropTypes.string,
   coinUsdtSymbol: PropTypes.arrayOf(PropTypes.string),
 };
 
 Chat.defaultProps = {
-  email: "",
   coinUsdtSymbol: [],
 };
 

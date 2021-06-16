@@ -9,7 +9,6 @@ import AddValue from "./AddValue";
 import DealTable from "./DealTable";
 import MobileButton from "./MobileButton";
 import {
-  subscribeUserData,
   readWishList,
   addWishList,
   removeWishList,
@@ -228,8 +227,6 @@ const CoinDetail = () => {
   const { symbol } = useParams();
   const [coinSymbol, setCoinSymbol] = useState();
   const [coinUsdtSymbol, setCoinUsdtSymbol] = useState();
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
   const history = useHistory();
   const context = useContext(Context);
@@ -264,15 +261,15 @@ const CoinDetail = () => {
   }, [history, symbol, coinSymbol]);
 
   const handleWishList = () => {
-    if (email) {
+    if (context.email) {
       if (userWishList.indexOf(symbol) === -1) {
-        addWishList(email, symbol);
+        addWishList(context.email, symbol);
         const newStarList = [...userWishList];
         newStarList.push(symbol);
         setUserWishList(newStarList);
         context.showToast("successAddWishList");
       } else {
-        removeWishList(email, symbol);
+        removeWishList(context.email, symbol);
         const num = userWishList.indexOf(symbol);
         const newStarList = [...userWishList];
         newStarList.splice(num, 1);
@@ -284,24 +281,15 @@ const CoinDetail = () => {
     }
   };
 
-  useEffect(
-    () =>
-      subscribeUserData((userEmail, uid) => {
-        setEmail(userEmail);
-        setUserId(uid);
-      }),
-    []
-  );
-
   useEffect(() => {
     const getUserWishList = async () => {
-      if (email) {
-        const wishList = await readWishList(email);
+      if (context.email) {
+        const wishList = await readWishList(context.email);
         setUserWishList(wishList);
       }
     };
     getUserWishList();
-  }, [email]);
+  }, [context.email]);
 
   return (
     <>
@@ -360,8 +348,8 @@ const CoinDetail = () => {
                             </TransitionerContainer>
                           </ChartColumn>
                           <TradeColumn>
-                            <PlaceOrder email={email} userId={userId} />
-                            <AddValue email={email} userId={userId} />
+                            <PlaceOrder />
+                            <AddValue />
                           </TradeColumn>
                         </FlexBoxContainer>
                       </FlexBox>
@@ -373,8 +361,8 @@ const CoinDetail = () => {
           </TransitionerContainer>
         </LayoutContainer>
       </LayoutWrapper>
-      <Mobile email={email} userId={userId} />
-      <Chat email={email} userId={userId} coinUsdtSymbol={coinUsdtSymbol} />
+      <Mobile />
+      <Chat coinUsdtSymbol={coinUsdtSymbol} />
     </>
   );
 };

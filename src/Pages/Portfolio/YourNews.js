@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { readWishList } from "../../Utils/firebase";
 import defaultNewsImg from "../../images/defaultNews.jpg";
+import Context from "../../context/Context";
 
 const YourNewsSection = styled.section`
   border-top: 1px solid #2f3336;
@@ -233,15 +233,15 @@ const NoNewsBtn = styled.button`
   }
 `;
 
-const YourNews = (props) => {
+const YourNews = () => {
   const [wishStr, setWishStr] = useState("");
   const [newsHeadlines, setNewsHeadlines] = useState([]);
-  const { email } = props;
+  const context = useContext(Context);
 
   useEffect(() => {
     const getWishListData = async () => {
-      if (email) {
-        const wishListData = await readWishList(email);
+      if (context.email) {
+        const wishListData = await readWishList(context.email);
         const wishString = wishListData
           .toString()
           .replace(/USDT/g, "")
@@ -250,7 +250,7 @@ const YourNews = (props) => {
       }
     };
     getWishListData();
-  }, [email]);
+  }, [context.email]);
 
   useEffect(() => {
     const options = {
@@ -357,10 +357,6 @@ const YourNews = (props) => {
       </YourNewsCardsContainer>
     </YourNewsSection>
   );
-};
-
-YourNews.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default YourNews;

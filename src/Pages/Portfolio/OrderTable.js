@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadOrder } from "../../Utils/firebase";
+import Context from "../../context/Context";
 
 const OrderContainer = styled.div`
   color: #d9d9d9;
@@ -185,12 +185,12 @@ const NoBuyData = styled(Link)`
   }
 `;
 
-const OrderTable = (props) => {
+const OrderTable = () => {
   const [buyDatas, setBuyDatas] = useState([]);
   const [sellDatas, setSellDatas] = useState([]);
   const [coinLastPrice, setCoinLastPrice] = useState([]);
-  const { email } = props;
   const dispatch = useDispatch();
+  const context = useContext(Context);
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -288,8 +288,8 @@ const OrderTable = (props) => {
 
   useEffect(() => {
     const getOrderData = async () => {
-      if (email) {
-        const orderDatas = await firebaseReadOrder(email);
+      if (context.email) {
+        const orderDatas = await firebaseReadOrder(context.email);
         orderDatas.forEach((orderData) => {
           if (orderData.type === "buy") {
             setBuyDatas((buy) => [...buy, orderData]);
@@ -300,7 +300,7 @@ const OrderTable = (props) => {
       }
     };
     getOrderData();
-  }, [email]);
+  }, [context.email]);
 
   useEffect(() => {
     getLastPrice();
@@ -421,10 +421,6 @@ const OrderTable = (props) => {
       </OrderContainer>
     </>
   );
-};
-
-OrderTable.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default OrderTable;
