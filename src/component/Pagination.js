@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -118,10 +117,10 @@ const Pagination = (props) => {
   return (
     <>
       <PagnitionUl>
-        {pages.map((page, index) => {
+        {pages.map((page) => {
           if (page === LEFT_PAGE)
             return (
-              <li key={index} className="page-item">
+              <li key={page} className="page-item">
                 <a
                   href="/"
                   className="page-link"
@@ -136,7 +135,7 @@ const Pagination = (props) => {
 
           if (page === RIGHT_PAGE)
             return (
-              <li key={index} className="page-item">
+              <li key={page} className="page-item">
                 <a
                   className="page-link"
                   href="/"
@@ -150,7 +149,7 @@ const Pagination = (props) => {
             );
 
           return (
-            <li key={index} className="page-item">
+            <li key={page} className="page-item">
               <a
                 className={`page-link ${
                   currentPage === page ? "active disabled" : ""

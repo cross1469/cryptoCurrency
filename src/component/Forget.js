@@ -22,8 +22,8 @@ const BtnContainer = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 16px 24px;
-  line-height: 1;
+  display: "inline-block";
+  line-height: 16px;
   background-color: #f0b90b;
   border-radius: 4px;
   cursor: pointer;
@@ -31,7 +31,13 @@ const Button = styled.button`
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   border: none;
   color: #212833;
-  margin-top: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 24px;
   &:hover {
     background-color: #ffe251;
   }

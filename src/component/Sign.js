@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import styled from "styled-components";
-import { color, flexbox, space, typography, border } from "styled-system";
+import { color, space, typography, border } from "styled-system";
 import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
@@ -54,7 +54,7 @@ const InputGroup = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  ${flexbox}
+  flex-direction: column;
   .divider {
     border-bottom: 1px solid #d9dadc;
     display: block;
@@ -368,7 +368,7 @@ const Sign = (props) => {
             )}
 
             {active === "signin" ? (
-              <InputGroup flexDirection="column">
+              <InputGroup>
                 <Button
                   id="sign-in"
                   type="button"

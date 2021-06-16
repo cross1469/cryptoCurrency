@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -6,6 +5,7 @@ import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
 import HelpLinksLoader from "../../component/loader/HelpLinksLoader";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
+import { getLastPrice } from "../../Utils/API";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
@@ -239,26 +239,16 @@ const BannerToExploreBtn = styled.button`
   }
 `;
 
-const StockBanner = () => {
+const CoinBanner = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
   const dispatch = useDispatch();
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-        setCoinLastPrice(usdtLastPrice.slice(0, 5));
-      });
 
   useEffect(() => {
-    getLastPrice();
+    const getCoinPrice = async () => {
+      const coinPrice = await getLastPrice();
+      setCoinLastPrice(coinPrice.slice(0, 5));
+    };
+    getCoinPrice();
   }, []);
 
   const renderCoinMarket = () =>
@@ -331,4 +321,4 @@ const StockBanner = () => {
   );
 };
 
-export default StockBanner;
+export default CoinBanner;

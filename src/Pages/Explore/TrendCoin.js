@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -6,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import DashboardLoader from "../../component/loader/DashboardLoader";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
+import { getCoinSortTrade } from "../../Utils/API";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;
@@ -228,7 +228,7 @@ const TrendingCardMdFooterText = styled.div`
 `;
 
 const TrendCoin = () => {
-  const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const [coinSort, setCoinSort] = useState([]);
   const dispatch = useDispatch();
 
   const renderThumb = ({ style }) => {
@@ -240,29 +240,16 @@ const TrendCoin = () => {
     return <div style={{ ...style, ...thumbStyle }} />;
   };
 
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.sort((a, b) => b.count - a.count);
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-
-        setCoinLastPrice(usdtLastPrice.slice(0, 4));
-      });
-
   useEffect(() => {
-    getLastPrice();
+    const getCoinSort = async () => {
+      const coinPrice = await getCoinSortTrade();
+      setCoinSort(coinPrice.slice(0, 5));
+    };
+    getCoinSort();
   }, []);
 
   const renderTrendCard = () =>
-    coinLastPrice.map((coin) => {
+    coinSort.map((coin) => {
       const symbol = coin.symbol.replace(/USDT/, "");
       return (
         <Link
@@ -310,7 +297,7 @@ const TrendCoin = () => {
           <span>Trending</span>
         </TrendingTitleContainer>
 
-        {coinLastPrice.length > 0 ? (
+        {coinSort.length > 0 ? (
           <Scrollbars
             autoHide
             autoHideTimeout={1000}
