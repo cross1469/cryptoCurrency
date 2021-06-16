@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router";
-import axios from "axios";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
@@ -16,6 +15,7 @@ import {
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
 import { ShowToastContext, EmailContext } from "../../context/Context";
+import { getUsdtCoinData } from "../../Utils/api";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -225,41 +225,27 @@ const Mobile = styled(MobileButton)`
 
 const CoinDetail = () => {
   const { symbol } = useParams();
-  const [coinSymbol, setCoinSymbol] = useState();
   const [coinUsdtSymbol, setCoinUsdtSymbol] = useState();
   const [userWishList, setUserWishList] = useState([]);
   const history = useHistory();
   const showToast = useContext(ShowToastContext);
   const email = useContext(EmailContext);
 
-  const getSymbol = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const coinType = res.data.map((data) => data.symbol);
-        setCoinSymbol(coinType);
-        const coinUsdtType = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            coinUsdtType.push(data.symbol);
-          }
-        });
-        setCoinUsdtSymbol(coinUsdtType);
-      });
-
   useEffect(() => {
-    getSymbol();
+    const getCoinUsdtSymbol = async () => {
+      const coinUsdt = await getUsdtCoinData();
+      setCoinUsdtSymbol(coinUsdt.usdtSymbol);
+    };
+    getCoinUsdtSymbol();
   }, []);
 
   useEffect(() => {
-    if (coinSymbol) {
-      if (coinSymbol.indexOf(symbol) === -1) {
+    if (coinUsdtSymbol) {
+      if (coinUsdtSymbol.indexOf(symbol) === -1) {
         history.push("/404");
       }
     }
-  }, [history, symbol, coinSymbol]);
+  }, [history, symbol, coinUsdtSymbol]);
 
   const handleWishList = () => {
     if (email) {

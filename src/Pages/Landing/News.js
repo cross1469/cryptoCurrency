@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NewsCard from "./NewsCard";
+import { getCoinHotNews } from "../../Utils/api";
 
 const NewsBg = styled.section`
   padding: 80px 0;
@@ -90,19 +90,11 @@ const News = () => {
     ));
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      url: "https://free-news.p.rapidapi.com/v1/search",
-      params: { q: "Crypto", lang: "en" },
-      headers: {
-        "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
-        "x-rapidapi-host": "free-news.p.rapidapi.com",
-      },
+    const hotNews = async () => {
+      const hotCoinNews = await getCoinHotNews();
+      setNewsHeadlines(hotCoinNews);
     };
-    axios.request(options).then((res) => {
-      const newsFourHeadline = res.data.articles.slice(0, 3);
-      setNewsHeadlines(newsFourHeadline);
-    });
+    hotNews();
   }, []);
 
   return (

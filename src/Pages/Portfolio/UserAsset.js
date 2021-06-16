@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadAsset } from "../../Utils/firebase";
 import DashboardLoader from "../../component/loader/DashboardLoader";
 import { EmailContext } from "../../context/Context";
+import { getUsdtCoinData } from "../../Utils/api";
 
 const UserAssetContainer = styled.div`
   background-color: #14151a;
@@ -261,24 +261,13 @@ const UserAsset = () => {
     return <div style={{ ...style, ...thumbStyle }} />;
   };
 
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-        setCoinLastPrice(usdtLastPrice);
-        setIsLoading(false);
-      });
-
   useEffect(() => {
-    getLastPrice();
+    const getCoinPrice = async () => {
+      const coinPrice = await getUsdtCoinData();
+      setCoinLastPrice(coinPrice.usdtLastPrice);
+      setIsLoading(false);
+    };
+    getCoinPrice();
   }, []);
 
   useEffect(() => {

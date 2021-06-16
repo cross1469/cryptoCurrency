@@ -2,11 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadOrder } from "../../Utils/firebase";
 import { EmailContext } from "../../context/Context";
+import { getCoinLastPrice } from "../../Utils/api";
 
 const OrderContainer = styled.div`
   color: #d9d9d9;
@@ -201,21 +201,6 @@ const OrderTable = () => {
     return <div style={{ ...style, ...thumbStyle }} />;
   };
 
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/portfolio`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-        setCoinLastPrice(usdtLastPrice);
-      });
-
   const renderBuyTable = () => {
     buyDatas.sort((a, b) => a.timestamp - b.timestamp);
     return buyDatas.map((buyData, index) =>
@@ -303,7 +288,11 @@ const OrderTable = () => {
   }, [email]);
 
   useEffect(() => {
-    getLastPrice();
+    const getCoinPrice = async () => {
+      const coinPrice = await getCoinLastPrice();
+      setCoinLastPrice(coinPrice);
+    };
+    getCoinPrice();
   }, []);
 
   return (

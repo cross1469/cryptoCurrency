@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import DashboardLoader from "../../component/loader/DashboardLoader";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
-import { getCoinSortTrade } from "../../Utils/API";
+import { getCoinSortTrade } from "../../Utils/api";
 
 const TrendingContainer = styled.div`
   background-color: #14151a;

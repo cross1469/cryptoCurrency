@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import axios from "axios";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Link } from "react-router-dom";
@@ -11,6 +10,7 @@ import MobileWishList from "./MobileWishList";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 import Spline from "./Spline";
 import { EmailContext } from "../../context/Context";
+import { getUsdtCoinData } from "../../Utils/api";
 
 const override = css`
   display: flex;
@@ -228,13 +228,13 @@ const WishListItemPricePercentage = styled.div`
   font-size: 14px;
   font-weight: 500;
   color: ${(props) => {
-    if (props.children[0] > 0) {
-      return "#f6465d";
+    if (props.children.props.children[0] > 0) {
+      return "#0ecb81";
     }
-    if (props.children[0] === 0) {
+    if (props.children.props.children[0] === 0) {
       return "#707a8a";
     }
-    return "#0ecb81";
+    return "#f6465d";
   }};
   h4 {
     font-size: 14px;
@@ -318,22 +318,11 @@ const WishList = () => {
   }, [email]);
 
   useEffect(() => {
-    const getLastPrice = () =>
-      axios
-        .get(
-          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-        )
-        .then((res) => {
-          const usdtLastPrice = [];
-          res.data.forEach((data) => {
-            if (data.symbol.indexOf("USDT", 2) !== -1) {
-              usdtLastPrice.push(data);
-            }
-          });
-
-          setCoinLastPrice(usdtLastPrice);
-          setLoading(false);
-        });
+    const getLastPrice = async () => {
+      const coinPrice = await getUsdtCoinData();
+      setCoinLastPrice(coinPrice.usdtLastPrice);
+      setLoading(false);
+    };
     getLastPrice();
   }, []);
 

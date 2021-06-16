@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
 import HelpLinksLoader from "../../component/loader/HelpLinksLoader";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
-import { getLastPrice } from "../../Utils/API";
+import { getUsdtCoinData } from "../../Utils/api";
 
 const CoinBannerWrapper = styled.section`
   padding: 130px 0;
@@ -245,8 +245,8 @@ const CoinBanner = () => {
 
   useEffect(() => {
     const getCoinPrice = async () => {
-      const coinPrice = await getLastPrice();
-      setCoinLastPrice(coinPrice.slice(0, 5));
+      const coinPrice = await getUsdtCoinData();
+      setCoinLastPrice(coinPrice.usdtLastPrice.slice(0, 5));
     };
     getCoinPrice();
   }, []);

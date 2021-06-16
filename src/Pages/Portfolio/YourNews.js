@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { readWishList } from "../../Utils/firebase";
 import defaultNewsImg from "../../images/defaultNews.jpg";
 import { EmailContext } from "../../context/Context";
+import { getCoinNews } from "../../Utils/api";
 
 const YourNewsSection = styled.section`
   border-top: 1px solid #2f3336;
@@ -253,21 +253,12 @@ const YourNews = () => {
   }, [email]);
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      url: "https://free-news.p.rapidapi.com/v1/search",
-      params: { q: wishStr, lang: "en" },
-      headers: {
-        "x-rapidapi-key": process.env.REACT_APP_NEWS_APIKEY,
-        "x-rapidapi-host": "free-news.p.rapidapi.com",
-      },
-    };
-
     if (wishStr) {
-      axios.request(options).then((res) => {
-        const newsFourHeadline = res.data.articles.slice(0, 6);
-        setNewsHeadlines(newsFourHeadline);
-      });
+      const getNews = async () => {
+        const coinNews = await getCoinNews(wishStr);
+        setNewsHeadlines(coinNews);
+      };
+      getNews();
     }
   }, [wishStr]);
 

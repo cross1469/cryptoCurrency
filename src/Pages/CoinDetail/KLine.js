@@ -12,6 +12,38 @@ const KLine = () => {
 
   const [interval, setInterval] = useState("1m");
 
+  const callBinanceAPI = useCallback(
+    (coinSymbol, APIInterval) => {
+      axios
+        .get(
+          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
+        )
+        .then((res) => {
+          const currencyData = [];
+          res.data.forEach((item) => {
+            currencyData.push([
+              item[0],
+              Number(item[1]),
+              Number(item[2]),
+              Number(item[3]),
+              Number(item[4]),
+            ]);
+          });
+          // eslint-disable-next-line no-use-before-define
+          setOptions({
+            series: [
+              {
+                type: "candlestick",
+                name: `${symbol}`,
+                data: currencyData,
+              },
+            ],
+          });
+        });
+    },
+    [symbol]
+  );
+
   const [options, setOptions] = useState({
     plotOptions: {
       candlestick: {
@@ -46,7 +78,6 @@ const KLine = () => {
           count: 60,
           events: {
             click() {
-              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "15m");
               setInterval(() => "15m");
             },
@@ -58,7 +89,6 @@ const KLine = () => {
           count: 24,
           events: {
             click() {
-              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1h");
               setInterval(() => "1h");
             },
@@ -70,7 +100,6 @@ const KLine = () => {
           count: 24,
           events: {
             click() {
-              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "4h");
               setInterval(() => "4h");
             },
@@ -82,7 +111,6 @@ const KLine = () => {
           count: 7,
           events: {
             click() {
-              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1d");
               setInterval(() => "1d");
             },
@@ -94,7 +122,6 @@ const KLine = () => {
           count: 4,
           events: {
             click() {
-              // eslint-disable-next-line no-use-before-define
               callBinanceAPI(symbol, "1w");
               setInterval(() => "1w");
             },
@@ -183,37 +210,6 @@ const KLine = () => {
 
     series: [],
   });
-
-  const callBinanceAPI = useCallback(
-    (coinSymbol, APIInterval) => {
-      axios
-        .get(
-          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
-        )
-        .then((res) => {
-          const currencyData = [];
-          for (let i = 0; i < res.data.length; i += 1) {
-            currencyData.push([
-              res.data[i][0],
-              Number(res.data[i][1]),
-              Number(res.data[i][2]),
-              Number(res.data[i][3]),
-              Number(res.data[i][4]),
-            ]);
-          }
-          setOptions({
-            series: [
-              {
-                type: "candlestick",
-                name: `${symbol}`,
-                data: currencyData,
-              },
-            ],
-          });
-        });
-    },
-    [symbol]
-  );
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");
