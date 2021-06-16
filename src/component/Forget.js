@@ -60,7 +60,7 @@ const Input = styled.input`
 
 const Forget = () => {
   const [email, setEmail] = useState("");
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -68,9 +68,9 @@ const Forget = () => {
       forgetMessage === "auth/invalid-email" ||
       forgetMessage === "auth/user-not-found"
     ) {
-      showToast("emailError");
+      context.showToast("emailError");
     } else {
-      showToast("sentResetPassword");
+      context.showToast("sentResetPassword");
       window.location.reload();
     }
   };

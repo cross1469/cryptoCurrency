@@ -365,7 +365,7 @@ const PlaceOrder = (props) => {
   const dispatch = useDispatch();
   const { symbol } = useParams();
   const coin = symbol.replace(/USDT/, "");
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const { email } = props;
   const [inputValue, setInputValue] = useState("0");
@@ -486,13 +486,13 @@ const PlaceOrder = (props) => {
         setInputBottomContent(coin);
         setInputValue("");
         setTotal(0);
-        showToast("successBuyCoin");
+        context.showToast("successBuyCoin");
       } else if (!email) {
-        showToast("dangerPlaceOrderSignin");
+        context.showToast("dangerPlaceOrderSignin");
       } else if (!total) {
-        showToast("dangerTotal");
+        context.showToast("dangerTotal");
       } else if (usdtQty < total) {
-        showToast("dangerUsdt");
+        context.showToast("dangerUsdt");
       }
     } else if (buyOrSell === "sell") {
       if (email && total > 0 && coinsQty >= Number(total)) {
@@ -509,13 +509,13 @@ const PlaceOrder = (props) => {
         setInputBottomContent("USDT");
         setInputValue("");
         setTotal(0);
-        showToast("successBuyCoin");
+        context.showToast("successBuyCoin");
       } else if (!email) {
-        showToast("dangerPlaceOrderSignin");
+        context.showToast("dangerPlaceOrderSignin");
       } else if (!total) {
-        showToast("dangerTotal");
+        context.showToast("dangerTotal");
       } else if (coinsQty < total) {
-        showToast("dangerCoin", coin);
+        context.showToast("dangerCoin", coin);
       }
     }
   };

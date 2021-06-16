@@ -252,7 +252,7 @@ const AddValue = (props) => {
   const dispatch = useDispatch();
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
   const [addValue, setAddValue] = useState("");
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const { email } = props;
 
@@ -274,11 +274,11 @@ const AddValue = (props) => {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
-      showToast("SuccessAddValue");
+      context.showToast("SuccessAddValue");
     } else if (!email) {
-      showToast("dangerAddValueLogin");
+      context.showToast("dangerAddValueLogin");
     } else if (!addValue.replace(/,/g, "")) {
-      showToast("dangerAddValueTotal");
+      context.showToast("dangerAddValueTotal");
     }
   };
 

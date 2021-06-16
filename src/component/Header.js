@@ -168,7 +168,7 @@ const Header = () => {
   const signModal = useRef(null);
   const forgetModal = createRef();
   const dispatch = useDispatch();
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const handleToggle = (e) => {
     e.preventDefault();
@@ -177,7 +177,7 @@ const Header = () => {
 
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
-    showToast("successSignOut");
+    context.showToast("successSignOut");
     setLoginStatus("Login");
     setUid(null);
   };
@@ -188,7 +188,7 @@ const Header = () => {
       history.push("/portfolio");
       dispatch(updatePageName("portfolio"));
     } else {
-      showToast("dangerPortfolio");
+      context.showToast("dangerPortfolio");
     }
   };
 
@@ -203,7 +203,7 @@ const Header = () => {
   };
 
   const getSignInfo = (sign) => {
-    showToast(sign);
+    context.showToast(sign);
   };
 
   useEffect(

@@ -232,7 +232,7 @@ const CoinDetail = () => {
   const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
   const history = useHistory();
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const getSymbol = () =>
     axios
@@ -270,17 +270,17 @@ const CoinDetail = () => {
         const newStarList = [...userWishList];
         newStarList.push(symbol);
         setUserWishList(newStarList);
-        showToast("successAddWishList");
+        context.showToast("successAddWishList");
       } else {
         removeWishList(email, symbol);
         const num = userWishList.indexOf(symbol);
         const newStarList = [...userWishList];
         newStarList.splice(num, 1);
         setUserWishList(newStarList);
-        showToast("successRemoveWishList");
+        context.showToast("successRemoveWishList");
       }
     } else {
-      showToast("dangerWishList");
+      context.showToast("dangerWishList");
     }
   };
 

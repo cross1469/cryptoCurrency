@@ -224,13 +224,14 @@ function App() {
   };
 
   useEffect(() => {
-    subscribeUserData((userEmail) => {
+    const unsubscribe = subscribeUserData((userEmail) => {
       setEmail(userEmail);
     });
+    return unsubscribe;
   }, [email]);
 
   return (
-    <Context.Provider value={showToast}>
+    <Context.Provider value={{ showToast, email }}>
       <ThemeProvider theme={theme}>
         <ScrollToTop />
         <div className="App">

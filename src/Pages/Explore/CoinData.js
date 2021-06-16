@@ -286,7 +286,7 @@ const CoinData = (props) => {
   const [loading, setLoading] = useState(true);
   const { email } = props;
   const dispatch = useDispatch();
-  const showToast = useContext(Context);
+  const context = useContext(Context);
   const [starList, setStarList] = useState([]);
 
   const handleChange = (e) => {
@@ -300,17 +300,17 @@ const CoinData = (props) => {
         const newStarList = [...starList];
         newStarList.push(e.target.parentNode.parentNode.id);
         setStarList(newStarList);
-        showToast("successAddWishList");
+        context.showToast("successAddWishList");
       } else {
         await removeWishList(email, e.target.parentNode.parentNode.id);
         const num = starList.indexOf(e.target.parentNode.parentNode.id);
         const newStarList = [...starList];
         newStarList.splice(num, 1);
         setStarList(newStarList);
-        showToast("successRemoveWishList");
+        context.showToast("successRemoveWishList");
       }
     } else {
-      showToast("dangerWishList");
+      context.showToast("dangerWishList");
     }
   };
 

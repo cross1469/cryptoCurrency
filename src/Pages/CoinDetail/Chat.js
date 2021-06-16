@@ -349,7 +349,7 @@ const Chat = (props) => {
   const [toggleChat, setToggleChat] = useState(false);
   const ref = useRef();
   const suggestRef = useRef();
-  const showToast = useContext(Context);
+  const context = useContext(Context);
 
   const handleOnChange = (e) => {
     const lastChar = e.target.value.split("")[e.target.value.length - 1];
@@ -388,7 +388,7 @@ const Chat = (props) => {
       }
       setNewMessage("");
     } else {
-      showToast("dangerChat");
+      context.showToast("dangerChat");
     }
   };
 
@@ -409,7 +409,7 @@ const Chat = (props) => {
         }
         setNewMessage("");
       } else {
-        showToast("dangerChat");
+        context.showToast("dangerChat");
       }
     }
   };
