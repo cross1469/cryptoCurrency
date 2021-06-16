@@ -77,9 +77,13 @@ const InputGroup = styled.div`
     ${space}
     ${typography}
   }
-  input[type="email"],
+  input[type="text"],
   input[type="password"] {
     appearance: none;
+    :focus {
+      border: 1px solid #f0b90b;
+      outline: none;
+    }
   }
   .floating-label {
     position: absolute;
@@ -178,7 +182,7 @@ const Errors = styled.div`
 `;
 
 const Sign = (props) => {
-  const { setIsOpen, forgetModal, signType, getSignInfo } = props;
+  const { setIsOpen, forgetModal, signType } = props;
   const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -225,14 +229,14 @@ const Sign = (props) => {
     });
   };
 
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-    updateValidators("email", e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-    updateValidators("password", e.target.value);
+  const handleChangeInput = (e) => {
+    if (e.target.id === "email") {
+      setEmail(e.target.value);
+      updateValidators("email", e.target.value);
+    } else if (e.target.id === "password") {
+      setPassword(e.target.value);
+      updateValidators("password", e.target.value);
+    }
   };
 
   const displayValidationErrors = (fieldName) => {
@@ -280,7 +284,7 @@ const Sign = (props) => {
         showToast("signed");
       } else {
         setIsOpen(false);
-        getSignInfo("successSignIn");
+        showToast("successSignIn");
       }
     } else if (inputType === "create") {
       const signUpMessage = await firebaseAuthSignUp(email, password);
@@ -292,7 +296,7 @@ const Sign = (props) => {
         showToast("existed");
       } else {
         setIsOpen(false);
-        getSignInfo("successSignUp");
+        showToast("successSignUp");
       }
     }
   };
@@ -302,7 +306,7 @@ const Sign = (props) => {
     const googleEmail = await firebaseAuthGoogleSignIn.email;
     setIsOpen(false);
     setEmail(googleEmail);
-    getSignInfo("successSignIn");
+    showToast("successSignIn");
   };
 
   return (
@@ -333,7 +337,7 @@ const Sign = (props) => {
                 className="u-full-width"
                 id="email"
                 type="text"
-                onChange={handleChangeEmail}
+                onChange={handleChangeInput}
                 borderColor={validColor.email}
                 required
               />
@@ -345,16 +349,14 @@ const Sign = (props) => {
                 className="u-full-width"
                 id="password"
                 type="password"
-                onChange={handleChangePassword}
+                onChange={handleChangeInput}
                 borderColor={validColor.password}
                 required
               />
               <span className="floating-label">Password</span>
             </InputGroup>
-
             {displayValidationErrors("password")}
-
-            {active === "signin" ? (
+            {active === "signin" && (
               <ForgetPasswordText
                 onClick={() => {
                   setIsOpen(false);
@@ -363,7 +365,7 @@ const Sign = (props) => {
               >
                 Forget password？
               </ForgetPasswordText>
-            ) : null}
+            )}
 
             {active === "signin" ? (
               <InputGroup flexDirection="column">
@@ -408,14 +410,12 @@ Sign.propTypes = {
   setIsOpen: PropTypes.func,
   forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func)),
   signType: PropTypes.string,
-  getSignInfo: PropTypes.func,
 };
 
 Sign.defaultProps = {
   setIsOpen: undefined,
   signType: "signin",
   forgetModal: undefined,
-  getSignInfo: undefined,
 };
 
 export default Sign;

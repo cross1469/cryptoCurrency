@@ -159,7 +159,7 @@ const Navigation = styled.header`
 
 const Header = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [loginStatus, setLoginStatus] = useState("Sign In");
+  const [loginStatus, setLoginStatus] = useState(false);
   const [signType, setSignType] = useState("signin");
   const history = useHistory();
   const page = useSelector((state) => state.pageReducer.name);
@@ -177,7 +177,7 @@ const Header = () => {
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
     showToast("successSignOut");
-    setLoginStatus("Login");
+    setLoginStatus(false);
   };
 
   const handleClickCheckMember = (e) => {
@@ -200,15 +200,11 @@ const Header = () => {
     }
   };
 
-  const getSignInfo = (sign) => {
-    showToast(sign);
-  };
-
   useEffect(() => {
     if (email) {
-      setLoginStatus("Sign Out");
+      setLoginStatus(true);
     } else {
-      setLoginStatus("Sign In");
+      setLoginStatus(false);
     }
   }, [email]);
 
@@ -250,14 +246,14 @@ const Header = () => {
               {email ? (
                 <li>
                   <button bg="black" type="button" onClick={handleClickSignOut}>
-                    {loginStatus}
+                    {loginStatus && "Sign Out"}
                   </button>
                 </li>
               ) : (
                 <>
                   <li>
                     <button bg="black" type="button" onClick={handleClickModal}>
-                      {loginStatus}
+                      {loginStatus || "Sign In"}
                     </button>
                   </li>
                   <li>
@@ -276,11 +272,7 @@ const Header = () => {
         <Forget />
       </CustomModal>
       <CustomModal ref={signModal}>
-        <Sign
-          forgetModal={forgetModal}
-          signType={signType}
-          getSignInfo={getSignInfo}
-        />
+        <Sign forgetModal={forgetModal} signType={signType} />
       </CustomModal>
     </>
   );

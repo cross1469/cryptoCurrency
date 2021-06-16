@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import HighchartsReact from "highcharts-react-official";
@@ -184,72 +184,74 @@ const KLine = () => {
     series: [],
   });
 
-  const callBinanceAPI = (coinSymbol, APIInterval) => {
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
-      )
-      .then((res) => {
-        const currencyData = [];
-        for (let i = 0; i < res.data.length; i += 1) {
-          currencyData.push([
-            res.data[i][0],
-            Number(res.data[i][1]),
-            Number(res.data[i][2]),
-            Number(res.data[i][3]),
-            Number(res.data[i][4]),
-          ]);
-        }
-        setOptions({
-          series: [
-            {
-              type: "candlestick",
-              name: `${symbol}`,
-              data: currencyData,
-            },
-          ],
+  const callBinanceAPI = useCallback(
+    (coinSymbol, APIInterval) => {
+      axios
+        .get(
+          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${APIInterval}`
+        )
+        .then((res) => {
+          const currencyData = [];
+          for (let i = 0; i < res.data.length; i += 1) {
+            currencyData.push([
+              res.data[i][0],
+              Number(res.data[i][1]),
+              Number(res.data[i][2]),
+              Number(res.data[i][3]),
+              Number(res.data[i][4]),
+            ]);
+          }
+          setOptions({
+            series: [
+              {
+                type: "candlestick",
+                name: `${symbol}`,
+                data: currencyData,
+              },
+            ],
+          });
         });
-      });
-  };
-
-  const socketAPI = (socketSymbol, socketInterval) => {
-    const socket = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
-    );
-    socket.onmessage = (event) => {
-      const newKLineData = [];
-      const data = JSON.parse(event.data);
-      dispatch(getMarketPrice(data.k.o));
-      newKLineData.push(
-        data.k.t,
-        Number(data.k.o),
-        Number(data.k.h),
-        Number(data.k.l),
-        Number(data.k.c)
-      );
-      if (options.series[0]) {
-        setOptions((op) => {
-          const newOptions = { ...op };
-          newOptions.series[0].data = [
-            ...newOptions.series[0].data,
-            newKLineData,
-          ];
-          return newOptions;
-        });
-      }
-    };
-
-    return () => socket.close();
-  };
+    },
+    [symbol]
+  );
 
   useEffect(() => {
     callBinanceAPI(symbol, "1h");
-  }, [symbol]);
+  }, [callBinanceAPI, symbol]);
 
   useEffect(() => {
+    const socketAPI = (socketSymbol, socketInterval) => {
+      const socket = new WebSocket(
+        `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
+      );
+      socket.onmessage = (event) => {
+        const newKLineData = [];
+        const data = JSON.parse(event.data);
+        dispatch(getMarketPrice(data.k.o));
+        newKLineData.push(
+          data.k.t,
+          Number(data.k.o),
+          Number(data.k.h),
+          Number(data.k.l),
+          Number(data.k.c)
+        );
+        if (options.series[0]) {
+          setOptions((op) => {
+            const newOptions = { ...op };
+            newOptions.series[0].data = [
+              ...newOptions.series[0].data,
+              newKLineData,
+            ];
+            return newOptions;
+          });
+        }
+      };
+
+      return () => socket.close();
+    };
     const closeSocket = socketAPI(symbol, interval);
     return closeSocket;
-  }, [symbol, interval]);
+  }, [symbol, interval, dispatch, options.series]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };

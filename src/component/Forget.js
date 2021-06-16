@@ -1,8 +1,20 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
 import { firebaseAuthForget } from "../Utils/firebase";
 import { ShowToastContext } from "../context/Context";
+import validators from "../Utils/validators";
+
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  h3 {
+    color: #f0b90b;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+  }
+`;
 
 const BtnContainer = styled.div`
   display: flex;
@@ -10,25 +22,18 @@ const BtnContainer = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 2rem;
+  padding: 16px 24px;
   line-height: 1;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
-  border-radius: 0.5rem;
+  background-color: #f0b90b;
+  border-radius: 4px;
   cursor: pointer;
   outline: none;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   border: none;
   color: #212833;
-  font-weight: bold;
+  margin-top: 16px;
   &:hover {
-    box-shadow: none;
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
 `;
 
@@ -36,31 +41,62 @@ const InputGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   span {
     flex: 0 0 auto;
-    ${color}
-    ${space}
-    ${typography}
   }
-  input[type="email"] {
+  input[type="text"] {
     appearance: none;
+    :focus {
+      border: 1px solid #f0b90b;
+      outline: none;
+    }
   }
-  input[type="email"]:focus {
-    border: 1px solid #00a7e5;
-    outline: none;
+  .floating-label {
+    position: absolute;
+    pointer-events: none;
+    top: 20px;
+    left: 9px;
+    transition: 0.2s ease all;
+    color: #c3c0c0;
+  }
+  input:focus ~ .floating-label,
+  input:not(:focus):valid ~ .floating-label {
+    top: -20px;
+    left: 9px;
+    font-size: 14px;
+    opacity: 1;
+    color: #d9d9d9;
   }
 `;
 
 const Input = styled.input`
   outline: none;
-  border: 1px solid black;
-  padding: 4px 8px;
-  ${space}
+  border: 1px solid #d9d9d9;
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #14151a;
+  color: #d9d9d9;
+  :hover {
+    border-color: #f0b90b;
+  }
+`;
+
+const Errors = styled.div`
+  text-align: left;
+  .error {
+    font-size: 12px;
+    color: red;
+  }
 `;
 
 const Forget = () => {
   const [email, setEmail] = useState("");
   const showToast = useContext(ShowToastContext);
+  const [validColor, setValidColor] = useState("#f1f3f5");
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -75,26 +111,63 @@ const Forget = () => {
     }
   };
 
+  const updateValidators = (fieldName, value) => {
+    validators[fieldName].errors = [];
+    validators[fieldName].state = value;
+    validators[fieldName].valid = true;
+    validators[fieldName].rules.forEach((rule) => {
+      if (rule.test instanceof RegExp) {
+        if (!rule.test.test(value)) {
+          validators[fieldName].errors.push(rule.message);
+          validators[fieldName].valid = false;
+          setValidColor({ ...validColor, email: "#f84960" });
+        } else {
+          setValidColor({ ...validColor, email: "#f1f3f5" });
+        }
+      }
+    });
+  };
+
+  const displayValidationErrors = (fieldName) => {
+    const validator = validators[fieldName];
+    const result = "";
+    if (validator && !validator.valid) {
+      const errors = validator.errors.map((info) => (
+        <span className="error" key={info}>
+          * {info}
+        </span>
+      ));
+
+      return <Errors>{errors}</Errors>;
+    }
+    return result;
+  };
+
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
+    updateValidators("email", e.target.value);
   };
 
   return (
     <>
-      <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
-        <span>Email：</span>
+      <TitleContainer>
+        <h3>Forget password</h3>
+      </TitleContainer>
+      <InputGroup>
         <Input
           className="u-full-width"
           id="email"
-          type="email"
-          placeholder="輸入Email"
+          type="text"
           onChange={handleChangeEmail}
-          mb={2}
+          borderColor={validColor}
+          required
         />
+        <span className="floating-label">Email</span>
       </InputGroup>
+      {displayValidationErrors("email")}
       <BtnContainer>
         <Button id="forget-password" type="button" onClick={checkType}>
-          重設密碼
+          Reset
         </Button>
       </BtnContainer>
     </>
