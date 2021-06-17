@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { ReactComponent as Right } from "../../images/next.svg";
 import HelpLinksLoader from "../../component/loader/HelpLinksLoader";
-import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { getUsdtCoinData } from "../../Utils/api";
 
 const CoinBannerWrapper = styled.section`
@@ -241,7 +239,6 @@ const BannerToExploreBtn = styled.button`
 
 const CoinBanner = () => {
   const [coinLastPrice, setCoinLastPrice] = useState([]);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const getCoinPrice = async () => {
@@ -306,10 +303,7 @@ const CoinBanner = () => {
                 expansive marketplace listings.
               </CoinTextDescription>
               <CoinTextBtnContainer>
-                <Link
-                  to="/explore"
-                  onClick={() => dispatch(updatePageName("explore"))}
-                >
+                <Link to="/explore">
                   <BannerToExploreBtn>Explore</BannerToExploreBtn>
                 </Link>
               </CoinTextBtnContainer>

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import DashboardLoader from "../../component/loader/DashboardLoader";
-import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { getCoinSortTrade } from "../../Utils/api";
 
 const TrendingContainer = styled.div`
@@ -229,7 +227,6 @@ const TrendingCardMdFooterText = styled.div`
 
 const TrendCoin = () => {
   const [coinSort, setCoinSort] = useState([]);
-  const dispatch = useDispatch();
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -252,11 +249,7 @@ const TrendCoin = () => {
     coinSort.map((coin) => {
       const symbol = coin.symbol.replace(/USDT/, "");
       return (
-        <Link
-          to={`/coinDetail/${coin.symbol}`}
-          onClick={() => dispatch(updatePageName("coinDetail"))}
-          key={coin.openTime}
-        >
+        <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
           <TrendingCardTitle>
             <TrendingCoinLogoContainer>
               <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />

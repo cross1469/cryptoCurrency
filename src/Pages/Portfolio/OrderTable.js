@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { updatePageName } from "../../Redux/Actions/actionCreator";
 import { firebaseReadOrder } from "../../Utils/firebase";
 import { EmailContext } from "../../context/Context";
 import { getCoinLastPrice } from "../../Utils/api";
@@ -189,7 +187,6 @@ const OrderTable = () => {
   const [buyDatas, setBuyDatas] = useState([]);
   const [sellDatas, setSellDatas] = useState([]);
   const [coinLastPrice, setCoinLastPrice] = useState([]);
-  const dispatch = useDispatch();
   const email = useContext(EmailContext);
 
   const renderThumb = ({ style }) => {
@@ -334,10 +331,7 @@ const OrderTable = () => {
                     {JSON.stringify(buyDatas) === "[]" ? (
                       <tr>
                         <td colSpan="7">
-                          <NoBuyData
-                            to="/explore"
-                            onClick={() => dispatch(updatePageName("explore"))}
-                          >
+                          <NoBuyData to="/explore">
                             You haven&apos;t Buy the data
                           </NoBuyData>
                         </td>
@@ -390,10 +384,7 @@ const OrderTable = () => {
                     {JSON.stringify(sellDatas) === "[]" ? (
                       <tr>
                         <td colSpan="7">
-                          <NoSoldData
-                            to="/explore"
-                            onClick={() => dispatch(updatePageName("explore"))}
-                          >
+                          <NoSoldData to="/explore">
                             You haven&apos;t Sell the data
                           </NoSoldData>
                         </td>
