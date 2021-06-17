@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router";
+import { useDispatch } from "react-redux";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat";
@@ -16,6 +17,7 @@ import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
 import { ShowToastContext, EmailContext } from "../../context/Context";
 import { getUsdtCoinData } from "../../Utils/api";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -230,6 +232,9 @@ const CoinDetail = () => {
   const history = useHistory();
   const showToast = useContext(ShowToastContext);
   const email = useContext(EmailContext);
+  const dispatch = useDispatch();
+
+  useEffect(() => dispatch(updatePageName("coinDetail")), [dispatch]);
 
   useEffect(() => {
     const getCoinUsdtSymbol = async () => {
