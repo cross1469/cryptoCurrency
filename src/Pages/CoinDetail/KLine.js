@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
-import { useDispatch } from "react-redux";
-import { getMarketPrice } from "../../Redux/Actions/actionCreator";
 import useCallBinanceAPI from "../../Hooks/useCallBinanceAPI";
 import { callBinanceAPI } from "../../Utils/api";
+import useSocketBinanceAPI from "../../Hooks/useSocketBinanceAPI";
 
 const KLine = () => {
   const { symbol } = useParams();
-  const dispatch = useDispatch();
   const [interval, setInterval] = useState("1m");
 
   const currencyData = async (time) => {
@@ -197,39 +195,17 @@ const KLine = () => {
     "candlestick"
   );
 
-  useEffect(() => {
-    const socketAPI = (socketSymbol, socketInterval) => {
-      const socket = new WebSocket(
-        `wss://stream.binance.com:9443/ws/${socketSymbol.toLowerCase()}@kline_${socketInterval}`
-      );
-      socket.onmessage = (event) => {
-        const newKLineData = [];
-        const data = JSON.parse(event.data);
-        dispatch(getMarketPrice(data.k.o));
-        newKLineData.push(
-          data.k.t,
-          Number(data.k.o),
-          Number(data.k.h),
-          Number(data.k.l),
-          Number(data.k.c)
-        );
-        if (options.series[0]) {
-          setOptions((op) => {
-            const newOptions = { ...op };
-            newOptions.series[0].data = [
-              ...newOptions.series[0].data,
-              newKLineData,
-            ];
-            return newOptions;
-          });
-        }
-      };
+  const kLineData = useSocketBinanceAPI(symbol, interval);
 
-      return () => socket.close();
-    };
-    const closeSocket = socketAPI(symbol, interval);
-    return closeSocket;
-  }, [dispatch, interval, options.series, setOptions, symbol]);
+  useEffect(() => {
+    if (options.series[0]) {
+      setOptions((op) => {
+        const newOptions = { ...op };
+        newOptions.series[0].data = [...newOptions.series[0].data, kLineData];
+        return newOptions;
+      });
+    }
+  }, [kLineData, options.series, setOptions]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };

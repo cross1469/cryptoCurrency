@@ -249,7 +249,7 @@ const TrendCoin = () => {
     coinSort.map((coin) => {
       const symbol = coin.symbol.replace(/USDT/, "");
       return (
-        <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
+        <Link to={`/coinDetail/${coin.symbol}`} key={coin.symbol}>
           <TrendingCardTitle>
             <TrendingCoinLogoContainer>
               <img src={`/icon/${symbol.toLowerCase()}.svg`} alt="CoinSymbol" />
