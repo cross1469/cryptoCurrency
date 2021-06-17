@@ -34,7 +34,7 @@ const NewsCard = (props) => {
     <>
       <CardImg
         style={
-          newsUrlToImage === "" || newsUrlToImage === null
+          newsUrlToImage
             ? { backgroundImage: `url(${defaultNewsImg})` }
             : { backgroundImage: `url(${newsUrlToImage})` }
         }

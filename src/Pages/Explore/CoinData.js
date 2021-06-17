@@ -94,6 +94,9 @@ const SearchSection = styled.section`
   border: 1px solid #2f3336;
   border-radius: 4px;
   background: #14151a;
+  :hover {
+    border: 1px solid #f0b90b;
+  }
 `;
 
 const SearchInputContainer = styled.div`
@@ -293,15 +296,13 @@ const CoinData = () => {
     if (email) {
       if (starList.indexOf(e.target.parentNode.parentNode.id) === -1) {
         await addWishList(email, e.target.parentNode.parentNode.id);
-        const newStarList = [...starList];
-        newStarList.push(e.target.parentNode.parentNode.id);
-        setStarList(newStarList);
+        setStarList([...starList, e.target.parentNode.parentNode.id]);
         showToast("successAddWishList");
       } else {
         await removeWishList(email, e.target.parentNode.parentNode.id);
-        const num = starList.indexOf(e.target.parentNode.parentNode.id);
-        const newStarList = [...starList];
-        newStarList.splice(num, 1);
+        const newStarList = starList.filter(
+          (coinType) => coinType !== e.target.parentNode.parentNode.id
+        );
         setStarList(newStarList);
         showToast("successRemoveWishList");
       }
@@ -337,12 +338,9 @@ const CoinData = () => {
     );
     socket.onmessage = (event) => {
       const coinDatas = JSON.parse(event.data);
-      const usdtDatas = [];
-      coinDatas.forEach((data) => {
-        if (data.s.indexOf("USDT", 2) !== -1) {
-          usdtDatas.push(data);
-        }
-      });
+      const usdtDatas = coinDatas.filter(
+        (data) => data.s.indexOf("USDT", 2) !== -1
+      );
 
       if (dataFirstOpen) {
         setRealTimeDatas(usdtDatas);
@@ -378,12 +376,10 @@ const CoinData = () => {
   }, [email]);
 
   useEffect(() => {
-    if (JSON.stringify(realTimeDatas) !== "[]") {
-      const results = realTimeDatas.filter((realTimeData) =>
-        realTimeData.s.includes(searchTerm.toUpperCase())
-      );
-      setSearchResults(results);
-    }
+    const results = realTimeDatas?.filter((realTimeData) =>
+      realTimeData.s.includes(searchTerm.toUpperCase())
+    );
+    setSearchResults(results);
   }, [realTimeDatas, searchTerm]);
 
   if (JSON.stringify(realTimeDatas) === "[]") {
@@ -444,12 +440,7 @@ const CoinData = () => {
     if (searchCurrentData.length === 0) {
       return (
         <tr>
-          <CoinTableBodyItem> </CoinTableBodyItem>
-          <CoinTableBodyItem> </CoinTableBodyItem>
-          <CoinTableBodyItem>No data available</CoinTableBodyItem>
-          <CoinTableBodyItem> </CoinTableBodyItem>
-          <CoinTableBodyItem> </CoinTableBodyItem>
-          <CoinTableBodyItem> </CoinTableBodyItem>
+          <CoinTableBodyItem colSpan="6">No data available</CoinTableBodyItem>
         </tr>
       );
     }

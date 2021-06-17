@@ -271,11 +271,7 @@ const YourNews = () => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={
-                    news.media === "" || news.media === null
-                      ? defaultNewsImg
-                      : news.media
-                  }
+                  src={news.media ? news.media : defaultNewsImg}
                   alt={news.title}
                   loading="lazy"
                 />
@@ -301,11 +297,7 @@ const YourNews = () => {
               <picture>
                 <source media="(max-width: 560px)" />
                 <img
-                  src={
-                    news.media === "" || news.media === null
-                      ? defaultNewsImg
-                      : news.media
-                  }
+                  src={news.media ? news.media : defaultNewsImg}
                   alt={news.title}
                   loading="lazy"
                 />
@@ -333,7 +325,7 @@ const YourNews = () => {
           <YourNewsContentContainer>
             {JSON.stringify(newsHeadlines) === "[]" ? (
               <Link to="/explore">
-                <NoNewsBtn>Add to wishLsist</NoNewsBtn>
+                <NoNewsBtn>Add to wishList</NoNewsBtn>
               </Link>
             ) : (
               <>

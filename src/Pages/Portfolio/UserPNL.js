@@ -201,9 +201,7 @@ const AssetsTotal = () => {
               <span>Account balance</span>
             </AccountBalanceTitle>
             <AccountBalanceQty>
-              <span>
-                {isLoading === false ? Number(usdt.qty).toLocaleString() : "-"}
-              </span>
+              <span>{isLoading ? Number(usdt.qty).toLocaleString() : "-"}</span>
               <span> USDT</span>
             </AccountBalanceQty>
           </AccountBalanceContainer>
@@ -223,9 +221,7 @@ const AssetsTotal = () => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {isLoading === false
-                  ? Number(profitLoss).toLocaleString()
-                  : "-"}
+                {isLoading ? Number(profitLoss).toLocaleString() : "-"}
               </span>
               <span> %</span>
             </AccountPNLPrice>

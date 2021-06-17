@@ -240,7 +240,7 @@ const TrendCoin = () => {
   useEffect(() => {
     const getCoinSort = async () => {
       const coinPrice = await getCoinSortTrade();
-      setCoinSort(coinPrice.slice(0, 5));
+      setCoinSort(coinPrice.slice(0, 4));
     };
     getCoinSort();
   }, []);

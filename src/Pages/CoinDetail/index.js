@@ -256,15 +256,13 @@ const CoinDetail = () => {
     if (email) {
       if (userWishList.indexOf(symbol) === -1) {
         addWishList(email, symbol);
-        const newStarList = [...userWishList];
-        newStarList.push(symbol);
-        setUserWishList(newStarList);
+        setUserWishList([...userWishList, symbol]);
         showToast("successAddWishList");
       } else {
         removeWishList(email, symbol);
-        const num = userWishList.indexOf(symbol);
-        const newStarList = [...userWishList];
-        newStarList.splice(num, 1);
+        const newStarList = userWishList.filter(
+          (coinType) => coinType !== symbol
+        );
         setUserWishList(newStarList);
         showToast("successRemoveWishList");
       }
