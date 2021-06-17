@@ -230,8 +230,6 @@ const Sign = (props) => {
         loginMessage === "auth/user-not-found"
       ) {
         showToast("emailError");
-      } else if (email) {
-        showToast("signed");
       } else {
         setIsOpen(false);
         showToast("successSignIn");

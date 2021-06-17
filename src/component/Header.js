@@ -9,13 +9,12 @@ import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useHistory } from "react-router-dom";
 import CustomModal from "./Modal";
 import Sign from "./Sign";
 import Forget from "./Forget";
 import { firebaseAuthSignOut } from "../Utils/firebase";
-import { updatePageName } from "../Redux/Actions/actionCreator";
 import logo from "../images/cryptoLogo.svg";
 import { ShowToastContext, EmailContext } from "../context/Context";
 
@@ -165,7 +164,6 @@ const Header = () => {
   const page = useSelector((state) => state.pageReducer.name);
   const signModal = useRef(null);
   const forgetModal = createRef();
-  const dispatch = useDispatch();
   const email = useContext(EmailContext);
   const showToast = useContext(ShowToastContext);
 
@@ -184,7 +182,6 @@ const Header = () => {
     e.preventDefault();
     if (email) {
       history.push("/portfolio");
-      dispatch(updatePageName("portfolio"));
     } else {
       showToast("dangerPortfolio");
     }
@@ -213,7 +210,7 @@ const Header = () => {
       <Navigation bg="black">
         <div className="container">
           <div className="logo">
-            <Link to="/" onClick={() => dispatch(updatePageName("landing"))}>
+            <Link to="/">
               <img src={logo} alt="logo" />
             </Link>
           </div>
@@ -221,11 +218,7 @@ const Header = () => {
             <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
             <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
               <li>
-                <NavLink
-                  onClick={() => dispatch(updatePageName("explore"))}
-                  activeClassName="active"
-                  to="/explore"
-                >
+                <NavLink activeClassName="active" to="/explore">
                   <button
                     className={page === "explore" ? "active" : null}
                     type="button"

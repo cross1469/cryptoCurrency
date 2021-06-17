@@ -186,16 +186,6 @@ const ShowToast = (props) => {
           icon: errorIcon,
         };
         break;
-      case "signed":
-        toastProperties = {
-          id,
-          title: "Signed in",
-          description: "Signed in",
-          backgroundColor: "#f0ad4e",
-          icon: warningIcon,
-        };
-        break;
-
       case "existed":
         toastProperties = {
           id,
