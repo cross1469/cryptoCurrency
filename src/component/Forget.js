@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { firebaseAuthForget } from "../Utils/firebase";
 import { ShowToastContext } from "../context/Context";
-import validators from "../Utils/validators";
+import DisplayValidation from "./DisplayValidation";
+import useUpdateValidators from "../Hooks/useUpdateValidators";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -91,18 +92,10 @@ const Input = styled.input`
   }
 `;
 
-const Errors = styled.div`
-  text-align: left;
-  .error {
-    font-size: 12px;
-    color: red;
-  }
-`;
-
 const Forget = () => {
   const [email, setEmail] = useState("");
   const showToast = useContext(ShowToastContext);
-  const [validColor, setValidColor] = useState("#f1f3f5");
+  const { validColor, updateValidators } = useUpdateValidators();
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -115,38 +108,6 @@ const Forget = () => {
       showToast("sentResetPassword");
       window.location.reload();
     }
-  };
-
-  const updateValidators = (fieldName, value) => {
-    validators[fieldName].errors = [];
-    validators[fieldName].state = value;
-    validators[fieldName].valid = true;
-    validators[fieldName].rules.forEach((rule) => {
-      if (rule.test instanceof RegExp) {
-        if (!rule.test.test(value)) {
-          validators[fieldName].errors.push(rule.message);
-          validators[fieldName].valid = false;
-          setValidColor({ ...validColor, email: "#f84960" });
-        } else {
-          setValidColor({ ...validColor, email: "#f1f3f5" });
-        }
-      }
-    });
-  };
-
-  const displayValidationErrors = (fieldName) => {
-    const validator = validators[fieldName];
-    const result = "";
-    if (validator && !validator.valid) {
-      const errors = validator.errors.map((info) => (
-        <span className="error" key={info}>
-          * {info}
-        </span>
-      ));
-
-      return <Errors>{errors}</Errors>;
-    }
-    return result;
   };
 
   const handleChangeEmail = (e) => {
@@ -170,7 +131,7 @@ const Forget = () => {
         />
         <span className="floating-label">Email</span>
       </InputGroup>
-      {displayValidationErrors("email")}
+      <DisplayValidation field="email" />
       <BtnContainer>
         <Button id="forget-password" type="button" onClick={checkType}>
           Reset

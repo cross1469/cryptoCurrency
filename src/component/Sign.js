@@ -10,6 +10,8 @@ import {
 import validators from "../Utils/validators";
 import googleIcon from "../images/google.svg";
 import { ShowToastContext } from "../context/Context";
+import DisplayValidation from "./DisplayValidation";
+import useUpdateValidators from "../Hooks/useUpdateValidators";
 
 const Container = styled.div`
   position: relative;
@@ -172,27 +174,15 @@ const ForgetPasswordText = styled.div`
   }
 `;
 
-const Errors = styled.div`
-  text-align: left;
-  ${space}
-  .error {
-    font-size: 12px;
-    color: red;
-  }
-`;
-
 const Sign = (props) => {
   const { setIsOpen, forgetModal, signType } = props;
   const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [active, setActive] = useState("signin");
-  const [validColor, setValidColor] = useState({
-    email: "#f1f3f5",
-    password: "#f1f3f5",
-  });
   const signModal = useRef(null);
   const showToast = useContext(ShowToastContext);
+  const { validColor, updateValidators } = useUpdateValidators();
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -204,31 +194,6 @@ const Sign = (props) => {
     }
   };
 
-  const updateValidators = (fieldName, value) => {
-    validators[fieldName].errors = [];
-    validators[fieldName].state = value;
-    validators[fieldName].valid = true;
-    validators[fieldName].rules.forEach((rule) => {
-      if (rule.test instanceof RegExp) {
-        if (!rule.test.test(value)) {
-          validators[fieldName].errors.push(rule.message);
-          validators[fieldName].valid = false;
-          setValidColor({ ...validColor, email: "#f84960" });
-        } else {
-          setValidColor({ ...validColor, email: "#f1f3f5" });
-        }
-      } else if (typeof rule.test === "function") {
-        if (!rule.test(value)) {
-          validators[fieldName].errors.push(rule.message);
-          validators[fieldName].valid = false;
-          setValidColor({ ...validColor, password: "#f84960" });
-        } else {
-          setValidColor({ ...validColor, password: "#f1f3f5" });
-        }
-      }
-    });
-  };
-
   const handleChangeInput = (e) => {
     if (e.target.id === "email") {
       setEmail(e.target.value);
@@ -237,21 +202,6 @@ const Sign = (props) => {
       setPassword(e.target.value);
       updateValidators("password", e.target.value);
     }
-  };
-
-  const displayValidationErrors = (fieldName) => {
-    const validator = validators[fieldName];
-    const result = "";
-    if (validator && !validator.valid) {
-      const errors = validator.errors.map((info) => (
-        <span className="error" key={info}>
-          * {info}
-        </span>
-      ));
-
-      return <Errors mb={2}>{errors}</Errors>;
-    }
-    return result;
   };
 
   const isFormValid = () => {
@@ -343,7 +293,7 @@ const Sign = (props) => {
               />
               <span className="floating-label">Email</span>
             </InputGroup>
-            {displayValidationErrors("email")}
+            <DisplayValidation field="email" />
             <InputGroup>
               <Input
                 className="u-full-width"
@@ -355,7 +305,7 @@ const Sign = (props) => {
               />
               <span className="floating-label">Password</span>
             </InputGroup>
-            {displayValidationErrors("password")}
+            <DisplayValidation field="password" />
             {active === "signin" && (
               <ForgetPasswordText
                 onClick={() => {

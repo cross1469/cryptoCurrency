@@ -1,75 +1,50 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 import PropTypes from "prop-types";
+import useCallBinanceAPI from "../../Hooks/useCallBinanceAPI";
 
 const Spline = (props) => {
   const { symbol } = props;
 
-  const [options, setOptions] = useState({
-    plotOptions: {
-      spline: {
-        color: "#F0B90B",
+  const [options, setOptions] = useCallBinanceAPI(
+    symbol,
+    {
+      plotOptions: {
+        spline: {
+          color: "#F0B90B",
+        },
       },
-    },
-    chart: {
-      zoomType: "x",
-      height: 150,
-      backgroundColor: "#14151a",
-    },
-    credits: {
-      enabled: false,
-    },
-    legend: {
-      enabled: false,
-    },
+      chart: {
+        zoomType: "x",
+        height: 150,
+        backgroundColor: "#14151a",
+      },
+      credits: {
+        enabled: false,
+      },
+      legend: {
+        enabled: false,
+      },
 
-    title: {
-      text: "",
-    },
-    xAxis: {
-      type: "datetime",
-      visible: false,
-    },
-    yAxis: {
-      visible: false,
-    },
-    tooltip: {
-      split: true,
-    },
+      title: {
+        text: "",
+      },
+      xAxis: {
+        type: "datetime",
+        visible: false,
+      },
+      yAxis: {
+        visible: false,
+      },
+      tooltip: {
+        split: true,
+      },
 
-    series: [],
-  });
-
-  useEffect(() => {
-    const callBinanceAPI = (coinSymbol) => {
-      axios
-        .get(
-          `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/1m`
-        )
-        .then((res) => {
-          const currencyData = [];
-          for (let i = 0; i < res.data.length; i += 1) {
-            currencyData.push([
-              res.data[i][0],
-              (Number(res.data[i][2]) + Number(res.data[i][3])) / 2,
-            ]);
-          }
-          // eslint-disable-next-line no-use-before-define
-          setOptions({
-            series: [
-              {
-                type: "spline",
-                name: `${symbol}`,
-                data: currencyData,
-              },
-            ],
-          });
-        });
-    };
-    callBinanceAPI(symbol);
-  }, [symbol]);
+      series: [],
+    },
+    "spline"
+  );
 
   useEffect(() => {
     const socket = new WebSocket(
@@ -90,7 +65,7 @@ const Spline = (props) => {
     };
 
     return () => socket.close();
-  }, [symbol]);
+  }, [setOptions, symbol]);
 
   if (symbol === "") {
     return null;

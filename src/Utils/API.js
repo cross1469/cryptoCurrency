@@ -73,10 +73,23 @@ const getCoinNews = async (coin) => {
   return newsFourHeadline;
 };
 
+const callBinanceAPI = (coinSymbol, apiInterval) =>
+  axios
+    .get(
+      `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/${coinSymbol}/${apiInterval}`
+    )
+    .then((res) => {
+      const currencyData = res.data.map((item) =>
+        item.slice(0, 5).map((i) => Number(i))
+      );
+      return currencyData;
+    });
+
 export {
   getUsdtCoinData,
   getCoinSortTrade,
   getCoinHotNews,
   getCoinLastPrice,
   getCoinNews,
+  callBinanceAPI,
 };
