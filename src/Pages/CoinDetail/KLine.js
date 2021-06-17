@@ -198,7 +198,7 @@ const KLine = () => {
   const kLineData = useSocketBinanceAPI(symbol, interval);
 
   useEffect(() => {
-    if (options.series[0]) {
+    if (options.series[0] && kLineData.length > 0) {
       setOptions((op) => {
         const newOptions = { ...op };
         newOptions.series[0].data = [...newOptions.series[0].data, kLineData];
