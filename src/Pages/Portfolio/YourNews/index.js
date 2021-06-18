@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { readWishList } from "../../../Utils/firebase";
 import { EmailContext } from "../../../context/Context";
 import { getCoinNews } from "../../../Utils/api";
 import YourNewsTop from "./YourNewsTop";
 import YourNewsBottom from "./YourNewsBottom";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
 
 const YourNewsSection = styled.section`
   border-top: 1px solid #2f3336;
@@ -79,6 +87,7 @@ const NoNewsBtn = styled.button`
 const YourNews = () => {
   const [wishStr, setWishStr] = useState("");
   const [newsHeadlines, setNewsHeadlines] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const email = useContext(EmailContext);
 
   useEffect(() => {
@@ -100,10 +109,37 @@ const YourNews = () => {
       const getNews = async () => {
         const coinNews = await getCoinNews(wishStr);
         setNewsHeadlines(coinNews);
+        setIsLoading(false);
       };
       getNews();
     }
   }, [wishStr]);
+
+  const renderLoadingAndYourNews = () => {
+    if (isLoading) {
+      return (
+        <ClipLoader
+          color="#f0b90b"
+          loading={isLoading}
+          css={override}
+          size={40}
+        />
+      );
+    }
+    if (newsHeadlines.length > 0) {
+      return (
+        <>
+          <YourNewsTop newsHeadlines={newsHeadlines} />
+          <YourNewsBottom newsHeadlines={newsHeadlines} />
+        </>
+      );
+    }
+    return (
+      <Link to="/explore">
+        <NoNewsBtn>Add to wishList</NoNewsBtn>
+      </Link>
+    );
+  };
 
   return (
     <YourNewsSection>
@@ -115,16 +151,7 @@ const YourNews = () => {
           </YourNewsTitleContainer>
 
           <YourNewsContentContainer>
-            {JSON.stringify(newsHeadlines) === "[]" ? (
-              <Link to="/explore">
-                <NoNewsBtn>Add to wishList</NoNewsBtn>
-              </Link>
-            ) : (
-              <>
-                <YourNewsTop newsHeadlines={newsHeadlines} />
-                <YourNewsBottom newsHeadlines={newsHeadlines} />
-              </>
-            )}
+            {renderLoadingAndYourNews()}
           </YourNewsContentContainer>
         </YourNewsGrid>
       </YourNewsCardsContainer>

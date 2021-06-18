@@ -1,12 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { firebaseReadOrder } from "../../../Utils/firebase";
 import { EmailContext } from "../../../context/Context";
 import { getCoinLastPrice } from "../../../Utils/api";
 import BuyTable from "./BuyTable";
 import SellTable from "./SellTable";
+
+const override = css`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`;
 
 const OrderContainer = styled.div`
   color: #d9d9d9;
@@ -121,16 +129,7 @@ const OrderTbody = styled.tbody`
   }
 `;
 
-const NoSoldData = styled.h3`
-  color: #d9d9d9;
-  padding: 56px;
-  cursor: pointer;
-  :hover {
-    color: #f6465d;
-  }
-`;
-
-const NoBuyData = styled(Link)`
+const NoData = styled(Link)`
   color: #d9d9d9;
   padding: 56px;
   cursor: pointer;
@@ -143,6 +142,7 @@ const OrderTable = () => {
   const [buyDatas, setBuyDatas] = useState([]);
   const [sellDatas, setSellDatas] = useState([]);
   const [coinLastPrice, setCoinLastPrice] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const email = useContext(EmailContext);
 
   const renderThumb = ({ style }) => {
@@ -166,6 +166,7 @@ const OrderTable = () => {
           }
         });
       }
+      setIsLoading(false);
     };
     getOrderData();
   }, [email]);
@@ -177,6 +178,46 @@ const OrderTable = () => {
     };
     getCoinPrice();
   }, []);
+
+  const renderLoadingAndTable = (array, type) => {
+    if (isLoading) {
+      return (
+        <ClipLoader
+          color="#f0b90b"
+          loading={isLoading}
+          css={override}
+          size={40}
+        />
+      );
+    }
+    if (array.length > 0) {
+      if (type === "buy") {
+        return <BuyTable buyDatas={buyDatas} coinLastPrice={coinLastPrice} />;
+      }
+      if (type === "sell") {
+        return (
+          <SellTable sellDatas={sellDatas} coinLastPrice={coinLastPrice} />
+        );
+      }
+    }
+
+    if (type === "buy") {
+      return (
+        <tr>
+          <td colSpan="7">
+            <NoData to="/explore">You haven&apos;t buy the data</NoData>
+          </td>
+        </tr>
+      );
+    }
+    return (
+      <tr>
+        <td colSpan="6">
+          <NoData to="/explore">You haven&apos;t sell the data</NoData>
+        </td>
+      </tr>
+    );
+  };
 
   return (
     <>
@@ -214,20 +255,7 @@ const OrderTable = () => {
                     </tr>
                   </OrderThead>
                   <OrderTbody>
-                    {JSON.stringify(buyDatas) === "[]" ? (
-                      <tr>
-                        <td colSpan="7">
-                          <NoBuyData to="/explore">
-                            You haven&apos;t Buy the data
-                          </NoBuyData>
-                        </td>
-                      </tr>
-                    ) : (
-                      <BuyTable
-                        buyDatas={buyDatas}
-                        coinLastPrice={coinLastPrice}
-                      />
-                    )}
+                    {renderLoadingAndTable(buyDatas, "buy")}
                   </OrderTbody>
                 </OrderTableContainer>
               </Scrollbars>
@@ -270,17 +298,7 @@ const OrderTable = () => {
                     </tr>
                   </OrderThead>
                   <OrderTbody>
-                    {JSON.stringify(sellDatas) === "[]" ? (
-                      <tr>
-                        <td colSpan="7">
-                          <NoSoldData to="/explore">
-                            You haven&apos;t Sell the data
-                          </NoSoldData>
-                        </td>
-                      </tr>
-                    ) : (
-                      <SellTable sellDatas={sellDatas} />
-                    )}
+                    {renderLoadingAndTable(sellDatas, "sell")}
                   </OrderTbody>
                 </OrderTableContainer>
               </Scrollbars>
