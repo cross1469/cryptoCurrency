@@ -1,34 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import CoinData from "./CoinData";
-import { subscribeUserData } from "../../Utils/firebase";
-import TrendCoin from "./TrendCoin";
+import CoinData from "./CoinData/index";
+import TrendCoin from "./TrendCoin/index";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const Explore = () => {
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(
-    () =>
-      subscribeUserData((userEmail, uid) => {
-        dispatch(updatePageName("explore"));
-        if (userEmail) {
-          setEmail(userEmail);
-          setUserId(uid);
-        } else {
-          setEmail("");
-          setUserId("");
-        }
-      }),
-    [dispatch, email]
-  );
+  useEffect(() => dispatch(updatePageName("explore")), [dispatch]);
 
   return (
     <>
       <TrendCoin />
-      <CoinData email={email} userId={userId} />
+      <CoinData />
     </>
   );
 };

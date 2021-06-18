@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router";
-import axios from "axios";
+import { useDispatch } from "react-redux";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
-import Chat from "./Chat";
+import Chat from "./Chat/index";
 import AddValue from "./AddValue";
-import DealTable from "./DealTable";
+import DealTable from "./DealTable/index";
 import MobileButton from "./MobileButton";
 import {
-  subscribeUserData,
   readWishList,
   addWishList,
   removeWishList,
 } from "../../Utils/firebase";
 import { ReactComponent as DefaultStar } from "../../images/defaultStar.svg";
 import { ReactComponent as ActiveStar } from "../../images/activeStar.svg";
-import Toast from "../../component/Toast";
-import errorIcon from "../../images/error.svg";
-import checkIcon from "../../images/check.svg";
+import { ShowToastContext, EmailContext } from "../../context/Context";
+import { getUsdtCoinData } from "../../Utils/api";
+import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -228,94 +227,42 @@ const Mobile = styled(MobileButton)`
 
 const CoinDetail = () => {
   const { symbol } = useParams();
-  const [coinSymbol, setCoinSymbol] = useState();
   const [coinUsdtSymbol, setCoinUsdtSymbol] = useState();
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("");
   const [userWishList, setUserWishList] = useState([]);
-  const [list, setList] = useState([]);
-  let toastProperties = null;
   const history = useHistory();
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
+  const dispatch = useDispatch();
 
-  const getSymbol = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const coinType = res.data.map((data) => data.symbol);
-        setCoinSymbol(coinType);
-        const coinUsdtType = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            coinUsdtType.push(data.symbol);
-          }
-        });
-        setCoinUsdtSymbol(coinUsdtType);
-      });
+  useEffect(() => dispatch(updatePageName("coinDetail")), [dispatch]);
 
   useEffect(() => {
-    getSymbol();
+    const getCoinUsdtSymbol = async () => {
+      const coinUsdt = await getUsdtCoinData();
+      setCoinUsdtSymbol(coinUsdt.usdtSymbol);
+    };
+    getCoinUsdtSymbol();
   }, []);
 
   useEffect(() => {
-    if (coinSymbol) {
-      if (coinSymbol.indexOf(symbol) === -1) {
+    if (coinUsdtSymbol) {
+      if (coinUsdtSymbol.indexOf(symbol) === -1) {
         history.push("/404");
       }
     }
-  }, [history, symbol, coinSymbol]);
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "successAddWishList":
-        toastProperties = {
-          id,
-          title: "Add to wish list",
-          description: "Successfully add to wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "successRemoveWishList":
-        toastProperties = {
-          id,
-          title: "Remove the wish list",
-          description: "Successfully remove the wish list",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "dangerWishList":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before add your wishlist, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
+  }, [history, symbol, coinUsdtSymbol]);
 
   const handleWishList = () => {
     if (email) {
       if (userWishList.indexOf(symbol) === -1) {
         addWishList(email, symbol);
-        const newStarList = [...userWishList];
-        newStarList.push(symbol);
-        setUserWishList(newStarList);
+        setUserWishList([...userWishList, symbol]);
         showToast("successAddWishList");
       } else {
         removeWishList(email, symbol);
-        const num = userWishList.indexOf(symbol);
-        const newStarList = [...userWishList];
-        newStarList.splice(num, 1);
+        const newStarList = userWishList.filter(
+          (coinType) => coinType !== symbol
+        );
         setUserWishList(newStarList);
         showToast("successRemoveWishList");
       }
@@ -323,15 +270,6 @@ const CoinDetail = () => {
       showToast("dangerWishList");
     }
   };
-
-  useEffect(
-    () =>
-      subscribeUserData((userEmail, uid) => {
-        setEmail(userEmail);
-        setUserId(uid);
-      }),
-    []
-  );
 
   useEffect(() => {
     const getUserWishList = async () => {
@@ -400,8 +338,8 @@ const CoinDetail = () => {
                             </TransitionerContainer>
                           </ChartColumn>
                           <TradeColumn>
-                            <PlaceOrder email={email} userId={userId} />
-                            <AddValue email={email} userId={userId} />
+                            <PlaceOrder />
+                            <AddValue />
                           </TradeColumn>
                         </FlexBoxContainer>
                       </FlexBox>
@@ -413,9 +351,8 @@ const CoinDetail = () => {
           </TransitionerContainer>
         </LayoutContainer>
       </LayoutWrapper>
-      <Mobile email={email} userId={userId} />
-      <Chat email={email} userId={userId} coinUsdtSymbol={coinUsdtSymbol} />
-      <Toast toastList={list} autoDelete dismissTime={3000} />
+      <Mobile />
+      <Chat coinUsdtSymbol={coinUsdtSymbol} />
     </>
   );
 };

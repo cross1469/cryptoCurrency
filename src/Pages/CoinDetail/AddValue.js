@@ -1,12 +1,9 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUsdtPrice } from "../../Redux/Actions/actionCreator";
 import { firebaseWriteCoinAsset } from "../../Utils/firebase";
-import Toast from "../../component/Toast";
-import checkIcon from "../../images/check.svg";
-import errorIcon from "../../images/error.svg";
+import { ShowToastContext, EmailContext } from "../../context/Context";
 
 const BuySellStyle = styled.div`
   display: flex;
@@ -250,16 +247,12 @@ const BuySellFooter = styled.div`
   }
 `;
 
-const AddValue = (props) => {
+const AddValue = () => {
   const dispatch = useDispatch();
   const usdtQty = useSelector((state) => state.coinDetailReducer.usdtQty);
-
   const [addValue, setAddValue] = useState("");
-
-  const { email } = props;
-
-  const [list, setList] = useState([]);
-  let toastProperties = null;
+  const showToast = useContext(ShowToastContext);
+  const email = useContext(EmailContext);
 
   const handlAddValueInput = (e) => {
     const re = /^[.,0-9\b]+$/;
@@ -273,54 +266,17 @@ const AddValue = (props) => {
     }
   };
 
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "success":
-        toastProperties = {
-          id,
-          title: "Success",
-          description: "Successful add value",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "danger":
-        toastProperties = {
-          id,
-          title: "Please login",
-          description: "Before adding value, please login",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "dangerTotal":
-        toastProperties = {
-          id,
-          title: "Danger",
-          description: "The value added cannot be 0",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
-
   const handleClickAddValue = () => {
     const total = Number(usdtQty) + Number(addValue.replace(/,/g, ""));
     if (email && addValue.replace(/,/g, "") > 0) {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
-      showToast("success");
+      showToast("SuccessAddValue");
     } else if (!email) {
-      showToast("danger");
+      showToast("dangerAddValueLogin");
     } else if (!addValue.replace(/,/g, "")) {
-      showToast("dangerTotal");
+      showToast("dangerAddValueTotal");
     }
   };
 
@@ -369,17 +325,8 @@ const AddValue = (props) => {
           </CryptoContainer>
         </BuySellContainer>
       </BuySellStyle>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
-};
-
-AddValue.propTypes = {
-  email: PropTypes.string,
-};
-
-AddValue.defaultProps = {
-  email: undefined,
 };
 
 export default AddValue;

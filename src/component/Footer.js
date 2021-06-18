@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { color } from "styled-system";
 
-const FooterStyled = styled.footer`
+const StyledFooter = styled.footer`
   position: relative;
   border-top: 1px solid #d9d9d9;
   bottom: 0;
@@ -23,13 +23,13 @@ const FooterStyled = styled.footer`
 `;
 
 const Footer = () => (
-  <FooterStyled bg="black">
+  <StyledFooter bg="black">
     <div className="container">
       <div className="footerContainer">
         <div className="disclaimer">&copy; 2021 Cryptocurrency</div>
       </div>
     </div>
-  </FooterStyled>
+  </StyledFooter>
 );
 
 export default Footer;

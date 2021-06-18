@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Tooltip from "rc-tooltip";
 import { ReactComponent as Info } from "../../images/information.svg";
 import { firebaseReadCoinAsset, firebaseReadAsset } from "../../Utils/firebase";
 import "rc-tooltip/assets/bootstrap.css";
+import { EmailContext } from "../../context/Context";
 
 const AssetsContainer = styled.div`
   margin-top: 32px;
@@ -153,11 +153,12 @@ const AccountPNLPrice = styled.div`
   }
 `;
 
-const AssetsTotal = (props) => {
+const AssetsTotal = () => {
   const [usdt, setUsdt] = useState({ profitLoss: null, qty: null });
   const [profitLoss, setProfitLoss] = useState("-");
   const [isLoading, setIsLoading] = useState(true);
-  const { email } = props;
+  const email = useContext(EmailContext);
+
   const text = (
     <span>
       Yesterday&apos;s PNL = Yesterday asset total in spot account （24:00:00
@@ -172,12 +173,12 @@ const AssetsTotal = (props) => {
       if (email) {
         const usdtData = await firebaseReadCoinAsset(email, "USDT");
         const coinProfitLoss = await firebaseReadAsset(email);
-        let coinAllprofitLoss = 0;
-        coinProfitLoss.forEach((coin) => {
-          if (coin.coinType !== "USDT") {
-            coinAllprofitLoss += coin.profitLoss;
+        const coinAllprofitLoss = coinProfitLoss.reduce((sum, num) => {
+          if (num.coinType !== "USDT") {
+            return sum + num.profitLoss;
           }
-        });
+          return sum;
+        }, 0);
         setProfitLoss(coinAllprofitLoss);
         setUsdt(usdtData);
         setIsLoading(false);
@@ -200,9 +201,7 @@ const AssetsTotal = (props) => {
               <span>Account balance</span>
             </AccountBalanceTitle>
             <AccountBalanceQty>
-              <span>
-                {isLoading === false ? Number(usdt.qty).toLocaleString() : "-"}
-              </span>
+              <span>{isLoading ? "-" : Number(usdt.qty).toLocaleString()}</span>
               <span> USDT</span>
             </AccountBalanceQty>
           </AccountBalanceContainer>
@@ -222,9 +221,7 @@ const AssetsTotal = (props) => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {isLoading === false
-                  ? Number(profitLoss).toLocaleString()
-                  : "-"}
+                {isLoading ? "-" : Number(profitLoss).toLocaleString()}
               </span>
               <span> %</span>
             </AccountPNLPrice>
@@ -233,10 +230,6 @@ const AssetsTotal = (props) => {
       </AssetTableContainer>
     </AssetsContainer>
   );
-};
-
-AssetsTotal.propTypes = {
-  email: PropTypes.string.isRequired,
 };
 
 export default AssetsTotal;

@@ -1,19 +1,22 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
 import styled from "styled-components";
 import { color, space, typography } from "styled-system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useHistory } from "react-router-dom";
 import CustomModal from "./Modal";
 import Sign from "./Sign";
 import Forget from "./Forget";
-import { subscribeUserData, firebaseAuthSignOut } from "../Utils/firebase";
-import { updatePageName } from "../Redux/Actions/actionCreator";
-import Toast from "./Toast";
-import checkIcon from "../images/check.svg";
-import errorIcon from "../images/error.svg";
+import { firebaseAuthSignOut } from "../Utils/firebase";
 import logo from "../images/cryptoLogo.svg";
+import { ShowToastContext, EmailContext } from "../context/Context";
 
 const Navigation = styled.header`
   width: 100%;
@@ -155,81 +158,30 @@ const Navigation = styled.header`
 
 const Header = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [email, setemail] = useState(null);
-  const [list, setList] = useState([]);
-  const [uid, setUid] = useState(null);
-  const [loginStatus, setLoginStatus] = useState("Sign In");
-  let toastProperties = null;
+  const [loginStatus, setLoginStatus] = useState(false);
   const [signType, setSignType] = useState("signin");
   const history = useHistory();
   const page = useSelector((state) => state.pageReducer.name);
   const signModal = useRef(null);
   const forgetModal = createRef();
-  const dispatch = useDispatch();
+  const email = useContext(EmailContext);
+  const showToast = useContext(ShowToastContext);
 
   const handleToggle = (e) => {
     e.preventDefault();
     setIsExpanded(!isExpanded);
   };
 
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "successSignOut":
-        toastProperties = {
-          id,
-          title: "Success signout",
-          description: "Successful signout",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "dangerPortfolio":
-        toastProperties = {
-          id,
-          title: "Please signin",
-          description: "Before accessing the portfolio page, please signin",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "successSignIn":
-        toastProperties = {
-          id,
-          title: "Success signin",
-          description: "Successful signin",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "successSignUp":
-        toastProperties = {
-          id,
-          title: "Success signup",
-          description: "Successful signup",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
-
   const handleClickSignOut = () => {
     firebaseAuthSignOut();
     showToast("successSignOut");
-    setLoginStatus("Login");
-    setUid(null);
+    setLoginStatus(false);
   };
 
   const handleClickCheckMember = (e) => {
     e.preventDefault();
     if (email) {
       history.push("/portfolio");
-      dispatch(updatePageName("portfolio"));
     } else {
       showToast("dangerPortfolio");
     }
@@ -245,32 +197,20 @@ const Header = () => {
     }
   };
 
-  const getSignInfo = (sign) => {
-    showToast(sign);
-  };
-
-  useEffect(
-    () =>
-      subscribeUserData((userEmail, userUid) => {
-        if (userEmail) {
-          setemail(userEmail);
-          setUid(userUid);
-          setLoginStatus("Sign Out");
-        } else {
-          setemail(userEmail);
-          setUid(userUid);
-          setLoginStatus("Sign In");
-        }
-      }),
-    []
-  );
+  useEffect(() => {
+    if (email) {
+      setLoginStatus(true);
+    } else {
+      setLoginStatus(false);
+    }
+  }, [email]);
 
   return (
     <>
       <Navigation bg="black">
         <div className="container">
           <div className="logo">
-            <Link to="/" onClick={() => dispatch(updatePageName("landing"))}>
+            <Link to="/">
               <img src={logo} alt="logo" />
             </Link>
           </div>
@@ -278,11 +218,7 @@ const Header = () => {
             <FontAwesomeIcon icon={faBars} onClick={(e) => handleToggle(e)} />
             <ul className={`collapsed ${isExpanded ? "is-expanded" : ""}`}>
               <li>
-                <NavLink
-                  onClick={() => dispatch(updatePageName("explore"))}
-                  activeClassName="active"
-                  to="/explore"
-                >
+                <NavLink activeClassName="active" to="/explore">
                   <button
                     className={page === "explore" ? "active" : null}
                     type="button"
@@ -300,17 +236,17 @@ const Header = () => {
                   Portfolio
                 </button>
               </li>
-              {email || uid ? (
+              {email ? (
                 <li>
                   <button bg="black" type="button" onClick={handleClickSignOut}>
-                    {loginStatus}
+                    {loginStatus && "Sign Out"}
                   </button>
                 </li>
               ) : (
                 <>
                   <li>
                     <button bg="black" type="button" onClick={handleClickModal}>
-                      {loginStatus}
+                      {loginStatus || "Sign In"}
                     </button>
                   </li>
                   <li>
@@ -329,13 +265,8 @@ const Header = () => {
         <Forget />
       </CustomModal>
       <CustomModal ref={signModal}>
-        <Sign
-          forgetModal={forgetModal}
-          signType={signType}
-          getSignInfo={getSignInfo}
-        />
+        <Sign forgetModal={forgetModal} signType={signType} />
       </CustomModal>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };
