@@ -35,8 +35,8 @@ const NewsCard = (props) => {
       <CardImg
         style={
           newsUrlToImage
-            ? { backgroundImage: `url(${defaultNewsImg})` }
-            : { backgroundImage: `url(${newsUrlToImage})` }
+            ? { backgroundImage: `url(${newsUrlToImage})` }
+            : { backgroundImage: `url(${defaultNewsImg})` }
         }
         loading="lazy"
       />
