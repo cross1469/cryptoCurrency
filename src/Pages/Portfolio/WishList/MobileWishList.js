@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { ReactComponent as Right } from "../../images/next.svg";
+import { ReactComponent as Right } from "../../../images/next.svg";
 
 const override = css`
   margin: 0 auto;

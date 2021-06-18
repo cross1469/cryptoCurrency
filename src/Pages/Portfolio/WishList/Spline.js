@@ -2,7 +2,7 @@ import React from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
 import PropTypes from "prop-types";
-import useCallBinanceAPI from "../../Hooks/useCallBinanceAPI";
+import useCallBinanceAPI from "../../../Hooks/useCallBinanceAPI";
 
 const Spline = (props) => {
   const { symbol } = props;

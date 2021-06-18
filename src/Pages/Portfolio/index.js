@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import OrderTable from "./OrderTable";
 import UserPNL from "./UserPNL";
 import UserAsset from "./UserAsset";
-import WishList from "./WishList";
+import WishList from "./WishList/index";
 import YourNews from "./YourNews";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 
