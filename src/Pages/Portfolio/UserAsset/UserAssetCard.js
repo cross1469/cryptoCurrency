@@ -1,43 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import { updatePageName } from "../../Redux/Actions/actionCreator";
-import { firebaseReadAsset } from "../../Utils/firebase";
-import DashboardLoader from "../../component/loader/DashboardLoader";
-
-const UserAssetContainer = styled.div`
-  background-color: #14151a;
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  flex-direction: column;
-  padding: 48px 0;
-  @media only screen and (max-width: 768px) {
-    padding: 32px 0;
-  }
-`;
-
-const UserAssetWrapper = styled.div`
-  max-width: 1280px;
-  width: 100%;
-`;
-
-const UserAssetTitleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  color: #d9d9d9;
-  min-height: 28px;
-  width: 100%;
-  margin-bottom: 24px;
-  span {
-    white-space: nowrap;
-    font-size: 24px;
-  }
-`;
 
 const UserAssetCardContainer = styled.div`
   flex-direction: row;
@@ -228,68 +192,8 @@ const UserAssetCardMdFooterText = styled.div`
   }};
 `;
 
-const NoDataBtn = styled.button`
-  padding: 16px 24px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 180px;
-  border-radius: 4px;
-  font-family: "Exo 2", sans-serif;
-  background-color: #f0b90b;
-  :hover {
-    background-color: #ffe251;
-  }
-`;
-
-const NoDataContainer = styled.div`
-  margin: 85px 0px;
-`;
-
-const UserAsset = (props) => {
-  const [coinLastPrice, setCoinLastPrice] = useState([]);
-  const [userAsset, setUserAsset] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch();
-  const { email } = props;
-
-  const renderThumb = ({ style }) => {
-    const thumbStyle = {
-      backgroundColor: "#2f3336",
-      width: "3px",
-      borderRadius: "3px",
-    };
-    return <div style={{ ...style, ...thumbStyle }} />;
-  };
-
-  const getLastPrice = () =>
-    axios
-      .get(
-        `https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/explore`
-      )
-      .then((res) => {
-        const usdtLastPrice = [];
-        res.data.forEach((data) => {
-          if (data.symbol.indexOf("USDT", 2) !== -1) {
-            usdtLastPrice.push(data);
-          }
-        });
-        setCoinLastPrice(usdtLastPrice);
-        setIsLoading(false);
-      });
-
-  useEffect(() => {
-    getLastPrice();
-  }, []);
-
-  useEffect(() => {
-    const getUserAsset = async () => {
-      if (email) {
-        const asset = await firebaseReadAsset(email);
-        setUserAsset(asset);
-      }
-    };
-    getUserAsset();
-  }, [email]);
+const UserAssetCard = (props) => {
+  const { userAsset, coinLastPrice } = props;
 
   const renderAssetCard = () =>
     userAsset.map((asset) =>
@@ -297,11 +201,7 @@ const UserAsset = (props) => {
         const symbol = coin.symbol.replace(/USDT/, "");
         if (asset.coinType === symbol) {
           return (
-            <Link
-              to={`/coinDetail/${coin.symbol}`}
-              key={coin.openTime}
-              onClick={() => dispatch(updatePageName("coinDetail"))}
-            >
+            <Link to={`/coinDetail/${coin.symbol}`} key={coin.openTime}>
               <UserAssetCardTitle>
                 <UserAssetCoinLogoContainer>
                   <img
@@ -342,47 +242,17 @@ const UserAsset = (props) => {
         return null;
       })
     );
-
-  const renderLoadingAndAsset = () => {
-    if (isLoading) {
-      return <DashboardLoader />;
-    }
-    if (userAsset.length > 0) {
-      return (
-        <Scrollbars
-          autoHide
-          autoHideTimeout={1000}
-          autoHideDuration={200}
-          renderThumbHorizontal={renderThumb}
-          style={{ width: "100%", height: "220px" }}
-        >
-          <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>
-        </Scrollbars>
-      );
-    }
-    return (
-      <NoDataContainer>
-        <Link to="/explore" onClick={() => dispatch(updatePageName("explore"))}>
-          <NoDataBtn>See all assets</NoDataBtn>
-        </Link>
-      </NoDataContainer>
-    );
-  };
-
-  return (
-    <UserAssetContainer>
-      <UserAssetWrapper>
-        <UserAssetTitleContainer>
-          <span>My cryptocurrencies</span>
-        </UserAssetTitleContainer>
-        {renderLoadingAndAsset()}
-      </UserAssetWrapper>
-    </UserAssetContainer>
-  );
+  return <UserAssetCardContainer>{renderAssetCard()}</UserAssetCardContainer>;
 };
 
-UserAsset.propTypes = {
-  email: PropTypes.string.isRequired,
+UserAssetCard.propTypes = {
+  userAsset: PropTypes.arrayOf(PropTypes.objectOf),
+  coinLastPrice: PropTypes.arrayOf(PropTypes.objectOf),
 };
 
-export default UserAsset;
+UserAssetCard.defaultProps = {
+  userAsset: [],
+  coinLastPrice: [],
+};
+
+export default UserAssetCard;

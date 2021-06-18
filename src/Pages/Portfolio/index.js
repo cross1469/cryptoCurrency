@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import OrderTable from "./OrderTable";
+import OrderTable from "./OrderTable/index";
 import UserPNL from "./UserPNL";
-import UserAsset from "./UserAsset";
-import WishList from "./WishList";
-import YourNews from "./YourNews";
-import { subscribeUserData } from "../../Utils/firebase";
+import UserAsset from "./UserAsset/index";
+import WishList from "./WishList/index";
+import YourNews from "./YourNews/index";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const PortfolioContainer = styled.div`
@@ -45,17 +44,10 @@ const PortfolioPanel = styled.div`
 `;
 
 const Portfolio = () => {
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = subscribeUserData((userEmail, uid) => {
-      dispatch(updatePageName("portfolio"));
-      setEmail(userEmail);
-      setUserId(uid);
-    });
-    return unsubscribe;
+    dispatch(updatePageName("portfolio"));
   }, [dispatch]);
 
   return (
@@ -64,11 +56,11 @@ const Portfolio = () => {
         <PortfolioStyleFlex>
           <PortfolioPanel>
             <PortfolioStyleFlex>
-              <UserPNL email={email} userId={userId} />
-              <UserAsset email={email} userId={userId} />
-              <OrderTable email={email} userId={userId} />
-              <WishList email={email} userId={userId} />
-              <YourNews email={email} userId={userId} />
+              <UserPNL />
+              <UserAsset />
+              <OrderTable />
+              <WishList />
+              <YourNews />
             </PortfolioStyleFlex>
           </PortfolioPanel>
         </PortfolioStyleFlex>

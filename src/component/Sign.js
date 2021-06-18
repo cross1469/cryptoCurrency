@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styled from "styled-components";
-import { color, flexbox, space, typography, border } from "styled-system";
+import { color, space, typography, border } from "styled-system";
 import PropTypes from "prop-types";
 import {
   firebaseAuthSignIn,
   firebaseAuthSignUp,
-  subscribeUserData,
   firebaseAuthGoogleSignIn,
 } from "../Utils/firebase";
 import validators from "../Utils/validators";
-import Toast from "./Toast";
-import errorIcon from "../images/error.svg";
-import warningIcon from "../images/warning.svg";
 import googleIcon from "../images/google.svg";
+import { ShowToastContext } from "../context/Context";
+import DisplayValidation from "./DisplayValidation";
+import useUpdateValidators from "../Hooks/useUpdateValidators";
 
 const Container = styled.div`
   position: relative;
@@ -57,7 +56,7 @@ const InputGroup = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  ${flexbox}
+  flex-direction: column;
   .divider {
     border-bottom: 1px solid #d9dadc;
     display: block;
@@ -80,9 +79,13 @@ const InputGroup = styled.div`
     ${space}
     ${typography}
   }
-  input[type="email"],
+  input[type="text"],
   input[type="password"] {
     appearance: none;
+    :focus {
+      border: 1px solid #f0b90b;
+      outline: none;
+    }
   }
   .floating-label {
     position: absolute;
@@ -171,30 +174,15 @@ const ForgetPasswordText = styled.div`
   }
 `;
 
-const Errors = styled.div`
-  text-align: left;
-  ${space}
-  .error {
-    font-size: 12px;
-    color: red;
-  }
-`;
-
 const Sign = (props) => {
-  const { setIsOpen, forgetModal, signType, getSignInfo } = props;
+  const { setIsOpen, forgetModal, signType } = props;
   const [inputType, setInputType] = useState(signType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [active, setActive] = useState("signin");
-  const [emailInfo, setEmailInfo] = useState("");
-  const [validColor, setValidColor] = useState({
-    email: "#f1f3f5",
-    password: "#f1f3f5",
-  });
-
-  const [list, setList] = useState([]);
   const signModal = useRef(null);
-  let toastProperties = null;
+  const showToast = useContext(ShowToastContext);
+  const { validColor, updateValidators } = useUpdateValidators();
 
   const handleSwitchTab = (e) => {
     e.preventDefault();
@@ -206,102 +194,14 @@ const Sign = (props) => {
     }
   };
 
-  const updateValidators = (fieldName, value) => {
-    validators[fieldName].errors = [];
-    validators[fieldName].state = value;
-    validators[fieldName].valid = true;
-    validators[fieldName].rules.forEach((rule) => {
-      if (rule.test instanceof RegExp) {
-        if (!rule.test.test(value)) {
-          validators[fieldName].errors.push(rule.message);
-          validators[fieldName].valid = false;
-          setValidColor({ ...validColor, email: "#f84960" });
-        } else {
-          setValidColor({ ...validColor, email: "#f1f3f5" });
-        }
-      } else if (typeof rule.test === "function") {
-        if (!rule.test(value)) {
-          validators[fieldName].errors.push(rule.message);
-          validators[fieldName].valid = false;
-          setValidColor({ ...validColor, password: "#f84960" });
-        } else {
-          setValidColor({ ...validColor, password: "#f1f3f5" });
-        }
-      }
-    });
-  };
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-    updateValidators("email", e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-    updateValidators("password", e.target.value);
-  };
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "passwordError":
-        toastProperties = {
-          id,
-          title: "Password error",
-          description: "Password error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      case "emailError":
-        toastProperties = {
-          id,
-          title: "Email error",
-          description: "Email error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-
-      case "signed":
-        toastProperties = {
-          id,
-          title: "Signed in",
-          description: "Signed in",
-          backgroundColor: "#f0ad4e",
-          icon: warningIcon,
-        };
-        break;
-
-      case "existed":
-        toastProperties = {
-          id,
-          title: "Already have this user",
-          description: "This user already exists",
-          backgroundColor: "#f0ad4e",
-          icon: warningIcon,
-        };
-        break;
-      default:
-        setList([]);
+  const handleChangeInput = (e) => {
+    if (e.target.id === "email") {
+      setEmail(e.target.value);
+      updateValidators("email", e.target.value);
+    } else if (e.target.id === "password") {
+      setPassword(e.target.value);
+      updateValidators("password", e.target.value);
     }
-
-    setList([...list, toastProperties]);
-  };
-
-  const displayValidationErrors = (fieldName) => {
-    const validator = validators[fieldName];
-    const result = "";
-    if (validator && !validator.valid) {
-      const errors = validator.errors.map((info) => (
-        <span className="error" key={info}>
-          * {info}
-        </span>
-      ));
-
-      return <Errors mb={2}>{errors}</Errors>;
-    }
-    return result;
   };
 
   const isFormValid = () => {
@@ -313,13 +213,6 @@ const Sign = (props) => {
     });
     return status;
   };
-
-  useEffect(() => {
-    const unsubscribe = subscribeUserData((userEmail) =>
-      setEmailInfo(userEmail)
-    );
-    return unsubscribe;
-  }, []);
 
   useEffect(() => {
     if (signType === "create") {
@@ -337,11 +230,9 @@ const Sign = (props) => {
         loginMessage === "auth/user-not-found"
       ) {
         showToast("emailError");
-      } else if (emailInfo) {
-        showToast("signed");
       } else {
         setIsOpen(false);
-        getSignInfo("successSignIn");
+        showToast("successSignIn");
       }
     } else if (inputType === "create") {
       const signUpMessage = await firebaseAuthSignUp(email, password);
@@ -353,7 +244,7 @@ const Sign = (props) => {
         showToast("existed");
       } else {
         setIsOpen(false);
-        getSignInfo("successSignUp");
+        showToast("successSignUp");
       }
     }
   };
@@ -363,7 +254,7 @@ const Sign = (props) => {
     const googleEmail = await firebaseAuthGoogleSignIn.email;
     setIsOpen(false);
     setEmail(googleEmail);
-    getSignInfo("successSignIn");
+    showToast("successSignIn");
   };
 
   return (
@@ -394,28 +285,26 @@ const Sign = (props) => {
                 className="u-full-width"
                 id="email"
                 type="text"
-                onChange={handleChangeEmail}
+                onChange={handleChangeInput}
                 borderColor={validColor.email}
                 required
               />
               <span className="floating-label">Email</span>
             </InputGroup>
-            {displayValidationErrors("email")}
+            <DisplayValidation field="email" />
             <InputGroup>
               <Input
                 className="u-full-width"
                 id="password"
                 type="password"
-                onChange={handleChangePassword}
+                onChange={handleChangeInput}
                 borderColor={validColor.password}
                 required
               />
               <span className="floating-label">Password</span>
             </InputGroup>
-
-            {displayValidationErrors("password")}
-
-            {active === "signin" ? (
+            <DisplayValidation field="password" />
+            {active === "signin" && (
               <ForgetPasswordText
                 onClick={() => {
                   setIsOpen(false);
@@ -424,10 +313,10 @@ const Sign = (props) => {
               >
                 Forget password？
               </ForgetPasswordText>
-            ) : null}
+            )}
 
             {active === "signin" ? (
-              <InputGroup flexDirection="column">
+              <InputGroup>
                 <Button
                   id="sign-in"
                   type="button"
@@ -461,7 +350,6 @@ const Sign = (props) => {
           </FormCard>
         </section>
       </Container>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };
@@ -470,14 +358,12 @@ Sign.propTypes = {
   setIsOpen: PropTypes.func,
   forgetModal: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func)),
   signType: PropTypes.string,
-  getSignInfo: PropTypes.func,
 };
 
 Sign.defaultProps = {
   setIsOpen: undefined,
   signType: "signin",
   forgetModal: undefined,
-  getSignInfo: undefined,
 };
 
 export default Sign;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { color } from "styled-system";
 import PropTypes from "prop-types";
@@ -102,13 +102,16 @@ const Toast = (props) => {
   const { toastList, autoDelete, dismissTime } = props;
   const [list, setList] = useState(toastList);
 
-  const deleteToast = (id) => {
-    const listItemIndex = list.findIndex((e) => e.id === id);
-    const toastListItem = toastList.findIndex((e) => e.id === id);
-    list.splice(listItemIndex, 1);
-    toastList.splice(toastListItem, 1);
-    setList([...list]);
-  };
+  const deleteToast = useCallback(
+    (id) => {
+      const listItemIndex = list.findIndex((e) => e.id === id);
+      const toastListItem = toastList.findIndex((e) => e.id === id);
+      list.splice(listItemIndex, 1);
+      toastList.splice(toastListItem, 1);
+      setList([...list]);
+    },
+    [list, toastList]
+  );
 
   useEffect(() => {
     setList([...toastList]);
@@ -124,13 +127,13 @@ const Toast = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [toastList, autoDelete, dismissTime, list]);
+  }, [toastList, autoDelete, dismissTime, list, deleteToast]);
 
   return (
     <>
       <ToastContainer>
         {list.map((toast) => (
-          <Notification key={toast} bg={toast.backgroundColor}>
+          <Notification key={toast.id} bg={toast.backgroundColor}>
             <CloseButton onClick={() => deleteToast(toast.id)}>X</CloseButton>
             <NotificationImage>
               <img src={toast.icon} alt="" />

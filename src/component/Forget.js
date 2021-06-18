@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { color, space, typography } from "styled-system";
 import { firebaseAuthForget } from "../Utils/firebase";
-import Toast from "./Toast";
-import checkIcon from "../images/check.svg";
-import errorIcon from "../images/error.svg";
+import { ShowToastContext } from "../context/Context";
+import DisplayValidation from "./DisplayValidation";
+import useUpdateValidators from "../Hooks/useUpdateValidators";
+
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  h3 {
+    color: #f0b90b;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+  }
+`;
 
 const BtnContainer = styled.div`
   display: flex;
@@ -12,25 +23,24 @@ const BtnContainer = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 2rem;
-  line-height: 1;
-  background-image: linear-gradient(
-    rgb(248, 209, 47) 0%,
-    rgb(240, 185, 11) 100%
-  );
-  border-radius: 0.5rem;
+  display: "inline-block";
+  line-height: 16px;
+  background-color: #f0b90b;
+  border-radius: 4px;
   cursor: pointer;
   outline: none;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   border: none;
   color: #212833;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 24px;
   &:hover {
-    box-shadow: none;
-    background-image: linear-gradient(
-      rgb(255, 226, 81) 0%,
-      rgb(237, 196, 35) 100%
-    );
+    background-color: #ffe251;
   }
 `;
 
@@ -38,60 +48,54 @@ const InputGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   span {
     flex: 0 0 auto;
-    ${color}
-    ${space}
-    ${typography}
   }
-  input[type="email"] {
+  input[type="text"] {
     appearance: none;
+    :focus {
+      border: 1px solid #f0b90b;
+      outline: none;
+    }
   }
-  input[type="email"]:focus {
-    border: 1px solid #00a7e5;
-    outline: none;
+  .floating-label {
+    position: absolute;
+    pointer-events: none;
+    top: 20px;
+    left: 9px;
+    transition: 0.2s ease all;
+    color: #c3c0c0;
+  }
+  input:focus ~ .floating-label,
+  input:not(:focus):valid ~ .floating-label {
+    top: -20px;
+    left: 9px;
+    font-size: 14px;
+    opacity: 1;
+    color: #d9d9d9;
   }
 `;
 
 const Input = styled.input`
   outline: none;
-  border: 1px solid black;
-  padding: 4px 8px;
-  ${space}
+  border: 1px solid #d9d9d9;
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 2%) inset;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #14151a;
+  color: #d9d9d9;
+  :hover {
+    border-color: #f0b90b;
+  }
 `;
 
 const Forget = () => {
   const [email, setEmail] = useState("");
-  const [list, setList] = useState([]);
-  let toastProperties = null;
-
-  const showToast = (type) => {
-    const id = Math.floor(Math.random() * 101 + 1);
-    switch (type) {
-      case "sentResetPassword":
-        toastProperties = {
-          id,
-          title: "Sent the reset password",
-          description: "Please check the mail to receive it.",
-          backgroundColor: "#5cb85c",
-          icon: checkIcon,
-        };
-        break;
-      case "emailError":
-        toastProperties = {
-          id,
-          title: "Email error",
-          description: "Email error, please retype",
-          backgroundColor: "#d9534f",
-          icon: errorIcon,
-        };
-        break;
-      default:
-        setList([]);
-    }
-
-    setList([...list, toastProperties]);
-  };
+  const showToast = useContext(ShowToastContext);
+  const { validColor, updateValidators } = useUpdateValidators();
 
   const checkType = async () => {
     const forgetMessage = await firebaseAuthForget(email);
@@ -108,27 +112,31 @@ const Forget = () => {
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
+    updateValidators("email", e.target.value);
   };
 
   return (
     <>
-      <InputGroup color="#000" fontFamily="Roboto" mb={1} pr={2}>
-        <span>Email：</span>
+      <TitleContainer>
+        <h3>Forget password</h3>
+      </TitleContainer>
+      <InputGroup>
         <Input
           className="u-full-width"
           id="email"
-          type="email"
-          placeholder="輸入Email"
+          type="text"
           onChange={handleChangeEmail}
-          mb={2}
+          borderColor={validColor}
+          required
         />
+        <span className="floating-label">Email</span>
       </InputGroup>
+      <DisplayValidation field="email" />
       <BtnContainer>
         <Button id="forget-password" type="button" onClick={checkType}>
-          重設密碼
+          Reset
         </Button>
       </BtnContainer>
-      <Toast toastList={list} autoDelete dismissTime={3000} />
     </>
   );
 };

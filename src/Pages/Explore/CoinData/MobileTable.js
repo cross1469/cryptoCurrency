@@ -97,7 +97,7 @@ const PriceColumn = styled.div`
 `;
 
 const MobileTable = (props) => {
-  const { className, currentData, searchResults, searchTerm } = props;
+  const { className, currentData, searchCurrentData, searchTerm } = props;
 
   const renderCoinDatas = () => {
     if (!searchTerm) {
@@ -119,7 +119,7 @@ const MobileTable = (props) => {
         );
       });
     }
-    return searchResults.map((item) => {
+    return searchCurrentData.map((item) => {
       const symbol = item.s.replace(/USDT/, "");
       return (
         <tr key={item.s}>
@@ -151,13 +151,13 @@ const MobileTable = (props) => {
 
 MobileTable.propTypes = {
   currentData: PropTypes.arrayOf(PropTypes.objectOf),
-  searchResults: PropTypes.arrayOf(PropTypes.objectOf),
+  searchCurrentData: PropTypes.arrayOf(PropTypes.objectOf),
   searchTerm: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
 };
 
 MobileTable.defaultProps = {
-  searchResults: [],
+  searchCurrentData: [],
   currentData: [],
 };
 
