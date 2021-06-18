@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import CoinData from "./CoinData";
+import CoinData from "./CoinData/index";
 import TrendCoin from "./TrendCoin";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 
