@@ -91,7 +91,8 @@ const SearchSection = styled.section`
   width: 100%;
   height: 48px;
   padding: 0px 16px;
-  border: 1px solid #2f3336;
+  border: 1px solid;
+  border-color: ${(props) => props.focusStyle};
   border-radius: 4px;
   background: #14151a;
   :hover {
@@ -290,6 +291,7 @@ const CoinData = () => {
   const showToast = useContext(ShowToastContext);
   const email = useContext(EmailContext);
   const [starList, setStarList] = useState([]);
+  const [focusStyle, setFocusStyle] = useState("#2f3336");
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -311,6 +313,14 @@ const CoinData = () => {
       }
     } else {
       showToast("dangerWishList");
+    }
+  };
+
+  const handleFocusStyle = (e) => {
+    if (e.type === "focus") {
+      setFocusStyle("#f0b90b");
+    } else {
+      setFocusStyle("#2f3336");
     }
   };
 
@@ -486,7 +496,7 @@ const CoinData = () => {
             <CoinDataTitle>Coin Datas / Prices</CoinDataTitle>
           </CoinDataHeadLeft>
           <CoinDataHeadRight>
-            <SearchSection>
+            <SearchSection focusStyle={focusStyle}>
               <SearchInputContainer>
                 <SearchInputIconContainer>
                   <Search />
@@ -496,6 +506,8 @@ const CoinData = () => {
                   placeholder="Search all coins..."
                   value={searchTerm}
                   onChange={handleChange}
+                  onFocus={handleFocusStyle}
+                  onBlur={handleFocusStyle}
                 />
               </SearchInputContainer>
             </SearchSection>
