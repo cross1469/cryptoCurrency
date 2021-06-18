@@ -277,6 +277,9 @@ const TradeButton = styled.button`
   }
 `;
 
+const getCurrentData = (array, currentPage, limit) =>
+  array.slice((currentPage - 1) * limit, (currentPage - 1) * limit + limit);
+
 const CoinData = () => {
   const [dataFirstOpen, setDataFirstOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -322,15 +325,8 @@ const CoinData = () => {
     [setCurrentPage]
   );
 
-  const currentData = realTimeDatas.slice(
-    (currentPage - 1) * limit,
-    (currentPage - 1) * limit + limit
-  );
-
-  const searchCurrentData = searchResults.slice(
-    (currentPage - 1) * limit,
-    (currentPage - 1) * limit + limit
-  );
+  const currentData = getCurrentData(realTimeDatas, currentPage, limit);
+  const searchCurrentData = getCurrentData(searchResults, currentPage, limit);
 
   useEffect(() => {
     const socket = new WebSocket(
