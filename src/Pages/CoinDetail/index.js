@@ -6,7 +6,7 @@ import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
 import Chat from "./Chat/index";
 import AddValue from "./AddValue";
-import DealTable from "./DealTable";
+import DealTable from "./DealTable/index";
 import MobileButton from "./MobileButton";
 import {
   readWishList,

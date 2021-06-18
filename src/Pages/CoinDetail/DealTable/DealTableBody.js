@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { useParams } from "react-router";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import styled from "styled-components";
 
-const DealTableContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const DealTableContenContainer = styled.div`
+const DealTableBodyContainer = styled.div`
   width: 100%;
-`;
-
-const DealTableHeaderContainer = styled.div`
-  position: relative;
-  padding: 0px 24px;
-  margin-top: 32px;
-  z-index: 1;
-  margin-bottom: -1px;
-  transition: border-bottom-color 300ms ease 0s;
-  border-bottom: 1px solid #2f3336;
 `;
 
 const TransionerContainer = styled.div`
@@ -39,27 +22,6 @@ const ModuleFade = styled.div`
   flex-direction: column;
   position: relative;
   opacity: 1;
-`;
-
-const DealTableTitleContainer = styled.div`
-  display: flex;
-  padding-bottom: 36px;
-  margin-top: 16px;
-`;
-
-const DealTableTitle = styled.div`
-  display: flex;
-  flex: 1 1 0%;
-  align-items: center;
-  h1 {
-    font-size: 24px;
-    font-weight: 500;
-    margin: 8px 0px 0px;
-  }
-`;
-
-const DealTableBodyContainer = styled.div`
-  width: 100%;
 `;
 
 const ModulSlide = styled.div`
@@ -147,19 +109,9 @@ const DealTablePrice = styled.div`
   }
 `;
 
-const DealTable = () => {
-  const { symbol } = useParams();
-
+const DealTableBody = () => {
   const [dealDatas, setDealDatas] = useState([]);
-
-  const renderThumb = ({ style }) => {
-    const thumbStyle = {
-      backgroundColor: "#2f3336",
-      width: "3px",
-      borderRadius: "3px",
-    };
-    return <div style={{ ...style, ...thumbStyle }} />;
-  };
+  const { symbol } = useParams();
 
   useEffect(() => {
     const socket = new WebSocket(
@@ -172,6 +124,15 @@ const DealTable = () => {
 
     return () => socket.close();
   }, [symbol]);
+
+  const renderThumb = ({ style }) => {
+    const thumbStyle = {
+      backgroundColor: "#2f3336",
+      width: "3px",
+      borderRadius: "3px",
+    };
+    return <div style={{ ...style, ...thumbStyle }} />;
+  };
 
   const renderDealTable = () =>
     dealDatas.map((data) => {
@@ -201,44 +162,29 @@ const DealTable = () => {
     });
 
   return (
-    <DealTableContainer>
-      <DealTableContenContainer>
-        <DealTableHeaderContainer>
-          <TransionerContainer>
-            <ModuleFade>
-              <DealTableTitleContainer>
-                <DealTableTitle>
-                  <h1>Trades</h1>
-                </DealTableTitle>
-              </DealTableTitleContainer>
-            </ModuleFade>
-          </TransionerContainer>
-        </DealTableHeaderContainer>
-        <Scrollbars
-          autoHide
-          autoHideTimeout={1000}
-          autoHideDuration={200}
-          renderThumbVertical={renderThumb}
-          autoHeight
-          autoHeightMin={500}
-        >
-          <DealTableBodyContainer>
-            <TransionerContainer>
-              <ModuleFade>
-                <ModulSlide>
-                  <DealTableToContainer>
-                    <DealTabletoTable>
-                      <DealTableTbody>{renderDealTable()}</DealTableTbody>
-                    </DealTabletoTable>
-                  </DealTableToContainer>
-                </ModulSlide>
-              </ModuleFade>
-            </TransionerContainer>
-          </DealTableBodyContainer>
-        </Scrollbars>
-      </DealTableContenContainer>
-    </DealTableContainer>
+    <Scrollbars
+      autoHide
+      autoHideTimeout={1000}
+      autoHideDuration={200}
+      renderThumbVertical={renderThumb}
+      autoHeight
+      autoHeightMin={500}
+    >
+      <DealTableBodyContainer>
+        <TransionerContainer>
+          <ModuleFade>
+            <ModulSlide>
+              <DealTableToContainer>
+                <DealTabletoTable>
+                  <DealTableTbody>{renderDealTable()}</DealTableTbody>
+                </DealTabletoTable>
+              </DealTableToContainer>
+            </ModulSlide>
+          </ModuleFade>
+        </TransionerContainer>
+      </DealTableBodyContainer>
+    </Scrollbars>
   );
 };
 
-export default DealTable;
+export default DealTableBody;

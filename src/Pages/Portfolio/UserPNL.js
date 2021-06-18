@@ -173,13 +173,12 @@ const AssetsTotal = () => {
       if (email) {
         const usdtData = await firebaseReadCoinAsset(email, "USDT");
         const coinProfitLoss = await firebaseReadAsset(email);
-        const sumProfitLoss = (sum, num) => {
+        const coinAllprofitLoss = coinProfitLoss.reduce((sum, num) => {
           if (num.coinType !== "USDT") {
             return sum + num.profitLoss;
           }
           return sum;
-        };
-        const coinAllprofitLoss = coinProfitLoss.reduce(sumProfitLoss, 0);
+        }, 0);
         setProfitLoss(coinAllprofitLoss);
         setUsdt(usdtData);
         setIsLoading(false);
