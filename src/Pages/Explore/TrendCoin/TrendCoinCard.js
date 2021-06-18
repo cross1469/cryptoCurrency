@@ -1,40 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import DashboardLoader from "../../component/loader/DashboardLoader";
-import { getCoinSortTrade } from "../../Utils/api";
-
-const TrendingContainer = styled.div`
-  background-color: #14151a;
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  flex-direction: column;
-  padding: 48px 24px;
-  @media only screen and (max-width: 768px) {
-    padding: 32px 16px;
-  }
-`;
-
-const TrendinWrapper = styled.div`
-  max-width: 1280px;
-  width: 100%;
-`;
-
-const TrendingTitleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  color: #d9d9d9;
-  min-height: 28px;
-  width: 100%;
-  margin-bottom: 24px;
-  span {
-    white-space: nowrap;
-    font-size: 24px;
-    padding: 2px 8px;
-  }
-`;
 
 const TrendingCardContainer = styled.div`
   flex-direction: row;
@@ -225,8 +193,8 @@ const TrendingCardMdFooterText = styled.div`
   }};
 `;
 
-const TrendCoin = () => {
-  const [coinSort, setCoinSort] = useState([]);
+const TrendCoinCard = (props) => {
+  const { coinSort } = props;
 
   const renderThumb = ({ style }) => {
     const thumbStyle = {
@@ -236,14 +204,6 @@ const TrendCoin = () => {
     };
     return <div style={{ ...style, ...thumbStyle }} />;
   };
-
-  useEffect(() => {
-    const getCoinSort = async () => {
-      const coinPrice = await getCoinSortTrade();
-      setCoinSort(coinPrice.slice(0, 4));
-    };
-    getCoinSort();
-  }, []);
 
   const renderTrendCard = () =>
     coinSort.map((coin) => {
@@ -282,30 +242,25 @@ const TrendCoin = () => {
         </Link>
       );
     });
-
   return (
-    <TrendingContainer>
-      <TrendinWrapper>
-        <TrendingTitleContainer>
-          <span>Trending</span>
-        </TrendingTitleContainer>
-
-        {coinSort.length > 0 ? (
-          <Scrollbars
-            autoHide
-            autoHideTimeout={1000}
-            autoHideDuration={200}
-            renderThumbHorizontal={renderThumb}
-            style={{ width: "100%", height: "220px" }}
-          >
-            <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
-          </Scrollbars>
-        ) : (
-          <DashboardLoader />
-        )}
-      </TrendinWrapper>
-    </TrendingContainer>
+    <Scrollbars
+      autoHide
+      autoHideTimeout={1000}
+      autoHideDuration={200}
+      renderThumbHorizontal={renderThumb}
+      style={{ width: "100%", height: "220px" }}
+    >
+      <TrendingCardContainer> {renderTrendCard()}</TrendingCardContainer>
+    </Scrollbars>
   );
 };
 
-export default TrendCoin;
+TrendCoinCard.propTypes = {
+  coinSort: PropTypes.arrayOf(PropTypes.objectOf),
+};
+
+TrendCoinCard.defaultProps = {
+  coinSort: [],
+};
+
+export default TrendCoinCard;
