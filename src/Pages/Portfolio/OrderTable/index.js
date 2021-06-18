@@ -2,9 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { firebaseReadOrder } from "../../Utils/firebase";
-import { EmailContext } from "../../context/Context";
-import { getCoinLastPrice } from "../../Utils/api";
+import { firebaseReadOrder } from "../../../Utils/firebase";
+import { EmailContext } from "../../../context/Context";
+import { getCoinLastPrice } from "../../../Utils/api";
+import BuyTable from "./BuyTable";
+import SellTable from "./SellTable";
 
 const OrderContainer = styled.div`
   color: #d9d9d9;
@@ -119,52 +121,6 @@ const OrderTbody = styled.tbody`
   }
 `;
 
-const OrderTbodyItem = styled.td`
-  padding: 14px 48px 14px 0px;
-  border-top: 1px solid #2f3336;
-  cursor: default;
-  text-align: center;
-  position: relative;
-  width: 85px;
-  :first-child {
-    padding-left: 32px;
-  }
-  :nth-child(4),
-  :nth-child(5) {
-    min-width: 135px;
-  }
-  :last-child {
-    padding-right: 32px;
-    color: ${(props) => {
-      if (props.children[0] > 0) {
-        return "#0ecb81";
-      }
-      if (props.children[0] === 0) {
-        return "#707a8a";
-      }
-      return "#f6465d";
-    }};
-  }
-`;
-
-const OrderTbodySellItem = styled.td`
-  padding: 14px 48px 14px 0px;
-  border-top: 1px solid #2f3336;
-  cursor: default;
-  position: relative;
-  text-align: center;
-  width: 85px;
-  :first-child {
-    padding-left: 32px;
-  }
-  :nth-child(4) {
-    min-width: 135px;
-  }
-  :last-child {
-    padding-right: 32px;
-  }
-`;
-
 const NoSoldData = styled.h3`
   color: #d9d9d9;
   padding: 56px;
@@ -196,76 +152,6 @@ const OrderTable = () => {
       borderRadius: "3px",
     };
     return <div style={{ ...style, ...thumbStyle }} />;
-  };
-
-  const renderBuyTable = () => {
-    buyDatas.sort((a, b) => a.timestamp - b.timestamp);
-    return buyDatas.map((buyData, index) =>
-      coinLastPrice.map((coinPrice) => {
-        const symbol = coinPrice.symbol.replace(/USDT/, "");
-        if (symbol === buyData.coinType) {
-          return (
-            <tr key={buyData.timestamp}>
-              <OrderTbodyItem>
-                <h4>{index + 1}</h4>
-              </OrderTbodyItem>
-              <OrderTbodyItem>
-                {new Date(buyData.timestamp).toLocaleDateString("zh-TW", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "numeric",
-                })}
-              </OrderTbodyItem>
-              <OrderTbodyItem>{buyData.coinType}</OrderTbodyItem>
-              <OrderTbodyItem>
-                $ {Number(buyData.coinPrice).toLocaleString()}
-              </OrderTbodyItem>
-              <OrderTbodyItem>
-                $ {Number(coinPrice.price).toLocaleString()}
-              </OrderTbodyItem>
-              <OrderTbodyItem>
-                {Number(buyData.qty).toLocaleString()}
-              </OrderTbodyItem>
-              <OrderTbodyItem>
-                {(
-                  (Number(coinPrice.price - buyData.coinPrice) /
-                    Number(coinPrice.price)) *
-                  100
-                ).toFixed(2)}
-                %
-              </OrderTbodyItem>
-            </tr>
-          );
-        }
-        return null;
-      })
-    );
-  };
-
-  const renderSellTable = () => {
-    sellDatas.sort((a, b) => a.timestamp - b.timestamp);
-    return sellDatas.map((sellData, index) => (
-      <tr key={sellData.timestamp}>
-        <OrderTbodySellItem>{index + 1}</OrderTbodySellItem>
-        <OrderTbodySellItem>
-          {new Date(sellData.timestamp).toLocaleDateString("zh-TW", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-          })}
-        </OrderTbodySellItem>
-        <OrderTbodySellItem>{sellData.coinType}</OrderTbodySellItem>
-        <OrderTbodySellItem>
-          $ {Number(sellData.coinPrice).toLocaleString()}
-        </OrderTbodySellItem>
-        <OrderTbodySellItem>
-          {Number(sellData.qty).toLocaleString()}
-        </OrderTbodySellItem>
-        <OrderTbodySellItem>
-          {Number(sellData.coinPrice * sellData.qty).toLocaleString()}
-        </OrderTbodySellItem>
-      </tr>
-    ));
   };
 
   useEffect(() => {
@@ -337,7 +223,10 @@ const OrderTable = () => {
                         </td>
                       </tr>
                     ) : (
-                      renderBuyTable()
+                      <BuyTable
+                        buyDatas={buyDatas}
+                        coinLastPrice={coinLastPrice}
+                      />
                     )}
                   </OrderTbody>
                 </OrderTableContainer>
@@ -390,7 +279,7 @@ const OrderTable = () => {
                         </td>
                       </tr>
                     ) : (
-                      renderSellTable()
+                      <SellTable sellDatas={sellDatas} />
                     )}
                   </OrderTbody>
                 </OrderTableContainer>

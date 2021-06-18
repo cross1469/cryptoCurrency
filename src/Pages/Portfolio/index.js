@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import OrderTable from "./OrderTable";
+import OrderTable from "./OrderTable/index";
 import UserPNL from "./UserPNL";
 import UserAsset from "./UserAsset";
 import WishList from "./WishList/index";
