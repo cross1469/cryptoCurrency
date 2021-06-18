@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import OrderTable from "./OrderTable/index";
 import UserPNL from "./UserPNL";
-import UserAsset from "./UserAsset";
+import UserAsset from "./UserAsset/index";
 import WishList from "./WishList/index";
 import YourNews from "./YourNews";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
