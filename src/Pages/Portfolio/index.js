@@ -5,7 +5,7 @@ import OrderTable from "./OrderTable/index";
 import UserPNL from "./UserPNL";
 import UserAsset from "./UserAsset/index";
 import WishList from "./WishList/index";
-import YourNews from "./YourNews";
+import YourNews from "./YourNews/index";
 import { updatePageName } from "../../Redux/Actions/actionCreator";
 
 const PortfolioContainer = styled.div`
