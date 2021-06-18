@@ -348,7 +348,6 @@ const Chat = (props) => {
   const [newMessage, setNewMessage] = useState("");
   const [toggleChat, setToggleChat] = useState(false);
   const ref = useRef();
-  const suggestRef = useRef();
   const showToast = useContext(ShowToastContext);
   const email = useContext(EmailContext);
 
@@ -440,10 +439,6 @@ const Chat = (props) => {
   }, [chatDatas, toggleChat]);
 
   useEffect(() => {
-    suggestRef.current.scrollToTop();
-  }, [suggestions, isTypingName]);
-
-  useEffect(() => {
     const showSuggestions = () => {
       let suggestion = [];
       if (coinName.length > 0) {
@@ -530,9 +525,6 @@ const Chat = (props) => {
         autoHideTimeout={1000}
         autoHideDuration={200}
         renderThumbVertical={renderThumbForSuggest}
-        ref={(suggest) => {
-          suggestRef.current = suggest;
-        }}
         autoHeight
       >
         {suggestions.map((item) => (
@@ -582,19 +574,21 @@ const Chat = (props) => {
             </button>
           </ChatCloseContainer>
         </ChatHeader>
-        <ChatMain>
-          <Scrollbars
-            autoHide
-            autoHideTimeout={1000}
-            autoHideDuration={200}
-            renderThumbVertical={renderThumb}
-            ref={(s) => {
-              ref.current = s;
-            }}
-          >
+        <Scrollbars
+          autoHide
+          autoHideTimeout={1000}
+          autoHideDuration={200}
+          renderThumbVertical={renderThumb}
+          ref={(s) => {
+            ref.current = s;
+          }}
+          autoHeight
+          autoHeightMin={450}
+        >
+          <ChatMain>
             <ChatData>{renderChatData()}</ChatData>
-          </Scrollbars>
-        </ChatMain>
+          </ChatMain>
+        </Scrollbars>
 
         <ChatFooter>
           <ChatInputContainer>

@@ -214,26 +214,28 @@ const DealTable = () => {
             </ModuleFade>
           </TransionerContainer>
         </DealTableHeaderContainer>
-        <DealTableBodyContainer>
-          <TransionerContainer>
-            <ModuleFade>
-              <ModulSlide>
-                <DealTableToContainer>
-                  <Scrollbars
-                    autoHide
-                    autoHideTimeout={1000}
-                    autoHideDuration={200}
-                    renderThumbVertical={renderThumb}
-                  >
+        <Scrollbars
+          autoHide
+          autoHideTimeout={1000}
+          autoHideDuration={200}
+          renderThumbVertical={renderThumb}
+          autoHeight
+          autoHeightMin={500}
+        >
+          <DealTableBodyContainer>
+            <TransionerContainer>
+              <ModuleFade>
+                <ModulSlide>
+                  <DealTableToContainer>
                     <DealTabletoTable>
                       <DealTableTbody>{renderDealTable()}</DealTableTbody>
                     </DealTabletoTable>
-                  </Scrollbars>
-                </DealTableToContainer>
-              </ModulSlide>
-            </ModuleFade>
-          </TransionerContainer>
-        </DealTableBodyContainer>
+                  </DealTableToContainer>
+                </ModulSlide>
+              </ModuleFade>
+            </TransionerContainer>
+          </DealTableBodyContainer>
+        </Scrollbars>
       </DealTableContenContainer>
     </DealTableContainer>
   );
