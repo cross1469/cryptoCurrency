@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NewsCard from "./NewsCard";
-import { getCoinHotNews } from "../../Utils/api";
+import { getCoinHotNews } from "../../../Utils/api";
 
 const NewsBg = styled.section`
   padding: 80px 0;

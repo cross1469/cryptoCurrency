@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import defaultNewsImg from "../../images/defaultNews.jpg";
+import defaultNewsImg from "../../../images/defaultNews.jpg";
 
 const CardImg = styled.div`
   min-height: 230px;
