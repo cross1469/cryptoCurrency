@@ -173,12 +173,13 @@ const AssetsTotal = () => {
       if (email) {
         const usdtData = await firebaseReadCoinAsset(email, "USDT");
         const coinProfitLoss = await firebaseReadAsset(email);
-        let coinAllprofitLoss = 0;
-        coinProfitLoss.forEach((coin) => {
-          if (coin.coinType !== "USDT") {
-            coinAllprofitLoss += coin.profitLoss;
+        const sumProfitLoss = (sum, num) => {
+          if (num.coinType !== "USDT") {
+            return sum + num.profitLoss;
           }
-        });
+          return sum;
+        };
+        const coinAllprofitLoss = coinProfitLoss.reduce(sumProfitLoss, 0);
         setProfitLoss(coinAllprofitLoss);
         setUsdt(usdtData);
         setIsLoading(false);
@@ -201,7 +202,7 @@ const AssetsTotal = () => {
               <span>Account balance</span>
             </AccountBalanceTitle>
             <AccountBalanceQty>
-              <span>{isLoading ? Number(usdt.qty).toLocaleString() : "-"}</span>
+              <span>{isLoading ? "-" : Number(usdt.qty).toLocaleString()}</span>
               <span> USDT</span>
             </AccountBalanceQty>
           </AccountBalanceContainer>
@@ -221,7 +222,7 @@ const AssetsTotal = () => {
             </AccountPNLTitle>
             <AccountPNLPrice>
               <span>
-                {isLoading ? Number(profitLoss).toLocaleString() : "-"}
+                {isLoading ? "-" : Number(profitLoss).toLocaleString()}
               </span>
               <span> %</span>
             </AccountPNLPrice>
