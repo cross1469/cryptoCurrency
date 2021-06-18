@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import KLine from "./KLine";
 import PlaceOrder from "./PlaceOrder";
-import Chat from "./Chat";
+import Chat from "./Chat/index";
 import AddValue from "./AddValue";
 import DealTable from "./DealTable";
 import MobileButton from "./MobileButton";
