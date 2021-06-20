@@ -9,12 +9,9 @@ const getUsdtCoinData = () =>
       const usdtLastPrice = res.data.filter(
         (data) => data.symbol.indexOf("USDT", 2) !== -1
       );
-      const usdtSymbol = [];
-      res.data.forEach((data) => {
-        if (data.symbol.indexOf("USDT", 2) !== -1) {
-          usdtSymbol.push(data.symbol);
-        }
-      });
+      const usdtSymbol = res.data
+        .filter((data) => data.symbol.indexOf("USDT", 2) !== -1)
+        .map((data) => data.symbol);
       return { usdtLastPrice, usdtSymbol };
     });
 

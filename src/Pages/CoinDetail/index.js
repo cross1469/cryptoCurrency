@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useHistory, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import KLine from "./KLine";
-import PlaceOrder from "./PlaceOrder";
+import PlaceOrder from "./PlaceOrder/index";
 import Chat from "./Chat/index";
 import AddValue from "./AddValue";
 import DealTable from "./DealTable/index";
