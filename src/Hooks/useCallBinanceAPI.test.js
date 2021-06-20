@@ -1,20 +1,8 @@
 import { renderHook, cleanup } from "@testing-library/react-hooks";
 import useCallBinanceAPI from "./useCallBinanceAPI";
 import { callBinanceAPI } from "../Utils/api";
-import { act } from "react-dom/test-utils";
 
 jest.mock("../Utils/api");
-
-// it("should use useCallBinanceAPI", async () => {
-//   const { result } = renderHook(() =>
-//     useCallBinanceAPI("ETHUSDT", [], "chartType")
-//   );
-//   const promise = Promise.resolve({ data: { coinType: "ETH" } });
-//   axios.get.mockResolvedValue(() => promise);
-//   await act(() => promise);
-//   expect(result.current[0]).toStrictEqual([]);
-//   expect(typeof result.current[1]).toBe("function");
-// });
 
 describe("analytics helper", () => {
   afterEach(() => {
@@ -22,18 +10,26 @@ describe("analytics helper", () => {
     cleanup();
   });
 
-  it("should fire usePdpGtm Hook", async () => {
+  it("initial data state is loading and data empty", async () => {
+    const { result } = renderHook(() =>
+      useCallBinanceAPI("ETHUSDT", [], "type")
+    );
+    expect(result.current[0]).toStrictEqual([]);
+  });
+
+  it("data is fetched", async () => {
+    const fakeSWData = { coinType: "ETH" };
+    callBinanceAPI.mockResolvedValue(fakeSWData);
     const { result, waitForNextUpdate } = renderHook(() =>
       useCallBinanceAPI("ETHUSDT", [], "type")
     );
-    await act(() => waitForNextUpdate());
+    expect(result.current[0]).toStrictEqual([]);
+    await waitForNextUpdate();
     expect(callBinanceAPI).toHaveBeenCalledTimes(1);
-    expect(result.current).toBeUndefined();
-  });
-
-  it("should fire usePdpGtm Hook without data", () => {
-    const { result } = renderHook(() => useCallBinanceAPI(undefined));
-    expect(callBinanceAPI).not.toBeCalled();
-    expect(result.current).toBeUndefined();
+    expect(callBinanceAPI).toBeCalledWith("ETHUSDT", "1h");
+    expect(result.current[0]).toStrictEqual({
+      series: [{ data: { coinType: "ETH" }, name: "ETHUSDT", type: "type" }],
+    });
+    expect(typeof result.current[1]).toBe("function");
   });
 });
