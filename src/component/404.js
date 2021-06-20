@@ -77,7 +77,9 @@ const ErrorPadge = () => (
       <div className="subtext">
         Sorry we couldn&apos;t find what you were looking for.
       </div>
-      <Link to="/">Back to CryptoCurrency</Link>
+      <Link to="/" data-testid="home-link">
+        Back to CryptoCurrency
+      </Link>
     </Container>
   </Content>
 );
