@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import DashboardLoader from "../../../component/loader/DashboardLoader";
 import { getCoinSortTrade } from "../../../Utils/api";
@@ -35,32 +35,40 @@ const TrendingTitleContainer = styled.div`
   }
 `;
 
-const TrendCoin = () => {
-  const [coinSort, setCoinSort] = useState([]);
+class TrendCoin extends Component {
+  constructor() {
+    super();
+    this.state = {
+      coinSort: [],
+    };
+  }
 
-  useEffect(() => {
+  componentDidMount() {
     const getCoinSort = async () => {
       const coinPrice = await getCoinSortTrade();
-      setCoinSort(coinPrice.slice(0, 4));
+      this.setState({ coinSort: coinPrice.slice(0, 4) });
     };
     getCoinSort();
-  }, []);
+  }
 
-  return (
-    <TrendingContainer>
-      <TrendinWrapper>
-        <TrendingTitleContainer>
-          <span>Trending</span>
-        </TrendingTitleContainer>
+  render() {
+    const { coinSort } = this.state;
+    return (
+      <TrendingContainer>
+        <TrendinWrapper>
+          <TrendingTitleContainer>
+            <span>Trending</span>
+          </TrendingTitleContainer>
 
-        {coinSort.length > 0 ? (
-          <TrendCoinCard coinSort={coinSort} />
-        ) : (
-          <DashboardLoader />
-        )}
-      </TrendinWrapper>
-    </TrendingContainer>
-  );
-};
+          {coinSort.length > 0 ? (
+            <TrendCoinCard coinSort={coinSort} />
+          ) : (
+            <DashboardLoader />
+          )}
+        </TrendinWrapper>
+      </TrendingContainer>
+    );
+  }
+}
 
 export default TrendCoin;
