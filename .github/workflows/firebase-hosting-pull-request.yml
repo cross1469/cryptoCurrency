@@ -3,9 +3,6 @@
 
 name: Deploy to Firebase Hosting on PR
 "on": [pull_request]
-env:
-  REACT_APP_FIREBASE_APIKEY: ${{ secrets.REACT_APP_FIREBASE_APIKEY }}
-  REACT_APP_NEWS_APIKEY: ${{ secrets.REACT_APP_NEWS_APIKEY }}
 jobs:
   build_and_preview:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
@@ -13,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm install && CI=true npm test && CI=true npm run build
+      env:
+      REACT_APP_FIREBASE_APIKEY: ${{ secrets.FIREBASE_APIKEY }}
+      REACT_APP_NEWS_APIKEY: ${{ secrets.NEWS_APIKEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
