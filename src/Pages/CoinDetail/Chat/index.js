@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { layout } from "styled-system";
@@ -107,46 +107,54 @@ const ChatCloseContainer = styled.div`
   }
 `;
 
-const Chat = (props) => {
-  const { coinUsdtSymbol } = props;
+class Chat extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggleChat: false,
+    };
+  }
 
-  const [toggleChat, setToggleChat] = useState(false);
+  render(){
+    const { coinUsdtSymbol } = this.props;
+    const { toggleChat } = this.state;
 
-  const handleOpenChat = (e) => {
-    e.preventDefault();
-    setToggleChat(!toggleChat);
-  };
+    const handleOpenChat = (e) => {
+      e.preventDefault();
+      this.setState({toggleChat: !toggleChat})
+    };
 
-  return (
-    <>
-      <ChatForm display={toggleChat === false ? "none" : "block"}>
-        <ChatHeader>
-          <ChatRoomIconContainer>
-            <ChatRoom />
-          </ChatRoomIconContainer>
-          <ChatTitleContainer>
-            <h1>
-              Crypto <br />
-              Chat Room
-            </h1>
-          </ChatTitleContainer>
-          <ChatCloseContainer>
-            <button type="button" onClick={handleOpenChat}>
-              <ChatClose />
-            </button>
-          </ChatCloseContainer>
-        </ChatHeader>
-        <ChatMainContent toggleChat={toggleChat} />
-        <ChatFooter coinUsdtSymbol={coinUsdtSymbol} />
-      </ChatForm>
-      <OpenChat
-        onClick={handleOpenChat}
-        display={toggleChat === false ? "block" : "none"}
-      >
-        <ChatIcon />
-      </OpenChat>
-    </>
-  );
+    return (
+      <>
+        <ChatForm display={toggleChat === false ? "none" : "block"}>
+          <ChatHeader>
+            <ChatRoomIconContainer>
+              <ChatRoom />
+            </ChatRoomIconContainer>
+            <ChatTitleContainer>
+              <h1>
+                Crypto <br />
+                Chat Room
+              </h1>
+            </ChatTitleContainer>
+            <ChatCloseContainer>
+              <button type="button" onClick={handleOpenChat}>
+                <ChatClose />
+              </button>
+            </ChatCloseContainer>
+          </ChatHeader>
+          <ChatMainContent toggleChat={toggleChat} />
+          <ChatFooter coinUsdtSymbol={coinUsdtSymbol} />
+        </ChatForm>
+        <OpenChat
+          onClick={handleOpenChat}
+          display={toggleChat === false ? "block" : "none"}
+        >
+          <ChatIcon />
+        </OpenChat>
+      </>
+    );
+  }
 };
 
 Chat.propTypes = {

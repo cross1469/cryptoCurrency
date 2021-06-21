@@ -166,8 +166,8 @@ const TradeButton = (props) => {
 
 TradeButton.propTypes = {
   buyOrSell: PropTypes.string,
-  qty: PropTypes.number,
-  total: PropTypes.number,
+  qty: PropTypes.string,
+  total: PropTypes.string,
   setInputValue: PropTypes.func.isRequired,
   setInputTopContent: PropTypes.func.isRequired,
   setInputBottomContent: PropTypes.func.isRequired,
@@ -178,8 +178,8 @@ TradeButton.propTypes = {
 
 TradeButton.defaultProps = {
   buyOrSell: "",
-  qty: 0,
-  total: 0,
+  qty: "",
+  total: "",
   inputValue: "",
 };
 

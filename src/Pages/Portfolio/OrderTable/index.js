@@ -182,12 +182,16 @@ const OrderTable = () => {
   const renderLoadingAndTable = (array, type) => {
     if (isLoading) {
       return (
-        <ClipLoader
-          color="#f0b90b"
-          loading={isLoading}
-          css={override}
-          size={40}
-        />
+        <tr>
+          <td colSpan="7">
+            <ClipLoader
+              color="#f0b90b"
+              loading={isLoading}
+              css={override}
+              size={40}
+            />
+          </td>
+        </tr>
       );
     }
     if (array.length > 0) {

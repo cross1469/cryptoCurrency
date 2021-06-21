@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import HelpLinksLoader from "../../../component/loader/HelpLinksLoader";
@@ -166,52 +166,60 @@ const BannerToExploreBtn = styled.button`
   }
 `;
 
-const CoinBanner = () => {
-  const [coinLastPrice, setCoinLastPrice] = useState([]);
+class CoinBanner extends Component {
+  constructor() {
+    super();
+    this.state = {
+      coinLastPrice: [],
+    };
+  }
 
-  useEffect(() => {
+  componentDidMount() {
     const getCoinPrice = async () => {
       const coinPrice = await getUsdtCoinData();
-      setCoinLastPrice(coinPrice.usdtLastPrice.slice(0, 5));
+      this.setState({ coinLastPrice: coinPrice.usdtLastPrice.slice(0, 5) });
     };
     getCoinPrice();
-  }, []);
+  }
 
-  return (
-    <CoinBannerWrapper>
-      <CoinBannerFlexContainer>
-        <CoinBannerContainer>
-          <CoinContainer>
-            <CoinMarketData>
-              {coinLastPrice.length > 0 ? (
-                <CoinMarket coinLastPrice={coinLastPrice} />
-              ) : (
-                <HelpLinksLoader />
-              )}
-            </CoinMarketData>
-            <CoinMarketText>Trade over 200 Cryptocurrency</CoinMarketText>
-          </CoinContainer>
-          <CoinTextContainer>
-            <CoinTextWrapper>
-              <h1>
-                <p>Your access to the</p>
-                <p>top coin markets</p>
-              </h1>
-              <CoinTextDescription>
-                Capitalize on trends and trade with confidence through our
-                expansive marketplace listings.
-              </CoinTextDescription>
-              <CoinTextBtnContainer>
-                <Link to="/explore">
-                  <BannerToExploreBtn>Explore</BannerToExploreBtn>
-                </Link>
-              </CoinTextBtnContainer>
-            </CoinTextWrapper>
-          </CoinTextContainer>
-        </CoinBannerContainer>
-      </CoinBannerFlexContainer>
-    </CoinBannerWrapper>
-  );
-};
+  render() {
+    const { coinLastPrice } = this.state;
+    return (
+      <CoinBannerWrapper>
+        <CoinBannerFlexContainer>
+          <CoinBannerContainer>
+            <CoinContainer>
+              <CoinMarketData>
+                {coinLastPrice.length > 0 ? (
+                  <CoinMarket coinLastPrice={coinLastPrice} />
+                ) : (
+                  <HelpLinksLoader />
+                )}
+              </CoinMarketData>
+              <CoinMarketText>Trade over 200 Cryptocurrency</CoinMarketText>
+            </CoinContainer>
+            <CoinTextContainer>
+              <CoinTextWrapper>
+                <h1>
+                  <p>Your access to the</p>
+                  <p>top coin markets</p>
+                </h1>
+                <CoinTextDescription>
+                  Capitalize on trends and trade with confidence through our
+                  expansive marketplace listings.
+                </CoinTextDescription>
+                <CoinTextBtnContainer>
+                  <Link to="/explore">
+                    <BannerToExploreBtn>Explore</BannerToExploreBtn>
+                  </Link>
+                </CoinTextBtnContainer>
+              </CoinTextWrapper>
+            </CoinTextContainer>
+          </CoinBannerContainer>
+        </CoinBannerFlexContainer>
+      </CoinBannerWrapper>
+    );
+  }
+}
 
 export default CoinBanner;
