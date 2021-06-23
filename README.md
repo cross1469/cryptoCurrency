@@ -5,10 +5,10 @@ A platform for users to become the more familiar with the transaction process.
 
 ## Website Link
 
-Link: <https://cryptocurrency-0511.web.app//> \
-Use Google account to login.\
-You can also create your own native account or use default test account below.\
-**User: test@test.com**\
+Link: <https://cryptocurrency-0511.web.app//>
+Use Google account to login.
+You can also create your own native account or use default test account below.
+**User: test@test.com**
 **PassWord: test123**
 
 ## Techniques
@@ -34,7 +34,7 @@ You can also create your own native account or use default test account below.\
 
 ## Contact
 
-If you got any problem when using Cryptocurrency Exchange, or had any suggestion about it. Please feel free to contact with me via email.\
+If you got any problem when using Cryptocurrency Exchange, or had any suggestion about it. Please feel free to contact with me via email.
 
 - Author: Oakley, Liu
 - E-mail: <face9923029@gmail.com>
