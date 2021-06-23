@@ -5,10 +5,10 @@ A platform for users to become the more familiar with the transaction process.
 
 ## Website Link
 
-Link: <https://cryptocurrency-0511.web.app//>
-Use Google account to login.
-You can also create your own native account or use default test account below.
-**User: test@test.com**
+Link: <https://cryptocurrency-0511.web.app//>\
+Use Google account to login.\
+You can also create your own native account or use default test account below.\
+**User: test@test.com**\
 **PassWord: test123**
 
 ## Techniques
