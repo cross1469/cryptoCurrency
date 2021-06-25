@@ -272,7 +272,7 @@ const AddValue = () => {
       firebaseWriteCoinAsset(email, "USDT", total, 0, 0);
       dispatch(updateUsdtPrice(total));
       setAddValue("");
-      showToast("SuccessAddValue");
+      showToast("successAddValue");
     } else if (!email) {
       showToast("dangerAddValueLogin");
     } else if (!addValue.replace(/,/g, "")) {
