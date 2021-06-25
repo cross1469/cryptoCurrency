@@ -1,7 +1,8 @@
 # <img src="readimg/logo.svg" width=23/> Cryptocurrency Exchange
 
-A platform for users to become the more familiar with the transaction process.
-<img src= "readimg/crypto.jpeg" width=100%/>
+A platform allows user to simulate the transaction process of cryptocurrency and acquire cryptocurrency information in real-time.
+
+<img src= "readimg/crypto.png" width=100%/>
 
 ## Website Link
 
@@ -9,28 +10,77 @@ Link: <https://cryptocurrency-0511.web.app/>\
 Use Google account to login.\
 You can also create your own native account or use default test account below.\
 **User: test@test.com**\
-**PassWord: test123**
+**Password: test123**
 
 ## Techniques
 
 - Front-End Web Design
   - HTML / CSS / JavaScript
   - Responsive Web Design (RWD)
-- Frameworks
+- Frameworks & Library
   - React (Hooks)
   - React Router
-- JavsScript Library
   - Redux
 - Firebase
-  - Firestore
-  - Hosting
   - Authentication
+  - Firestore
   - Functions
+  - Hosting
+- Packages
+  - axios
+  - highcharts-react-official
+  - prop-types
+  - react-content-loader
+  - react-custom-scrollbars-2
+  - react-input-autosize
+  - styled-components
 - Other
-  - Version Control : Git / GitHub
-  - Lint Tool: ESLint with airbnb style
-  - Unit Test: Jest
   - CI / CD: GitHub Actions
+  - Lint Tool: ESLint with airbnb style
+  - Version Control : Git / GitHub
+  - Unit Test: Jest
+
+## Structure
+
+<img src= "readimg/flowchart.jpeg" width=100%/>
+
+## Demo
+
+### Main Page
+
+<img src= "readimg/landing.gif" width=100%/>
+
+### Explore Page
+
+- Trend Coin
+- Coins Table
+- Search Coin
+- Pagnation
+
+<img src= "readimg/explore.gif" width=100%/>
+
+### Coin Detail Page
+
+- Candlestick Chart
+- Trade
+- Deposit
+- Chat box
+- Lastest Trades
+
+<img src= "readimg/detail.gif" width=100%/>
+
+### Portfolio Page
+
+- 24Hr PNL calculation
+- Wishlist
+- YourNews
+
+<img src= "readimg/portfolio.gif" width=100%/>
+
+## Future Features
+
+- Adopt Next.js to have better reduce loading time and get better SEO
+- Build back-end Sever to integrate market price features into the website
 
 ## Contact
 
