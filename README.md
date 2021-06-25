@@ -80,7 +80,7 @@ You can also create your own native account or use default test account below.\
 ## Future Features
 
 - Adopt Next.js to have better reduce loading time and get better SEO.
-- Build back-end Sever to integrate market price features into the website.
+- Build back-end Sever to integrate limit price features into the website.
 
 ## Contact
 
