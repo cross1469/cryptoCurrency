@@ -62,10 +62,10 @@ const BuyTable = (props) => {
               </OrderTbodyItem>
               <OrderTbodyItem>
                 {(
-                  (Number(coinPrice.price - buyData.coinPrice) /
+                  (Number((coinPrice.price - buyData.coinPrice) * buyData.qty) /
                     Number(coinPrice.price)) *
                   100
-                ).toFixed(2)}
+                ).toLocaleString()}
                 %
               </OrderTbodyItem>
             </tr>
