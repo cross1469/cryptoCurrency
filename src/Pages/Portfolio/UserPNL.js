@@ -177,7 +177,7 @@ const AssetsTotal = () => {
           if (num.coinType !== "USDT") {
             return sum + num.profitLoss;
           }
-          return sum;
+          return sum / 2;
         }, 0);
         setProfitLoss(coinAllprofitLoss);
         setUsdt(usdtData);
