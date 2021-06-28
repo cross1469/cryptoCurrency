@@ -8,12 +8,7 @@ const getLastPrice = () =>
       "https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/portfolio"
     )
     .then((res) => {
-      const usdtLastPrice = [];
-      res.data.forEach((data) => {
-        if (data.symbol.indexOf("USDT", 2) !== -1) {
-          usdtLastPrice.push(data);
-        }
-      });
+      const usdtLastPrice = res.data.filter((data) => data.symbol.indexOf("USDT", 2) !== -1 );
       return usdtLastPrice;
     });
 
@@ -46,34 +41,15 @@ const updateProfitLoss = async () => {
   });
 };
 
-// const read = async () => {
-//   const userEmail = await readMemberEmail();
-//   userEmail.forEach(async (mail) => {
-//         coinLastPrice.forEach((coinPrice) => {
-//           const symbol = coinPrice.symbol.replace(/USDT/, "");
-//           collection("users").doc(email).collection("assets").doc(symbol).get().then(doc => {
-//             if (doc.exists) {
-//               const profitLoss =
-//                 (((item.coinData.averagePrice - coinPrice.price) *
-//                   item.coinData.qty) /
-//                   coinPrice.price) *
-//                   100;
-//               firebaseWriteCoinAsset(
-//                 mail,
-//                 item.coinType,
-//                 item.coinData.qty,
-//                 item.coinData.averagePrice,
-//                 profitLoss
-//               );
-//             }
-//           })
-//         });
-//   });
-// };
-
-// every 1 minutes
-// every 24 hours
 exports.schedule = functions.pubsub
+  .schedule("0 0 * * *")
+  .timeZone("Asia/Taipei")
+  .onRun(() => {
+    updateProfitLoss();
+    return null;
+  });
+
+  exports.schedule = functions.pubsub
   .schedule("0 0 * * *")
   .timeZone("Asia/Taipei")
   .onRun(() => {

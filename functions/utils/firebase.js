@@ -39,12 +39,11 @@ const readUserCoinAsset = (email) =>
     .collection("assets")
     .get()
     .then((querySnapshot) => {
-      const userCoin = [];
-      querySnapshot.forEach((doc) => {
-        userCoin.push({
+      const userCoin = querySnapshot.map((doc) => {
+        return {
           coinType: doc.id,
           coinData: doc.data(),
-        });
+        };
       });
       return userCoin;
     });
