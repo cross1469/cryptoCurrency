@@ -8,7 +8,9 @@ const getLastPrice = () =>
       "https://us-central1-cryptocurrency-0511.cloudfunctions.net/binanceAPI/portfolio"
     )
     .then((res) => {
-      const usdtLastPrice = res.data.filter((data) => data.symbol.indexOf("USDT", 2) !== -1 );
+      const usdtLastPrice = res.data.filter(
+        (data) => data.symbol.indexOf("USDT", 2) !== -1
+      );
       return usdtLastPrice;
     });
 
@@ -42,14 +44,6 @@ const updateProfitLoss = async () => {
 };
 
 exports.schedule = functions.pubsub
-  .schedule("0 0 * * *")
-  .timeZone("Asia/Taipei")
-  .onRun(() => {
-    updateProfitLoss();
-    return null;
-  });
-
-  exports.schedule = functions.pubsub
   .schedule("0 0 * * *")
   .timeZone("Asia/Taipei")
   .onRun(() => {

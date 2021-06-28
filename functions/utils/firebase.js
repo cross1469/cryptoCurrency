@@ -38,8 +38,8 @@ const readUserCoinAsset = (email) =>
     .doc(email)
     .collection("assets")
     .get()
-    .then((querySnapshot) => {
-      const userCoin = querySnapshot.map((doc) => {
+    .then((item) => {
+      const userCoin = item.docs.map((doc) => {
         return {
           coinType: doc.id,
           coinData: doc.data(),
