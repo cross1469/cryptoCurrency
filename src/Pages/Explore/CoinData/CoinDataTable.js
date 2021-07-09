@@ -194,7 +194,7 @@ const CoinDataTable = (props) => {
       return currentData.map((realTimeData) => {
         const symbol = realTimeData.s.replace(/USDT/, "");
         return (
-          <tr key={realTimeData.L} id={realTimeData.s}>
+          <tr key={realTimeData.s} id={realTimeData.s}>
             <CoinTableBodyItem>
               <Link to={`/coinDetail/${realTimeData.s}`}>
                 <div className="symbolContainer">
