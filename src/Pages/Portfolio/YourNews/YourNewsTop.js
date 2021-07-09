@@ -89,7 +89,7 @@ const YourNewsTop = (props) => {
 
   const renderYourNewsTop = () =>
     newsHeadlines.slice(0, 2).map((news) => (
-      <YourNewsContentTopLink key={news.summary} href={news.link}>
+      <YourNewsContentTopLink key={news.summary} href={news.link} target="_blank">
         <YourNewsTopContent>
           <YourNewsTopImageContainer>
             <YourNewsTopImage>

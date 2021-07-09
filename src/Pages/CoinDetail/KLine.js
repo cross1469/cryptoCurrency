@@ -6,6 +6,8 @@ import useCallBinanceAPI from "../../Hooks/useCallBinanceAPI";
 import { callBinanceAPI } from "../../Utils/api";
 import useSocketBinanceAPI from "../../Hooks/useSocketBinanceAPI";
 
+window.Highcharts = Highcharts;
+
 const KLine = () => {
   const { symbol } = useParams();
   const [interval, setInterval] = useState("1m");
