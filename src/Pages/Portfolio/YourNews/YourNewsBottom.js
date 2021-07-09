@@ -85,7 +85,7 @@ const YourNewsBottom = (props) => {
 
   const renderYourNewsButtom = () =>
     newsHeadlines.slice(2, 6).map((news) => (
-      <YourNewsContentBottomLink key={news.summary} href={news.link}>
+      <YourNewsContentBottomLink key={news.summary} href={news.link} target="_blank">
         <YourNewsBottomContent>
           <YourNewsBottomTopImg>
             <YourNewsBottomTopImgContainer>
